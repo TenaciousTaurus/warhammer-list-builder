@@ -51,9 +51,11 @@ export function UnitsPage() {
 
   return (
     <div>
-      <h2 style={{ fontSize: '1.25rem', marginBottom: 'var(--space-lg)' }}>Unit Browser</h2>
+      <div className="units-page__header">
+        <h2>Unit Browser</h2>
+      </div>
 
-      <div style={{ display: 'flex', gap: 'var(--space-md)', marginBottom: 'var(--space-lg)', flexWrap: 'wrap' }}>
+      <div className="units-page__filters">
         <div className="form-group" style={{ maxWidth: '300px' }}>
           <label>Faction</label>
           <select
@@ -86,7 +88,7 @@ export function UnitsPage() {
           <p>{filter ? 'No units match your search.' : 'No units available for this faction yet.'}</p>
         </div>
       ) : (
-        <div style={{ display: 'grid', gap: 'var(--space-md)' }}>
+        <div className="units-page__grid">
           {filteredUnits.map((unit) => {
             const isExpanded = expandedUnit === unit.id;
             const coreAbilities = unit.abilities.filter(a => a.type === 'core');
@@ -97,30 +99,34 @@ export function UnitsPage() {
             return (
               <div
                 key={unit.id}
-                className="card"
-                style={{ cursor: 'pointer' }}
+                className={`unit-browser-card${isExpanded ? ' unit-browser-card--expanded' : ''}`}
                 onClick={() => setExpandedUnit(isExpanded ? null : unit.id)}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                   <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)', marginBottom: 'var(--space-sm)' }}>
-                      <h3 style={{ fontSize: '0.95rem' }}>{unit.name}</h3>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)', marginBottom: 'var(--space-sm)', flexWrap: 'wrap' }}>
+                      <h3 style={{ fontSize: 'var(--text-base)', margin: 0 }}>{unit.name}</h3>
                       <span className={`role-badge role-badge--${unit.role}`}>
                         {unit.role.replace('_', ' ')}
                       </span>
-                      {unit.is_unique && (
-                        <span style={{ fontSize: '0.7rem', color: 'var(--color-role-epic-hero)', fontStyle: 'italic' }}>
+                      {unit.max_per_list === 1 && (
+                        <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-role-epic-hero)', fontStyle: 'italic' }}>
                           Unique
+                        </span>
+                      )}
+                      {unit.max_per_list > 1 && unit.max_per_list < 3 && (
+                        <span style={{ fontSize: 'var(--text-xs)', color: '#ef4444' }}>
+                          Max {unit.max_per_list}
                         </span>
                       )}
                     </div>
                     <StatLine unit={unit} />
                   </div>
-                  <div style={{ textAlign: 'right' }}>
+                  <div style={{ textAlign: 'right', flexShrink: 0, marginLeft: 'var(--space-md)' }}>
                     {unit.unit_points_tiers
                       .sort((a, b) => a.model_count - b.model_count)
                       .map((tier) => (
-                        <div key={tier.id} style={{ fontSize: '0.8rem', color: 'var(--color-gold)' }}>
+                        <div key={tier.id} style={{ fontSize: 'var(--text-sm)', color: 'var(--color-gold)', fontVariantNumeric: 'tabular-nums' }}>
                           {tier.model_count} model{tier.model_count !== 1 ? 's' : ''}: {tier.points} pts
                         </div>
                       ))}
@@ -155,18 +161,18 @@ export function UnitsPage() {
 
                 {/* Expanded: ability descriptions */}
                 {isExpanded && unit.abilities.length > 0 && (
-                  <div style={{ marginTop: 'var(--space-md)', borderTop: '1px solid var(--color-border)', paddingTop: 'var(--space-md)' }}>
-                    <h4 style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', marginBottom: 'var(--space-sm)' }}>
+                  <div style={{ marginTop: 'var(--space-md)', borderTop: '1px solid rgba(255,255,255,0.04)', paddingTop: 'var(--space-md)' }}>
+                    <h4 style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)', marginBottom: 'var(--space-sm)' }}>
                       Abilities
                     </h4>
                     <div style={{ display: 'grid', gap: 'var(--space-xs)' }}>
                       {unit.abilities.map(a => (
-                        <div key={a.id} style={{ fontSize: '0.8rem' }}>
+                        <div key={a.id} style={{ fontSize: 'var(--text-sm)' }}>
                           <span style={{ fontWeight: 600, color: 'var(--color-text-primary)' }}>{a.name}</span>
                           <span style={{ color: 'var(--color-text-muted)', marginLeft: 4 }}>
                             ({a.type})
                           </span>
-                          <div style={{ color: 'var(--color-text-secondary)', marginLeft: 'var(--space-md)', fontSize: '0.75rem' }}>
+                          <div style={{ color: 'var(--color-text-secondary)', marginLeft: 'var(--space-md)', fontSize: 'var(--text-xs)' }}>
                             {a.description}
                           </div>
                         </div>
@@ -177,39 +183,39 @@ export function UnitsPage() {
 
                 {/* Expanded: weapons */}
                 {isExpanded && unit.weapons.length > 0 && (
-                  <div style={{ marginTop: 'var(--space-md)', borderTop: '1px solid var(--color-border)', paddingTop: 'var(--space-md)' }}>
-                    <h4 style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', marginBottom: 'var(--space-sm)' }}>
+                  <div style={{ marginTop: 'var(--space-md)', borderTop: '1px solid rgba(255,255,255,0.04)', paddingTop: 'var(--space-md)' }}>
+                    <h4 style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)', marginBottom: 'var(--space-sm)' }}>
                       Weapons
                     </h4>
-                    <table style={{ width: '100%', fontSize: '0.8rem', borderCollapse: 'collapse' }}>
+                    <table className="weapons-table">
                       <thead>
-                        <tr style={{ color: 'var(--color-text-muted)', textAlign: 'left' }}>
-                          <th style={{ padding: '4px 8px' }}>Name</th>
-                          <th style={{ padding: '4px 8px' }}>Range</th>
-                          <th style={{ padding: '4px 8px' }}>A</th>
-                          <th style={{ padding: '4px 8px' }}>BS/WS</th>
-                          <th style={{ padding: '4px 8px' }}>S</th>
-                          <th style={{ padding: '4px 8px' }}>AP</th>
-                          <th style={{ padding: '4px 8px' }}>D</th>
+                        <tr>
+                          <th>Name</th>
+                          <th>Range</th>
+                          <th>A</th>
+                          <th>BS/WS</th>
+                          <th>S</th>
+                          <th>AP</th>
+                          <th>D</th>
                         </tr>
                       </thead>
                       <tbody>
                         {unit.weapons.map((w) => (
-                          <tr key={w.id} style={{ borderTop: '1px solid var(--color-border)' }}>
-                            <td style={{ padding: '4px 8px', fontWeight: 600 }}>
+                          <tr key={w.id}>
+                            <td style={{ fontWeight: 600 }}>
                               {w.name}
                               {w.keywords.length > 0 && (
-                                <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginLeft: 4 }}>
+                                <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)', marginLeft: 4 }}>
                                   [{w.keywords.join(', ')}]
                                 </span>
                               )}
                             </td>
-                            <td style={{ padding: '4px 8px' }}>{w.range || 'Melee'}</td>
-                            <td style={{ padding: '4px 8px' }}>{w.attacks}</td>
-                            <td style={{ padding: '4px 8px' }}>{w.skill}</td>
-                            <td style={{ padding: '4px 8px' }}>{w.strength}</td>
-                            <td style={{ padding: '4px 8px' }}>{w.ap}</td>
-                            <td style={{ padding: '4px 8px' }}>{w.damage}</td>
+                            <td>{w.range || 'Melee'}</td>
+                            <td>{w.attacks}</td>
+                            <td>{w.skill}</td>
+                            <td>{w.strength}</td>
+                            <td>{w.ap}</td>
+                            <td>{w.damage}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -219,7 +225,7 @@ export function UnitsPage() {
 
                 {isExpanded && unit.keywords.length > 0 && (
                   <div style={{ marginTop: 'var(--space-sm)' }}>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+                    <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)' }}>
                       Keywords: {unit.keywords.join(', ')}
                     </span>
                   </div>

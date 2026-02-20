@@ -378,20 +378,130 @@ function extractKeywords(node) {
 }
 
 /**
- * Check if a unit is unique/named character.
+ * Extract max_per_list from BSData constraint data.
+ * Checks for type="max" field="selections" constraints at both
+ * scope="roster" and scope="force" (different factions use different scopes).
+ * Falls back to role-based defaults per 10th Edition muster rules.
  */
-function isUniqueUnit(node) {
+function extractMaxPerList(node) {
   const role = extractRole(node);
-  if (role === 'epic_hero') return true;
 
-  // Check for max 1 constraint at roster level
+  // Epic heroes are always max 1
+  if (role === 'epic_hero') return 1;
+
+  // Look for explicit max constraint on selections at roster or force scope
+  let maxValue = null;
   for (const constraint of ensureArray(node?.constraints?.constraint)) {
-    if (constraint['@_type'] === 'max' && constraint['@_value'] === '1' &&
-        constraint['@_scope'] === 'roster' && constraint['@_field'] === 'selections') {
-      return true;
+    if (
+      constraint['@_type'] === 'max' &&
+      constraint['@_field'] === 'selections' &&
+      (constraint['@_scope'] === 'roster' || constraint['@_scope'] === 'force')
+    ) {
+      const val = parseInt(constraint['@_value'], 10);
+      if (val > 0) {
+        // Take the most restrictive (smallest) if multiple constraints exist
+        if (maxValue === null || val < maxValue) {
+          maxValue = val;
+        }
+      }
     }
   }
-  return false;
+
+  if (maxValue !== null) return maxValue;
+
+  // Fall back to role-based defaults per 10th Edition rules
+  if (role === 'battleline' || role === 'dedicated_transport') return 6;
+  return 3;
+}
+
+/**
+ * Extract wargear options from a unit's "Wargear" selection entry group.
+ * Returns an array of { group_name, name, is_default, points }.
+ */
+function extractWargearOptions(node, entryIndex) {
+  const options = [];
+
+  for (const group of ensureArray(node?.selectionEntryGroups?.selectionEntryGroup)) {
+    if (group['@_name'] !== 'Wargear') continue;
+
+    // Check for direct entries (simple wargear options)
+    const directEntries = ensureArray(group?.selectionEntries?.selectionEntry)
+      .filter(e => e['@_type'] === 'upgrade');
+
+    if (directEntries.length > 0) {
+      directEntries.forEach((e, idx) => {
+        let pts = 0;
+        for (const c of ensureArray(e?.costs?.cost)) {
+          if (c['@_name'] === 'pts') pts = parseInt(c['@_value']) || 0;
+        }
+        options.push({
+          group_name: 'Wargear',
+          name: e['@_name'],
+          is_default: idx === 0,
+          points: pts,
+        });
+      });
+    }
+
+    // Check for direct links (shared wargear references)
+    for (const link of ensureArray(group?.entryLinks?.entryLink)) {
+      const linkName = link['@_name'];
+      if (!linkName) continue;
+      let pts = 0;
+      for (const c of ensureArray(link?.costs?.cost)) {
+        if (c['@_name'] === 'pts') pts = parseInt(c['@_value']) || 0;
+      }
+      options.push({
+        group_name: 'Wargear',
+        name: linkName,
+        is_default: options.filter(o => o.group_name === 'Wargear').length === 0,
+        points: pts,
+      });
+    }
+
+    // Check for subgroups (e.g. "Weapon 1", "Weapon 2", "Sponson Weapons")
+    for (const subgroup of ensureArray(group?.selectionEntryGroups?.selectionEntryGroup)) {
+      const sgName = subgroup['@_name'] || 'Wargear';
+      let sgIdx = 0;
+
+      for (const e of ensureArray(subgroup?.selectionEntries?.selectionEntry)) {
+        if (e['@_type'] !== 'upgrade') continue;
+        let pts = 0;
+        for (const c of ensureArray(e?.costs?.cost)) {
+          if (c['@_name'] === 'pts') pts = parseInt(c['@_value']) || 0;
+        }
+        options.push({
+          group_name: sgName,
+          name: e['@_name'],
+          is_default: sgIdx === 0,
+          points: pts,
+        });
+        sgIdx++;
+      }
+
+      // Resolve links in subgroups
+      for (const link of ensureArray(subgroup?.entryLinks?.entryLink)) {
+        const linkName = link['@_name'];
+        if (!linkName) continue;
+        // Try to get name from target if link name is missing
+        const targetName = linkName || (entryIndex.get(link['@_targetId']) || {})['@_name'];
+        if (!targetName) continue;
+        let pts = 0;
+        for (const c of ensureArray(link?.costs?.cost)) {
+          if (c['@_name'] === 'pts') pts = parseInt(c['@_value']) || 0;
+        }
+        options.push({
+          group_name: sgName,
+          name: targetName,
+          is_default: options.filter(o => o.group_name === sgName).length === 0,
+          points: pts,
+        });
+        sgIdx++;
+      }
+    }
+  }
+
+  return options;
 }
 
 /**
@@ -584,9 +694,10 @@ function parseCatalog(filePath) {
         seenUnitNames.add(unitName);
         const role = extractRole(entry);
         const keywords = extractKeywords(entry);
-        const isUnique = isUniqueUnit(entry);
+        const maxPerList = extractMaxPerList(entry);
         const weapons = extractWeapons(entry, entryIndex);
         const abilities = extractAbilities(entry);
+        const wargearOptions = extractWargearOptions(entry, entryIndex);
 
         // Deduplicate weapons by name+type
         const weaponMap = new Map();
@@ -606,10 +717,11 @@ function parseCatalog(filePath) {
           leadership: parseInt(stats.LD) || 6,
           objective_control: parseInt(stats.OC) || 1,
           keywords,
-          is_unique: isUnique,
+          max_per_list: maxPerList,
           points_tiers: pointsTiers,
           weapons: [...weaponMap.values()],
           abilities,
+          wargear_options: wargearOptions,
         });
       }
     }
@@ -631,9 +743,10 @@ function parseCatalog(filePath) {
         seenUnitNames.add(unitName);
         const role = extractRole(target);
         const keywords = extractKeywords(target);
-        const isUnique = isUniqueUnit(target);
+        const maxPerList = extractMaxPerList(target);
         const weapons = extractWeapons(target, entryIndex);
         const abilities = extractAbilities(target);
+        const wargearOptions = extractWargearOptions(target, entryIndex);
 
         const weaponMap = new Map();
         for (const w of weapons) {
@@ -652,10 +765,11 @@ function parseCatalog(filePath) {
           leadership: parseInt(stats.LD) || 6,
           objective_control: parseInt(stats.OC) || 1,
           keywords,
-          is_unique: isUnique,
+          max_per_list: maxPerList,
           points_tiers: pointsTiers,
           weapons: [...weaponMap.values()],
           abilities,
+          wargear_options: wargearOptions,
         });
       }
     }
@@ -722,8 +836,8 @@ function generateSQL(faction) {
   for (const unit of units) {
     const kwArray = `'{${unit.keywords.map(k => `"${k.replace(/"/g, '\\"').replace(/'/g, "''")}"`).join(', ')}}'`;
 
-    lines.push(`INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, is_unique) VALUES`);
-    lines.push(`  (${esc(unit.id)}, ${esc(factionId)}, ${esc(unit.name)}, ${esc(unit.role)}, ${esc(unit.movement)}, ${unit.toughness}, ${esc(unit.save)}, ${unit.wounds}, ${unit.leadership}, ${unit.objective_control}, ${kwArray}, ${unit.is_unique});`);
+    lines.push(`INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES`);
+    lines.push(`  (${esc(unit.id)}, ${esc(factionId)}, ${esc(unit.name)}, ${esc(unit.role)}, ${esc(unit.movement)}, ${unit.toughness}, ${esc(unit.save)}, ${unit.wounds}, ${unit.leadership}, ${unit.objective_control}, ${kwArray}, ${unit.max_per_list});`);
     lines.push('');
 
     // Points tiers
@@ -751,6 +865,16 @@ function generateSQL(faction) {
       lines.push(unit.abilities.map(a =>
         `  (${esc(unit.id)}, ${esc(a.name)}, ${esc(a.type)}, ${esc(a.description)})`
       ).join(',\n') + ';');
+      lines.push('');
+    }
+
+    // Wargear options
+    if (unit.wargear_options && unit.wargear_options.length > 0) {
+      lines.push(`INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES`);
+      lines.push(unit.wargear_options.map(wo => {
+        const woId = uuidFromSeed(`wargear:${factionName}:${unit.name}:${wo.group_name}:${wo.name}`);
+        return `  (${esc(woId)}, ${esc(unit.id)}, ${esc(wo.group_name)}, ${esc(wo.name)}, ${wo.is_default}, ${wo.points})`;
+      }).join(',\n') + '\nON CONFLICT (unit_id, group_name, name) DO NOTHING;');
       lines.push('');
     }
   }
@@ -879,6 +1003,14 @@ const header = `-- ============================================================
 -- ============================================================
 
 -- Clean existing seed data (preserve schema)
+DO $$ BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'army_list_unit_wargear') THEN
+    TRUNCATE public.army_list_unit_wargear CASCADE;
+  END IF;
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'wargear_options') THEN
+    TRUNCATE public.wargear_options CASCADE;
+  END IF;
+END $$;
 TRUNCATE public.abilities CASCADE;
 TRUNCATE public.weapons CASCADE;
 TRUNCATE public.unit_points_tiers CASCADE;

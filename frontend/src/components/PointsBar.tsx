@@ -8,11 +8,17 @@ export function PointsBar({ current, limit }: { current: number; limit: number }
   else if (nearLimit) fillClass += ' points-bar__fill--warning';
 
   return (
-    <div className="points-bar">
-      <div
-        className={fillClass}
-        style={{ width: `${percentage}%` }}
-      />
+    <div className="points-bar-container">
+      <div className="points-bar">
+        <div
+          className={fillClass}
+          style={{ width: `${percentage}%` }}
+        />
+      </div>
+      <div className="points-bar-labels">
+        <span>{current} pts</span>
+        <span>{limit} pts</span>
+      </div>
     </div>
   );
 }
