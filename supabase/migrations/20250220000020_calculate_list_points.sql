@@ -55,7 +55,7 @@ begin
 end;
 $$;
 
--- Full army list validation: points + duplicate unique unit detection
+-- Full army list validation: points + unit limit enforcement + enhancement rules
 create or replace function public.validate_army_list(list_id uuid)
 returns jsonb
 language plpgsql
@@ -63,32 +63,66 @@ stable
 as $$
 declare
   v_points jsonb;
-  v_duplicate_units jsonb;
+  v_unit_violations jsonb;
+  v_enhancement_violations jsonb;
 begin
   -- Get points calculation
   v_points := public.calculate_list_points(list_id);
 
-  -- Find duplicate unique units (epic heroes and other units that should only appear once)
-  -- Units with role 'epic_hero' are always unique; others may be added multiple times
+  -- Check unit count limits against max_per_list (10th Edition muster rules)
   select coalesce(jsonb_agg(jsonb_build_object(
     'unit_id', unit_id,
     'unit_name', unit_name,
-    'count', cnt
+    'count', cnt,
+    'max_allowed', max_allowed
   )), '[]'::jsonb)
-  into v_duplicate_units
+  into v_unit_violations
   from (
-    select u.id as unit_id, u.name as unit_name, count(*) as cnt
+    select u.id as unit_id, u.name as unit_name, count(*) as cnt, u.max_per_list as max_allowed
     from public.army_list_units alu
     join public.units u on u.id = alu.unit_id
     where alu.army_list_id = list_id
-      and u.role = 'epic_hero'
-    group by u.id, u.name
+    group by u.id, u.name, u.max_per_list
+    having count(*) > u.max_per_list
+  ) violations;
+
+  -- Check enhancement rules (max 3 total, no duplicates, not on Epic Heroes)
+  select coalesce(jsonb_agg(violation), '[]'::jsonb)
+  into v_enhancement_violations
+  from (
+    -- Too many enhancements total (max 3)
+    select 'Army has ' || count(*) || ' enhancements (max 3 allowed)' as violation
+    from public.army_list_enhancements ale
+    where ale.army_list_id = list_id
+    having count(*) > 3
+
+    union all
+
+    -- Duplicate enhancements
+    select 'Enhancement "' || e.name || '" is used ' || count(*) || ' times (max 1 allowed)' as violation
+    from public.army_list_enhancements ale
+    join public.enhancements e on e.id = ale.enhancement_id
+    where ale.army_list_id = list_id
+    group by e.id, e.name
     having count(*) > 1
-  ) dupes;
+
+    union all
+
+    -- Enhancements on Epic Heroes
+    select 'Enhancement "' || e.name || '" assigned to Epic Hero "' || u.name || '"' as violation
+    from public.army_list_enhancements ale
+    join public.enhancements e on e.id = ale.enhancement_id
+    join public.army_list_units alu on alu.id = ale.army_list_unit_id
+    join public.units u on u.id = alu.unit_id
+    where ale.army_list_id = list_id
+      and u.role = 'epic_hero'
+  ) enh_violations;
 
   return v_points || jsonb_build_object(
-    'duplicate_unique_units', v_duplicate_units,
-    'has_duplicate_uniques', jsonb_array_length(v_duplicate_units) > 0
+    'unit_limit_violations', v_unit_violations,
+    'has_unit_limit_violations', jsonb_array_length(v_unit_violations) > 0,
+    'enhancement_violations', v_enhancement_violations,
+    'has_enhancement_violations', jsonb_array_length(v_enhancement_violations) > 0
   );
 end;
 $$;

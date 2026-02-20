@@ -140,33 +140,68 @@ export function ListEditorPage() {
 
   const overLimit = list ? totalPoints > list.points_limit : false;
 
-  const duplicateUniqueWarnings = useMemo(() => {
-    const uniqueUnitCounts = new Map<string, number>();
+  const unitLimitWarnings = useMemo(() => {
+    const unitCounts = new Map<string, { name: string; count: number; maxPerList: number }>();
     for (const lu of listUnits) {
-      if (lu.units.is_unique) {
-        uniqueUnitCounts.set(lu.units.name, (uniqueUnitCounts.get(lu.units.name) ?? 0) + 1);
+      const existing = unitCounts.get(lu.unit_id);
+      if (existing) {
+        existing.count += 1;
+      } else {
+        unitCounts.set(lu.unit_id, {
+          name: lu.units.name,
+          count: 1,
+          maxPerList: lu.units.max_per_list,
+        });
       }
     }
     const warnings: string[] = [];
-    for (const [name, count] of uniqueUnitCounts) {
-      if (count > 1) warnings.push(`${name} is unique and appears ${count} times`);
+    for (const [, info] of unitCounts) {
+      if (info.count > info.maxPerList) {
+        warnings.push(
+          `${info.name} exceeds its limit (${info.count}/${info.maxPerList} allowed)`
+        );
+      }
     }
     return warnings;
   }, [listUnits]);
 
   const pointsMismatch = serverValidation !== null && serverValidation.total_points !== totalPoints;
 
-  const uniqueUnitIdsInList = useMemo(() => {
-    const ids = new Set<string>();
+  const unitCountsInList = useMemo(() => {
+    const counts = new Map<string, number>();
     for (const lu of listUnits) {
-      if (lu.units.is_unique) ids.add(lu.unit_id);
+      counts.set(lu.unit_id, (counts.get(lu.unit_id) ?? 0) + 1);
     }
-    return ids;
+    return counts;
   }, [listUnits]);
 
   const assignedEnhancementIds = useMemo(() => {
     return new Set(listEnhancements.map(le => le.enhancement_id));
   }, [listEnhancements]);
+
+  const enhancementLimitReached = listEnhancements.length >= 3;
+
+  const enhancementWarnings = useMemo(() => {
+    const warnings: string[] = [];
+    if (listEnhancements.length > 3) {
+      warnings.push(`Too many enhancements: ${listEnhancements.length}/3 allowed`);
+    }
+    const enhIds = listEnhancements.map(le => le.enhancement_id);
+    const dupes = enhIds.filter((eid, i) => enhIds.indexOf(eid) !== i);
+    if (dupes.length > 0) {
+      const dupeNames = [...new Set(dupes)].map(eid =>
+        enhancements.find(e => e.id === eid)?.name ?? 'Unknown'
+      );
+      warnings.push(`Duplicate enhancements: ${dupeNames.join(', ')}`);
+    }
+    for (const le of listEnhancements) {
+      const lu = listUnits.find(u => u.id === le.army_list_unit_id);
+      if (lu && lu.units.role === 'epic_hero') {
+        warnings.push(`${lu.units.name} is an Epic Hero and cannot take enhancements`);
+      }
+    }
+    return warnings;
+  }, [listEnhancements, listUnits, enhancements]);
 
   const unitEnhancementMap = useMemo(() => {
     const map = new Map<string, { enhancementId: string; listEnhancementId: string }>();
@@ -178,7 +213,8 @@ export function ListEditorPage() {
 
   async function addUnit(unit: UnitWithRelations) {
     if (!id) return;
-    if (unit.is_unique && uniqueUnitIdsInList.has(unit.id)) return;
+    const currentCount = unitCountsInList.get(unit.id) ?? 0;
+    if (currentCount >= unit.max_per_list) return;
 
     const minModels = unit.unit_points_tiers.length > 0
       ? Math.min(...unit.unit_points_tiers.map(t => t.model_count))
@@ -330,7 +366,7 @@ export function ListEditorPage() {
           <PointsBar current={totalPoints} limit={list.points_limit} />
 
           {/* Validation banners */}
-          {(overLimit || duplicateUniqueWarnings.length > 0 || pointsMismatch || serverValidationError || (serverValidation && !serverValidation.is_valid && !overLimit)) && (
+          {(overLimit || unitLimitWarnings.length > 0 || enhancementWarnings.length > 0 || pointsMismatch || serverValidationError || (serverValidation && !serverValidation.is_valid && !overLimit)) && (
             <div className="list-editor__validations">
               {overLimit && (
                 <div className="validation-banner validation-banner--error">
@@ -338,9 +374,15 @@ export function ListEditorPage() {
                 </div>
               )}
 
-              {duplicateUniqueWarnings.length > 0 && (
+              {unitLimitWarnings.length > 0 && (
                 <div className="validation-banner validation-banner--error">
-                  {duplicateUniqueWarnings.map((w, i) => <div key={i}>{w}</div>)}
+                  {unitLimitWarnings.map((w, i) => <div key={i}>{w}</div>)}
+                </div>
+              )}
+
+              {enhancementWarnings.length > 0 && (
+                <div className="validation-banner validation-banner--warning">
+                  {enhancementWarnings.map((w, i) => <div key={i}>{w}</div>)}
                 </div>
               )}
 
@@ -369,7 +411,7 @@ export function ListEditorPage() {
         {listUnits.length > 0 ? (
           <div className="list-editor__units-grid">
             {listUnits.map((lu) => {
-              const isCharacter = lu.units.role === 'character' || lu.units.role === 'epic_hero';
+              const isCharacter = lu.units.role === 'character';
               const unitEnh = unitEnhancementMap.get(lu.id);
               return (
                 <UnitCard
@@ -385,6 +427,7 @@ export function ListEditorPage() {
                     assigned: unitEnh ? enhancements.find(e => e.id === unitEnh.enhancementId) ?? null : null,
                     available: enhancements.filter(e => !assignedEnhancementIds.has(e.id) || e.id === unitEnh?.enhancementId),
                     onAssign: (enhId) => assignEnhancement(lu.id, enhId),
+                    limitReached: enhancementLimitReached && !unitEnh,
                   } : undefined}
                   wargear={(() => {
                     const unitOpts = wargearOptions.filter(w => w.unit_id === lu.unit_id);
@@ -425,20 +468,33 @@ export function ListEditorPage() {
             const minTier = unit.unit_points_tiers.length > 0
               ? Math.min(...unit.unit_points_tiers.map(t => t.points))
               : 0;
-            const isUniqueAlreadyAdded = unit.is_unique && uniqueUnitIdsInList.has(unit.id);
+            const currentCount = unitCountsInList.get(unit.id) ?? 0;
+            const atLimit = currentCount >= unit.max_per_list;
             return (
               <div
                 key={unit.id}
-                className={`unit-picker-item${isUniqueAlreadyAdded ? ' unit-picker-item--disabled' : ''}`}
-                onClick={() => !isUniqueAlreadyAdded && addUnit(unit)}
+                className={`unit-picker-item${atLimit ? ' unit-picker-item--disabled' : ''}`}
+                onClick={() => !atLimit && addUnit(unit)}
               >
                 <div className="unit-picker-item__info">
                   <span className="unit-picker-item__name">{unit.name}</span>
                   <span className={`role-badge role-badge--${unit.role}`}>
                     {unit.role.replace('_', ' ')}
                   </span>
+                  {atLimit && (
+                    <span className="unit-picker-item__limit-tag">
+                      Max {unit.max_per_list}
+                    </span>
+                  )}
                 </div>
-                <span className="unit-picker-item__points">{minTier} pts</span>
+                <div className="unit-picker-item__right">
+                  {currentCount > 0 && (
+                    <span className="unit-picker-item__count">
+                      {currentCount}/{unit.max_per_list}
+                    </span>
+                  )}
+                  <span className="unit-picker-item__points">{minTier} pts</span>
+                </div>
               </div>
             );
           })}

@@ -13,6 +13,7 @@ interface UnitCardProps {
     assigned: Enhancement | null;
     available: Enhancement[];
     onAssign: (enhancementId: string) => void;
+    limitReached?: boolean;
   };
   wargear?: {
     options: WargearOption[];
@@ -45,8 +46,11 @@ export function UnitCard({
             <span className={`role-badge role-badge--${unit.role}`}>
               {unit.role.replace('_', ' ')}
             </span>
-            {unit.is_unique && (
+            {unit.max_per_list === 1 && (
               <span className="unit-card__unique-tag">Unique</span>
+            )}
+            {unit.max_per_list > 1 && unit.max_per_list < 3 && (
+              <span className="unit-card__limit-tag">Max {unit.max_per_list}</span>
             )}
           </div>
           <StatLine unit={unit} />
@@ -156,9 +160,10 @@ export function UnitCard({
               className="form-select"
               value={enhancement.assigned?.id ?? ''}
               onChange={(e) => enhancement.onAssign(e.target.value)}
+              disabled={enhancement.limitReached}
               style={{ fontSize: 'var(--text-xs)', padding: '4px 8px', flex: 1 }}
             >
-              <option value="">None</option>
+              <option value="">{enhancement.limitReached ? 'Max 3 enhancements reached' : 'None'}</option>
               {enhancement.available.map(e => (
                 <option key={e.id} value={e.id}>{e.name} (+{e.points} pts)</option>
               ))}

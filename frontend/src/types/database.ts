@@ -53,7 +53,7 @@ export type Database = {
           leadership: number;
           objective_control: number;
           keywords: string[];
-          is_unique: boolean;
+          max_per_list: number;
           created_at: string;
         };
         Insert: {
@@ -68,7 +68,7 @@ export type Database = {
           leadership: number;
           objective_control: number;
           keywords?: string[];
-          is_unique?: boolean;
+          max_per_list?: number;
         };
         Update: {
           id?: string;
@@ -82,7 +82,7 @@ export type Database = {
           leadership?: number;
           objective_control?: number;
           keywords?: string[];
-          is_unique?: boolean;
+          max_per_list?: number;
         };
       };
       unit_points_tiers: {
@@ -326,12 +326,15 @@ export type Database = {
           enhancement_points: number;
           points_limit: number;
           is_valid: boolean;
-          duplicate_unique_units: {
+          unit_limit_violations: {
             unit_id: string;
             unit_name: string;
             count: number;
+            max_allowed: number;
           }[];
-          has_duplicate_uniques: boolean;
+          has_unit_limit_violations: boolean;
+          enhancement_violations: string[];
+          has_enhancement_violations: boolean;
         };
       };
     };

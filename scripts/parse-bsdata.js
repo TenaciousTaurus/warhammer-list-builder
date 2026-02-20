@@ -378,20 +378,40 @@ function extractKeywords(node) {
 }
 
 /**
- * Check if a unit is unique/named character.
+ * Extract max_per_list from BSData constraint data.
+ * Checks for type="max" field="selections" constraints at both
+ * scope="roster" and scope="force" (different factions use different scopes).
+ * Falls back to role-based defaults per 10th Edition muster rules.
  */
-function isUniqueUnit(node) {
+function extractMaxPerList(node) {
   const role = extractRole(node);
-  if (role === 'epic_hero') return true;
 
-  // Check for max 1 constraint at roster level
+  // Epic heroes are always max 1
+  if (role === 'epic_hero') return 1;
+
+  // Look for explicit max constraint on selections at roster or force scope
+  let maxValue = null;
   for (const constraint of ensureArray(node?.constraints?.constraint)) {
-    if (constraint['@_type'] === 'max' && constraint['@_value'] === '1' &&
-        constraint['@_scope'] === 'roster' && constraint['@_field'] === 'selections') {
-      return true;
+    if (
+      constraint['@_type'] === 'max' &&
+      constraint['@_field'] === 'selections' &&
+      (constraint['@_scope'] === 'roster' || constraint['@_scope'] === 'force')
+    ) {
+      const val = parseInt(constraint['@_value'], 10);
+      if (val > 0) {
+        // Take the most restrictive (smallest) if multiple constraints exist
+        if (maxValue === null || val < maxValue) {
+          maxValue = val;
+        }
+      }
     }
   }
-  return false;
+
+  if (maxValue !== null) return maxValue;
+
+  // Fall back to role-based defaults per 10th Edition rules
+  if (role === 'battleline' || role === 'dedicated_transport') return 6;
+  return 3;
 }
 
 /**
@@ -674,7 +694,7 @@ function parseCatalog(filePath) {
         seenUnitNames.add(unitName);
         const role = extractRole(entry);
         const keywords = extractKeywords(entry);
-        const isUnique = isUniqueUnit(entry);
+        const maxPerList = extractMaxPerList(entry);
         const weapons = extractWeapons(entry, entryIndex);
         const abilities = extractAbilities(entry);
         const wargearOptions = extractWargearOptions(entry, entryIndex);
@@ -697,7 +717,7 @@ function parseCatalog(filePath) {
           leadership: parseInt(stats.LD) || 6,
           objective_control: parseInt(stats.OC) || 1,
           keywords,
-          is_unique: isUnique,
+          max_per_list: maxPerList,
           points_tiers: pointsTiers,
           weapons: [...weaponMap.values()],
           abilities,
@@ -723,7 +743,7 @@ function parseCatalog(filePath) {
         seenUnitNames.add(unitName);
         const role = extractRole(target);
         const keywords = extractKeywords(target);
-        const isUnique = isUniqueUnit(target);
+        const maxPerList = extractMaxPerList(target);
         const weapons = extractWeapons(target, entryIndex);
         const abilities = extractAbilities(target);
         const wargearOptions = extractWargearOptions(target, entryIndex);
@@ -745,7 +765,7 @@ function parseCatalog(filePath) {
           leadership: parseInt(stats.LD) || 6,
           objective_control: parseInt(stats.OC) || 1,
           keywords,
-          is_unique: isUnique,
+          max_per_list: maxPerList,
           points_tiers: pointsTiers,
           weapons: [...weaponMap.values()],
           abilities,
@@ -816,8 +836,8 @@ function generateSQL(faction) {
   for (const unit of units) {
     const kwArray = `'{${unit.keywords.map(k => `"${k.replace(/"/g, '\\"').replace(/'/g, "''")}"`).join(', ')}}'`;
 
-    lines.push(`INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, is_unique) VALUES`);
-    lines.push(`  (${esc(unit.id)}, ${esc(factionId)}, ${esc(unit.name)}, ${esc(unit.role)}, ${esc(unit.movement)}, ${unit.toughness}, ${esc(unit.save)}, ${unit.wounds}, ${unit.leadership}, ${unit.objective_control}, ${kwArray}, ${unit.is_unique});`);
+    lines.push(`INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES`);
+    lines.push(`  (${esc(unit.id)}, ${esc(factionId)}, ${esc(unit.name)}, ${esc(unit.role)}, ${esc(unit.movement)}, ${unit.toughness}, ${esc(unit.save)}, ${unit.wounds}, ${unit.leadership}, ${unit.objective_control}, ${kwArray}, ${unit.max_per_list});`);
     lines.push('');
 
     // Points tiers

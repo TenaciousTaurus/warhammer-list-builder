@@ -669,6 +669,14 @@
   font-style: italic;
 }
 
+.unit-card__limit-tag {
+  font-size: var(--text-xs);
+  background: rgba(192, 64, 64, 0.15);
+  color: #ef4444;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+}
+
 .unit-card__actions {
   display: flex;
   flex-direction: column;
@@ -848,13 +856,36 @@
   text-overflow: ellipsis;
 }
 
+.unit-picker-item__right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+  margin-left: var(--space-sm);
+}
+
+.unit-picker-item__count {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.unit-picker-item__limit-tag {
+  font-size: var(--text-xs);
+  background: rgba(192, 64, 64, 0.2);
+  color: #ef4444;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
 .unit-picker-item__points {
   color: var(--color-gold);
   font-weight: 600;
   font-size: var(--text-sm);
   font-variant-numeric: tabular-nums;
   flex-shrink: 0;
-  margin-left: var(--space-sm);
 }
 
 /* Sticky summary panel */

@@ -40,7 +40,7 @@ create table public.units (
   leadership integer not null default 6,
   objective_control integer not null default 1,
   keywords text[] not null default '{}',
-  is_unique boolean not null default false,
+  max_per_list integer not null default 3,
   created_at timestamptz not null default now()
 );
 

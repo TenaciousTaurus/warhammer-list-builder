@@ -109,9 +109,14 @@ export function UnitsPage() {
                       <span className={`role-badge role-badge--${unit.role}`}>
                         {unit.role.replace('_', ' ')}
                       </span>
-                      {unit.is_unique && (
+                      {unit.max_per_list === 1 && (
                         <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-role-epic-hero)', fontStyle: 'italic' }}>
                           Unique
+                        </span>
+                      )}
+                      {unit.max_per_list > 1 && unit.max_per_list < 3 && (
+                        <span style={{ fontSize: 'var(--text-xs)', color: '#ef4444' }}>
+                          Max {unit.max_per_list}
                         </span>
                       )}
                     </div>
