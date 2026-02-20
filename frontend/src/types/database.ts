@@ -263,8 +263,78 @@ export type Database = {
           army_list_unit_id?: string;
         };
       };
+      wargear_options: {
+        Row: {
+          id: string;
+          unit_id: string;
+          group_name: string;
+          name: string;
+          is_default: boolean;
+          points: number;
+        };
+        Insert: {
+          id?: string;
+          unit_id: string;
+          group_name: string;
+          name: string;
+          is_default?: boolean;
+          points?: number;
+        };
+        Update: {
+          id?: string;
+          unit_id?: string;
+          group_name?: string;
+          name?: string;
+          is_default?: boolean;
+          points?: number;
+        };
+      };
+      army_list_unit_wargear: {
+        Row: {
+          id: string;
+          army_list_unit_id: string;
+          wargear_option_id: string;
+        };
+        Insert: {
+          id?: string;
+          army_list_unit_id: string;
+          wargear_option_id: string;
+        };
+        Update: {
+          id?: string;
+          army_list_unit_id?: string;
+          wargear_option_id?: string;
+        };
+      };
     };
-    Functions: Record<string, never>;
+    Functions: {
+      calculate_list_points: {
+        Args: { list_id: string };
+        Returns: {
+          total_points: number;
+          unit_points: number;
+          enhancement_points: number;
+          points_limit: number;
+          is_valid: boolean;
+        };
+      };
+      validate_army_list: {
+        Args: { list_id: string };
+        Returns: {
+          total_points: number;
+          unit_points: number;
+          enhancement_points: number;
+          points_limit: number;
+          is_valid: boolean;
+          duplicate_unique_units: {
+            unit_id: string;
+            unit_name: string;
+            count: number;
+          }[];
+          has_duplicate_uniques: boolean;
+        };
+      };
+    };
     Enums: Record<string, never>;
   };
 };
@@ -280,3 +350,9 @@ export type Enhancement = Database['public']['Tables']['enhancements']['Row'];
 export type ArmyList = Database['public']['Tables']['army_lists']['Row'];
 export type ArmyListUnit = Database['public']['Tables']['army_list_units']['Row'];
 export type ArmyListEnhancement = Database['public']['Tables']['army_list_enhancements']['Row'];
+export type WargearOption = Database['public']['Tables']['wargear_options']['Row'];
+export type ArmyListUnitWargear = Database['public']['Tables']['army_list_unit_wargear']['Row'];
+
+// RPC response types
+export type CalculateListPointsResult = Database['public']['Functions']['calculate_list_points']['Returns'];
+export type ValidateArmyListResult = Database['public']['Functions']['validate_army_list']['Returns'];

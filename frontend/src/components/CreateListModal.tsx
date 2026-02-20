@@ -52,7 +52,6 @@ export function CreateListModal({ onClose, onCreated }: CreateListModalProps) {
     if (!name || !factionId || !detachmentId) return;
     setSaving(true);
 
-    // For now, use a placeholder user ID since we haven't set up auth yet
     const { error } = await supabase.from('army_lists').insert({
       name,
       faction_id: factionId,
@@ -68,26 +67,12 @@ export function CreateListModal({ onClose, onCreated }: CreateListModalProps) {
   }
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        backgroundColor: 'rgba(0,0,0,0.7)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 100,
-      }}
-      onClick={onClose}
-    >
+    <div className="modal-backdrop" onClick={onClose}>
       <div
-        className="card"
-        style={{ width: '100%', maxWidth: '450px' }}
+        className="modal-panel modal-panel--sm"
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 style={{ fontSize: '1.1rem', marginBottom: 'var(--space-lg)', color: 'var(--color-gold)' }}>
-          New Army List
-        </h2>
+        <h2 className="modal-panel__title">New Army List</h2>
         <form onSubmit={handleSubmit} style={{ display: 'grid', gap: 'var(--space-md)' }}>
           <div className="form-group">
             <label>List Name</label>
@@ -141,7 +126,7 @@ export function CreateListModal({ onClose, onCreated }: CreateListModalProps) {
             </select>
           </div>
 
-          <div style={{ display: 'flex', gap: 'var(--space-md)', justifyContent: 'flex-end' }}>
+          <div className="modal-panel__actions">
             <button type="button" className="btn" onClick={onClose}>
               Cancel
             </button>

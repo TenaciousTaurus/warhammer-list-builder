@@ -34,8 +34,8 @@ export function ListsPage() {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-lg)' }}>
-        <h2 style={{ fontSize: '1.25rem' }}>My Army Lists</h2>
+      <div className="lists-page__header">
+        <h2 className="lists-page__title">My Army Lists</h2>
         <button className="btn btn--primary" onClick={() => setShowCreate(true)}>
           + New List
         </button>
@@ -55,33 +55,29 @@ export function ListsPage() {
           </button>
         </div>
       ) : (
-        <div style={{ display: 'grid', gap: 'var(--space-md)' }}>
+        <div className="lists-page__grid">
           {lists.map((list) => (
             <Link
               key={list.id}
               to={`/list/${list.id}`}
-              style={{ textDecoration: 'none', color: 'inherit' }}
+              className="list-card"
             >
-              <div className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div>
-                  <h3 style={{ fontSize: '1rem', marginBottom: 'var(--space-xs)' }}>
-                    {list.name}
-                  </h3>
-                  <span style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>
-                    {list.factions?.name} &middot; {list.points_limit} pts
-                  </span>
-                </div>
-                <button
-                  className="btn btn--danger"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    handleDelete(list.id);
-                  }}
-                >
-                  Delete
-                </button>
+              <div>
+                <h3 className="list-card__name">{list.name}</h3>
+                <span className="list-card__meta">
+                  {list.factions?.name} &middot; {list.points_limit} pts
+                </span>
               </div>
+              <button
+                className="btn btn--danger list-card__delete"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  handleDelete(list.id);
+                }}
+              >
+                Delete
+              </button>
             </Link>
           ))}
         </div>

@@ -7,6 +7,42 @@ type ArmyListUnitWithDetails = ArmyListUnit & {
   units: UnitWithRelations;
 };
 
+export interface ParsedUnit {
+  name: string;
+  modelCount: number;
+  enhancementName: string | null;
+}
+
+function parseImportText(text: string): ParsedUnit[] {
+  const units: ParsedUnit[] = [];
+  const lines = text.split('\n');
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
+    // Match unit lines:  "  Unit Name - 100 pts" or "  Unit Name (5 models) - 100 pts"
+    const unitMatch = line.match(/^\s{2}(.+?)(?:\s+\((\d+)\s+models?\))?\s+-\s+\d+\s+pts\s*$/);
+    if (!unitMatch) continue;
+
+    const name = unitMatch[1].trim();
+    const modelCount = unitMatch[2] ? parseInt(unitMatch[2], 10) : 1;
+
+    // Check if next line has an enhancement
+    let enhancementName: string | null = null;
+    if (i + 1 < lines.length) {
+      const enhMatch = lines[i + 1].match(/^\s{4}Enhancement:\s+(.+?)\s+\(\+\d+\s+pts\)\s*$/);
+      if (enhMatch) {
+        enhancementName = enhMatch[1].trim();
+        i++; // skip the enhancement line
+      }
+    }
+
+    units.push({ name, modelCount, enhancementName });
+  }
+
+  return units;
+}
+
 interface ExportModalProps {
   list: ArmyList & { detachments: Detachment };
   listUnits: ArmyListUnitWithDetails[];
@@ -15,6 +51,7 @@ interface ExportModalProps {
   totalPoints: number;
   getUnitPoints: (unit: Unit & { unit_points_tiers: UnitPointsTier[] }, modelCount: number) => number;
   onClose: () => void;
+  onImport?: (parsed: ParsedUnit[]) => Promise<{ success: boolean; matched: number; unmatched: string[] }>;
 }
 
 function generateExportText(
@@ -31,7 +68,6 @@ function generateExportText(
   lines.push(`Detachment: ${list.detachments?.name ?? 'Unknown'}`);
   lines.push('');
 
-  // Group by role
   const roleOrder = ['epic_hero', 'character', 'battleline', 'infantry', 'mounted', 'beast', 'vehicle', 'monster', 'fortification', 'dedicated_transport', 'allied'];
   const roleLabels: Record<string, string> = {
     epic_hero: 'Epic Heroes',
@@ -80,10 +116,12 @@ function generateExportText(
   return lines.join('\n');
 }
 
-export function ExportModal({ list, listUnits, enhancements, listEnhancements, totalPoints, getUnitPoints, onClose }: ExportModalProps) {
+export function ExportModal({ list, listUnits, enhancements, listEnhancements, totalPoints, getUnitPoints, onClose, onImport }: ExportModalProps) {
   const [copied, setCopied] = useState(false);
   const [importMode, setImportMode] = useState(false);
   const [importText, setImportText] = useState('');
+  const [importing, setImporting] = useState(false);
+  const [importResult, setImportResult] = useState<{ success: boolean; matched: number; unmatched: string[] } | null>(null);
 
   const exportText = generateExportText(list, listUnits, enhancements, listEnhancements, totalPoints, getUnitPoints);
 
@@ -94,32 +132,34 @@ export function ExportModal({ list, listUnits, enhancements, listEnhancements, t
     });
   }
 
+  const textareaStyles = {
+    width: '100%',
+    minHeight: '300px',
+    padding: 'var(--space-md)',
+    backgroundColor: 'rgba(10, 10, 15, 0.6)',
+    border: '1px solid var(--glass-border)',
+    borderRadius: 'var(--radius-md)',
+    color: 'var(--color-text-primary)',
+    fontFamily: 'monospace',
+    fontSize: 'var(--text-sm)',
+    resize: 'vertical' as const,
+    flex: 1,
+  };
+
   return (
-    <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        backgroundColor: 'rgba(0,0,0,0.7)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 100,
-      }}
-      onClick={onClose}
-    >
+    <div className="modal-backdrop" onClick={onClose}>
       <div
-        className="card"
-        style={{ width: '100%', maxWidth: '600px', maxHeight: '80vh', display: 'flex', flexDirection: 'column' }}
+        className="modal-panel modal-panel--md"
+        style={{ maxHeight: '80vh', display: 'flex', flexDirection: 'column' }}
         onClick={(e) => e.stopPropagation()}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-md)' }}>
-          <h2 style={{ fontSize: '1.1rem', color: 'var(--color-gold)' }}>
+          <h2 className="modal-panel__title" style={{ marginBottom: 0 }}>
             {importMode ? 'Import List' : 'Export List'}
           </h2>
           <button
             className="btn"
             onClick={() => setImportMode(!importMode)}
-            style={{ fontSize: '0.8rem' }}
           >
             {importMode ? 'Back to Export' : 'Switch to Import'}
           </button>
@@ -130,21 +170,9 @@ export function ExportModal({ list, listUnits, enhancements, listEnhancements, t
             <textarea
               readOnly
               value={exportText}
-              style={{
-                width: '100%',
-                minHeight: '300px',
-                padding: 'var(--space-md)',
-                backgroundColor: 'var(--color-bg-tertiary)',
-                border: '1px solid var(--color-border)',
-                borderRadius: 'var(--radius-sm)',
-                color: 'var(--color-text-primary)',
-                fontFamily: 'monospace',
-                fontSize: '0.85rem',
-                resize: 'vertical',
-                flex: 1,
-              }}
+              style={textareaStyles}
             />
-            <div style={{ display: 'flex', gap: 'var(--space-md)', justifyContent: 'flex-end', marginTop: 'var(--space-md)' }}>
+            <div className="modal-panel__actions">
               <button className="btn" onClick={onClose}>Close</button>
               <button className="btn btn--primary" onClick={handleCopy}>
                 {copied ? 'Copied!' : 'Copy to Clipboard'}
@@ -153,38 +181,59 @@ export function ExportModal({ list, listUnits, enhancements, listEnhancements, t
           </>
         ) : (
           <>
-            <p style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', marginBottom: 'var(--space-md)' }}>
+            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)', marginBottom: 'var(--space-md)' }}>
               Paste an exported list below. Note: importing will match units by name against the current faction's available units.
             </p>
             <textarea
               value={importText}
               onChange={(e) => setImportText(e.target.value)}
               placeholder="Paste exported list text here..."
-              style={{
-                width: '100%',
-                minHeight: '300px',
-                padding: 'var(--space-md)',
-                backgroundColor: 'var(--color-bg-tertiary)',
-                border: '1px solid var(--color-border)',
-                borderRadius: 'var(--radius-sm)',
-                color: 'var(--color-text-primary)',
-                fontFamily: 'monospace',
-                fontSize: '0.85rem',
-                resize: 'vertical',
-                flex: 1,
-              }}
+              style={textareaStyles}
             />
-            <div style={{ display: 'flex', gap: 'var(--space-md)', justifyContent: 'flex-end', marginTop: 'var(--space-md)' }}>
+            {importResult && (
+              <div
+                className={`validation-banner ${importResult.success ? 'validation-banner--warning' : 'validation-banner--error'}`}
+                style={{ marginTop: 'var(--space-sm)' }}
+              >
+                {importResult.success ? (
+                  <>
+                    <div>Imported {importResult.matched} unit{importResult.matched !== 1 ? 's' : ''} successfully.</div>
+                    {importResult.unmatched.length > 0 && (
+                      <div style={{ marginTop: 'var(--space-xs)', fontSize: 'var(--text-xs)' }}>
+                        Could not match: {importResult.unmatched.join(', ')}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div>Import failed. Check the text format and try again.</div>
+                )}
+              </div>
+            )}
+
+            <div className="modal-panel__actions">
               <button className="btn" onClick={onClose}>Close</button>
               <button
                 className="btn btn--primary"
-                disabled={!importText.trim()}
-                onClick={() => {
-                  // Import is informational for now - users can use the text format for reference
-                  alert('Import parsing is not yet implemented. Use the export text to share lists manually.');
+                disabled={!importText.trim() || importing || !onImport}
+                onClick={async () => {
+                  if (!onImport) return;
+                  setImporting(true);
+                  setImportResult(null);
+                  try {
+                    const parsed = parseImportText(importText);
+                    const result = await onImport(parsed);
+                    setImportResult(result);
+                    if (result.success) {
+                      setTimeout(onClose, 1500);
+                    }
+                  } catch {
+                    setImportResult({ success: false, matched: 0, unmatched: [] });
+                  } finally {
+                    setImporting(false);
+                  }
                 }}
               >
-                Import (Coming Soon)
+                {importing ? 'Importing...' : 'Import List'}
               </button>
             </div>
           </>

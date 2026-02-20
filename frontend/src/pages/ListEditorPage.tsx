@@ -1,10 +1,10 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import type { ArmyList, Unit, UnitPointsTier, ArmyListUnit, Enhancement, Detachment, Ability } from '../types/database';
+import type { ArmyList, Unit, UnitPointsTier, ArmyListUnit, Enhancement, Detachment, Ability, ValidateArmyListResult, WargearOption } from '../types/database';
 import { UnitCard } from '../components/UnitCard';
 import { PointsBar } from '../components/PointsBar';
-import { ExportModal } from '../components/ExportModal';
+import { ExportModal, type ParsedUnit } from '../components/ExportModal';
 
 type UnitWithRelations = Unit & { unit_points_tiers: UnitPointsTier[]; abilities: Ability[] };
 
@@ -21,9 +21,24 @@ export function ListEditorPage() {
   const [enhancements, setEnhancements] = useState<Enhancement[]>([]);
   const [listEnhancements, setListEnhancements] = useState<{ id: string; enhancement_id: string; army_list_unit_id: string }[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showUnitPicker, setShowUnitPicker] = useState(false);
   const [showExport, setShowExport] = useState(false);
   const [unitPickerFilter, setUnitPickerFilter] = useState('');
+  const [serverValidation, setServerValidation] = useState<ValidateArmyListResult | null>(null);
+  const [serverValidationError, setServerValidationError] = useState(false);
+  const [wargearOptions, setWargearOptions] = useState<WargearOption[]>([]);
+  const [unitWargearSelections, setUnitWargearSelections] = useState<Map<string, Map<string, string>>>(new Map());
+
+  async function fetchServerValidation() {
+    if (!id) return;
+    const { data, error } = await supabase.rpc('validate_army_list', { list_id: id });
+    if (error) {
+      setServerValidationError(true);
+      console.error('Server validation failed:', error);
+    } else {
+      setServerValidation(data as unknown as ValidateArmyListResult);
+      setServerValidationError(false);
+    }
+  }
 
   async function fetchList() {
     if (!id) return;
@@ -55,7 +70,6 @@ export function ListEditorPage() {
 
     if (available) setAvailableUnits(available as UnitWithRelations[]);
 
-    // Fetch enhancements for the detachment
     const { data: enhData } = await supabase
       .from('enhancements')
       .select('*')
@@ -64,7 +78,6 @@ export function ListEditorPage() {
 
     if (enhData) setEnhancements(enhData);
 
-    // Fetch assigned enhancements for this list
     const { data: listEnhData } = await supabase
       .from('army_list_enhancements')
       .select('*')
@@ -72,7 +85,35 @@ export function ListEditorPage() {
 
     if (listEnhData) setListEnhancements(listEnhData);
 
+    const { data: wargearData } = await supabase
+      .from('wargear_options')
+      .select('*')
+      .in('unit_id', (available || []).map(u => u.id))
+      .order('group_name')
+      .order('is_default', { ascending: false });
+
+    if (wargearData) setWargearOptions(wargearData);
+
+    if (unitData && unitData.length > 0) {
+      const { data: wargearSelData } = await supabase
+        .from('army_list_unit_wargear')
+        .select('*')
+        .in('army_list_unit_id', unitData.map(u => u.id));
+
+      if (wargearSelData) {
+        const selMap = new Map<string, Map<string, string>>();
+        for (const sel of wargearSelData) {
+          const opt = wargearData?.find(w => w.id === sel.wargear_option_id);
+          if (!opt) continue;
+          if (!selMap.has(sel.army_list_unit_id)) selMap.set(sel.army_list_unit_id, new Map());
+          selMap.get(sel.army_list_unit_id)!.set(opt.group_name, sel.wargear_option_id);
+        }
+        setUnitWargearSelections(selMap);
+      }
+    }
+
     setLoading(false);
+    fetchServerValidation();
   }
 
   useEffect(() => {
@@ -99,7 +140,6 @@ export function ListEditorPage() {
 
   const overLimit = list ? totalPoints > list.points_limit : false;
 
-  // Validation: detect duplicate unique units
   const duplicateUniqueWarnings = useMemo(() => {
     const uniqueUnitCounts = new Map<string, number>();
     for (const lu of listUnits) {
@@ -114,7 +154,8 @@ export function ListEditorPage() {
     return warnings;
   }, [listUnits]);
 
-  // Check which unique units are already in the list
+  const pointsMismatch = serverValidation !== null && serverValidation.total_points !== totalPoints;
+
   const uniqueUnitIdsInList = useMemo(() => {
     const ids = new Set<string>();
     for (const lu of listUnits) {
@@ -123,14 +164,6 @@ export function ListEditorPage() {
     return ids;
   }, [listUnits]);
 
-  // Character units for enhancement assignment
-  const characterUnits = useMemo(() => {
-    return listUnits.filter(lu =>
-      lu.units.role === 'character' || lu.units.role === 'epic_hero'
-    );
-  }, [listUnits]);
-
-  // Enhancement assignment helpers
   const assignedEnhancementIds = useMemo(() => {
     return new Set(listEnhancements.map(le => le.enhancement_id));
   }, [listEnhancements]);
@@ -145,7 +178,6 @@ export function ListEditorPage() {
 
   async function addUnit(unit: UnitWithRelations) {
     if (!id) return;
-    // Block adding duplicate unique units
     if (unit.is_unique && uniqueUnitIdsInList.has(unit.id)) return;
 
     const minModels = unit.unit_points_tiers.length > 0
@@ -158,7 +190,6 @@ export function ListEditorPage() {
       model_count: minModels,
       sort_order: listUnits.length,
     });
-    setShowUnitPicker(false);
     fetchList();
   }
 
@@ -177,7 +208,6 @@ export function ListEditorPage() {
 
   async function assignEnhancement(armyListUnitId: string, enhancementId: string) {
     if (!id) return;
-    // Remove existing enhancement on this unit first
     const existing = unitEnhancementMap.get(armyListUnitId);
     if (existing) {
       await supabase.from('army_list_enhancements').delete().eq('id', existing.listEnhancementId);
@@ -192,6 +222,77 @@ export function ListEditorPage() {
     fetchList();
   }
 
+  async function selectWargear(armyListUnitId: string, groupName: string, optionId: string) {
+    const existing = unitWargearSelections.get(armyListUnitId);
+    if (existing) {
+      const currentOptionId = existing.get(groupName);
+      if (currentOptionId) {
+        await supabase.from('army_list_unit_wargear').delete()
+          .eq('army_list_unit_id', armyListUnitId)
+          .eq('wargear_option_id', currentOptionId);
+      }
+    }
+    if (optionId) {
+      await supabase.from('army_list_unit_wargear').insert({
+        army_list_unit_id: armyListUnitId,
+        wargear_option_id: optionId,
+      });
+    }
+    setUnitWargearSelections(prev => {
+      const next = new Map(prev);
+      if (!next.has(armyListUnitId)) next.set(armyListUnitId, new Map());
+      next.get(armyListUnitId)!.set(groupName, optionId);
+      return next;
+    });
+  }
+
+  async function handleImport(parsed: ParsedUnit[]): Promise<{ success: boolean; matched: number; unmatched: string[] }> {
+    if (!id) return { success: false, matched: 0, unmatched: [] };
+
+    const matched: { unit: UnitWithRelations; modelCount: number; enhancementName: string | null }[] = [];
+    const unmatched: string[] = [];
+
+    for (const p of parsed) {
+      const unit = availableUnits.find(u => u.name.toLowerCase() === p.name.toLowerCase());
+      if (unit) {
+        matched.push({ unit, modelCount: p.modelCount, enhancementName: p.enhancementName });
+      } else {
+        unmatched.push(p.name);
+      }
+    }
+
+    if (matched.length === 0) {
+      return { success: false, matched: 0, unmatched: unmatched };
+    }
+
+    await supabase.from('army_list_enhancements').delete().eq('army_list_id', id);
+    await supabase.from('army_list_units').delete().eq('army_list_id', id);
+
+    for (let i = 0; i < matched.length; i++) {
+      const m = matched[i];
+      const { data: inserted } = await supabase.from('army_list_units').insert({
+        army_list_id: id,
+        unit_id: m.unit.id,
+        model_count: m.modelCount,
+        sort_order: i,
+      }).select().single();
+
+      if (inserted && m.enhancementName) {
+        const enh = enhancements.find(e => e.name.toLowerCase() === m.enhancementName!.toLowerCase());
+        if (enh) {
+          await supabase.from('army_list_enhancements').insert({
+            army_list_id: id,
+            enhancement_id: enh.id,
+            army_list_unit_id: inserted.id,
+          });
+        }
+      }
+    }
+
+    fetchList();
+    return { success: true, matched: matched.length, unmatched };
+  }
+
   const filteredUnits = availableUnits.filter(u =>
     u.name.toLowerCase().includes(unitPickerFilter.toLowerCase())
   );
@@ -201,142 +302,150 @@ export function ListEditorPage() {
   }
 
   return (
-    <div>
-      <div style={{ marginBottom: 'var(--space-lg)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-md)' }}>
-          <button className="btn" onClick={() => navigate('/')}>
-            &larr; Back to Lists
-          </button>
-          <button className="btn" onClick={() => setShowExport(true)}>
-            Export List
-          </button>
-        </div>
-        <h2 style={{ fontSize: '1.25rem', marginBottom: 'var(--space-xs)' }}>{list.name}</h2>
-        <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: 'var(--space-sm)' }}>
-          {list.detachments?.name}
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)', marginBottom: 'var(--space-md)' }}>
-          <span style={{
-            fontSize: '1.5rem',
-            fontFamily: 'var(--font-display)',
-            fontWeight: 700,
-            color: overLimit ? 'var(--color-red-bright)' : undefined,
-          }}>
-            {totalPoints}
-            <span style={{ fontSize: '0.9rem', color: overLimit ? 'var(--color-red-bright)' : 'var(--color-text-secondary)' }}>
-              {' '}/ {list.points_limit} pts
-            </span>
-          </span>
-        </div>
-        <PointsBar current={totalPoints} limit={list.points_limit} />
-
-        {overLimit && (
-          <div className="validation-banner validation-banner--error" style={{ marginTop: 'var(--space-md)' }}>
-            Over limit by {totalPoints - list.points_limit} points! Remove units or reduce model counts.
-          </div>
-        )}
-
-        {duplicateUniqueWarnings.length > 0 && (
-          <div className="validation-banner validation-banner--error" style={{ marginTop: 'var(--space-sm)' }}>
-            {duplicateUniqueWarnings.map((w, i) => <div key={i}>{w}</div>)}
-          </div>
-        )}
-      </div>
-
-      <div style={{ display: 'grid', gap: 'var(--space-md)', marginBottom: 'var(--space-lg)' }}>
-        {listUnits.map((lu) => {
-          const isCharacter = lu.units.role === 'character' || lu.units.role === 'epic_hero';
-          const unitEnh = unitEnhancementMap.get(lu.id);
-          return (
-            <UnitCard
-              key={lu.id}
-              unit={lu.units}
-              modelCount={lu.model_count}
-              points={getUnitPoints(lu.units, lu.model_count)}
-              availableTiers={lu.units.unit_points_tiers}
-              abilities={lu.units.abilities}
-              onModelCountChange={(count) => updateModelCount(lu.id, count)}
-              onRemove={() => removeUnit(lu.id)}
-              enhancement={isCharacter ? {
-                assigned: unitEnh ? enhancements.find(e => e.id === unitEnh.enhancementId) ?? null : null,
-                available: enhancements.filter(e => !assignedEnhancementIds.has(e.id) || e.id === unitEnh?.enhancementId),
-                onAssign: (enhId) => assignEnhancement(lu.id, enhId),
-              } : undefined}
-            />
-          );
-        })}
-      </div>
-
-      {listUnits.length === 0 && (
-        <div className="empty-state card" style={{ marginBottom: 'var(--space-lg)' }}>
-          <div className="empty-state__icon">&#9876;</div>
-          <div className="empty-state__title">No Units Added</div>
-          <p>Add units from the panel below to build your army.</p>
-        </div>
-      )}
-
-      <div>
-        <button
-          className="btn btn--primary"
-          onClick={() => setShowUnitPicker(!showUnitPicker)}
-          style={{ marginBottom: 'var(--space-md)' }}
-        >
-          {showUnitPicker ? 'Close Unit Picker' : '+ Add Unit'}
-        </button>
-
-        {showUnitPicker && (
-          <div className="card" style={{ maxHeight: '400px', overflowY: 'auto' }}>
-            <input
-              className="form-input"
-              type="text"
-              placeholder="Filter units..."
-              value={unitPickerFilter}
-              onChange={(e) => setUnitPickerFilter(e.target.value)}
-              style={{ width: '100%', marginBottom: 'var(--space-md)' }}
-            />
-            <div style={{ display: 'grid', gap: 'var(--space-sm)' }}>
-              {filteredUnits.map((unit) => {
-                const minTier = unit.unit_points_tiers.length > 0
-                  ? Math.min(...unit.unit_points_tiers.map(t => t.points))
-                  : 0;
-                const isUniqueAlreadyAdded = unit.is_unique && uniqueUnitIdsInList.has(unit.id);
-                return (
-                  <div
-                    key={unit.id}
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      padding: 'var(--space-sm) var(--space-md)',
-                      backgroundColor: 'var(--color-bg-tertiary)',
-                      borderRadius: 'var(--radius-sm)',
-                      cursor: isUniqueAlreadyAdded ? 'not-allowed' : 'pointer',
-                      opacity: isUniqueAlreadyAdded ? 0.4 : 1,
-                    }}
-                    onClick={() => !isUniqueAlreadyAdded && addUnit(unit)}
-                  >
-                    <div>
-                      <span style={{ fontWeight: 600 }}>{unit.name}</span>
-                      <span className={`role-badge role-badge--${unit.role}`} style={{ marginLeft: 'var(--space-sm)' }}>
-                        {unit.role.replace('_', ' ')}
-                      </span>
-                      {isUniqueAlreadyAdded && (
-                        <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginLeft: 'var(--space-sm)' }}>
-                          (already in list)
-                        </span>
-                      )}
-                    </div>
-                    <span style={{ color: 'var(--color-gold)', fontWeight: 600 }}>
-                      {minTier} pts
-                    </span>
-                  </div>
-                );
-              })}
+    <div className="list-editor">
+      {/* Main area: summary + unit cards */}
+      <div className="list-editor__main">
+        {/* Sticky summary panel */}
+        <div className="list-editor__summary">
+          <div className="list-editor__summary-header">
+            <div>
+              <h2 className="list-editor__army-name">{list.name}</h2>
+              <span className="list-editor__detachment">{list.detachments?.name}</span>
+            </div>
+            <div className="list-editor__summary-actions">
+              <button className="btn" onClick={() => navigate('/')}>
+                &larr; Back
+              </button>
+              <button className="btn" onClick={() => setShowExport(true)}>
+                Export
+              </button>
             </div>
           </div>
+
+          <div className={`list-editor__points-display${overLimit ? ' list-editor__points-display--over' : ''}`}>
+            {totalPoints}
+            <span className="list-editor__points-limit"> / {list.points_limit} pts</span>
+          </div>
+
+          <PointsBar current={totalPoints} limit={list.points_limit} />
+
+          {/* Validation banners */}
+          {(overLimit || duplicateUniqueWarnings.length > 0 || pointsMismatch || serverValidationError || (serverValidation && !serverValidation.is_valid && !overLimit)) && (
+            <div className="list-editor__validations">
+              {overLimit && (
+                <div className="validation-banner validation-banner--error">
+                  Over limit by {totalPoints - list.points_limit} points! Remove units or reduce model counts.
+                </div>
+              )}
+
+              {duplicateUniqueWarnings.length > 0 && (
+                <div className="validation-banner validation-banner--error">
+                  {duplicateUniqueWarnings.map((w, i) => <div key={i}>{w}</div>)}
+                </div>
+              )}
+
+              {pointsMismatch && (
+                <div className="validation-banner validation-banner--warning">
+                  Points mismatch: client shows {totalPoints} pts but server calculated {serverValidation!.total_points} pts. Try refreshing.
+                </div>
+              )}
+
+              {serverValidationError && (
+                <div className="validation-banner validation-banner--warning">
+                  Server-side validation unavailable. Points shown are calculated locally.
+                </div>
+              )}
+
+              {serverValidation && !serverValidation.is_valid && !overLimit && (
+                <div className="validation-banner validation-banner--error">
+                  Server validation: list exceeds {serverValidation.points_limit} point limit (server total: {serverValidation.total_points} pts).
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Unit cards */}
+        {listUnits.length > 0 ? (
+          <div className="list-editor__units-grid">
+            {listUnits.map((lu) => {
+              const isCharacter = lu.units.role === 'character' || lu.units.role === 'epic_hero';
+              const unitEnh = unitEnhancementMap.get(lu.id);
+              return (
+                <UnitCard
+                  key={lu.id}
+                  unit={lu.units}
+                  modelCount={lu.model_count}
+                  points={getUnitPoints(lu.units, lu.model_count)}
+                  availableTiers={lu.units.unit_points_tiers}
+                  abilities={lu.units.abilities}
+                  onModelCountChange={(count) => updateModelCount(lu.id, count)}
+                  onRemove={() => removeUnit(lu.id)}
+                  enhancement={isCharacter ? {
+                    assigned: unitEnh ? enhancements.find(e => e.id === unitEnh.enhancementId) ?? null : null,
+                    available: enhancements.filter(e => !assignedEnhancementIds.has(e.id) || e.id === unitEnh?.enhancementId),
+                    onAssign: (enhId) => assignEnhancement(lu.id, enhId),
+                  } : undefined}
+                  wargear={(() => {
+                    const unitOpts = wargearOptions.filter(w => w.unit_id === lu.unit_id);
+                    if (unitOpts.length === 0) return undefined;
+                    return {
+                      options: unitOpts,
+                      selected: unitWargearSelections.get(lu.id) ?? new Map(),
+                      onSelect: (groupName: string, optionId: string) => selectWargear(lu.id, groupName, optionId),
+                    };
+                  })()}
+                />
+              );
+            })}
+          </div>
+        ) : (
+          <div className="empty-state card">
+            <div className="empty-state__icon">&#9876;</div>
+            <div className="empty-state__title">No Units Added</div>
+            <p>Select units from the sidebar to build your army.</p>
+          </div>
         )}
       </div>
 
+      {/* Sidebar: unit picker (always visible) */}
+      <div className="list-editor__sidebar">
+        <div className="list-editor__sidebar-header">
+          <div className="list-editor__sidebar-title">Add Units</div>
+          <input
+            className="form-input list-editor__sidebar-search"
+            type="text"
+            placeholder="Search units..."
+            value={unitPickerFilter}
+            onChange={(e) => setUnitPickerFilter(e.target.value)}
+          />
+        </div>
+        <div className="list-editor__sidebar-list">
+          {filteredUnits.map((unit) => {
+            const minTier = unit.unit_points_tiers.length > 0
+              ? Math.min(...unit.unit_points_tiers.map(t => t.points))
+              : 0;
+            const isUniqueAlreadyAdded = unit.is_unique && uniqueUnitIdsInList.has(unit.id);
+            return (
+              <div
+                key={unit.id}
+                className={`unit-picker-item${isUniqueAlreadyAdded ? ' unit-picker-item--disabled' : ''}`}
+                onClick={() => !isUniqueAlreadyAdded && addUnit(unit)}
+              >
+                <div className="unit-picker-item__info">
+                  <span className="unit-picker-item__name">{unit.name}</span>
+                  <span className={`role-badge role-badge--${unit.role}`}>
+                    {unit.role.replace('_', ' ')}
+                  </span>
+                </div>
+                <span className="unit-picker-item__points">{minTier} pts</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Export modal */}
       {showExport && (
         <ExportModal
           list={list}
@@ -346,6 +455,7 @@ export function ListEditorPage() {
           totalPoints={totalPoints}
           getUnitPoints={getUnitPoints}
           onClose={() => setShowExport(false)}
+          onImport={handleImport}
         />
       )}
     </div>
