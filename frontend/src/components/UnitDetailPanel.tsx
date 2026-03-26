@@ -1,5 +1,6 @@
-import type { Unit, UnitPointsTier, Ability, Enhancement, Weapon, WargearOption } from '../types/database';
+import type { Unit, UnitPointsTier, Ability, Enhancement, Weapon, WargearOption, ModelVariant } from '../types/database';
 import { StatLine } from './StatLine';
+import { ModelCompositionEditor } from './ModelCompositionEditor';
 
 interface UnitDetailPanelProps {
   unit: Unit & { abilities: Ability[] };
@@ -21,12 +22,17 @@ interface UnitDetailPanelProps {
     selected: Map<string, string>;
     onSelect: (groupName: string, optionId: string) => void;
   };
+  composition?: {
+    variants: ModelVariant[];
+    counts: Map<string, number>;
+    onUpdateCount: (variantId: string, count: number) => void;
+  };
 }
 
 export function UnitDetailPanel({
   unit, weapons, modelCount, points, availableTiers,
   onModelCountChange, onRemove, onClose,
-  enhancement, wargear,
+  enhancement, wargear, composition,
 }: UnitDetailPanelProps) {
   const sortedTiers = [...availableTiers].sort((a, b) => a.model_count - b.model_count);
   const enhancementPoints = enhancement?.assigned?.points ?? 0;
@@ -197,6 +203,18 @@ export function UnitDetailPanel({
               </option>
             ))}
           </select>
+        </div>
+      )}
+
+      {/* Model Composition */}
+      {composition && composition.variants.length > 0 && (
+        <div className="detail-panel__section">
+          <ModelCompositionEditor
+            variants={composition.variants}
+            composition={composition.counts}
+            totalModels={modelCount}
+            onUpdateCount={composition.onUpdateCount}
+          />
         </div>
       )}
 

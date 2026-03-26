@@ -645,6 +645,98 @@ function extractWargearOptions(node, entryIndex) {
 }
 
 /**
+ * Extract model variants from a unit node.
+ * Returns array of { name, min_count, max_count, default_count, is_leader, sort_order, group_name }
+ */
+function extractModelVariants(node) {
+  const variants = [];
+  const seen = new Set();
+  let sortIdx = 0;
+
+  function getConstraints(entry) {
+    let min = 0, max = 10;
+    for (const c of ensureArray(entry?.constraints?.constraint)) {
+      if (c['@_type'] === 'min' && c['@_field'] === 'selections') min = parseInt(c['@_value']) || 0;
+      if (c['@_type'] === 'max' && c['@_field'] === 'selections') max = parseInt(c['@_value']) || 10;
+    }
+    return { min, max };
+  }
+
+  // 1) Direct model-type child selectionEntries (e.g. "Plague Champion")
+  for (const child of ensureArray(node?.selectionEntries?.selectionEntry)) {
+    if (child['@_type'] !== 'model') continue;
+    const name = child['@_name'];
+    if (!name || seen.has(name)) continue;
+    seen.add(name);
+
+    const { min, max } = getConstraints(child);
+    const isLeader = min >= 1 && max === 1;
+
+    variants.push({
+      name,
+      min_count: min,
+      max_count: max,
+      default_count: min,
+      is_leader: isLeader,
+      sort_order: parseInt(child['@_sortIndex']) || sortIdx,
+      group_name: null,
+    });
+    sortIdx++;
+  }
+
+  // 2) Model variants inside selectionEntryGroups (e.g. "4-9 Plague Marines", "Special weapons")
+  for (const group of ensureArray(node?.selectionEntryGroups?.selectionEntryGroup)) {
+    const groupName = group['@_name'] || null;
+
+    for (const child of ensureArray(group?.selectionEntries?.selectionEntry)) {
+      if (child['@_type'] !== 'model') continue;
+      const name = child['@_name'];
+      if (!name || seen.has(name)) continue;
+      seen.add(name);
+
+      const { min, max } = getConstraints(child);
+      const isLeader = min >= 1 && max === 1;
+
+      variants.push({
+        name,
+        min_count: min,
+        max_count: max,
+        default_count: min,
+        is_leader: isLeader,
+        sort_order: parseInt(child['@_sortIndex']) || sortIdx,
+        group_name: groupName,
+      });
+      sortIdx++;
+    }
+
+    // 3) Recurse into sub-groups (e.g. "Special weapons" inside a parent group)
+    for (const subGroup of ensureArray(group?.selectionEntryGroups?.selectionEntryGroup)) {
+      const subGroupName = subGroup['@_name'] || groupName;
+      for (const child of ensureArray(subGroup?.selectionEntries?.selectionEntry)) {
+        if (child['@_type'] !== 'model') continue;
+        const name = child['@_name'];
+        if (!name || seen.has(name)) continue;
+        seen.add(name);
+
+        const { min, max } = getConstraints(child);
+        variants.push({
+          name,
+          min_count: min,
+          max_count: max,
+          default_count: min,
+          is_leader: false,
+          sort_order: parseInt(child['@_sortIndex']) || sortIdx,
+          group_name: subGroupName,
+        });
+        sortIdx++;
+      }
+    }
+  }
+
+  return variants;
+}
+
+/**
  * Extract detachments and their enhancements from the catalog.
  */
 function extractDetachments(root, entryIndex) {
@@ -838,6 +930,7 @@ function parseCatalog(filePath) {
         const weapons = extractWeapons(entry, entryIndex);
         const abilities = extractAbilities(entry);
         const wargearOptions = extractWargearOptions(entry, entryIndex);
+        const modelVariants = extractModelVariants(entry);
 
         // Deduplicate weapons by name+type
         const weaponMap = new Map();
@@ -862,6 +955,7 @@ function parseCatalog(filePath) {
           weapons: [...weaponMap.values()],
           abilities,
           wargear_options: wargearOptions,
+          model_variants: modelVariants,
         });
       }
     }
@@ -887,6 +981,7 @@ function parseCatalog(filePath) {
         const weapons = extractWeapons(target, entryIndex);
         const abilities = extractAbilities(target);
         const wargearOptions = extractWargearOptions(target, entryIndex);
+        const modelVariants = extractModelVariants(target);
 
         const weaponMap = new Map();
         for (const w of weapons) {
@@ -910,6 +1005,7 @@ function parseCatalog(filePath) {
           weapons: [...weaponMap.values()],
           abilities,
           wargear_options: wargearOptions,
+          model_variants: modelVariants,
         });
       }
     }
@@ -1015,6 +1111,16 @@ function generateSQL(faction) {
         const woId = uuidFromSeed(`wargear:${factionName}:${unit.name}:${wo.group_name}:${wo.name}`);
         return `  (${esc(woId)}, ${esc(unit.id)}, ${esc(wo.group_name)}, ${esc(wo.name)}, ${wo.is_default}, ${wo.points})`;
       }).join(',\n') + '\nON CONFLICT (unit_id, group_name, name) DO NOTHING;');
+      lines.push('');
+    }
+
+    // Model variants
+    if (unit.model_variants && unit.model_variants.length > 0) {
+      lines.push(`INSERT INTO public.unit_model_variants (id, unit_id, name, min_count, max_count, default_count, is_leader, sort_order, group_name) VALUES`);
+      lines.push(unit.model_variants.map(mv => {
+        const mvId = uuidFromSeed(`model_variant:${factionName}:${unit.name}:${mv.name}`);
+        return `  (${esc(mvId)}, ${esc(unit.id)}, ${esc(mv.name)}, ${mv.min_count}, ${mv.max_count}, ${mv.default_count}, ${mv.is_leader}, ${mv.sort_order}, ${esc(mv.group_name)})`;
+      }).join(',\n') + '\nON CONFLICT (unit_id, name) DO UPDATE SET min_count = EXCLUDED.min_count, max_count = EXCLUDED.max_count, default_count = EXCLUDED.default_count, is_leader = EXCLUDED.is_leader, sort_order = EXCLUDED.sort_order, group_name = EXCLUDED.group_name;');
       lines.push('');
     }
   }
@@ -1150,6 +1256,12 @@ DO $$ BEGIN
   IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'wargear_options') THEN
     TRUNCATE public.wargear_options CASCADE;
   END IF;
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'army_list_unit_composition') THEN
+    TRUNCATE public.army_list_unit_composition CASCADE;
+  END IF;
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'unit_model_variants') THEN
+    TRUNCATE public.unit_model_variants CASCADE;
+  END IF;
 END $$;
 TRUNCATE public.abilities CASCADE;
 TRUNCATE public.weapons CASCADE;
@@ -1161,6 +1273,43 @@ TRUNCATE public.enhancements CASCADE;
 TRUNCATE public.detachments CASCADE;
 TRUNCATE public.units CASCADE;
 TRUNCATE public.factions CASCADE;
+
+-- Ensure model variants table exists (needed before seed data)
+CREATE TABLE IF NOT EXISTS public.unit_model_variants (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  unit_id uuid NOT NULL REFERENCES public.units(id) ON DELETE CASCADE,
+  name text NOT NULL,
+  min_count integer NOT NULL DEFAULT 0,
+  max_count integer NOT NULL DEFAULT 10,
+  default_count integer NOT NULL DEFAULT 0,
+  is_leader boolean NOT NULL DEFAULT false,
+  sort_order integer NOT NULL DEFAULT 0,
+  group_name text,
+  UNIQUE(unit_id, name)
+);
+CREATE INDEX IF NOT EXISTS idx_unit_model_variants_unit ON public.unit_model_variants(unit_id);
+
+-- Ensure composition table exists
+CREATE TABLE IF NOT EXISTS public.army_list_unit_composition (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  army_list_unit_id uuid NOT NULL REFERENCES public.army_list_units(id) ON DELETE CASCADE,
+  model_variant_id uuid NOT NULL REFERENCES public.unit_model_variants(id) ON DELETE CASCADE,
+  count integer NOT NULL DEFAULT 0,
+  UNIQUE(army_list_unit_id, model_variant_id)
+);
+CREATE INDEX IF NOT EXISTS idx_army_list_unit_composition_alu ON public.army_list_unit_composition(army_list_unit_id);
+
+-- RLS
+ALTER TABLE public.unit_model_variants ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.army_list_unit_composition ENABLE ROW LEVEL SECURITY;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'unit_model_variants' AND policyname = 'Public read model variants') THEN
+    CREATE POLICY "Public read model variants" ON public.unit_model_variants FOR SELECT USING (true);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'army_list_unit_composition' AND policyname = 'army_list_unit_composition_all') THEN
+    CREATE POLICY "army_list_unit_composition_all" ON public.army_list_unit_composition USING (true) WITH CHECK (true);
+  END IF;
+END $$;
 
 `;
 

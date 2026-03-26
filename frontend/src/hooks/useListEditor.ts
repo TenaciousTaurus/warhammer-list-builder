@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import type { ArmyList, Unit, UnitPointsTier, ArmyListUnit, Enhancement, Detachment, Ability, Weapon, ValidateArmyListResult, WargearOption } from '../types/database';
+import type { ArmyList, Unit, UnitPointsTier, ArmyListUnit, Enhancement, Detachment, Ability, Weapon, ValidateArmyListResult, WargearOption, ModelVariant, ArmyListUnitComposition } from '../types/database';
 import type { ParsedUnit } from '../components/ExportModal';
 
 export type UnitWithRelations = Unit & { unit_points_tiers: UnitPointsTier[]; abilities: Ability[]; weapons: Weapon[] };
@@ -54,6 +54,8 @@ export function useListEditor(id: string | undefined) {
   const [unitWargearSelections, setUnitWargearSelections] = useState<Map<string, Map<string, string>>>(new Map());
   const [selectedArmyListUnitId, setSelectedArmyListUnitId] = useState<string | null>(null);
   const [collapsedPickerRoles, setCollapsedPickerRoles] = useState<Set<string>>(new Set());
+  const [modelVariants, setModelVariants] = useState<ModelVariant[]>([]);
+  const [unitCompositions, setUnitCompositions] = useState<Map<string, Map<string, number>>>(new Map()); // armyListUnitId -> (variantId -> count)
 
   // ============================================================
   // Data fetching
@@ -125,6 +127,15 @@ export function useListEditor(id: string | undefined) {
 
     if (wargearData) setWargearOptions(wargearData);
 
+    // Fetch model variants for all available units
+    const { data: variantData } = await supabase
+      .from('unit_model_variants')
+      .select('*')
+      .in('unit_id', (available || []).map(u => u.id))
+      .order('sort_order');
+
+    if (variantData) setModelVariants(variantData as ModelVariant[]);
+
     if (unitData && unitData.length > 0) {
       const { data: wargearSelData } = await supabase
         .from('army_list_unit_wargear')
@@ -140,6 +151,21 @@ export function useListEditor(id: string | undefined) {
           selMap.get(sel.army_list_unit_id)!.set(opt.group_name, sel.wargear_option_id);
         }
         setUnitWargearSelections(selMap);
+      }
+
+      // Fetch composition data
+      const { data: compData } = await supabase
+        .from('army_list_unit_composition')
+        .select('*')
+        .in('army_list_unit_id', unitData.map(u => u.id));
+
+      if (compData) {
+        const compMap = new Map<string, Map<string, number>>();
+        for (const comp of compData as ArmyListUnitComposition[]) {
+          if (!compMap.has(comp.army_list_unit_id)) compMap.set(comp.army_list_unit_id, new Map());
+          compMap.get(comp.army_list_unit_id)!.set(comp.model_variant_id, comp.count);
+        }
+        setUnitCompositions(compMap);
       }
     }
 
@@ -449,6 +475,75 @@ export function useListEditor(id: string | undefined) {
     return { success: true, matched: matched.length, unmatched };
   }
 
+  async function updateComposition(armyListUnitId: string, variantId: string, count: number) {
+    // Optimistic update
+    setUnitCompositions(prev => {
+      const next = new Map(prev);
+      if (!next.has(armyListUnitId)) next.set(armyListUnitId, new Map());
+      next.get(armyListUnitId)!.set(variantId, count);
+      return next;
+    });
+
+    // Upsert to DB
+    if (count > 0) {
+      await supabase
+        .from('army_list_unit_composition')
+        .upsert({
+          army_list_unit_id: armyListUnitId,
+          model_variant_id: variantId,
+          count,
+        }, { onConflict: 'army_list_unit_id,model_variant_id' });
+    } else {
+      await supabase
+        .from('army_list_unit_composition')
+        .delete()
+        .eq('army_list_unit_id', armyListUnitId)
+        .eq('model_variant_id', variantId);
+    }
+
+    // Recalculate total model count from composition
+    const comp = unitCompositions.get(armyListUnitId) ?? new Map();
+    comp.set(variantId, count);
+    const variants = modelVariants.filter(v => comp.has(v.id) || v.unit_id === modelVariants.find(mv => mv.id === variantId)?.unit_id);
+    let totalModels = 0;
+    for (const v of variants) {
+      if (v.is_leader) {
+        totalModels += v.min_count;
+      } else {
+        totalModels += comp.get(v.id) ?? 0;
+      }
+    }
+    if (totalModels > 0) {
+      await supabase.from('army_list_units').update({ model_count: totalModels }).eq('id', armyListUnitId);
+      // Update local state
+      setListUnits(prev => prev.map(lu =>
+        lu.id === armyListUnitId ? { ...lu, model_count: totalModels } : lu
+      ));
+    }
+  }
+
+  function getModelVariantsForUnit(unitId: string): ModelVariant[] {
+    return modelVariants.filter(v => v.unit_id === unitId);
+  }
+
+  function getCompositionForUnit(armyListUnitId: string): Map<string, number> {
+    return unitCompositions.get(armyListUnitId) ?? new Map();
+  }
+
+  function getCompositionSummary(armyListUnitId: string, unitId: string): string {
+    const variants = getModelVariantsForUnit(unitId);
+    if (variants.length === 0) return '';
+    const comp = getCompositionForUnit(armyListUnitId);
+    const parts: string[] = [];
+    for (const v of variants) {
+      const count = v.is_leader ? v.min_count : (comp.get(v.id) ?? 0);
+      if (count > 0) {
+        parts.push(`${count}x ${v.name}`);
+      }
+    }
+    return parts.join(', ');
+  }
+
   async function reorderUnits(fromIndex: number, toIndex: number) {
     if (fromIndex === toIndex) return;
     const reordered = [...listUnits];
@@ -534,5 +629,13 @@ export function useListEditor(id: string | undefined) {
     // Helpers
     getWargearSummary,
     getEnhancementForUnit,
+
+    // Model variants
+    modelVariants,
+    unitCompositions,
+    updateComposition,
+    getModelVariantsForUnit,
+    getCompositionForUnit,
+    getCompositionSummary,
   };
 }

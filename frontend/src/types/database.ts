@@ -359,6 +359,26 @@ export type ArmyListEnhancement = Database['public']['Tables']['army_list_enhanc
 export type WargearOption = Database['public']['Tables']['wargear_options']['Row'];
 export type ArmyListUnitWargear = Database['public']['Tables']['army_list_unit_wargear']['Row'];
 
+// Model variants (not in Database type since table was added later)
+export interface ModelVariant {
+  id: string;
+  unit_id: string;
+  name: string;
+  min_count: number;
+  max_count: number;
+  default_count: number;
+  is_leader: boolean;
+  sort_order: number;
+  group_name: string | null;
+}
+
+export interface ArmyListUnitComposition {
+  id: string;
+  army_list_unit_id: string;
+  model_variant_id: string;
+  count: number;
+}
+
 // RPC response types
 export type CalculateListPointsResult = Database['public']['Functions']['calculate_list_points']['Returns'];
 export type ValidateArmyListResult = Database['public']['Functions']['validate_army_list']['Returns'];

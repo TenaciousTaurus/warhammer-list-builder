@@ -170,6 +170,15 @@ export function ListEditorPage() {
                 selected: editor.unitWargearSelections.get(selectedLu.id) ?? new Map(),
                 onSelect: (groupName: string, optionId: string) => editor.selectWargear(selectedLu.id, groupName, optionId),
               } : undefined}
+              composition={(() => {
+                const variants = editor.getModelVariantsForUnit(selectedLu.unit_id);
+                if (variants.length === 0) return undefined;
+                return {
+                  variants,
+                  counts: editor.getCompositionForUnit(selectedLu.id),
+                  onUpdateCount: (variantId: string, count: number) => editor.updateComposition(selectedLu.id, variantId, count),
+                };
+              })()}
             />
           );
         })() : (
