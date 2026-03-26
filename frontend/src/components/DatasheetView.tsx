@@ -11,17 +11,13 @@ export function DatasheetView({ unit, weapons, compact }: DatasheetViewProps) {
   const rangedWeapons = weapons.filter(w => w.type === 'ranged');
   const meleeWeapons = weapons.filter(w => w.type === 'melee');
 
-  const groupedAbilities = {
-    invulnerable: unit.abilities.filter(a => a.type === 'invulnerable'),
-    core: unit.abilities.filter(a => a.type === 'core'),
-    faction: unit.abilities.filter(a => a.type === 'faction'),
-    unique: unit.abilities.filter(a => a.type === 'unique'),
-  };
+  const invuln = unit.abilities.find(a => a.type === 'invulnerable');
+  const coreAbilities = unit.abilities.filter(a => a.type === 'core');
+  const factionAbilities = unit.abilities.filter(a => a.type === 'faction');
+  const uniqueAbilities = unit.abilities.filter(a => a.type === 'unique');
 
-  const hasAbilities = groupedAbilities.invulnerable.length > 0
-    || groupedAbilities.core.length > 0
-    || groupedAbilities.faction.length > 0
-    || groupedAbilities.unique.length > 0;
+  // Extract invuln save value (e.g. "4+" from "This model has a 4+ invulnerable save.")
+  const invulnValue = invuln?.description?.match(/(\d\+)/)?.[1] ?? null;
 
   function renderWeaponTable(weaponList: Weapon[], label: string) {
     if (weaponList.length === 0) return null;
@@ -47,7 +43,9 @@ export function DatasheetView({ unit, weapons, compact }: DatasheetViewProps) {
                   <span className="datasheet__weapon-name">{w.name}</span>
                   {w.keywords.length > 0 && (
                     <div className="datasheet__weapon-keywords">
-                      {w.keywords.join(', ')}
+                      {w.keywords.map((kw, i) => (
+                        <span key={i} className="datasheet__weapon-kw-chip">{kw}</span>
+                      ))}
                     </div>
                   )}
                 </td>
@@ -67,23 +65,41 @@ export function DatasheetView({ unit, weapons, compact }: DatasheetViewProps) {
 
   return (
     <div className={`datasheet${compact ? ' datasheet--compact' : ''}`}>
-      {/* Stat Line */}
-      <div className="datasheet__section">
-        <StatLine unit={unit} />
+      {/* Stat Line + Invuln Shield */}
+      <div className="datasheet__stats-row">
+        <div className="datasheet__section" style={{ flex: 1 }}>
+          <StatLine unit={unit} />
+        </div>
+        {invulnValue && (
+          <div className="datasheet__invuln-shield" title={invuln?.description ?? ''}>
+            <span className="datasheet__invuln-value">{invulnValue}</span>
+            <span className="datasheet__invuln-label">Invuln</span>
+          </div>
+        )}
       </div>
 
-      {/* Abilities */}
-      {hasAbilities && (
+      {/* Core & Faction abilities as chips */}
+      {(coreAbilities.length > 0 || factionAbilities.length > 0) && (
+        <div className="datasheet__section">
+          <div className="datasheet__core-abilities">
+            {coreAbilities.map(a => (
+              <span key={a.id} className="datasheet__core-chip datasheet__core-chip--core">{a.name}</span>
+            ))}
+            {factionAbilities.map(a => (
+              <span key={a.id} className="datasheet__core-chip datasheet__core-chip--faction">{a.name}</span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Unique abilities with descriptions */}
+      {uniqueAbilities.length > 0 && (
         <div className="datasheet__section">
           <div className="datasheet__section-label">Abilities</div>
           <div className="datasheet__ability-list">
-            {[...groupedAbilities.invulnerable, ...groupedAbilities.core,
-              ...groupedAbilities.faction, ...groupedAbilities.unique].map(a => (
+            {uniqueAbilities.map(a => (
               <div key={a.id} className="datasheet__ability-item">
                 <div className="datasheet__ability-header">
-                  <span className={`ability-tag ability-tag--${a.type === 'invulnerable' ? 'invuln' : a.type}`}>
-                    {a.type === 'invulnerable' ? 'Invuln' : a.type}
-                  </span>
                   <span className="datasheet__ability-name">{a.name}</span>
                 </div>
                 {!compact && a.description && (

@@ -584,6 +584,12 @@
   padding: var(--space-sm) var(--space-md);
 }
 
+.datasheet__stats-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+}
+
 .datasheet__section {
   padding: var(--space-sm) 0;
   border-top: 1px solid rgba(255, 255, 255, 0.04);
@@ -604,6 +610,64 @@
   margin-bottom: var(--space-xs);
 }
 
+/* Invulnerable Save Shield */
+.datasheet__invuln-shield {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 52px;
+  background: linear-gradient(135deg, rgba(201, 168, 76, 0.15), rgba(201, 168, 76, 0.05));
+  border: 2px solid rgba(201, 168, 76, 0.4);
+  border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%;
+  flex-shrink: 0;
+  cursor: default;
+}
+
+.datasheet__invuln-value {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: 900;
+  color: var(--color-gold);
+  line-height: 1;
+}
+
+.datasheet__invuln-label {
+  font-size: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-gold-dim);
+  line-height: 1;
+}
+
+/* Core & Faction ability chips */
+.datasheet__core-abilities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.datasheet__core-chip {
+  font-size: var(--text-xs);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+}
+
+.datasheet__core-chip--core {
+  background: rgba(100, 180, 255, 0.12);
+  border: 1px solid rgba(100, 180, 255, 0.25);
+  color: #8bc4ff;
+}
+
+.datasheet__core-chip--faction {
+  background: rgba(201, 168, 76, 0.1);
+  border: 1px solid rgba(201, 168, 76, 0.25);
+  color: var(--color-gold);
+}
+
+/* Ability list */
 .datasheet__ability-list {
   display: flex;
   flex-direction: column;
@@ -612,6 +676,9 @@
 
 .datasheet__ability-item {
   font-size: var(--text-sm);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--radius-xs);
+  padding: var(--space-xs);
 }
 
 .datasheet__ability-header {
@@ -629,10 +696,10 @@
   font-size: var(--text-xs);
   color: var(--color-text-muted);
   margin-top: 2px;
-  margin-left: var(--space-md);
   line-height: 1.4;
 }
 
+/* Weapons */
 .datasheet__weapons-group {
   margin-bottom: var(--space-xs);
 }
@@ -650,10 +717,23 @@
 }
 
 .datasheet__weapon-keywords {
-  font-size: var(--text-xs);
-  color: var(--color-text-muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin-top: 2px;
 }
 
+.datasheet__weapon-kw-chip {
+  font-size: 9px;
+  padding: 0 4px;
+  background: rgba(180, 120, 255, 0.1);
+  border: 1px solid rgba(180, 120, 255, 0.2);
+  border-radius: 2px;
+  color: #c4a0ff;
+  white-space: nowrap;
+}
+
+/* Keywords */
 .datasheet__keywords {
   display: flex;
   flex-wrap: wrap;
@@ -2310,21 +2390,115 @@
   }
 
   .app-main {
-    padding: var(--space-md);
+    padding: var(--space-sm);
   }
 
   .lists-page__grid {
     grid-template-columns: 1fr;
   }
 
-  .unit-card__header {
+  .lists-page__controls {
     flex-direction: column;
+    align-items: stretch;
   }
 
-  .unit-card__actions {
-    flex-direction: row;
-    align-items: center;
+  .lists-page__search {
+    max-width: none;
+  }
+
+  /* List card — always show actions on mobile (no hover) */
+  .list-card__actions {
+    opacity: 1;
+  }
+
+  /* Play Mode mobile optimizations */
+  .play-mode__header {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .play-mode__header-actions {
     width: 100%;
     justify-content: space-between;
+  }
+
+  /* Game tracker — wrap nicely */
+  .game-tracker {
+    gap: var(--space-sm);
+    padding: var(--space-sm);
+  }
+
+  .game-tracker__section {
+    flex: 1;
+    min-width: 60px;
+  }
+
+  .game-tracker__value--phase {
+    min-width: 60px;
+    font-size: var(--text-xs);
+  }
+
+  /* Casualty pips bigger on mobile for touch */
+  .casualty-tracker__pip {
+    width: 28px;
+    height: 28px;
+  }
+
+  .casualty-tracker__wound-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+
+  /* Game tracker buttons bigger on mobile */
+  .game-tracker__btn {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+
+  /* Weapon tables scroll horizontally on small screens */
+  .datasheet__weapons-group {
+    overflow-x: auto;
+  }
+
+  /* Export modal tabs */
+  .export-modal__tabs {
+    justify-content: stretch;
+  }
+
+  .export-modal__tab {
+    flex: 1;
+    text-align: center;
+    padding: var(--space-sm);
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  .app-header__nav {
+    gap: var(--space-xs);
+  }
+
+  .app-header__link {
+    font-size: var(--text-xs);
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .play-mode__title {
+    font-size: var(--text-base);
+  }
+
+  .play-mode__unit-name {
+    font-size: var(--text-sm);
+  }
+
+  .stat-line {
+    gap: var(--space-xs);
+  }
+
+  .stat-line__item {
+    min-width: 28px;
+    padding: var(--space-xs);
   }
 }
