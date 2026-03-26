@@ -7,9 +7,10 @@ import { CasualtyTracker } from '../components/CasualtyTracker';
 import { GameTracker } from '../components/GameTracker';
 import { SecondaryObjectives } from '../components/SecondaryObjectives';
 import { StratagemReference } from '../components/StratagemReference';
+import { BattleReport } from '../components/BattleReport';
 import { getUnitPoints, ROLE_ORDER, ROLE_LABELS } from '../hooks/useListEditor';
 
-type PlayTab = 'army' | 'secondaries' | 'stratagems';
+type PlayTab = 'army' | 'secondaries' | 'stratagems' | 'history';
 
 type UnitWithRelations = Unit & { unit_points_tiers: UnitPointsTier[]; abilities: Ability[]; weapons: Weapon[] };
 type ArmyListUnitWithDetails = ArmyListUnit & { units: UnitWithRelations };
@@ -116,6 +117,9 @@ export function PlayModePage() {
         <button className={`play-mode__tab${activeTab === 'stratagems' ? ' play-mode__tab--active' : ''}`} onClick={() => setActiveTab('stratagems')}>
           Stratagems
         </button>
+        <button className={`play-mode__tab${activeTab === 'history' ? ' play-mode__tab--active' : ''}`} onClick={() => setActiveTab('history')}>
+          History
+        </button>
       </div>
 
       {/* Tab Content */}
@@ -181,6 +185,10 @@ export function PlayModePage() {
 
       {activeTab === 'stratagems' && (
         <StratagemReference />
+      )}
+
+      {activeTab === 'history' && (
+        <BattleReport listId={id} listName={list.name} />
       )}
     </div>
   );

@@ -1,3 +1,4 @@
+import { useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useListEditor, getUnitPoints } from '../hooks/useListEditor';
 import { UnitPicker } from '../components/UnitPicker';
@@ -10,6 +11,71 @@ export function ListEditorPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const editor = useListEditor(id);
+
+  // Keyboard shortcuts
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    // Don't handle shortcuts when typing in inputs
+    const tag = (e.target as HTMLElement)?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+
+    // Escape: close detail panel or export modal
+    if (e.key === 'Escape') {
+      if (editor.showExport) {
+        editor.setShowExport(false);
+      } else if (editor.selectedArmyListUnitId) {
+        editor.setSelectedArmyListUnitId(null);
+      }
+      return;
+    }
+
+    // E: open export
+    if (e.key === 'e' && !e.ctrlKey && !e.metaKey) {
+      editor.setShowExport(true);
+      return;
+    }
+
+    // P: go to play mode
+    if (e.key === 'p' && !e.ctrlKey && !e.metaKey) {
+      navigate(`/play/${id}`);
+      return;
+    }
+
+    // /: focus search
+    if (e.key === '/') {
+      e.preventDefault();
+      const searchInput = document.querySelector('.picker__search') as HTMLInputElement;
+      if (searchInput) searchInput.focus();
+      return;
+    }
+
+    // Delete/Backspace: remove selected unit
+    if ((e.key === 'Delete' || e.key === 'Backspace') && editor.selectedArmyListUnitId) {
+      editor.removeUnit(editor.selectedArmyListUnitId);
+      return;
+    }
+
+    // Arrow Up/Down: navigate roster selection
+    if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+      if (editor.listUnits.length === 0) return;
+      e.preventDefault();
+      const currentIdx = editor.selectedArmyListUnitId
+        ? editor.listUnits.findIndex(lu => lu.id === editor.selectedArmyListUnitId)
+        : -1;
+      let nextIdx: number;
+      if (e.key === 'ArrowDown') {
+        nextIdx = currentIdx < editor.listUnits.length - 1 ? currentIdx + 1 : 0;
+      } else {
+        nextIdx = currentIdx > 0 ? currentIdx - 1 : editor.listUnits.length - 1;
+      }
+      editor.setSelectedArmyListUnitId(editor.listUnits[nextIdx].id);
+      return;
+    }
+  }, [editor, id, navigate]);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
 
   if (editor.loading || !editor.list) {
     return <div className="empty-state"><p>Loading...</p></div>;
@@ -61,6 +127,16 @@ export function ListEditorPage() {
             onRemoveUnit={editor.removeUnit}
             onReorder={editor.reorderUnits}
           />
+        </div>
+
+        {/* Keyboard shortcuts hint */}
+        <div className="list-editor__shortcuts-hint">
+          <span>/</span> search &nbsp;
+          <span>&#8593;&#8595;</span> navigate &nbsp;
+          <span>Del</span> remove &nbsp;
+          <span>E</span> export &nbsp;
+          <span>P</span> play &nbsp;
+          <span>Esc</span> close
         </div>
       </div>
 
