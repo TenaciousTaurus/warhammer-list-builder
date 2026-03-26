@@ -1,7 +1,7 @@
 -- ============================================================
 -- AUTO-GENERATED from BSData/wh40k-10e
 -- 26 factions, 1299 total units
--- Generated: 2026-02-20T21:04:46.219Z
+-- Generated: 2026-03-26T19:38:56.985Z
 -- ============================================================
 
 -- Clean existing seed data (preserve schema)
@@ -781,6 +781,11 @@ by 1.'),
   ('443cc212-e400-b732-7b82-d95fb839a44c', 'Oath of Moment', 'faction', ''),
   ('443cc212-e400-b732-7b82-d95fb839a44c', 'Templar Vows', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('d1f85298-05a4-c6ef-ba36-0dbfe5ac3c20', '443cc212-e400-b732-7b82-d95fb839a44c', 'Aggressors', 'Aggressors', false, 0),
+  ('102faeb3-5e75-8477-6116-8aea8f67a838', '443cc212-e400-b732-7b82-d95fb839a44c', 'Aggressors', 'Aggressor Sergeant', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('0d36cf94-668c-43dc-5dd1-e4e32808e957', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Ancient in Terminator Armor', 'character', '5"', 5, '2+', 5, 6, 1, '{"Character", "Infantry", "Imperium", "Terminator", "Ancient"}', 3);
 
@@ -875,6 +880,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('af8b192c-4077-c78a-04da-b596acc3703a', 'Oath of Moment', 'faction', ''),
   ('af8b192c-4077-c78a-04da-b596acc3703a', 'Templar Vows', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('b5e6caac-f4c0-dee5-e512-8e5657d08657', 'af8b192c-4077-c78a-04da-b596acc3703a', 'Assault Intercessors', 'Assault Intercessor Sergeant', false, 0),
+  ('ed85eb26-d029-2988-3d7b-da39d16c9206', 'af8b192c-4077-c78a-04da-b596acc3703a', 'Assault Intercessors', 'Assault Intercessors', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('ec97d2b5-2602-0a3b-76f2-dc5d1f69949c', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Assault Squad [Legends]', 'infantry', '6"', 4, '3+', 2, 6, 1, '{"Infantry", "Imperium", "Assault Squad"}', 3);
 
@@ -913,6 +923,13 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('ec97d2b5-2602-0a3b-76f2-dc5d1f69949c', 'Oath of Moment', 'faction', ''),
   ('ec97d2b5-2602-0a3b-76f2-dc5d1f69949c', 'Templar Vows', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('13322396-7f22-5b7d-e495-4a15681c2e2e', 'ec97d2b5-2602-0a3b-76f2-dc5d1f69949c', 'Assault Marines', 'Assault Sergeant', false, 0),
+  ('48996f4b-8f9f-ff08-9935-476c023c37fb', 'ec97d2b5-2602-0a3b-76f2-dc5d1f69949c', 'Assault Marines', 'Assault Marine w/ Eviscerator', false, 0),
+  ('d1025260-6b8f-f8d2-1f7f-b7ca2ba115d9', 'ec97d2b5-2602-0a3b-76f2-dc5d1f69949c', 'Assault Marines', 'Assault Marine w/ Special Weapon', false, 0),
+  ('08ae5f5c-d035-11f5-6e90-5c512755927b', 'ec97d2b5-2602-0a3b-76f2-dc5d1f69949c', 'Assault Marines', 'Assault Marine', true, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('768f9ee3-14be-5e55-3dd9-f6479dcdb45a', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Assault Squad with Jump Packs [Legends]', 'infantry', '12"', 4, '3+', 2, 6, 1, '{"Infantry", "Imperium", "Assault Squad with Jump Packs", "Jump Pack", "Fly"}', 3);
 
@@ -947,6 +964,13 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('768f9ee3-14be-5e55-3dd9-f6479dcdb45a', 'Oath of Moment', 'faction', ''),
   ('768f9ee3-14be-5e55-3dd9-f6479dcdb45a', 'Templar Vows', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('f146fa2d-84b8-7aeb-84a1-b92c60687075', '768f9ee3-14be-5e55-3dd9-f6479dcdb45a', 'Assault Marines with Jump Packs', 'Assault Sergeant with Jump Pack', false, 0),
+  ('2d2cdf09-171e-eb0d-c9c3-80dba9332d1a', '768f9ee3-14be-5e55-3dd9-f6479dcdb45a', 'Assault Marines with Jump Packs', 'Assault Marine with Jump Pack w/ Eviscerator', false, 0),
+  ('f0883de8-6115-1168-a941-bf12c6b9c7e9', '768f9ee3-14be-5e55-3dd9-f6479dcdb45a', 'Assault Marines with Jump Packs', 'Assault Marine with Jump Pack w/ Special Weapon', false, 0),
+  ('0017c256-47cc-c244-b5cf-99888b2e52dd', '768f9ee3-14be-5e55-3dd9-f6479dcdb45a', 'Assault Marines with Jump Packs', 'Assault Marine with Jump Pack', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('3cafce6f-9d42-c0b7-6238-f51901614be3', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Astartes Servitors [Legends]', 'infantry', '6"', 4, '4+', 1, 8, 1, '{"Infantry", "Imperium", "Astartes Servitors"}', 3);
 
@@ -971,6 +995,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('3cafce6f-9d42-c0b7-6238-f51901614be3', 'Servitor Retinue', 'unique', 'At the start of the Declare Battle Formations step, this unit can join one other unit from your army that is being led by a Techmarine. If it does, until the end of the battle, every model in this unit counts as being part of that Bodyguard unit, and that Bodyguard unit’s Starting Strength is increased accordingly.'),
   ('3cafce6f-9d42-c0b7-6238-f51901614be3', 'Oath of Moment', 'faction', ''),
   ('3cafce6f-9d42-c0b7-6238-f51901614be3', 'Templar Vows', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('2811f6fe-16dd-f544-6c8f-05325460d215', '3cafce6f-9d42-c0b7-6238-f51901614be3', 'Astartes Servitors', 'Astartes Servitor', true, 0),
+  ('d61703ff-8b19-4c0a-8220-8399cf5d3977', '3cafce6f-9d42-c0b7-6238-f51901614be3', 'Astartes Servitors', 'Astartes Servitor w/ Heavy Weapon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('7071e736-8348-cf4a-a37b-7c419011f305', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Ballistus Dreadnought', 'vehicle', '8"', 10, '2+', 12, 6, 4, '{"Vehicle", "Walker", "Imperium", "Ballistus Dreadnought", "Dreadnought"}', 3);
@@ -1005,7 +1034,6 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('bbd4b2da-73e3-67f5-885b-1527fd5ad2e5', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Bike Squad [Legends]', 'mounted', '12"', 5, '3+', 5, 6, 2, '{"Mounted", "Imperium", "Bike Squad"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('bbd4b2da-73e3-67f5-885b-1527fd5ad2e5', 3, 80),
   ('bbd4b2da-73e3-67f5-885b-1527fd5ad2e5', 4, 160);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -1040,6 +1068,13 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('bbd4b2da-73e3-67f5-885b-1527fd5ad2e5', 'Turbo Boost', 'unique', 'Each time this unit Advances, do not make an Advance roll for it. Instead, until the end of the phase, add 6" to the Move characteristic of models in this unit'),
   ('bbd4b2da-73e3-67f5-885b-1527fd5ad2e5', 'Oath of Moment', 'faction', ''),
   ('bbd4b2da-73e3-67f5-885b-1527fd5ad2e5', 'Templar Vows', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('5ab3ec74-e208-f5d1-1cfa-f40dbe971894', 'bbd4b2da-73e3-67f5-885b-1527fd5ad2e5', 'Space Marine Bikers', 'Biker Sergeant', false, 0),
+  ('e138209d-df67-6d50-6be1-6b06b0837c3c', 'bbd4b2da-73e3-67f5-885b-1527fd5ad2e5', 'Space Marine Bikers', 'Space Marine Bikers w/ Bolt Pistol', true, 0),
+  ('76525201-32e5-07b9-bbcc-8cacc99ad5b4', 'bbd4b2da-73e3-67f5-885b-1527fd5ad2e5', 'Space Marine Bikers', 'Space Marine Bikers w/ Astartes Chainsword', false, 0),
+  ('2e3e12ef-db41-a059-139e-2cd6f16375c0', 'bbd4b2da-73e3-67f5-885b-1527fd5ad2e5', 'Space Marine Bikers', 'Space Marine Bikers w/  Special Weapon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('60e57fca-c90b-e322-a911-bafb70b00e24', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Bladeguard Ancient', 'character', '6"', 4, '3+', 4, 6, 1, '{"Infantry", "Character", "Imperium", "Bladeguard Ancient", "Tacticus", "Ancient"}', 3);
@@ -1095,6 +1130,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
 ■ Shields of the Imperium: Each time an invulnerable saving throw is made for a model in this unit, re-roll a saving throw of 1.'),
   ('68269daa-1f86-00a4-1978-60f878ef03a2', 'Oath of Moment', 'faction', ''),
   ('68269daa-1f86-00a4-1978-60f878ef03a2', 'Templar Vows', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('f7fde961-e2c7-5911-953c-02d0e03841d3', '68269daa-1f86-00a4-1978-60f878ef03a2', 'Bladeguard Veterans', 'Bladeguard Veterans', false, 0),
+  ('a6c99d76-779d-38f4-1965-a9093270a60c', '68269daa-1f86-00a4-1978-60f878ef03a2', 'Bladeguard Veterans', 'Bladeguard Veteran Sergeant', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('e39afdfd-21f1-0245-c2f7-638ea8b65e27', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Brutalis Dreadnought', 'vehicle', '8"', 10, '2+', 12, 6, 4, '{"Vehicle", "Dreadnought", "Walker", "Brutalis Dreadnought", "Imperium"}', 3);
@@ -1341,6 +1381,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('b667feb5-9198-8f93-54f5-245791ccd641', 'Oath of Moment', 'faction', ''),
   ('b667feb5-9198-8f93-54f5-245791ccd641', 'Templar Vows', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('6b0ece2d-e1fc-662b-dd27-88a5e1fb8f64', 'b667feb5-9198-8f93-54f5-245791ccd641', 'Assault Centurions', 'Assault Centurion Sergeant', false, 0),
+  ('3f8d7355-fb85-0b74-f2d1-c71f8372cba7', 'b667feb5-9198-8f93-54f5-245791ccd641', 'Assault Centurions', 'Assault Centurion', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('20c49be4-22a8-7497-0396-ef394baf1020', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Centurion Devastator Squad', 'infantry', '4"', 7, '2+', 4, 6, 2, '{"Infantry", "Imperium", "Centurion Devastator Squad", "Centurion"}', 3);
 
@@ -1364,6 +1409,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('20c49be4-22a8-7497-0396-ef394baf1020', 'Decimator Protocols', 'unique', 'Each time a model in this unit makes a ranged attack, re-roll a Hit roll of 1. If the target of that attack is an enemy unit within range of an objective marker, you can re-roll the Hit roll instead.'),
   ('20c49be4-22a8-7497-0396-ef394baf1020', 'Oath of Moment', 'faction', ''),
   ('20c49be4-22a8-7497-0396-ef394baf1020', 'Templar Vows', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('392ab11a-15e4-059b-e680-d04dd0746d88', '20c49be4-22a8-7497-0396-ef394baf1020', 'Devastator Centurions', 'Devastator Centurion Sergeant', false, 0),
+  ('65e76d03-e7a6-b855-ac0e-0c3756411b08', '20c49be4-22a8-7497-0396-ef394baf1020', 'Devastator Centurions', 'Devastator Centurion', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('29d9a7c4-4910-7f1d-640b-b3810efc1660', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Chaplain in Terminator Armour', 'character', '5"', 5, '2+', 5, 5, 1, '{"Character", "Infantry", "Terminator", "Chaplain", "Imperium"}', 3);
@@ -1516,6 +1566,13 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('e5d94ace-d8ef-7182-1af5-d059245307fb', 'Oath of Moment', 'faction', ''),
   ('e5d94ace-d8ef-7182-1af5-d059245307fb', 'Templar Vows', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('f5b82582-908e-a0eb-45e2-df4c444df663', 'e5d94ace-d8ef-7182-1af5-d059245307fb', 'Unit Composition', 'Apothecary', false, 0),
+  ('4c4e0a77-1ee4-8f3a-c26c-f42e99cbe71c', 'e5d94ace-d8ef-7182-1af5-d059245307fb', 'Unit Composition', 'Company Ancient', false, 0),
+  ('0016a9d2-c247-9868-13f9-3e908dc3cca0', 'e5d94ace-d8ef-7182-1af5-d059245307fb', 'Unit Composition', 'Company Champion', false, 0),
+  ('387a82b7-f784-f704-bd64-3b77494a5253', 'e5d94ace-d8ef-7182-1af5-d059245307fb', 'Unit Composition', 'Company Veterans', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('399f3160-1fb9-bbee-1fc1-fcd03f3de7d2', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Desolation Squad', 'infantry', '6"', 4, '3+', 2, 6, 1, '{"Infantry", "Imperium", "Tacticus", "Desolation Squad"}', 3);
 
@@ -1538,6 +1595,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('399f3160-1fb9-bbee-1fc1-fcd03f3de7d2', 'Targeter Optics', 'unique', 'Each time this unit Remains Stationary, until the start of your next Movement phase, ranged weapons equipped by models in this unit have the  [IGNORES COVER] ability.'),
   ('399f3160-1fb9-bbee-1fc1-fcd03f3de7d2', 'Oath of Moment', 'faction', ''),
   ('399f3160-1fb9-bbee-1fc1-fcd03f3de7d2', 'Templar Vows', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('f654edf0-e983-c99d-539e-ab5ce8781897', '399f3160-1fb9-bbee-1fc1-fcd03f3de7d2', 'Desolation Marines', 'Desolation Marine', true, 0),
+  ('828c500d-a927-e6cc-f231-93dd4008bf6e', '399f3160-1fb9-bbee-1fc1-fcd03f3de7d2', 'Desolation Marines', 'Desolation Sergeant', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('45c997df-2517-ed43-0e12-2bd3456d195f', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Dreadnought', 'vehicle', '6"', 9, '2+', 8, 6, 3, '{"Vehicle", "Dreadnought", "Smoke", "Imperium", "Walker"}', 3);
@@ -1621,6 +1683,11 @@ Normal move. If it does so, until the end of the turn, this unit is not eligible
   ('4b482b39-2521-9c3d-49bb-1fe39a3362a0', 'Oath of Moment', 'faction', ''),
   ('4b482b39-2521-9c3d-49bb-1fe39a3362a0', 'Templar Vows', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('aa977159-0d28-2d6a-c54b-4551d0a8b240', '4b482b39-2521-9c3d-49bb-1fe39a3362a0', 'Eliminators', 'Eliminator Sergeant', false, 0),
+  ('8615d446-a03f-f2ba-faa6-efff40935daf', '4b482b39-2521-9c3d-49bb-1fe39a3362a0', 'Eliminators', 'Eliminator', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('7eff9a54-a20a-f25a-4425-d553cedcf432', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Eradicator Squad', 'infantry', '5"', 6, '3+', 3, 6, 1, '{"Infantry", "Imperium", "Gravis", "Eradicator Squad"}', 3);
 
@@ -1642,6 +1709,12 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('7eff9a54-a20a-f25a-4425-d553cedcf432', 'Total Obliteration', 'unique', 'Each time a ranged attack made by a model in this unit targets a Monster or Vehicle model, you can re-roll the Hit roll, you can re-roll the Wound roll and you can re-roll the Damage roll.'),
   ('7eff9a54-a20a-f25a-4425-d553cedcf432', 'Oath of Moment', 'faction', ''),
   ('7eff9a54-a20a-f25a-4425-d553cedcf432', 'Templar Vows', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('b1ee5255-5c62-e0e2-ba43-84c8ea881a09', '7eff9a54-a20a-f25a-4425-d553cedcf432', 'Eradicators', 'Eradicator Sergeant', false, 0),
+  ('e48c884d-5edc-7fdf-deac-08fe227fded4', '7eff9a54-a20a-f25a-4425-d553cedcf432', 'Eradicators', 'Eradicator', true, 0),
+  ('b83bf4d9-4039-62de-b760-1edb8af6f062', '7eff9a54-a20a-f25a-4425-d553cedcf432', 'Eradicators', 'Eradicator with Multi-melta', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('1e22ef2c-5c7f-da29-3dfe-3266de1173eb', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Gladiator Lancer', 'vehicle', '10"', 10, '3+', 12, 6, 3, '{"Vehicle", "Imperium", "Smoke", "Gladiator Lancer"}', 3);
@@ -1775,6 +1848,12 @@ this unit, add 1 to any armour saving throw made against that attack.'),
   ('ab2b4b1f-961c-f5a8-9c9f-a521933bcd49', 'Oath of Moment', 'faction', ''),
   ('ab2b4b1f-961c-f5a8-9c9f-a521933bcd49', 'Templar Vows', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('d45493d7-9904-820a-cf4a-1f9e32d885f3', 'ab2b4b1f-961c-f5a8-9c9f-a521933bcd49', 'Heavy Intercessors', 'Heavy Intercessors', true, 0),
+  ('fc683608-f8de-f858-70db-abdb4d8ccc8b', 'ab2b4b1f-961c-f5a8-9c9f-a521933bcd49', 'Heavy Intercessors', 'Heavy Intercessor Sergeant', false, 0),
+  ('c88b6827-31e3-e958-e8d7-0eb7192fedcd', 'ab2b4b1f-961c-f5a8-9c9f-a521933bcd49', 'Heavy Intercessors', 'Heavy Intercessor w/Heavy Bolter', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('1e9bd181-b060-eb58-89b4-f23e3a15e5b7', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Hellblaster Squad', 'infantry', '6"', 4, '3+', 2, 6, 1, '{"Infantry", "Imperium", "Hellblaster Squad", "Tacticus"}', 3);
 
@@ -1798,6 +1877,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('1e9bd181-b060-eb58-89b4-f23e3a15e5b7', 'For the Chapter!', 'unique', 'Each time a model in this unit is destroyed, roll one D6: on a 3+, do not remove it from play. The destroyed model can shoot after the attacking model’s unit has finished making its attacks, and is then removed from play. When resolving these attacks, any Hazardous tests taken for that attack are automatically passed.'),
   ('1e9bd181-b060-eb58-89b4-f23e3a15e5b7', 'Oath of Moment', 'faction', ''),
   ('1e9bd181-b060-eb58-89b4-f23e3a15e5b7', 'Templar Vows', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('66114b52-3479-4743-b97d-c1b7f6a91632', '1e9bd181-b060-eb58-89b4-f23e3a15e5b7', 'Hellblasters', 'Hellblaster Sergeant', false, 0),
+  ('bd418eea-5296-1356-cf3f-0d94572c723d', '1e9bd181-b060-eb58-89b4-f23e3a15e5b7', 'Hellblasters', 'Hellblaster', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('5de0e0ae-9b56-1a6e-6aeb-399b17916fb2', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Hunter [Legends]', 'vehicle', '9"', 11, '3+', 11, 6, 3, '{"Vehicle", "Smoke", "Imperium", "Hunter"}', 3);
@@ -1885,6 +1969,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('397c0289-c2c2-246f-940a-12b0d4384444', 'Oath of Moment', 'faction', ''),
   ('397c0289-c2c2-246f-940a-12b0d4384444', 'Templar Vows', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('e2d1d14b-4ffe-1e9b-a94f-7eccf62f9fba', '397c0289-c2c2-246f-940a-12b0d4384444', 'Inceptors', 'Inceptor Sergeant', false, 0),
+  ('e9f0ea41-4f39-c9d7-e8d9-3086d37aae95', '397c0289-c2c2-246f-940a-12b0d4384444', 'Inceptors', 'Inceptor', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('8ccb4837-fac4-e798-9992-495d5516e23e', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Incursor Squad', 'infantry', '6"', 4, '3+', 2, 6, 1, '{"Infantry", "Imperium", "Smoke", "Phobos", "Incursor Squad"}', 3);
 
@@ -1905,6 +1994,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('8ccb4837-fac4-e798-9992-495d5516e23e', 'Multi-spectrum Array', 'unique', 'In your Shooting phase, after this unit has shot, select one enemy unit that was hit by one or more attacks made by this unit this phase. Until the end of the phase, each time a friendly Adeptus Astartes unit makes an attack that targets that enemy unit, add 1 to the Hit roll.'),
   ('8ccb4837-fac4-e798-9992-495d5516e23e', 'Oath of Moment', 'faction', ''),
   ('8ccb4837-fac4-e798-9992-495d5516e23e', 'Templar Vows', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('8e5a2326-7287-47b8-2025-10ea9ebad313', '8ccb4837-fac4-e798-9992-495d5516e23e', 'Incursors', 'Incursor Sergeant', false, 0),
+  ('8a767cab-32a1-e251-175c-c02f103f65a8', '8ccb4837-fac4-e798-9992-495d5516e23e', 'Incursors', 'Incursor', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('d37be919-fb8b-da09-624a-149c77a54504', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Infernus Squad', 'infantry', '6"', 4, '3+', 2, 6, 1, '{"Infantry", "Imperium", "Tacticus", "Infernus Squad"}', 3);
@@ -1927,6 +2021,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('d37be919-fb8b-da09-624a-149c77a54504', 'Oath of Moment', 'faction', ''),
   ('d37be919-fb8b-da09-624a-149c77a54504', 'Templar Vows', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('6a65ea65-0d93-bb7a-159b-fb37d7381250', 'd37be919-fb8b-da09-624a-149c77a54504', 'Infernus Marines', 'Infernus Marines', false, 0),
+  ('deda1493-d330-1c2e-3487-d9805425193e', 'd37be919-fb8b-da09-624a-149c77a54504', 'Infernus Marines', 'Infernus Sergeant', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('63742c8f-7380-e5b1-e627-39147e8aa7e6', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Infiltrator Squad', 'infantry', '6"', 4, '3+', 2, 6, 1, '{"Infantry", "Imperium", "Smoke", "Phobos", "Infiltrator Squad"}', 3);
 
@@ -1947,6 +2046,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('63742c8f-7380-e5b1-e627-39147e8aa7e6', 'Omni-scramblers', 'unique', 'Enemy units that are set up on the battlefield from Reserves cannot be set up within 12" of this unit.'),
   ('63742c8f-7380-e5b1-e627-39147e8aa7e6', 'Oath of Moment', 'faction', ''),
   ('63742c8f-7380-e5b1-e627-39147e8aa7e6', 'Templar Vows', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('a8655e7a-bb00-2d96-59e8-30af2d500540', '63742c8f-7380-e5b1-e627-39147e8aa7e6', 'Infiltrators', 'Infiltrator', false, 0),
+  ('28821704-cba2-db9b-88bd-06dc483cc794', '63742c8f-7380-e5b1-e627-39147e8aa7e6', 'Infiltrators', 'Infiltrator Sergeant', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('7a209e63-225b-2371-5b70-64a1106fe0e5', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Intercessor Squad', 'battleline', '6"', 4, '3+', 2, 6, 2, '{"Infantry", "Battleline", "Imperium", "Tacticus", "Intercessor Squad"}', 6);
@@ -1978,6 +2082,12 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('7a209e63-225b-2371-5b70-64a1106fe0e5', 'Target Elimination', 'unique', 'Each time this unit is selected to shoot, it can use this ability. If it does, until the end of the phase, add 2 to the Attacks characteristic of bolt rifles equipped by models in this unit and you can only select one enemy unit as the target of all of this unit''s attacks'),
   ('7a209e63-225b-2371-5b70-64a1106fe0e5', 'Oath of Moment', 'faction', ''),
   ('7a209e63-225b-2371-5b70-64a1106fe0e5', 'Templar Vows', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('d362ecfa-2126-bfa3-c67b-1f632d0ecd64', '7a209e63-225b-2371-5b70-64a1106fe0e5', 'Intercessors', 'Intercessor Sergeant', false, 0),
+  ('8778e5ab-a37a-5547-3ae6-b9ef2a56cf9c', '7a209e63-225b-2371-5b70-64a1106fe0e5', 'Intercessors', 'Intercessor', false, 0),
+  ('146e1f8d-eb88-d7b9-88b2-5121f69bb21a', '7a209e63-225b-2371-5b70-64a1106fe0e5', 'Intercessors', 'Intercessor w/ Grenade Launcher', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('a39499ed-b2ec-43c9-54ab-8dba2a6363d4', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Invictor Tactical Warsuit', 'vehicle', '8"', 8, '3+', 12, 6, 4, '{"Vehicle", "Walker", "Invictor Tactical Warsuit", "Imperium", "Phobos"}', 3);
@@ -2351,6 +2461,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('7b3ef325-8259-4ed2-ea1a-a667e4250dfb', 'Oath of Moment', 'faction', ''),
   ('7b3ef325-8259-4ed2-ea1a-a667e4250dfb', 'Templar Vows', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('955d327c-6adc-c556-22b7-5313a5aea7f4', '7b3ef325-8259-4ed2-ea1a-a667e4250dfb', 'Vanguard Veterans', 'Vanguard Veterans', false, 0),
+  ('fdf6909f-db36-d5d2-a6ff-61ff25e2c6fb', '7b3ef325-8259-4ed2-ea1a-a667e4250dfb', 'Vanguard Veterans', 'Vanguard Veteran Sergeant', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('956a0237-19aa-4c81-fc41-1e1cae52be05', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Librarian with Jump Pack [Legends]', 'character', '12"', 4, '3+', 4, 6, 1, '{"Character", "Infantry", "Imperium", "Librarian", "Psyker", "Fly", "Jump Pack"}', 3);
 
@@ -2560,7 +2675,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('ba0d9279-227e-52cf-bb16-e479cd286105', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Thunderfire Cannon [Legends]', 'vehicle', '3"', 6, '2+', 6, 6, 2, '{"Vehicle", "Imperium", "Thunderfire Cannon", "Artillery"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('ba0d9279-227e-52cf-bb16-e479cd286105', 1, 90);
+  ('ba0d9279-227e-52cf-bb16-e479cd286105', 2, 90);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('ba0d9279-227e-52cf-bb16-e479cd286105', 'Gunner''s Servo Arms', 'melee', NULL, '2', '3', 8, -2, '3', '{"Extra Attacks"}'),
@@ -2579,6 +2694,16 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('ba0d9279-227e-52cf-bb16-e479cd286105', 'Crewed Artillery', 'unique', 'If one model in this unit is destroyed, the remaining model in this unit is also destroyed'),
   ('ba0d9279-227e-52cf-bb16-e479cd286105', 'Oath of Moment', 'faction', ''),
   ('ba0d9279-227e-52cf-bb16-e479cd286105', 'Templar Vows', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('7b3386c3-6f82-58c1-5c37-eceb4061a902', 'ba0d9279-227e-52cf-bb16-e479cd286105', 'Techmarine Gunner wargear', 'Gunner''s Servo Arms', true, 0),
+  ('7b5b0ed9-d9cf-0e9e-0305-7d53e50fed7a', 'ba0d9279-227e-52cf-bb16-e479cd286105', 'Techmarine Gunner wargear', 'Plasma Cutter', false, 0),
+  ('140e7002-db68-3f7f-7d83-b1a3ca605571', 'ba0d9279-227e-52cf-bb16-e479cd286105', 'Techmarine Gunner wargear', 'Bolt pistol', false, 0),
+  ('a65cd1b7-ddb0-be41-f5c8-5d46db4daeb9', 'ba0d9279-227e-52cf-bb16-e479cd286105', 'Techmarine Gunner wargear', 'Close combat weapon', false, 0),
+  ('707869cd-aa23-54d2-92b5-20fb45dee98b', 'ba0d9279-227e-52cf-bb16-e479cd286105', 'Techmarine Gunner wargear', 'Flamer', false, 0),
+  ('f2b3378a-68b9-69eb-679d-8464dcc4ad33', 'ba0d9279-227e-52cf-bb16-e479cd286105', 'Thunderfire Cannon wargear', 'Thunderfire Cannon', true, 0),
+  ('089409ff-71c7-b487-3a8e-95c77207c184', 'ba0d9279-227e-52cf-bb16-e479cd286105', 'Thunderfire Cannon wargear', 'Close combat weapon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('21a47c02-7596-ab83-5dc1-8fa372da5809', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Outrider Squad', 'mounted', '12"', 5, '3+', 4, 6, 2, '{"Mounted", "Imperium", "Outrider Squad"}', 3);
@@ -2604,6 +2729,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('21a47c02-7596-ab83-5dc1-8fa372da5809', 'Thunderous Impact', 'unique', 'Each time a model in this unit makes a melee attack, if this unit made a Charge move this turn, improve the Strength and Damage characteristics of that attack by 1'),
   ('21a47c02-7596-ab83-5dc1-8fa372da5809', 'Oath of Moment', 'faction', ''),
   ('21a47c02-7596-ab83-5dc1-8fa372da5809', 'Templar Vows', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('d462d180-3dd0-81b9-6a3c-afa5438170ef', '21a47c02-7596-ab83-5dc1-8fa372da5809', 'Outriders', 'Outrider', true, 0),
+  ('068eade3-bd4d-bb14-8fbd-8d253b9255ed', '21a47c02-7596-ab83-5dc1-8fa372da5809', 'Outriders', 'Outrider Sergeant', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('ecd08312-ee8c-39c4-a6d5-f2dde30f0793', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Scout Bike Squad [Legends]', 'mounted', '12"', 5, '4+', 3, 6, 2, '{"Mounted", "Imperium", "Smoke", "Scout Bike Squad"}', 3);
@@ -2640,6 +2770,12 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('ecd08312-ee8c-39c4-a6d5-f2dde30f0793', 'Outflank', 'unique', 'When this unit arrives from Strategic Reserves, it can be set up within your opponent’s deployment zone (all other restrictions still apply).'),
   ('ecd08312-ee8c-39c4-a6d5-f2dde30f0793', 'Oath of Moment', 'faction', ''),
   ('ecd08312-ee8c-39c4-a6d5-f2dde30f0793', 'Templar Vows', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('f2dbaf25-63ba-2965-5f76-0746e0abfee7', 'ecd08312-ee8c-39c4-a6d5-f2dde30f0793', 'Scout Bikers', 'Scout Biker w/ Astartes Grenade Launcher', false, 0),
+  ('8e4b0c42-b5db-7c53-2768-6bfffb4b7fac', 'ecd08312-ee8c-39c4-a6d5-f2dde30f0793', 'Scout Bikers', 'Scout Biker w/ Twin Boltgun', true, 0),
+  ('dc2e9bf5-0222-422f-b9dc-4a0d42401462', 'ecd08312-ee8c-39c4-a6d5-f2dde30f0793', 'Scout Bikers', 'Scout Biker Sergeant', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('87268d61-fb46-c7d9-640b-701cedd08dc9', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Rhino', 'dedicated_transport', '12"', 9, '3+', 10, 6, 2, '{"Imperium", "Smoke", "Dedicated Transport", "Transport", "Vehicle", "Rhino"}', 6);
@@ -2808,6 +2944,15 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('86095c82-975c-3fd6-9068-c0eda832ec36', 'Fury of the First', 'unique', 'Each time a model in this unit makes an attack, you can ignore any or all modifiers to that attack’s Ballistic Skill or Weapon Skill characteristic and/or to the Hit roll. In addition, each time a model in this unit makes an attack that targets the enemy unit you selected for the Oath of Moment ability this turn, add 1 to the Hit roll'),
   ('86095c82-975c-3fd6-9068-c0eda832ec36', 'Oath of Moment', 'faction', ''),
   ('86095c82-975c-3fd6-9068-c0eda832ec36', 'Templar Vows', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('5cc72b62-6cf0-72ce-f06b-8f1d7040202d', '86095c82-975c-3fd6-9068-c0eda832ec36', 'Relic Terminators', 'Relic Terminator Sergeant', false, 0),
+  ('98d1a61a-7bbf-63fa-fd7d-83e4aff257d5', '86095c82-975c-3fd6-9068-c0eda832ec36', 'Relic Terminators', 'Relic Terminator w/ Power Fist', true, 0),
+  ('555e8f96-79d8-fe9f-6e1d-2d442b359747', '86095c82-975c-3fd6-9068-c0eda832ec36', 'Relic Terminators', 'Relic Terminator w/ Twin Lightning Claws', false, 0),
+  ('0a9307c0-ac73-94ae-0cd5-537695f3f771', '86095c82-975c-3fd6-9068-c0eda832ec36', 'Relic Terminators', 'Relic Terminator w/ Power Weapon', false, 0),
+  ('e97916db-2e78-2c4e-80a2-52fbc8314cd2', '86095c82-975c-3fd6-9068-c0eda832ec36', 'Relic Terminators', 'Relic Terminator w/ Chain Fist', false, 0),
+  ('2968bc7f-ce91-54e7-592b-fb92b6b51b53', '86095c82-975c-3fd6-9068-c0eda832ec36', 'Relic Terminators', 'Relic Terminator w/ Heavy Weapon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('7b0df200-7587-5c45-e9b6-a01a97f1632f', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Predator Destructor', 'vehicle', '10', 10, '3+', 11, 6, 3, '{"Vehicle", "Smoke", "Imperium", "Predator Destructor"}', 3);
@@ -3071,6 +3216,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('4e24370a-c9dc-c2da-22ef-e7f9b8bc57ef', 'Oath of Moment', 'faction', ''),
   ('4e24370a-c9dc-c2da-22ef-e7f9b8bc57ef', 'Templar Vows', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('2b79a972-0544-8542-6280-a61d9229f055', '4e24370a-c9dc-c2da-22ef-e7f9b8bc57ef', 'Reivers', 'Reivers', false, 0),
+  ('16123f33-b4a9-5cef-18a0-42f9d3dcb5b7', '4e24370a-c9dc-c2da-22ef-e7f9b8bc57ef', 'Reivers', 'Reiver Sergeant', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('a49b3742-9f63-9177-87ee-d7a7d63c351d', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Captain', 'character', '6"', 4, '3+', 5, 6, 1, '{"Character", "Infantry", "Captain", "Imperium", "Tacticus"}', 3);
 
@@ -3209,6 +3359,12 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('30b65b39-b12f-9957-2787-233a866e1dc0', 'Oath of Moment', 'faction', ''),
   ('30b65b39-b12f-9957-2787-233a866e1dc0', 'Templar Vows', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('dbd494f4-a0a2-57f1-67b9-c0eac06e8ea9', '30b65b39-b12f-9957-2787-233a866e1dc0', 'Scout Snipers', 'Scout Sniper Sergeant', false, 0),
+  ('22c918f6-b20f-2c61-79c9-4fac6894226c', '30b65b39-b12f-9957-2787-233a866e1dc0', 'Scout Snipers', 'Scout Snipers', false, 0),
+  ('e5bc4c4b-424e-e4cf-b677-37322cddb218', '30b65b39-b12f-9957-2787-233a866e1dc0', 'Scout Snipers', 'Scout Sniper w/ Missile Launcher', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('b9e76540-1031-5690-e619-57d511f1a103', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Scout Squad', 'infantry', '6"', 4, '4+', 2, 6, 1, '{"Infantry", "Imperium", "Smoke", "Scout Squad"}', 3);
 
@@ -3238,6 +3394,15 @@ Strategic Reserves.'),
   ('b9e76540-1031-5690-e619-57d511f1a103', 'Oath of Moment', 'faction', ''),
   ('b9e76540-1031-5690-e619-57d511f1a103', 'Templar Vows', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('8f11e9e4-d09d-2860-ee82-fc1ab2d7c4d8', 'b9e76540-1031-5690-e619-57d511f1a103', 'Scouts', 'Scouts w/ Boltgun', true, 0),
+  ('8c2a9a88-5cb1-8536-3524-9a468b452fcf', 'b9e76540-1031-5690-e619-57d511f1a103', 'Scouts', 'Scout Sergeant', false, 0),
+  ('3b3c5b2d-0d84-56d7-57fc-df79ffb2df68', 'b9e76540-1031-5690-e619-57d511f1a103', 'Scouts', 'Scouts w/ Astartes Shotgun', false, 0),
+  ('694e7448-5882-2472-c66c-db0d6a1e0431', 'b9e76540-1031-5690-e619-57d511f1a103', 'Scouts', 'Scouts w/ Combat Knife', false, 0),
+  ('4681a7f8-6dbb-650e-a32b-3b569c333ab0', 'b9e76540-1031-5690-e619-57d511f1a103', 'Scouts', 'Scout w/ Heavy Weapon', false, 0),
+  ('236cbff5-5f17-2d92-4af1-c47c6a6eeac3', 'b9e76540-1031-5690-e619-57d511f1a103', 'Scouts', 'Scout w/ Scout Sniper Rifle', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('220a654f-f27e-a649-0683-1921250b94ce', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Terminator Squad', 'infantry', '5"', 5, '2+', 3, 6, 1, '{"Infantry", "Imperium", "Terminator", "Terminator Squad"}', 3);
 
@@ -3263,6 +3428,13 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('220a654f-f27e-a649-0683-1921250b94ce', 'Teleport Homer', 'unique', 'At the start of the battle, you can set up one Teleport Homer token for this unit anywhere on the battlefield that is not in your opponent’s deployment zone. If you do, once per battle, you can target this unit with the Rapid Ingress Stratagem for 0CP, but when resolving that Stratagem, you must set this unit up within 3" horizontally of that token and not within 9" horizontally of any enemy models. That token is then removed.'),
   ('220a654f-f27e-a649-0683-1921250b94ce', 'Fury of the First', 'unique', 'Each time a model in this unit makes an attack that targets your Oath of Moment target, add 1 to the Hit roll.'),
   ('220a654f-f27e-a649-0683-1921250b94ce', 'Oath of Moment', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('b0012bfe-6c34-f763-e918-7cdee2ac4ba9', '220a654f-f27e-a649-0683-1921250b94ce', 'Terminators', 'Terminator Sergeant', false, 0),
+  ('ae71c13b-9b0a-fdbd-bafd-bb0298eb2a37', '220a654f-f27e-a649-0683-1921250b94ce', 'Terminators', 'Terminator w/ Power Fist', true, 0),
+  ('001ee653-18fa-af03-865b-f8124c1805be', '220a654f-f27e-a649-0683-1921250b94ce', 'Terminators', 'Terminator w/ Chain Fist', false, 0),
+  ('672bf522-ed15-7c2e-410e-810b88a91df5', '220a654f-f27e-a649-0683-1921250b94ce', 'Terminators', 'Terminator w/ Heavy Weapon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('be52ef76-7c67-6896-7977-0d6d9cd14df5', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Whirlwind', 'vehicle', '10"', 10, '3+', 11, 6, 3, '{"Imperium", "Vehicle", "Smoke", "Whirlwind"}', 3);
@@ -3313,6 +3485,12 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('99c1278e-56f7-f840-c7ce-8401ebe77b36', 'Oath of Moment', 'faction', ''),
   ('99c1278e-56f7-f840-c7ce-8401ebe77b36', 'Templar Vows', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('fa8169d8-838d-4bfd-35c3-67cde58fad27', '99c1278e-56f7-f840-c7ce-8401ebe77b36', 'Assault Terminators', 'Assault Terminator w/ Thunder Hammer & Storm Shield', true, 0),
+  ('c4685af6-127c-7a2a-3d32-552eaa2a5e16', '99c1278e-56f7-f840-c7ce-8401ebe77b36', 'Assault Terminators', 'Assault Terminator w/ Twin Lightning Claws', false, 0),
+  ('e40bd5e0-8cbd-9f47-86ff-3b47202d6ca5', '99c1278e-56f7-f840-c7ce-8401ebe77b36', 'Assault Terminators', 'Assault Terminator Sergeant', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('80a36d37-06ca-0be2-ac14-238e9dc6f0d7', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Vanguard Veteran Squad with Jump Packs', 'infantry', '12"', 4, '3+', 2, 6, 1, '{"Infantry", "Imperium", "Vanguard Veteran Squad with Jump Packs", "Jump Pack", "Fly", "Vanguard Veteran Squad"}', 3);
 
@@ -3337,6 +3515,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('80a36d37-06ca-0be2-ac14-238e9dc6f0d7', 'Vanguard Assault', 'unique', 'Each time this unit ends a Charge move, until the end of the turn, melee weapons equipped by models in this unit have the [LETHAL HITS] ability.'),
   ('80a36d37-06ca-0be2-ac14-238e9dc6f0d7', 'Oath of Moment', 'faction', ''),
   ('80a36d37-06ca-0be2-ac14-238e9dc6f0d7', 'Templar Vows', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('23d1e388-0134-785d-624d-e9f5628ffa5b', '80a36d37-06ca-0be2-ac14-238e9dc6f0d7', 'Vanguard Veterans with Jump Packs', 'Vanguard Veterans with Jump Packs', false, 0),
+  ('d533dc21-76b7-4cea-ec96-e551bc2e8cdb', '80a36d37-06ca-0be2-ac14-238e9dc6f0d7', 'Vanguard Veterans with Jump Packs', 'Vanguard Veteran Sergeant with Jump Pack', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('704a1539-a390-7410-a009-a80bbf897c6a', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Stormtalon Gunship', 'vehicle', '20"+', 8, '3+', 10, 6, 1, '{"Aircraft", "Vehicle", "Imperium", "Fly", "Stormtalon Gunship"}', 3);
@@ -3455,6 +3638,13 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('b3b5c84f-cd2d-5505-2ca2-774fb04c7782', 'Oath of Moment', 'faction', ''),
   ('b3b5c84f-cd2d-5505-2ca2-774fb04c7782', 'Templar Vows', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('e10ec441-94f5-8530-6ed4-9c158fa7aa6b', 'b3b5c84f-cd2d-5505-2ca2-774fb04c7782', 'Tactical Marines', 'Tactical Marine', true, 0),
+  ('e9275410-d237-f764-5de6-0d47b0c05a24', 'b3b5c84f-cd2d-5505-2ca2-774fb04c7782', 'Tactical Marines', 'Tactical Marine Sergeant', false, 0),
+  ('dc4792b1-c581-6600-443d-d03e6140d90c', 'b3b5c84f-cd2d-5505-2ca2-774fb04c7782', 'Tactical Marines', 'Tactical Marine w/Special Weapon', false, 0),
+  ('5718d4e9-d362-58fd-7ce8-71e57638b2c3', 'b3b5c84f-cd2d-5505-2ca2-774fb04c7782', 'Tactical Marines', 'Tactical Marine w/Heavy or Special Weapon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('68aca9f4-a8ce-def8-589c-7f2558c106a3', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Suppressor Squad', 'infantry', '12"', 4, '3+', 2, 6, 1, '{"Infantry", "Imperium", "Smoke", "Fly", "Jump Pack", "Suppressor Squad"}', 3);
 
@@ -3474,6 +3664,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('68aca9f4-a8ce-def8-589c-7f2558c106a3', 'Suppression Fire', 'unique', 'In your Shooting phase, after this unit has shot, select one enemy unit hit by one or more of those attacks made with an accelerator autocannon. Until the start of your next turn, while this unit is on the battlefield, that enemy unit is suppressed. While a unit is suppressed, each time a model in that unit makes an attack, subtract 1 from the Hit roll.'),
   ('68aca9f4-a8ce-def8-589c-7f2558c106a3', 'Oath of Moment', 'faction', ''),
   ('68aca9f4-a8ce-def8-589c-7f2558c106a3', 'Templar Vows', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('61ef323a-ed4b-de67-3bed-36a6ca9767ed', '68aca9f4-a8ce-def8-589c-7f2558c106a3', 'Suppressors', 'Suppressor Sergeant', false, 0),
+  ('6ab997e2-b3db-5ce9-f636-efb2a1697765', '68aca9f4-a8ce-def8-589c-7f2558c106a3', 'Suppressors', 'Suppressor', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('2a19f2e2-7d62-5e99-95ed-f817a03aa326', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Storm Speeder Hailstrike', 'vehicle', '14"', 9, '3+', 11, 6, 3, '{"Vehicle", "Fly", "Imperium", "Storm Speeder Hailstrike"}', 3);
@@ -3556,6 +3751,13 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('6bcf3cab-5426-04ee-b596-10d2cdb93e53', 'Sternguard Focus', 'unique', 'Each time a model in this unit makes an attack that targets your Oath of Moment Target, you can re-roll the wound roll'),
   ('6bcf3cab-5426-04ee-b596-10d2cdb93e53', 'Oath of Moment', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('a004e08e-b579-e427-c6b0-d3e389be0c91', '6bcf3cab-5426-04ee-b596-10d2cdb93e53', 'Sternguard Veterans', 'Sternguard Veteran w/ Bolt Rifle', true, 0),
+  ('f9cb8126-63d5-6f57-4a47-f543482a01fa', '6bcf3cab-5426-04ee-b596-10d2cdb93e53', 'Sternguard Veterans', 'Sternguard Veteran Sergeant', false, 0),
+  ('bb2c9294-88b0-4b07-7db9-b7ebaea0c7c7', '6bcf3cab-5426-04ee-b596-10d2cdb93e53', 'Sternguard Veterans', 'Sternguard Veteran w/ Special Weapon', false, 0),
+  ('a2cd12b6-6e18-2262-394b-f076d5e22593', '6bcf3cab-5426-04ee-b596-10d2cdb93e53', 'Sternguard Veterans', 'Sternguard Veteran w/ Combi-weapon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('fe71677c-53bb-1a53-207d-56f1743af213', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Storm Speeder Hammerstrike', 'vehicle', '14"', 9, '3+', 11, 6, 3, '{"Imperium", "Fly", "Vehicle", "Storm Speeder Hammerstrike"}', 3);
@@ -3779,6 +3981,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('a5de256d-b2c4-9183-d3d5-a6eb57f3baba', 'Armorium Cherub', 'unique', 'Once per battle, after making a Hit roll for a model in this unit, you can change that roll to an unmodified 6.'),
   ('a5de256d-b2c4-9183-d3d5-a6eb57f3baba', 'Oath of Moment', 'faction', ''),
   ('a5de256d-b2c4-9183-d3d5-a6eb57f3baba', 'Templar Vows', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('b174bcfe-f918-d9ec-1e8d-917d1ee9ce81', 'a5de256d-b2c4-9183-d3d5-a6eb57f3baba', 'Devastators', 'Devastator Marine w/ Boltgun', false, 0),
+  ('9cbf44af-1484-cb85-174d-a8d253982b43', 'a5de256d-b2c4-9183-d3d5-a6eb57f3baba', 'Devastators', 'Devastator Marine w/ Heavy Weapon', true, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('0b00ccce-8b3d-4a68-4467-45467c466bd4', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Land Raider Helios [Legends]', 'vehicle', '10"', 12, '2+', 16, 6, 5, '{"Vehicle", "Smoke", "Transport", "Imperium", "Land Raider Helios"}', 3);
@@ -4172,6 +4379,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('2b3393a1-c2bd-70b7-74a7-576377aff214', 'Vanguard Assault', 'unique', 'Each time this unit ends a Charge move, until the end of the turn, melee weapons equipped by models in this unit have the [LETHAL HITS] ability.'),
   ('2b3393a1-c2bd-70b7-74a7-576377aff214', 'Oath of Moment', 'faction', ''),
   ('2b3393a1-c2bd-70b7-74a7-576377aff214', 'Templar Vows', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('ac02b5ec-3af7-5ff1-2d8b-bb6a3023844c', '2b3393a1-c2bd-70b7-74a7-576377aff214', 'Company Veterans on Bikes [Legends]', 'Veteran Biker Sergeant', false, 0),
+  ('f4095f19-ab51-faa4-fb08-0038f5bc1a8c', '2b3393a1-c2bd-70b7-74a7-576377aff214', 'Company Veterans on Bikes [Legends]', 'Veteran Bikers', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('273fa95c-675d-a017-7662-56c4d50cd8c8', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Company Champion on Bike [Legends]', 'character', '12"', 5, '3+', 5, 6, 2, '{"Character", "Mounted", "Imperium", "Company Champion"}', 3);
@@ -4567,6 +4779,12 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('29a86431-66b7-9711-3d3c-d0dbac42de4c', 'Oath of Moment', 'faction', ''),
   ('29a86431-66b7-9711-3d3c-d0dbac42de4c', 'Templar Vows', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('bb4ca0da-bbac-c216-0dff-ea3bed5182d6', '29a86431-66b7-9711-3d3c-d0dbac42de4c', 'Assault Intercessors with Jump Packs', 'Assault Intercessor Sergeant with Jump Pack', false, 0),
+  ('cbaec906-b039-5baa-178a-f87170789f16', '29a86431-66b7-9711-3d3c-d0dbac42de4c', 'Assault Intercessors with Jump Packs', 'Assault Intercessors with Jump Pack', true, 0),
+  ('d53a66fe-f913-37db-1044-d66a086984d3', '29a86431-66b7-9711-3d3c-d0dbac42de4c', 'Assault Intercessors with Jump Packs', 'Assault Intercessors with Jump Pack w/ Plasma Pistol', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('0a22410a-1ded-b9bb-9ce3-e0abaa90ae15', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Company Heroes', 'infantry', '6"', 4, '3+', 4, 6, 1, '{"Infantry", "Imperium", "Tacticus", "Company Heroes"}', 3);
 
@@ -4591,6 +4809,13 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('0a22410a-1ded-b9bb-9ce3-e0abaa90ae15', 'Company Heroes', 'unique', 'You must attach one Captain or Chapter Master model to this unit. If this is not possible, this unit does not take part in the battle and counts as having been destroyed.'),
   ('0a22410a-1ded-b9bb-9ce3-e0abaa90ae15', 'Oath of Moment', 'faction', ''),
   ('0a22410a-1ded-b9bb-9ce3-e0abaa90ae15', 'Templar Vows', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('a752bcc4-0eb6-d816-b7df-c32f1fdcdf80', '0a22410a-1ded-b9bb-9ce3-e0abaa90ae15', 'Unit Composition', 'Ancient', false, 0),
+  ('5b2bcb4e-ca70-84d5-de1b-0c0bfad263b9', '0a22410a-1ded-b9bb-9ce3-e0abaa90ae15', 'Unit Composition', 'Company Champion', false, 0),
+  ('fa914599-75b7-2885-79d7-6d38e9a1caac', '0a22410a-1ded-b9bb-9ce3-e0abaa90ae15', 'Unit Composition', 'Company Veteran w/ Bolt Rifle', false, 0),
+  ('43090339-177d-0713-161d-babbc01c988b', '0a22410a-1ded-b9bb-9ce3-e0abaa90ae15', 'Unit Composition', 'Company Veteran w/ Heavy Bolter', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('bafc102e-cc3f-f35d-5944-fe724a5ec29a', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Ferren Areios [Legends]', 'epic_hero', '6"', 4, '2+', 5, 6, 1, '{"Character", "Epic Hero", "Infantry", "Captain", "Imperium", "Tacticus", "Ferren Areios"}', 1);
@@ -4708,7 +4933,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('c9719222-8ca5-bf34-032d-9c44d52f5e00', 'd1d1e3b7-8f05-edbb-0805-80abfa63fc86', 'Aestred Thurga and Agathae Dolan', 'epic_hero', '6"', 3, '2+', 4, 6, 1, '{"Epic Hero", "Aestred Thurga and Agathae Dolan", "Character", "Imperium", "Infantry"}', 1);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('c9719222-8ca5-bf34-032d-9c44d52f5e00', 1, 70);
+  ('c9719222-8ca5-bf34-032d-9c44d52f5e00', 2, 70);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('c9719222-8ca5-bf34-032d-9c44d52f5e00', 'Blade of Vigil', 'melee', NULL, '4', '2+', 5, -2, '2', '{}'),
@@ -4721,7 +4946,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('7687f122-2af9-6646-89f4-65e131356107', 'd1d1e3b7-8f05-edbb-0805-80abfa63fc86', 'Arco-Flagellants', 'infantry', '7"', 3, '7+', 2, 8, 1, '{"Infantry", "Imperium", "Penitent"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('7687f122-2af9-6646-89f4-65e131356107', 1, 45),
+  ('7687f122-2af9-6646-89f4-65e131356107', 3, 45),
   ('7687f122-2af9-6646-89f4-65e131356107', 4, 140);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -5009,7 +5234,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('9d4342b0-f59f-7536-de20-3f79da2fa224', 'd1d1e3b7-8f05-edbb-0805-80abfa63fc86', 'Paragon Warsuits', 'vehicle', '8"', 7, '2+', 4, 7, 2, '{"Vehicle", "Walker", "Imperium", "Paragon Warsuits"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('9d4342b0-f59f-7536-de20-3f79da2fa224', 1, 210);
+  ('9d4342b0-f59f-7536-de20-3f79da2fa224', 3, 210);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('9d4342b0-f59f-7536-de20-3f79da2fa224', 'Paragon Storm Bolters', 'ranged', '24"', '2', '3+', 4, 0, '1', '{"Rapid Fire 2", "Twin-Linked"}'),
@@ -5023,6 +5248,17 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('9d4342b0-f59f-7536-de20-3f79da2fa224', 'Righteous Paragons', 'unique', 'Each time a model in this unit makes an attack that targets a MONSTER or VEHICLE unit, add 1 to the Hit roll and add 1 to the Wound roll.'),
   ('9d4342b0-f59f-7536-de20-3f79da2fa224', 'Invulnerable Save', 'invulnerable', 'Models in this units have an Invulnerable save of 4+.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('1ac38e81-774b-60bb-f622-dd0e7855cd5f', '9d4342b0-f59f-7536-de20-3f79da2fa224', 'Paragon Superior wargear', 'Bolt pistol', true, 0),
+  ('3d0ae37b-cef5-2e28-9002-d2ca57f6c86b', '9d4342b0-f59f-7536-de20-3f79da2fa224', 'Paragon Superior: Paragon Carapace Weapon', 'Paragon Storm Bolters', true, 0),
+  ('0f707232-a038-625e-ed10-a35d4a900c5a', '9d4342b0-f59f-7536-de20-3f79da2fa224', 'Paragon Superior: Paragon Carapace Weapon', 'Paragon Grenade Launchers', false, 0),
+  ('4abcd0bb-f48f-5ca8-3677-72e556939da2', '9d4342b0-f59f-7536-de20-3f79da2fa224', 'Paragon Superior: Paragon Melee Weapon', 'Paragon War Blade', true, 0),
+  ('b3e457b4-9923-14dd-73c7-9eb87b7f0b3a', '9d4342b0-f59f-7536-de20-3f79da2fa224', 'Paragon Superior: Paragon Melee Weapon', 'Paragon War Mace', false, 0),
+  ('4761f09c-e6de-4f64-dd6c-5157e48f806c', '9d4342b0-f59f-7536-de20-3f79da2fa224', 'Paragon Superior: Paragon Ranged Weapon', 'Heavy Bolter', true, 0),
+  ('8d1c2c55-c92b-5a43-e125-f4f28e9be576', '9d4342b0-f59f-7536-de20-3f79da2fa224', 'Paragon Superior: Paragon Ranged Weapon', 'Multi-melta', false, 0),
+  ('05798b8c-cbc4-70aa-e59d-216c88e0694f', '9d4342b0-f59f-7536-de20-3f79da2fa224', 'Paragon Superior: Paragon Ranged Weapon', 'Ministorum heavy flamer', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('ddf2f064-ab05-2d55-5492-a7bc78ee1725', 'd1d1e3b7-8f05-edbb-0805-80abfa63fc86', 'Penitent Engines', 'vehicle', '8"', 6, '4+', 5, 7, 2, '{"Vehicle", "Walker", "Imperium", "Penitent Engines", "Penitent"}', 3);
@@ -5069,7 +5305,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('79b53b76-5f60-7835-868f-cb3a80304227', 'd1d1e3b7-8f05-edbb-0805-80abfa63fc86', 'Retributor Squad', 'infantry', '6"', 3, '3+', 1, 7, 1, '{"Infantry", "Imperium", "Retributor Squad"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('79b53b76-5f60-7835-868f-cb3a80304227', 4, 120);
+  ('79b53b76-5f60-7835-868f-cb3a80304227', 5, 120);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('79b53b76-5f60-7835-868f-cb3a80304227', 'Condemnor boltgun', 'ranged', '24"', '1', '3+', 4, 0, '1', '{"Anti-Psyker 2+", "Devastating Wounds", "Precision", "Rapid Fire 1"}'),
@@ -5111,7 +5347,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('1f405619-ff16-6093-3cbf-7e28e9a0f5a5', 'd1d1e3b7-8f05-edbb-0805-80abfa63fc86', 'Seraphim Squad', 'infantry', '12"', 3, '3+', 1, 7, 1, '{"Infantry", "Fly", "Imperium", "Seraphim Squad", "Jump Pack"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('1f405619-ff16-6093-3cbf-7e28e9a0f5a5', 4, 80),
+  ('1f405619-ff16-6093-3cbf-7e28e9a0f5a5', 5, 80),
   ('1f405619-ff16-6093-3cbf-7e28e9a0f5a5', 6, 160);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -5126,6 +5362,11 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('1f405619-ff16-6093-3cbf-7e28e9a0f5a5', 'Angelic Ascent', 'unique', 'In your Shooting phase, after this unit has shot, if it is not within Engagement Range of any enemy units, it can make a Normal move of up to 6". If it does, until the end of the turn, this unit is not eligible to declare a charge.'),
   ('1f405619-ff16-6093-3cbf-7e28e9a0f5a5', 'Invulnerable Save', 'invulnerable', 'Models in this units have an Invulnerable save of 5+.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('c04b1184-d5bd-8cfd-cd2e-e16e00a8a27c', '1f405619-ff16-6093-3cbf-7e28e9a0f5a5', 'Seraphim', 'Seraphim', true, 0),
+  ('ba4f2e9e-349f-82be-22ed-afbdbb689b61', '1f405619-ff16-6093-3cbf-7e28e9a0f5a5', 'Seraphim', 'Seraphim with Special Weapons', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('cb2d00d9-add7-f7cf-d093-61f77241df52', 'd1d1e3b7-8f05-edbb-0805-80abfa63fc86', 'Sororitas Rhino', 'dedicated_transport', '12"', 9, '3+', 10, 7, 2, '{"Dedicated Transport", "Vehicle", "Transport", "Smoke", "Imperium", "Sororitas Rhino"}', 6);
@@ -5175,7 +5416,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('39d9e3e7-c3f8-0eba-7842-ff7dc276c2d9', 'd1d1e3b7-8f05-edbb-0805-80abfa63fc86', 'Zephyrim Squad', 'infantry', '12"', 3, '3+', 1, 7, 1, '{"Infantry", "Fly", "Imperium", "Zephyrim Squad", "Jump Pack"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('39d9e3e7-c3f8-0eba-7842-ff7dc276c2d9', 1, 80),
+  ('39d9e3e7-c3f8-0eba-7842-ff7dc276c2d9', 5, 80),
   ('39d9e3e7-c3f8-0eba-7842-ff7dc276c2d9', 6, 160);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -5196,7 +5437,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('1e3aeb49-1a08-fc69-7f13-106640582310', 'd1d1e3b7-8f05-edbb-0805-80abfa63fc86', 'Daemonifuge', 'epic_hero', '8"', 3, '3+', 5, 7, 1, '{"Epic Hero", "Infantry", "Character", "Imperium", "Daemonifuge"}', 1);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('1e3aeb49-1a08-fc69-7f13-106640582310', 1, 85);
+  ('1e3aeb49-1a08-fc69-7f13-106640582310', 2, 85);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('1e3aeb49-1a08-fc69-7f13-106640582310', 'Sanctity', 'melee', NULL, '4', '2+', 6, -2, '2', '{"Anti-Chaos 2+", "Precision"}'),
@@ -5262,7 +5503,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('7c250512-4084-5dd5-494c-22bb8bd5f65d', 'd1d1e3b7-8f05-edbb-0805-80abfa63fc86', 'Crusaders [Legends]', 'infantry', '6"', 3, '3+', 2, 7, 1, '{"Infantry", "Imperium", "Crusaders"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('7c250512-4084-5dd5-494c-22bb8bd5f65d', 1, 40),
+  ('7c250512-4084-5dd5-494c-22bb8bd5f65d', 2, 40),
   ('7c250512-4084-5dd5-494c-22bb8bd5f65d', 3, 80);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -5306,11 +5547,22 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('e4826418-d1da-cdbb-7496-41a141331c2d', 'Attached Unit', 'unique', 'If a ^^**Ministorum Priest^^** model from your army with the Leader ability can be attached to a ^^**Battle Sisters Squad^^**, it can be attached to this unit instead. If a ^^**Ministorum Priest^^** model from your army is attached to this unit during the Declare Battle Formations step, that model gains the Scouts 6" ability.'),
   ('e4826418-d1da-cdbb-7496-41a141331c2d', 'Invulnerable Save', 'invulnerable', 'Models in this unit have a 5+ invulnerable save.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('0e0330ba-a9fb-66b9-9b4b-ad1015934e4c', 'e4826418-d1da-cdbb-7496-41a141331c2d', 'Sanctifiers', 'Sanctifier w/ simulacrum imperialis', false, 0),
+  ('b854b624-79f6-6fb4-f4ec-25325e2e4266', 'e4826418-d1da-cdbb-7496-41a141331c2d', 'Sanctifiers', 'Sanctifier w/ two hand flamers', false, 0),
+  ('fc384379-16dc-11c3-b2a8-2f6ed3e3fbef', 'e4826418-d1da-cdbb-7496-41a141331c2d', 'Sanctifiers', 'Missionary w/ plasma gun', false, 0),
+  ('9e552866-1c82-2bcf-cc1b-9f158d2011b7', 'e4826418-d1da-cdbb-7496-41a141331c2d', 'Sanctifiers', 'Sanctifier w/ hand flamer', false, 0),
+  ('43cf4a88-b9f5-e12e-37d3-f6df86a65f12', 'e4826418-d1da-cdbb-7496-41a141331c2d', 'Sanctifiers', 'Miraculist', false, 0),
+  ('b9a3cc69-3ce3-e7da-aa27-6186c4fe3c53', 'e4826418-d1da-cdbb-7496-41a141331c2d', 'Sanctifiers', 'Death Cult Assassin', false, 0),
+  ('7bf4b6ae-5bff-8d75-bf2e-dda33e72b7a8', 'e4826418-d1da-cdbb-7496-41a141331c2d', 'Sanctifiers', 'Missionary w/ flamer', false, 0),
+  ('5e56dc67-6b27-972e-efd1-89555cf23a12', 'e4826418-d1da-cdbb-7496-41a141331c2d', 'Sanctifiers', 'Salvationist', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('7c7ba870-3234-0fcd-f3dc-431ddc76f1fb', 'd1d1e3b7-8f05-edbb-0805-80abfa63fc86', 'Celestian Insidiants', 'infantry', '6"', 3, '3+', 1, 7, 1, '{"Infantry", "Imperium", "Celestian Insidiants"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('7c7ba870-3234-0fcd-f3dc-431ddc76f1fb', 9, 120);
+  ('7c7ba870-3234-0fcd-f3dc-431ddc76f1fb', 10, 120);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('7c7ba870-3234-0fcd-f3dc-431ddc76f1fb', 'Inferno pistol', 'ranged', '6"', '1', '3+', 8, -4, 'D3', '{"Melta 2", "Pistol"}'),
@@ -5325,6 +5577,15 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('7c7ba870-3234-0fcd-f3dc-431ddc76f1fb', 'Rituale Nullificatus', 'unique', 'Models in this unit have the Feel No Pain 4+ ability against Psychic Attacks and mortal wounds.'),
   ('7c7ba870-3234-0fcd-f3dc-431ddc76f1fb', 'Virtue of Intolerance', 'unique', 'At the start of the battle, select one unit from your opponent’s army to be this unit’s quarry. Each time a model in this unit makes an attack that targets its quarry, that attack has the ^^**[Precision]^^** ability and you can re‑roll the Hit roll. This ability can be used even if this unit is embarked within a ^^**Transport**^^.'),
   ('7c7ba870-3234-0fcd-f3dc-431ddc76f1fb', 'Attached Unit', 'unique', 'If a ^^**Character^^** unit from your army can be attached to a ^^**Dominion Squad^^** unit, it can be attached to this unit instead.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('f50d0d06-1e47-b0ca-b68f-6f09acb5fa3e', '7c7ba870-3234-0fcd-f3dc-431ddc76f1fb', '9 Insidiants', 'Insidiant', true, 0),
+  ('53730118-af23-8a12-9129-fbd8a1ca2353', '7c7ba870-3234-0fcd-f3dc-431ddc76f1fb', '9 Insidiants', 'Insidiant w/ hand flamer', false, 0),
+  ('17880cce-da2a-ad43-ab00-3e9278f5b186', '7c7ba870-3234-0fcd-f3dc-431ddc76f1fb', '9 Insidiants', 'Insidiant w/ blessed sword', false, 0),
+  ('1d1d256f-d550-d2b1-e79c-2f0b15809d0a', '7c7ba870-3234-0fcd-f3dc-431ddc76f1fb', '9 Insidiants', 'Insidiant w/ virge of admonition', false, 0),
+  ('9e620a97-cdcf-1c5c-dfca-db7093f122e7', '7c7ba870-3234-0fcd-f3dc-431ddc76f1fb', '9 Insidiants', 'Insidiant w/ denuncia', false, 0),
+  ('a8ee6bf7-807c-b40e-129a-90e338f49857', '7c7ba870-3234-0fcd-f3dc-431ddc76f1fb', '9 Insidiants', 'Insidiant w/ simulacrum', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 
 -- ============================================================
@@ -5399,6 +5660,12 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('36bab247-f8da-1092-0494-2db4aae794c8', 'Slayers of Tyrants', 'unique', 'Each time a model in this unit makes an attack that targets a ^^Character, Monster^^ or ^^Vehicle^^ unit, you can re-roll the Wound roll.'),
   ('36bab247-f8da-1092-0494-2db4aae794c8', 'From Golden Light', 'unique', 'Once per battle, at the end of your opponent''s turn, if this unit is not within Engagement Range of one or more enemy units, you can remove it from the battlefield and place it into Strategic Reserves.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('7cfbe154-338d-5f5f-49ed-4c5187d112c5', '36bab247-f8da-1092-0494-2db4aae794c8', 'Allarus Custodians', 'Allarus Custodian (Guardian Spear)', true, 0),
+  ('15aaf806-ad04-f77b-4736-aec7c87cae2f', '36bab247-f8da-1092-0494-2db4aae794c8', 'Allarus Custodians', 'Allarus Custodian (Castellan Axe)', false, 0),
+  ('10ee792b-7b35-74ac-e202-4dc12c0c0991', '36bab247-f8da-1092-0494-2db4aae794c8', 'Allarus Custodians', 'Allarus Custodian (Vexilla & Misericordia)', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('a214b207-696f-4a00-611a-0a9e76e65e8d', '0027c41e-4cd4-481f-bbc5-7daf5dcc1452', 'Custodian Guard', 'battleline', '6"', 6, '2+', 3, 6, 2, '{"Custodian Guard", "Infantry", "Battleline", "Imperium"}', 6);
 
@@ -5418,6 +5685,12 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('a214b207-696f-4a00-611a-0a9e76e65e8d', 'Stand Vigil', 'unique', 'Each time a model in this unit makes an attack, re-roll a Wound roll of 1. While this unit is within range of an objective marker you control, you can re-roll the Wound roll instead.'),
   ('a214b207-696f-4a00-611a-0a9e76e65e8d', 'Sentinel Storm', 'unique', 'Once per battle, in your Shooting phase, after the unit has shot, it can shoot again.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('eec0e784-836f-efc3-be73-8588041add93', 'a214b207-696f-4a00-611a-0a9e76e65e8d', '4-5 Custodian Guard', 'Custodian Guard (Guardian Spear)', true, 0),
+  ('02a3da32-0551-b32d-bbf2-83eea647e464', 'a214b207-696f-4a00-611a-0a9e76e65e8d', '4-5 Custodian Guard', 'Custodian Guard (Sentinel Blade & Praesidium Shield)', false, 0),
+  ('015ca3aa-aacd-2cf9-0beb-b589836dd9af', 'a214b207-696f-4a00-611a-0a9e76e65e8d', '4-5 Custodian Guard', 'Custodian Guard (Vexilla, Praesidium Shield & Misericordia)', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('a52f1359-1e5e-ab38-95a1-de0490536101', '0027c41e-4cd4-481f-bbc5-7daf5dcc1452', 'Aleya', 'epic_hero', '6"', 3, '3+', 4, 6, 1, '{"Aleya", "Epic Hero", "Character", "Infantry", "Imperium", "Anathema Psykana"}', 1);
@@ -5499,6 +5772,12 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('50b8633c-db06-a16d-703d-b9651cb5ac11', 'Resolute Will', 'unique', 'While a CHARACTER is leading this unit, each time an attack targets this unit, if the Strength characteristic of that attack is greater than the Toughness characteristic of this unit, subtract 1 from the Wound roll.'),
   ('50b8633c-db06-a16d-703d-b9651cb5ac11', 'Living Fortress', 'unique', 'Once per battle, at the start of any phase, this unit can use this ability. If it does, until the end of the phase, models in this unit have the Feel No Pain 4+ ability.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('a4e7f975-012f-c5b1-2e2a-454a79afa77a', '50b8633c-db06-a16d-703d-b9651cb5ac11', '4-5 Custodian Wardens', 'Custodian Warden (Guardian Spear)', true, 0),
+  ('f39ed7ef-f5b1-d3cf-bd8e-02a366a9a208', '50b8633c-db06-a16d-703d-b9651cb5ac11', '4-5 Custodian Wardens', 'Custodian Warden (Castellan axe)', false, 0),
+  ('6d26ff3b-0994-9cf4-61bf-eda3a17a8f36', '50b8633c-db06-a16d-703d-b9651cb5ac11', '4-5 Custodian Wardens', 'Custodian Warden w/ Vexilla', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('bdc148de-b4ff-0123-caa5-b50844db5091', '0027c41e-4cd4-481f-bbc5-7daf5dcc1452', 'Knight-Centura', 'character', '6"', 3, '3+', 4, 6, 1, '{"Knight-Centura", "Infantry", "Anathema Psykana", "Imperium", "Character"}', 3);
@@ -5730,6 +6009,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('8ff8dc80-44ea-a989-466a-1dc9bbe652c6', 'Turbo Boost', 'unique', 'Each time this unit Advances, do not make an Advance roll. Instead, until the end of the phase, add 6" to the Move characteristic of models in this unit.'),
   ('8ff8dc80-44ea-a989-466a-1dc9bbe652c6', 'Quicksilver Execution', 'unique', 'Once per battle, after this unit ends a normal or Advance move, you can select one enemy unit (excluding MONSTER and VEHICLE units) that it moved over during that move, then roll one D6 for each model in this unit; for each 2+, that enemy unit suffers 2 mortal wounds.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('094226c2-a8e3-f056-bad0-ecbe67951fb8', '8ff8dc80-44ea-a989-466a-1dc9bbe652c6', '2-3 Vertus Praetors', 'Vertus Praetor (Salvo Launcher)', true, 0),
+  ('fdf13632-68ba-18db-9025-1bf5821fabd9', '8ff8dc80-44ea-a989-466a-1dc9bbe652c6', '2-3 Vertus Praetors', 'Vertus Praetor (Hurricane Bolter)', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('9853b0a7-8759-acd0-c984-44a252809456', '0027c41e-4cd4-481f-bbc5-7daf5dcc1452', 'Vigilators', 'infantry', '6"', 3, '3+', 1, 6, 1, '{"Vigilators", "Anathema Psykana", "Infantry", "Imperium"}', 3);
 
@@ -5777,11 +6061,16 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('eef1336d-8506-6266-f6ef-b19b24d8b913', 'Stand Vigil', 'unique', 'Each time a model in this unit makes an attack, re-roll a Wound roll of 1. While this unit is within range of an objective marker you control, you can re-roll the Wound roll instead.'),
   ('eef1336d-8506-6266-f6ef-b19b24d8b913', 'No Foe Shall Stand', 'unique', 'Once per battle, at the start of your Shooting phase, this unit can use this ability. If it does, until the end of the phase, ranged weapons equipped by models in this unit have the [LETHAL HITS] and [IGNORES COVER abilities].');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('7e3f414d-3c04-d4c1-cc4b-cba425898f2e', 'eef1336d-8506-6266-f6ef-b19b24d8b913', '5 Custodian Guard', 'Custodian Guard (Adrasite spear)', true, 0),
+  ('5dc5eca0-3813-1bc9-e7c5-64bf4fb22fd7', 'eef1336d-8506-6266-f6ef-b19b24d8b913', '5 Custodian Guard', 'Custodian Guard (Pyrithite spear)', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('906e088a-7a4a-47cd-ab0e-621db7065ae3', '0027c41e-4cd4-481f-bbc5-7daf5dcc1452', 'Sagittarum Custodians', 'infantry', '6"', 6, '2+', 3, 6, 2, '{"Infantry", "Imperium", "Sagittarum Custodians"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('906e088a-7a4a-47cd-ab0e-621db7065ae3', 1, 225);
+  ('906e088a-7a4a-47cd-ab0e-621db7065ae3', 5, 225);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('906e088a-7a4a-47cd-ab0e-621db7065ae3', 'Adrastus bolt caliver', 'ranged', '36"', '3', '2+', 5, -1, '2', '{"Sustained Hits 1"}'),
@@ -5813,6 +6102,15 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('17fe58ad-e7d0-0c58-ff5b-8e4fef6c3a02', 'Heavy Assault Infantry', 'unique', 'Each time a model in this unit makes a ranged attack that targets the closest eligible target, re-roll a Wound roll of 1.'),
   ('17fe58ad-e7d0-0c58-ff5b-8e4fef6c3a02', 'From Golden Light', 'unique', 'Once per battle, at the end of your opponent''s turn, if this unit is not whithin Engagement Range of one or more enemy units, you can remove it from the battlefield. In the Reinforcements step of your next Movement phase, set it up anywhere on the battlefield that is more than 9" horizontally away from all enemy models.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('4521b38c-3d23-ba11-ca6f-434f44c79a20', '17fe58ad-e7d0-0c58-ff5b-8e4fef6c3a02', 'Aquilon Custodians', 'Aquilon Custodian (Gauntlet & Lastrum bolter)', true, 0),
+  ('4fb1be57-9d6a-c8b0-14a1-935e0d07203e', '17fe58ad-e7d0-0c58-ff5b-8e4fef6c3a02', 'Aquilon Custodians', 'Aquilon Custodian (Gauntlet & Twin adrathic destructor)', false, 0),
+  ('c1abdfbf-9526-538c-b205-7a5395ef875a', '17fe58ad-e7d0-0c58-ff5b-8e4fef6c3a02', 'Aquilon Custodians', 'Aquilon Custodian (Gauntlet & Infernus firepike)', false, 0),
+  ('e1d01f4b-d516-f039-d5ec-5328376c9f6f', '17fe58ad-e7d0-0c58-ff5b-8e4fef6c3a02', 'Aquilon Custodians', 'Aquilon Custodian (Talon & infernus firepike)', false, 0),
+  ('22d52358-adbe-74b2-d934-1ae4b1a66ec9', '17fe58ad-e7d0-0c58-ff5b-8e4fef6c3a02', 'Aquilon Custodians', 'Aquilon Custodian (Talon & Lastrum bolter)', false, 0),
+  ('82ecebe5-565b-57d6-e881-c5cce2d261ce', '17fe58ad-e7d0-0c58-ff5b-8e4fef6c3a02', 'Aquilon Custodians', 'Aquilon Custodian (Talon & Twin adrathic destructor)', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('e65f1cb5-357e-608e-51f8-5a9620be8823', '0027c41e-4cd4-481f-bbc5-7daf5dcc1452', 'Agamatus Custodians', 'mounted', '12"', 6, '2+', 4, 6, 2, '{"Mounted", "Fly", "Imperium", "Agamatus Custodians"}', 3);
 
@@ -5832,6 +6130,12 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('e65f1cb5-357e-608e-51f8-5a9620be8823', 'Implacable Vanguard', 'unique', 'Once per battle, in your Shooting phase, after this unit has shot, if it is not within Engagement Range of one or more enemy units, it can make a Normal move of up to 6". If it does, until the end of the turn, this unit is not elgibile to declare a charge.'),
   ('e65f1cb5-357e-608e-51f8-5a9620be8823', 'Turbo Boost', 'unique', 'Each time this unit Advances, do not make an Advance roll. Instead, until the end of the phase, add 6" to the Move characteristic of models in this unit.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('d29a4422-856e-7dcf-3bf3-9d6fb4259a3c', 'e65f1cb5-357e-608e-51f8-5a9620be8823', 'Agamatus Custodians', 'Agamatus Custodian (Lastrum bolt cannon)', true, 0),
+  ('67082959-6a43-3e71-0a06-b224f7949feb', 'e65f1cb5-357e-608e-51f8-5a9620be8823', 'Agamatus Custodians', 'Agamatus Custodian (Adrathic devastator)', false, 0),
+  ('e140acfe-ae2d-6dc9-86e7-d889be0b6899', 'e65f1cb5-357e-608e-51f8-5a9620be8823', 'Agamatus Custodians', 'Agamatus Custodian (Twin las-pulsar)', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('2b6dd8da-6f98-f0bb-f929-f22aeb7febc9', '0027c41e-4cd4-481f-bbc5-7daf5dcc1452', 'Venatari Custodians', 'infantry', '10"', 6, '2+', 3, 6, 2, '{"Imperium", "Infantry", "Fly", "Jump Pack", "Venatari Custodians"}', 3);
 
@@ -5850,6 +6154,11 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('2b6dd8da-6f98-f0bb-f929-f22aeb7febc9', 'Strike from the Skies', 'unique', 'This unit is eligible to shoot and declare a charge in a turn in which it Fell Back.'),
   ('2b6dd8da-6f98-f0bb-f929-f22aeb7febc9', 'Swooping Dive', 'unique', 'Once per battle, you can target this unit with the Rapid Ingress Stratagem for 0 CP, and can do so even if you have already targeted a different unit with that Stratagem that phase.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('d337fb8d-9bea-de90-f3ae-14d2dd5b02a2', '2b6dd8da-6f98-f0bb-f929-f22aeb7febc9', '3-6 Venatari Custodians', 'Venatari Custodian (Venatari lance)', true, 0),
+  ('c0476634-22eb-d5a0-b4ac-cb0074c8788e', '2b6dd8da-6f98-f0bb-f929-f22aeb7febc9', '3-6 Venatari Custodians', 'Venatari Custodian (Kinetic Destroyer & Tarsus Buckler)', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('57aaac2e-39d2-f68a-27b7-ed839dfefd41', '0027c41e-4cd4-481f-bbc5-7daf5dcc1452', 'Contemptor-Galatus Dreadnought', 'vehicle', '6"', 9, '2+', 10, 6, 3, '{"Contemptor-Galatus Dreadnought", "Vehicle", "Walker", "Imperium", "AC Walker"}', 3);
@@ -6223,7 +6532,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('ad8c60d3-5ac9-88ec-fd96-88579b818bd8', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Corpuscarii Electro-Priests', 'infantry', '6"', 3, '7+', 1, 7, 1, '{"Electro-Priests", "Corpuscarii", "Imperium", "Infantry", "Cult Mechanicus"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('ad8c60d3-5ac9-88ec-fd96-88579b818bd8', 1, 65);
+  ('ad8c60d3-5ac9-88ec-fd96-88579b818bd8', 5, 65);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('ad8c60d3-5ac9-88ec-fd96-88579b818bd8', 'Electrostatic gauntlets', 'ranged', '12"', '3', '3+', 5, 0, '1', '{"Pistol", "Sustained Hits 2"}'),
@@ -6243,7 +6552,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('603ae73f-cd8f-f039-72a9-75dc9b6556e2', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Fulgurite Electro-Priests', 'infantry', '6"', 3, '7+', 1, 7, 1, '{"Electro-Priests", "Fulgurite", "Infantry", "Imperium", "Cult Mechanicus"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('603ae73f-cd8f-f039-72a9-75dc9b6556e2', 1, 70);
+  ('603ae73f-cd8f-f039-72a9-75dc9b6556e2', 5, 70);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('603ae73f-cd8f-f039-72a9-75dc9b6556e2', 'Electroleech stave', 'melee', NULL, '2', '3+', 6, -1, '2', '{"Devastating Wounds"}'),
@@ -6295,7 +6604,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('8672e40a-1627-562c-8b99-97d6846fa118', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Kastelan Robots', 'vehicle', '6"', 9, '2+', 7, 7, 2, '{"Kastelan Robots", "Imperium", "Vehicle", "Walker", "Legio Cybernetica"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('8672e40a-1627-562c-8b99-97d6846fa118', 1, 180);
+  ('8672e40a-1627-562c-8b99-97d6846fa118', 2, 180);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('8672e40a-1627-562c-8b99-97d6846fa118', 'Close combat weapon', 'melee', NULL, '3', '4+', 6, 0, '1', '{}'),
@@ -6316,6 +6625,14 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('8672e40a-1627-562c-8b99-97d6846fa118', 'Robotic Bodyguard', 'unique', 'While a ^^**Cybernetica Datasmith^^** model is leading this unit, that model has the Feel No Pain 4+ ability.'),
   ('8672e40a-1627-562c-8b99-97d6846fa118', 'Repulsor Grid', 'unique', 'Each time a ranged attack is allocated to a ^^**Kastelan Robot^^** model in this unit, on an unmodified saving throw of 6, the attacking unit suffers 1 mortal wound after it has finished making its attacks.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('91191de0-eb9e-50a9-a9b8-747203cdfa1b', '8672e40a-1627-562c-8b99-97d6846fa118', 'Kastelan Robot: Arm weapons', 'Twin Kastelan phosphor blaster and CCW', true, 0),
+  ('17952295-642d-3662-1d84-e645a6ee1cfc', '8672e40a-1627-562c-8b99-97d6846fa118', 'Kastelan Robot: Arm weapons', 'Twin Kastelan fist', false, 0),
+  ('5a6b81c0-b139-554e-47c3-d337e3b72c17', '8672e40a-1627-562c-8b99-97d6846fa118', 'Kastelan Robot: Arm weapons', 'Kastelan phosphor blaster & Kastelan fist', false, 0),
+  ('8f172ee5-1b89-802d-9277-56cdb6cb186a', '8672e40a-1627-562c-8b99-97d6846fa118', 'Kastelan Robot: Shoulder mount', 'Incendine combustor', true, 0),
+  ('c63fd210-827d-11dc-675a-070825788c20', '8672e40a-1627-562c-8b99-97d6846fa118', 'Kastelan Robot: Shoulder mount', 'Heavy phosphor blaster', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('41518221-0a70-cfb2-9ad0-d1fcf63b378f', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Kataphron Breachers', 'infantry', '5"', 7, '3+', 3, 7, 1, '{"Breachers", "Kataphron", "Infantry", "Imperium", "Cult Mechanicus"}', 3);
@@ -6339,6 +6656,13 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('41518221-0a70-cfb2-9ad0-d1fcf63b378f', 'Breaching Command', 'unique', 'Each time a model in this unit makes an attack, re-roll a Hit roll of 1. While this unit is within 6” of one or more friendly ^^**Adeptus Mechanicus Battleline^^** units, you can re-roll the Hit roll instead.'),
   ('41518221-0a70-cfb2-9ad0-d1fcf63b378f', 'Invulnerable Save', 'invulnerable', 'Models in this unit have a 6+ invulnerable save.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('4308f827-ede5-1936-8e88-17946f5e391a', '41518221-0a70-cfb2-9ad0-d1fcf63b378f', 'Kataphron Breachers', 'Kataphron Breacher (Heavy arc rifle & arc claw)', true, 0),
+  ('794db522-bdc2-a519-92e9-8d448340bfaa', '41518221-0a70-cfb2-9ad0-d1fcf63b378f', 'Kataphron Breachers', 'Kataphron Breacher (Heavy arc rifle & hydraulic claw)', false, 0),
+  ('335d8360-c228-feb6-17e6-a9b42dc86213', '41518221-0a70-cfb2-9ad0-d1fcf63b378f', 'Kataphron Breachers', 'Kataphron Breacher (Torsion cannon & arc claw)', false, 0),
+  ('25e14742-5595-aa13-adce-16b14b4ad3ce', '41518221-0a70-cfb2-9ad0-d1fcf63b378f', 'Kataphron Breachers', 'Kataphron Breacher (Torsion cannon & hydraulic claw)', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('f573383c-92cb-291b-af6d-7823dfa5ddea', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Kataphron Destroyers', 'infantry', '5"', 6, '3+', 3, 7, 1, '{"Destroyers", "Kataphron", "Infantry", "Imperium", "Cult Mechanicus"}', 3);
@@ -6364,6 +6688,13 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('f573383c-92cb-291b-af6d-7823dfa5ddea', 'Sentinel Directive', 'unique', 'Each time you target this unit with the Fire Overwatch Stratagem, hits are scored on unmodified Hit rolls of 5+ when resolving that Stratagem.'),
   ('f573383c-92cb-291b-af6d-7823dfa5ddea', 'Invulnerable Save', 'invulnerable', 'Models in this unit have a 6+ invulnerable save.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('7c82d7e4-8781-7a30-5e89-ec9e8227bf85', 'f573383c-92cb-291b-af6d-7823dfa5ddea', 'Kataphron Destroyers', 'Kataphron Destroyer (Heavy grav-cannon & Cognis flamer)', false, 0),
+  ('2374d3f2-bcc1-8f6e-041f-b6db2b15da69', 'f573383c-92cb-291b-af6d-7823dfa5ddea', 'Kataphron Destroyers', 'Kataphron Destroyer (Heavy grav-cannon & phosphor blaster)', true, 0),
+  ('f5b5caee-8c45-9dd4-ed53-b26a3ff3fd3b', 'f573383c-92cb-291b-af6d-7823dfa5ddea', 'Kataphron Destroyers', 'Kataphron Destroyer (Kataphron plasma culverin & Phosphor blaster)', false, 0),
+  ('3c42bda4-6f4e-6ed6-115e-7b8af60bd639', 'f573383c-92cb-291b-af6d-7823dfa5ddea', 'Kataphron Destroyers', 'Kataphron Destroyer (Kataphron plasma culverin & Cognis flamer)', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('0b035bfb-d0fc-2cfc-900e-d615bda57181', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Onager Dunecrawler', 'vehicle', '8"', 10, '2+', 11, 7, 3, '{"Onager Dunecrawler", "Imperium", "Vehicle", "Walker", "Skitarii", "Smoke"}', 3);
@@ -6408,7 +6739,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('48ffa629-2a72-e030-508d-ce483b360f68', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Pteraxii Skystalkers', 'infantry', '12"', 4, '4+', 2, 7, 1, '{"Skystalkers", "Imperium", "Infantry", "Fly", "Jump Pack", "Skitarii", "Pteraxii"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('48ffa629-2a72-e030-508d-ce483b360f68', 1, 75);
+  ('48ffa629-2a72-e030-508d-ce483b360f68', 5, 75);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('48ffa629-2a72-e030-508d-ce483b360f68', 'Flechette blaster', 'ranged', '12"', '5', '4+', 3, 0, '1', '{"Pistol"}'),
@@ -6434,7 +6765,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('051d8de1-44bc-8780-9cca-60b699d3db2c', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Pteraxii Sterylizors', 'infantry', '12"', 4, '4+', 2, 7, 1, '{"Sterylizors", "Imperium", "Infantry", "Fly", "Jump Pack", "Skitarii", "Pteraxii"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('051d8de1-44bc-8780-9cca-60b699d3db2c', 1, 80);
+  ('051d8de1-44bc-8780-9cca-60b699d3db2c', 5, 80);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('051d8de1-44bc-8780-9cca-60b699d3db2c', 'Flechette blaster', 'ranged', '12"', '5', '4+', 3, 0, '1', '{"Pistol"}'),
@@ -6456,7 +6787,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('99657f7b-5017-cf16-41e3-8c77bbb93b55', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Serberys Raiders', 'mounted', '12"', 4, '4+', 2, 7, 2, '{"Serberys Raiders", "Imperium", "Skitarii", "Mounted"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('99657f7b-5017-cf16-41e3-8c77bbb93b55', 2, 60);
+  ('99657f7b-5017-cf16-41e3-8c77bbb93b55', 3, 60);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('99657f7b-5017-cf16-41e3-8c77bbb93b55', 'Galvanic carbine', 'ranged', '18"', '3', '4+', 4, 0, '1', '{"Devastating Wounds"}'),
@@ -6475,11 +6806,16 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
 - Make a Normal move of up to D6".
 - Make a Normal move of up to 6", provided every model in this unit ends that move wholly within 6" of one or more friendly ^^**Adeptus Mechanicus Battleline^^** units.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('a00d39be-9210-b542-c5a8-f744cb07b9f4', '99657f7b-5017-cf16-41e3-8c77bbb93b55', '2-5 Serberys Raiders', 'Serberys Raider', false, 0),
+  ('ab187bb9-eae2-a779-4e43-d3b27b280c3b', '99657f7b-5017-cf16-41e3-8c77bbb93b55', '2-5 Serberys Raiders', 'Serberys Raider w/ data-tether', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('6231b076-7727-a819-919a-bad125f0157d', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Serberys Sulphurhounds', 'mounted', '12"', 4, '4+', 2, 7, 2, '{"Serberys Sulphurhounds", "Imperium", "Skitarii", "Mounted"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('6231b076-7727-a819-919a-bad125f0157d', 2, 55);
+  ('6231b076-7727-a819-919a-bad125f0157d', 3, 55);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('6231b076-7727-a819-919a-bad125f0157d', 'Cavalry arc maul', 'melee', NULL, '1', '4+', 5, -1, '1', '{"Anti-Vehicle 4+", "Devastating Wounds", "Extra Attacks"}'),
@@ -6499,11 +6835,16 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('6231b076-7727-a819-919a-bad125f0157d', 'Line-breakers', 'unique', 'Each time this unit ends a Charge move, select one enemy unit within Engagement Range of it and roll one D6 for each model in this unit that is within Engagement Range of that enemy unit, adding 2 to the result if this unit started its Charge move within 6" of one or more friendly Adeptus Mechanicus Battleline units. For each 4+, that enemy unit suffers 1 mortal wound.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('2e2c026c-8533-822a-5ff4-35dc668a895f', '6231b076-7727-a819-919a-bad125f0157d', '2-5 Serberys Sulphurhounds', 'Serberys Sulphurhound (Twin phosphor pistols)', true, 0),
+  ('c91ee5a2-8d87-c45a-152d-7d49dcd64f70', '6231b076-7727-a819-919a-bad125f0157d', '2-5 Serberys Sulphurhounds', 'Serberys Sulphurhound (Phosphor blast carbine & Phosphor pistol)', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('73436e35-bc1f-71cb-f0e8-7a7fb1a8b175', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Sicarian Infiltrators', 'infantry', '8"', 4, '4+', 2, 7, 1, '{"Imperium", "Skitarii", "Infantry", "Sicarian", "Infiltrators"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('73436e35-bc1f-71cb-f0e8-7a7fb1a8b175', 1, 75);
+  ('73436e35-bc1f-71cb-f0e8-7a7fb1a8b175', 5, 75);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('73436e35-bc1f-71cb-f0e8-7a7fb1a8b175', 'Power weapon', 'melee', NULL, '4', '4+', 4, -2, '1', '{}'),
@@ -6521,11 +6862,18 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('73436e35-bc1f-71cb-f0e8-7a7fb1a8b175', 'Neurostatic Interference (Aura)', 'unique', 'While an enemy unit is within 6" of this unit, each time a Battle-shock or Leadership test is taken for that unit, subtract 1 from that test. While this unit is within 6" of one or more friendly ^^**Adeptus Mechanicus Battleline^^** units, subtract 2 from that test instead.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('415995c0-37e3-0c2f-2104-521df8db36f9', '73436e35-bc1f-71cb-f0e8-7a7fb1a8b175', '4-9 Sicarian Infiltrators', 'Sicarian Infiltrator (Power weapon & stubcarbine)', true, 0),
+  ('93512910-ff19-8014-3e64-23129dd6ddaa', '73436e35-bc1f-71cb-f0e8-7a7fb1a8b175', '4-9 Sicarian Infiltrators', 'Sicarian Infiltrator (Taser goad & flechette blaster)', false, 0),
+  ('084e0780-33c9-2429-3880-48b5260d79ba', '73436e35-bc1f-71cb-f0e8-7a7fb1a8b175', 'Sicarian Infiltrator Princeps', 'Sicarian Infiltrator Princeps (Power weapon & stub carbine)', true, 0),
+  ('73e6b9bb-eea8-dee7-a5e8-fc27732baf40', '73436e35-bc1f-71cb-f0e8-7a7fb1a8b175', 'Sicarian Infiltrator Princeps', 'Sicarian Infiltrator Princeps (Taser goad & flechette blaster)', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('21cc5e08-dba2-247b-d320-27e75edf4c66', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Sicarian Ruststalkers', 'infantry', '8"', 4, '4+', 2, 7, 1, '{"Ruststalkers", "Imperium", "Infantry", "Skitarii", "Sicarian"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('21cc5e08-dba2-247b-d320-27e75edf4c66', 1, 80);
+  ('21cc5e08-dba2-247b-d320-27e75edf4c66', 5, 80);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('21cc5e08-dba2-247b-d320-27e75edf4c66', 'Transonic razor & chordclaw', 'melee', NULL, '3', '4+', 5, -2, '2', '{"Anti-Infantry 3+", "Precision"}'),
@@ -6541,6 +6889,13 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('21cc5e08-dba2-247b-d320-27e75edf4c66', 'Optimised Gait', 'unique', 'Add 1 to Advance and Charge rolls made for this unit. While this unit is within 6" of one or more friendly ^^**Adeptus Mechanicus Battleline^^** units, add 2 to Advance and Charge rolls made for this unit instead.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('bf9bf08f-adaa-5b14-60d2-990e84d59131', '21cc5e08-dba2-247b-d320-27e75edf4c66', '4-9 Sicarian Ruststalkers', 'Sicarian Ruststalker (Transonic razor & chordclaw)', true, 0),
+  ('39458b6c-8221-0c7e-4e67-2be126a5d16c', '21cc5e08-dba2-247b-d320-27e75edf4c66', '4-9 Sicarian Ruststalkers', 'Sicarian Ruststalker (Transonic blades)', false, 0),
+  ('03214e0f-3d9f-6a42-f3d1-b30aa04377e5', '21cc5e08-dba2-247b-d320-27e75edf4c66', 'Sicarian Ruststalker Princeps', 'Sicarian Ruststalker Princeps (Transonic blades & chordclaw)', false, 0),
+  ('61ecc69f-a262-627b-2f37-9b7ac558f6ad', '21cc5e08-dba2-247b-d320-27e75edf4c66', 'Sicarian Ruststalker Princeps', 'Sicarian Ruststalker Princeps (Transonic razor & chordclaw)', true, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('c4174c73-8a14-80ba-2d2a-ea0ca5ed94dc', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Skitarii Marshal', 'character', '6"', 3, '4+', 3, 6, 1, '{"Marshal", "Imperium", "Skitarii", "Character", "Infantry"}', 3);
@@ -6576,7 +6931,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('5d0b80db-0c1e-24f9-e224-008ad99e4664', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Skitarii Rangers', 'battleline', '6"', 3, '4+', 1, 7, 2, '{"Rangers", "Imperium", "Infantry", "Skitarii", "Battleline"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('5d0b80db-0c1e-24f9-e224-008ad99e4664', 9, 85);
+  ('5d0b80db-0c1e-24f9-e224-008ad99e4664', 10, 85);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('5d0b80db-0c1e-24f9-e224-008ad99e4664', 'Alpha combat weapon', 'melee', NULL, '2', '4+', 5, -1, '1', '{}'),
@@ -6598,11 +6953,20 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('5d0b80db-0c1e-24f9-e224-008ad99e4664', 'Objective Scouted', 'unique', 'At the end of your Command phase, if this unit is within range of an objective marker you control, that objective marker remains under your control, even if you have no models within range of it, until your opponent controls it at the start or end of any turn.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('b079ed6f-8474-905c-11dd-8f10873e955c', '5d0b80db-0c1e-24f9-e224-008ad99e4664', '9 Skitarii Rangers', 'Skitarii Ranger w/ transuranic arquebus', false, 0),
+  ('e8672708-bfc6-b38c-d0a1-6dcb8b4e7cb6', '5d0b80db-0c1e-24f9-e224-008ad99e4664', '9 Skitarii Rangers', 'Skitarii Ranger w/ arc rifle', false, 0),
+  ('e6f0b665-beb6-c2cf-ebed-91fff8bddd4b', '5d0b80db-0c1e-24f9-e224-008ad99e4664', '9 Skitarii Rangers', 'Skitarii Ranger w/ plasma caliver', false, 0),
+  ('6cdebfc2-629b-437f-abf0-ab7580e5d233', '5d0b80db-0c1e-24f9-e224-008ad99e4664', '9 Skitarii Rangers', 'Skitarii Ranger w/ galvanic rifle', true, 0),
+  ('62ad933f-1778-9cbb-941a-22e6e3d691fe', '5d0b80db-0c1e-24f9-e224-008ad99e4664', '9 Skitarii Rangers', 'Skitarii Ranger w/ data-tether', false, 0),
+  ('9b7ce640-1776-d95f-4fa1-77a01140a412', '5d0b80db-0c1e-24f9-e224-008ad99e4664', '9 Skitarii Rangers', 'Skitarii Ranger w/ omnispex', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('c03ab037-cda2-d284-0902-e587d18686cc', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Skitarii Vanguard', 'battleline', '6"', 3, '4+', 1, 7, 2, '{"Vanguard", "Imperium", "Infantry", "Skitarii", "Battleline"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('c03ab037-cda2-d284-0902-e587d18686cc', 9, 95);
+  ('c03ab037-cda2-d284-0902-e587d18686cc', 10, 95);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('c03ab037-cda2-d284-0902-e587d18686cc', 'Alpha combat weapon', 'melee', NULL, '2', '4+', 5, -1, '1', '{}'),
@@ -6623,6 +6987,15 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('c03ab037-cda2-d284-0902-e587d18686cc', 'Rad-saturation (Aura)', 'unique', 'While an enemy unit (excluding ^^**Vehicle^^** units) is within 3" of this unit, subtract 1 from the Objective Control characteristic of models in that unit.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('b390668d-91bc-1039-44f2-7f9e63ba9217', 'c03ab037-cda2-d284-0902-e587d18686cc', 'Skitarii Vanguard', 'Skitarii Vanguard w/ transuranic arquebus', false, 0),
+  ('248fcc82-a039-443f-8081-385925f3a5eb', 'c03ab037-cda2-d284-0902-e587d18686cc', 'Skitarii Vanguard', 'Skitarii Vanguard w/ arc rifle', false, 0),
+  ('6370edbc-3a7c-ca07-ac2d-f6fe05be5be3', 'c03ab037-cda2-d284-0902-e587d18686cc', 'Skitarii Vanguard', 'Skitarii Vanguard w/ plasma caliver', false, 0),
+  ('2484b8b1-6715-95c3-fe14-2aff6e698a39', 'c03ab037-cda2-d284-0902-e587d18686cc', 'Skitarii Vanguard', 'Skitarii Vanguard w/ radium carbine', true, 0),
+  ('6e53dd57-8b83-38b2-8517-3e89096d0d51', 'c03ab037-cda2-d284-0902-e587d18686cc', 'Skitarii Vanguard', 'Skitarii Vanguard w/ data-tether', false, 0),
+  ('5f315660-dcee-2bec-138d-59826384fa40', 'c03ab037-cda2-d284-0902-e587d18686cc', 'Skitarii Vanguard', 'Skitarii Vanguard w/ omnispex', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('427642e8-288f-e23e-7f2e-220440d1af07', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Skorpius Disintegrator', 'vehicle', '10"', 10, '2+', 12, 7, 3, '{"Skorpius Disintegrator", "Imperium", "Skitarii", "Vehicle", "Smoke"}', 3);
@@ -6836,7 +7209,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('5273743e-c662-6ca3-b5e7-4c5850785707', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Secutarii Hoplites [Legends]', 'infantry', '6"', 3, '5+', 1, 7, 1, '{"Secutarii Hoplites", "Infantry", "Imperium", "Skitarii"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('5273743e-c662-6ca3-b5e7-4c5850785707', 4, 65),
+  ('5273743e-c662-6ca3-b5e7-4c5850785707', 5, 65),
   ('5273743e-c662-6ca3-b5e7-4c5850785707', 6, 130);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -6857,11 +7230,17 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('5273743e-c662-6ca3-b5e7-4c5850785707', 'Titan Guard', 'unique', 'You can target this unit with the Heroic Intervention Stratagem for 0CP, and can do so even if you have already targeted a different unit with that Stratagem this phase. When oing so, if there are one or more friendly ^^**Adeptus Titanicus^^** units on the battlefield, you can re-roll the subsequent charge roll.'),
   ('5273743e-c662-6ca3-b5e7-4c5850785707', 'Secutarii', 'unique', 'If a model from your army with the Leader ability can be attached to a ^^**Skitarii Vanguard^^** unit, it can be attached to this unit instead.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('d9d8d44f-c322-a8b9-3f85-76ca9400a91c', '5273743e-c662-6ca3-b5e7-4c5850785707', '4-9 Hoplites', 'Secutarii Hoplite', true, 0),
+  ('93c3c1ad-bf59-2f12-0f9c-f54b5527113b', '5273743e-c662-6ca3-b5e7-4c5850785707', '4-9 Hoplites', 'Secutarii Hoplite w/ data-tether', false, 0),
+  ('7f2bbebe-a1a9-33a3-b5bb-11e38540d523', '5273743e-c662-6ca3-b5e7-4c5850785707', '4-9 Hoplites', 'Secutarii Hoplite w/ omnispex', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('d1f7b6f5-545b-710b-c225-421080d95e11', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Secutarii Peltasts [Legends]', 'infantry', '6"', 3, '5+', 1, 7, 1, '{"Infantry", "Secutarii Peltasts", "Skitarii", "Imperium"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('d1f7b6f5-545b-710b-c225-421080d95e11', 4, 50),
+  ('d1f7b6f5-545b-710b-c225-421080d95e11', 5, 50),
   ('d1f7b6f5-545b-710b-c225-421080d95e11', 6, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -6882,6 +7261,12 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('d1f7b6f5-545b-710b-c225-421080d95e11', 'Invulnerable Save', 'invulnerable', 'Models in this unit have a 6+ invulnerable save.'),
   ('d1f7b6f5-545b-710b-c225-421080d95e11', 'Blind Barrage', 'unique', 'In your Shooting phase, after this unit has shot, select one enemy Infantry unit hit by one or more of those attacks. Until the start of your next turn, while this unit is on the  battlefield, that enemy unit is blinded. While a unit is blinded, each time a model in that unit makes an attack, subtract 1 from the Hit roll.'),
   ('d1f7b6f5-545b-710b-c225-421080d95e11', 'Secutarii', 'unique', 'If a model from your army with the Leader ability can be attached to a ^^**Skitarii Vanguard^^** unit, it can be attached to this unit instead.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('72c989ad-49e7-d97a-3835-ebc8cf438c1a', 'd1f7b6f5-545b-710b-c225-421080d95e11', '4-9 Peltasts', 'Secutarii Peltast', true, 0),
+  ('574725ed-6cbf-9712-fd1f-113658b259f2', 'd1f7b6f5-545b-710b-c225-421080d95e11', '4-9 Peltasts', 'Secutarii Peltast w/ data-tether', false, 0),
+  ('ccdb2e37-a36f-083e-2964-5e5cf01126ee', 'd1f7b6f5-545b-710b-c225-421080d95e11', '4-9 Peltasts', 'Secutarii Peltast w/ omnispex', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('0952d9ec-ca75-cac7-4360-9efd974d96c6', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Terrax-Pattern Termite [Legends]', 'dedicated_transport', '8"', 10, '3+', 14, 6, 2, '{"Vehicle", "Imperium", "Transport", "Dedicated Transport", "Terrax-pattern Termite"}', 3);
@@ -7001,7 +7386,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('19895525-a961-c7f2-227e-a5fd632fba5b', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Servitor Battleclade', 'infantry', '6"', 4, '4+', 1, 8, 1, '{"Infantry", "Imperium", "Cult Mechanicus", "Servitor Battleclade"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('19895525-a961-c7f2-227e-a5fd632fba5b', 6, 60);
+  ('19895525-a961-c7f2-227e-a5fd632fba5b', 9, 60);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('19895525-a961-c7f2-227e-a5fd632fba5b', 'Mechanicus pistol', 'ranged', '12"', '1', '4+', 6, -1, '1', '{"Devastating Wounds", "Pistol"}'),
@@ -7026,6 +7411,12 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
 - Eligible to shoot in a turn in which it started an Action.'),
   ('19895525-a961-c7f2-227e-a5fd632fba5b', 'Invulnerable Save', 'invulnerable', 'Models in this unit have a 6+ invulnerable save.'),
   ('19895525-a961-c7f2-227e-a5fd632fba5b', 'Attached Unit', 'unique', 'If a ^^**Character^^** unit from your army with the Leader ability can be attached to a ^^**Kataphron Breachers^^** unit, it can be attached to this unit instead.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('c74ff5f4-a898-1426-ec1c-a3d03b488f5b', '19895525-a961-c7f2-227e-a5fd632fba5b', 'Combat Servitors', 'Combat Servitor w/ incendine igniter', false, 0),
+  ('5b243fe4-8ddc-e47f-9667-4641bc01204b', '19895525-a961-c7f2-227e-a5fd632fba5b', 'Combat Servitors', 'Combat Servitor w/ meltagun', false, 0),
+  ('4bb7b9a5-3e32-b055-6259-5245bb085a2b', '19895525-a961-c7f2-227e-a5fd632fba5b', 'Combat Servitors', 'Combat Servitor w/ phophor blaster', true, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 
 -- ============================================================
@@ -7325,6 +7716,13 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('7e12e71a-acd8-6153-7775-f47e45771b56', 'Cadia Stands!', 'unique', 'While this unit contains an **^^Officer^^**, each time a ranged attack targets this unit, if this unit is within range of an objective marker you control, models in this unit have the Benefit of Cover against that attack.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('6157bbac-d88a-62c4-8b3b-e909d21becd9', '7e12e71a-acd8-6153-7775-f47e45771b56', 'Cadian Veteran Guardsmen', 'Cadian Veteran Guardsman w/ Regimental standard', false, 0),
+  ('c3b26d6f-c2e7-4856-7b36-55500c0adf4d', '7e12e71a-acd8-6153-7775-f47e45771b56', 'Cadian Veteran Guardsmen', 'Cadian Veteran Guardsman w/ Chainsword', false, 0),
+  ('f649c97f-2861-f49b-81b7-987ab2a07776', '7e12e71a-acd8-6153-7775-f47e45771b56', 'Cadian Veteran Guardsmen', 'Cadian Veteran Guardsman w/ Master vox', false, 0),
+  ('3d1c6ee8-08be-2277-59ec-b18e4c036c0a', '7e12e71a-acd8-6153-7775-f47e45771b56', 'Cadian Veteran Guardsmen', 'Cadian Veteran Guardsman w/ Medi-pack', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('b610d2d3-f482-1186-9033-d6f43c9e3ff7', '0040daa1-d4e4-b7a4-6642-eb071416cab2', 'Chimera', 'dedicated_transport', '10"', 9, '3+', 11, 7, 2, '{"Chimera", "Imperium", "Vehicle", "Squadron", "Transport", "Dedicated Transport", "Smoke"}', 6);
 
@@ -7428,7 +7826,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('b164ea60-a1da-e733-5221-fec0c9faaef5', '0040daa1-d4e4-b7a4-6642-eb071416cab2', 'Gaunt’s Ghosts', 'epic_hero', '6"', 3, '4+', 3, 6, 1, '{"Gaunt’s Ghosts", "Imperium", "Epic Hero", "Infantry"}', 1);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('b164ea60-a1da-e733-5221-fec0c9faaef5', 1, 100);
+  ('b164ea60-a1da-e733-5221-fec0c9faaef5', 6, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('b164ea60-a1da-e733-5221-fec0c9faaef5', 'Gaunt''s chainsword', 'melee', NULL, '5', '2+', 3, -1, '1', '{}'),
@@ -7602,6 +8000,13 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
   ('9ba80a89-a675-c87b-32c3-d58bd8bf5dc2', '➤ Plasma pistol - standard', 'ranged', '12"', '1', '3+', 7, -2, '1', '{"Pistol"}'),
   ('9ba80a89-a675-c87b-32c3-d58bd8bf5dc2', '➤ Plasma pistol - supercharge', 'ranged', '12"', '1', '3+', 8, -3, '2', '{"Hazardous", "Pistol"}');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('116614ff-0049-695e-2c3b-9a282e9cbf97', '9ba80a89-a675-c87b-32c3-d58bd8bf5dc2', 'Tempestus Scions', 'Tempestus Scion', false, 0),
+  ('34b80a58-967a-b275-8847-89ed28a8c47d', '9ba80a89-a675-c87b-32c3-d58bd8bf5dc2', 'Tempestus Scions', 'Tempestus Scion w/ Regimental Standard', false, 0),
+  ('6ceb8aba-2c9d-cb04-5c5e-83700d33287f', '9ba80a89-a675-c87b-32c3-d58bd8bf5dc2', 'Tempestus Scions', 'Tempestus Scion w/ Master Vox', false, 0),
+  ('a6576ed3-5924-45c5-9cb7-a96b9b657d63', '9ba80a89-a675-c87b-32c3-d58bd8bf5dc2', 'Tempestus Scions', 'Tempestus Scion w/ Medi-pack', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('94bb7242-ccd2-a2be-2116-65ae1aafec0c', '0040daa1-d4e4-b7a4-6642-eb071416cab2', 'Nork Deddog', 'epic_hero', '6"', 6, '4+', 6, 7, 1, '{"Nork Deddog", "Imperium", "Epic Hero", "Infantry", "Ogryn", "Loyal Protector", "Character"}', 1);
 
@@ -7677,7 +8082,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('4117f5bd-f6ba-fea2-7a2b-da16345bc1f6', '0040daa1-d4e4-b7a4-6642-eb071416cab2', 'Regimental Attachés [Legends]', 'infantry', '6"', 3, '5+', 1, 7, 1, '{"Regimental Attachés", "Imperium", "Infantry"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('4117f5bd-f6ba-fea2-7a2b-da16345bc1f6', 1, 40);
+  ('4117f5bd-f6ba-fea2-7a2b-da16345bc1f6', 3, 40);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('4117f5bd-f6ba-fea2-7a2b-da16345bc1f6', 'Astropath''s stave', 'melee', NULL, '1', '4+', 6, -1, 'D3', '{"Psychic"}'),
@@ -8730,6 +9135,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('91aa7b41-8d5f-46f4-156d-01b3a13711f9', 'Grenadiers', 'unique', 'Once per turn, you can target this unit with the Grenade Stratagem for 0CP.'),
   ('91aa7b41-8d5f-46f4-156d-01b3a13711f9', 'Grenadier Squad', 'unique', 'If a model from your army with the Leader ability can be attached to a **^^Krieg Combat Engineers^^** unit, it can be attached to this unit instead.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('4d346114-79c6-31aa-150d-439c5947766d', '91aa7b41-8d5f-46f4-156d-01b3a13711f9', 'Unit Composition', 'Grenadier', false, 0),
+  ('868a5174-be51-b711-0447-08fcde47f47c', '91aa7b41-8d5f-46f4-156d-01b3a13711f9', 'Unit Composition', 'Heavy Weapons Team', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('2ca473b7-64b6-f17f-2ad3-3df42cdc4c94', '0040daa1-d4e4-b7a4-6642-eb071416cab2', 'Centaur Light Carrier [Legends]', 'vehicle', '10"', 7, '3+', 7, 7, 1, '{"Vehicle", "Transport", "Imperium", "Squadron", "Centaur Light Carrier", "Smoke"}', 3);
 
@@ -8807,7 +9217,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('711526ec-349b-5824-a5ee-ac2c7921b8f6', '0040daa1-d4e4-b7a4-6642-eb071416cab2', 'Rein and Raus [Legends]', 'epic_hero', '6"', 2, '6+', 1, 8, 1, '{"Epic Hero", "Infantry", "Imperium", "Character", "Rein and Raus"}', 1);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('711526ec-349b-5824-a5ee-ac2c7921b8f6', 1, 50);
+  ('711526ec-349b-5824-a5ee-ac2c7921b8f6', 2, 50);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('711526ec-349b-5824-a5ee-ac2c7921b8f6', 'Close Combat Weapon', 'melee', NULL, '1', '5+', 2, 0, '1', '{}'),
@@ -8886,7 +9296,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('b5a54c29-ea5e-5d28-c2c8-4342da73ad0b', '0040daa1-d4e4-b7a4-6642-eb071416cab2', 'Elysian Sniper Squad [Legends]', 'infantry', '6"', 3, '5+', 2, 7, 2, '{"Infantry", "Imperium", "Regiment", "Elysian Sniper Squad"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('b5a54c29-ea5e-5d28-c2c8-4342da73ad0b', 1, 65);
+  ('b5a54c29-ea5e-5d28-c2c8-4342da73ad0b', 3, 65);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('b5a54c29-ea5e-5d28-c2c8-4342da73ad0b', 'Lasgun', 'ranged', '24"', '1', '4+', 3, 0, '1', '{"Rapid Fire 1"}'),
@@ -9312,6 +9722,14 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('43ac6317-5439-2c9c-8024-6123ca64f49b', 'Precision Drop', 'unique', 'In your Movement phase, when this unit is set up on the battlefield using the Deep Strike ability, it can perform a precision drop. If it does, this unit can be set up anywhere on the battlefield that is more than 6" horizontally away from all enemy units, but until the end of the turn, it is not eligible to declare a charge.'),
   ('43ac6317-5439-2c9c-8024-6123ca64f49b', 'Servo-sentry', 'unique', 'When this unit is set up on the battlefield using the Deep Strike ability, the Tempestor Aquilon can shoot with its sentry weapon (its sentry flamer, sentry grenade launcher or sentry hot‑shot volley gun).');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('912809ac-8ece-dd1f-1aa7-0eee2af8a026', '43ac6317-5439-2c9c-8024-6123ca64f49b', '9 Tempestus Aquilons', 'Tempestus Aquilon', false, 0),
+  ('a5ea547b-c009-c336-8fad-d791c07dba30', '43ac6317-5439-2c9c-8024-6123ca64f49b', '9 Tempestus Aquilons', 'Tempestus Aquilon w/ 2 Hot-shot laspistols', false, 0),
+  ('167d9bef-ecf2-9aad-b90f-afcbc1e73e19', '43ac6317-5439-2c9c-8024-6123ca64f49b', '9 Tempestus Aquilons', 'Tempestus Aquilon w/ 1 Hot-shot laspistol', false, 0),
+  ('76dc7832-d69e-9ba6-4777-a36a34eda5e2', '43ac6317-5439-2c9c-8024-6123ca64f49b', '9 Tempestus Aquilons', 'Tempestus Aquilon w/ Hot-shot long-las', false, 0),
+  ('6f9728b2-cb3d-a2f8-bc04-d5202219b361', '43ac6317-5439-2c9c-8024-6123ca64f49b', '9 Tempestus Aquilons', 'Tempestus Aquilon w/ Special weapon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('de5da2dc-e256-30ef-966f-990fa98d0c89', '0040daa1-d4e4-b7a4-6642-eb071416cab2', 'Ratlings', 'infantry', '6"', 2, '6+', 1, 8, 1, '{"Imperium", "Infantry", "Ratlings"}', 3);
 
@@ -9326,6 +9744,11 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('de5da2dc-e256-30ef-966f-990fa98d0c89', 'Shoot Sharp and Scarper', 'unique', 'In your Shooting phase, after this unit has shot, if it is not within Engagement Range of any enemy units, it can make a Normal move as if it were your Movement phase. If it does, until the end of the turn, this unit is not eligible to declare a charge.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('6899f4c0-ad7d-c02a-20ab-5a79ca9626ae', 'de5da2dc-e256-30ef-966f-990fa98d0c89', '5-10 Ratlings', 'Ratlings', false, 0),
+  ('c939a343-f4cd-5717-eb4c-446fd015d834', 'de5da2dc-e256-30ef-966f-990fa98d0c89', '5-10 Ratlings', 'Ratling w/ tankstopper rifle', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('80e714a6-d4ee-140e-e9d4-ac61016b79f9', '0040daa1-d4e4-b7a4-6642-eb071416cab2', 'Krieg Command Squad', 'character', '6"', 3, '5+', 3, 6, 1, '{"Imperium", "Command Squad", "Infantry", "Character", "Platoon", "Krieg"}', 3);
@@ -9354,6 +9777,14 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('80e714a6-d4ee-140e-e9d4-ac61016b79f9', 'Grim Determination', 'unique', 'While this unit contains an **^^Officer^^**, you can target this unit with Stratagems even while it is Battle-shocked and Orders issued to this unit do not cease to affect this unit if it becomes Battle-shocked.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('3f27b438-f22b-862d-22ef-bfb8eec32e6d', '80e714a6-d4ee-140e-e9d4-ac61016b79f9', 'Veteran Guardsmen', 'Veteran Guardsman w/ Alchemyk counteragents', false, 0),
+  ('11640211-ba7d-8679-5808-8fd8444f0fa1', '80e714a6-d4ee-140e-e9d4-ac61016b79f9', 'Veteran Guardsmen', 'Veteran Guardsman w/ Boltgun', false, 0),
+  ('c0e3435a-0a73-3276-31c8-5e93e916577a', '80e714a6-d4ee-140e-e9d4-ac61016b79f9', 'Veteran Guardsmen', 'Veteran Guardsman w/ Chainsword', false, 0),
+  ('38f1f175-3bad-a9df-e020-eeea0121b9b8', '80e714a6-d4ee-140e-e9d4-ac61016b79f9', 'Veteran Guardsmen', 'Veteran Guardsman w/ Master vox', false, 0),
+  ('f1cae12e-4058-410f-5811-618f09a3e9ef', '80e714a6-d4ee-140e-e9d4-ac61016b79f9', 'Veteran Guardsmen', 'Veteran Guardsman w/ Regimental standard', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('3d4a8f29-8f5f-910f-856f-09d6f13ca62a', '0040daa1-d4e4-b7a4-6642-eb071416cab2', 'Lord Marshal Dreir', 'epic_hero', '10"', 4, '4+', 6, 7, 2, '{"Mounted", "Epic Hero", "Imperium", "Character", "Officer", "Lord Marshal Dreir"}', 1);
@@ -9394,6 +9825,13 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
   ('ea548890-2ec0-bd0a-1a94-4cac9af2f613', 'Chainsword', 'melee', NULL, '4', '4+', 3, 0, '1', '{}'),
   ('ea548890-2ec0-bd0a-1a94-4cac9af2f613', 'Power fist', 'melee', NULL, '3', '4+', 6, -2, '2', '{}'),
   ('ea548890-2ec0-bd0a-1a94-4cac9af2f613', 'Power weapon', 'melee', NULL, '3', '4+', 4, -2, '1', '{}');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('a5a4262f-558e-5630-d746-015676503cda', 'ea548890-2ec0-bd0a-1a94-4cac9af2f613', 'Veteran Guardsmen', 'Veteran Guardsman', true, 0),
+  ('2b27bd21-d798-ec47-6174-87cbfb531e52', 'ea548890-2ec0-bd0a-1a94-4cac9af2f613', 'Veteran Guardsmen', 'Veteran Guardsman w/ Master vox', false, 0),
+  ('2227b260-c795-ee57-63f3-a92c2198ac4a', 'ea548890-2ec0-bd0a-1a94-4cac9af2f613', 'Veteran Guardsmen', 'Veteran Guardsman w/ Regimental standard', false, 0),
+  ('1391197c-7b78-10d9-979e-891e05cbf0e2', 'ea548890-2ec0-bd0a-1a94-4cac9af2f613', 'Veteran Guardsmen', 'Veteran Guardsman w/ Medi-pack', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('3dcb1112-0455-a7de-674d-0c4adcaaa1fc', '0040daa1-d4e4-b7a4-6642-eb071416cab2', 'Rogal Dorn Commander', 'character', '10"', 12, '2+', 18, 7, 5, '{"Imperium", "Vehicle", "Squadron", "Smoke", "Rogal Dorn Commander", "Character", "Officer"}', 3);
@@ -9467,6 +9905,12 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('7c0302f3-dcf0-6efe-2e55-75c74cf30196', 'Final Duty', 'unique', 'While the Fire Coordinator model is on the battlefield, each time a Heavy Weapons Gunner model is destroyed, roll one D6: one a 3+, do not remove it from play. The destroyed model can shoot after the attacking model''s unit has finished making its attacks, and is then removed from play.'),
   ('7c0302f3-dcf0-6efe-2e55-75c74cf30196', 'Embarking', 'unique', 'While embarked within a **^^Transport^^**, each Heavy Weapons Gunner model takes up the space of 2 models, and each weapon equipped by these models is considered to be 2 models'' weapons for the purposes of the Firing Deck ability.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('fc3382ca-c080-6267-ae3f-1c46bb82f763', '7c0302f3-dcf0-6efe-2e55-75c74cf30196', '3 Heavy Weapons Gunners', 'Heavy Weapons Gunners w/ Krieg heavy flamer', false, 0),
+  ('a93de22d-1ea5-6975-fbcc-acf20aa79b87', '7c0302f3-dcf0-6efe-2e55-75c74cf30196', '3 Heavy Weapons Gunners', 'Heavy Weapons Gunners w/ Twin Krieg heavy stubber', false, 0),
+  ('fa98904a-9406-ec87-7c73-6fc08f9bf252', '7c0302f3-dcf0-6efe-2e55-75c74cf30196', '3 Heavy Weapons Gunners', 'Heavy Weapons Gunners w/ Lascannon', true, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('77872251-156d-25cc-dc04-d44fc9945b57', '0040daa1-d4e4-b7a4-6642-eb071416cab2', 'Artillery Team', 'infantry', '3"', 7, '3+', 10, 7, 3, '{"Imperium", "Infantry", "Artillery", "Regiment", "Artillery Team"}', 3);
 
@@ -9526,6 +9970,10 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('0095008d-5d6b-f7a8-a0f2-01191d91ac5d', 'Lesk’s Heroes', 'unique', 'Add 1 to the Leadership characteristic of models in this unit and you can re-roll Battle-shock and Leadership tests taken for this unit.'),
   ('0095008d-5d6b-f7a8-a0f2-01191d91ac5d', 'Heroic Example', 'unique', 'While this unit’s Minka Lesk model is on the battlefield, each time a model in this unit makes an attack, you can re-roll the Hit roll.'),
   ('0095008d-5d6b-f7a8-a0f2-01191d91ac5d', 'Invulnerable Save 5+', 'invulnerable', 'Models in this unit have a 5+ Invulnerable Save.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('1a3cb515-46ae-b5c0-4e02-fde131785af5', '0095008d-5d6b-f7a8-a0f2-01191d91ac5d', 'Lesk''s Heroes', 'Lesk''s Hero', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 
 -- ============================================================
@@ -9775,7 +10223,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('3c01a78f-dba0-5111-9024-2a71f0edc3ac', '51afa74e-4fc5-ffd4-d7b7-fd3759b7cbf3', 'Brotherhood Terminator Squad', 'battleline', '5"', 5, '2+', 3, 6, 2, '{"Battleline", "Infantry", "Psyker", "Imperium", "Terminator", "Brotherhood Terminator Squad"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('3c01a78f-dba0-5111-9024-2a71f0edc3ac', 1, 160),
+  ('3c01a78f-dba0-5111-9024-2a71f0edc3ac', 4, 160),
   ('3c01a78f-dba0-5111-9024-2a71f0edc3ac', 5, 200),
   ('3c01a78f-dba0-5111-9024-2a71f0edc3ac', 6, 320),
   ('3c01a78f-dba0-5111-9024-2a71f0edc3ac', 9, 400);
@@ -9789,6 +10237,13 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('3c01a78f-dba0-5111-9024-2a71f0edc3ac', 'Force Edge (Psychic)', 'unique', 'Each time a model in this unit makes a melee attack that targets a unit (excluding ^^**Vehicles^^** or ^^**Monsters^^**), improve the Armour Penetration characteristic of that attack by 1.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('b6566005-e43a-2f89-79a5-4ccccb47de3e', '3c01a78f-dba0-5111-9024-2a71f0edc3ac', '3-9 Terminators', 'Terminator', true, 0),
+  ('83d70145-147c-ebdd-a4fd-eeb5dc1fa20b', '3c01a78f-dba0-5111-9024-2a71f0edc3ac', '3-9 Terminators', 'Terminator with Ancient''s Banner', false, 0),
+  ('c5e361b6-dadb-3350-92e3-5ce1dc0e8d43', '3c01a78f-dba0-5111-9024-2a71f0edc3ac', '3-9 Terminators', 'Terminator with Narthecium', false, 0),
+  ('a060b50f-fc42-1f44-5629-7990d1e059e3', '3c01a78f-dba0-5111-9024-2a71f0edc3ac', '3-9 Terminators', 'Terminator with Heavy Weapon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('6d2a58cc-32d9-448e-be9e-47b99f5d9a1b', '51afa74e-4fc5-ffd4-d7b7-fd3759b7cbf3', 'Castellan Crowe', 'epic_hero', '6"', 4, '2+', 5, 6, 1, '{"Castellan Crowe", "Psyker", "Imperium", "Epic Hero", "Infantry", "Character"}', 1);
@@ -10242,6 +10697,13 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('bfe3b96f-3b36-b323-a38c-5049b2c78b29', 'Attuned Onslaught (Psychic)', 'unique', 'Each time this unit makes a Charge move, until the end of the turn, add 1 to the Damage characteristic of melee weapons equipped by ^^**Paladin Squad**^^ models in this unit.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('cacd26b1-3e4c-596c-d259-96bc8f826c7d', 'bfe3b96f-3b36-b323-a38c-5049b2c78b29', '3-9 Paladins', 'Paladin', true, 0),
+  ('9ab11cd5-6b8e-6d8f-b4de-d03d4afbed2a', 'bfe3b96f-3b36-b323-a38c-5049b2c78b29', '3-9 Paladins', 'Paladin with Ancient''s Banner', false, 0),
+  ('0ee900fd-0fe2-10b3-f811-7cfd787dbda7', 'bfe3b96f-3b36-b323-a38c-5049b2c78b29', '3-9 Paladins', 'Paladin with Heavy Weapon', false, 0),
+  ('b4c392a3-a758-1607-7118-879bad859bac', 'bfe3b96f-3b36-b323-a38c-5049b2c78b29', '3-9 Paladins', 'Paladin with Narthecium', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('0b16077c-f460-395c-01ab-0961611e9af9', '51afa74e-4fc5-ffd4-d7b7-fd3759b7cbf3', 'Grey Knights Thunderhawk Gunship', 'vehicle', '20+"', 12, '2+', 30, 6, 1, '{"Thunderhawk Gunship", "Titanic", "Vehicle", "Fly", "Transport", "Aircraft", "Imperium"}', 3);
 
@@ -10326,6 +10788,13 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('4442135e-9990-d8e8-3d6c-13adccded556', 'Mindlock', 'unique', 'While a **^^Brotherhood Techmarine^^** model is leading this unit, improve the Ballistic Skill and Weapon Skill characteristics of ranged and melee weapons equipped by **^^Servitor^^** models in this unit by 1'),
   ('4442135e-9990-d8e8-3d6c-13adccded556', 'Servitor Retinue', 'unique', 'At the start of the Declare Battle Formations step, this unit can join one other unit from your army that is being led by a **^^Brotherhood Techmarine^^** (a unit cannot have more than one **^^Servitors^^** unit joined to it). If it does, until the end of the battle, every model in this unit counts as being part of that Bodyguard unit, and that Bodyguard unit’s Starting Strength is increased accordingly.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('f9dac78c-1970-7e07-65b9-21d838e50034', '4442135e-9990-d8e8-3d6c-13adccded556', '4 Servitors', 'Servitor with servo-arm', true, 0),
+  ('72890221-0de1-7f7c-abec-7f1c2ed9e220', '4442135e-9990-d8e8-3d6c-13adccded556', '4 Servitors', 'Servitor with heavy bolter', false, 0),
+  ('5663441d-dd8d-420e-2c5b-4f501b3591c2', '4442135e-9990-d8e8-3d6c-13adccded556', '4 Servitors', 'Servitor with multi-melta', false, 0),
+  ('84afde20-ebee-287e-49a7-986138cff4c5', '4442135e-9990-d8e8-3d6c-13adccded556', '4 Servitors', 'Servitor with plasma cannon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('acf2686f-cb05-fc76-e0f7-c4065f881717', '51afa74e-4fc5-ffd4-d7b7-fd3759b7cbf3', 'Strike Squad', 'battleline', '6"', 4, '2+', 2, 6, 2, '{"Strike Squad", "Psyker", "Imperium", "Battleline", "Infantry"}', 6);
 
@@ -10343,6 +10812,11 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('acf2686f-cb05-fc76-e0f7-c4065f881717', 'Sanctifying Ritual (Psychic)', 'unique', 'At the end of your Command phase, if this unit is within range of an objective marker that you control, that objective marker remains under you control until your opponent''s Level of Control over that objective marker is greater than yours at the end of a phase.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('b0b6211a-161f-bdb2-68ad-664346a3d31f', 'acf2686f-cb05-fc76-e0f7-c4065f881717', '4-9 Grey Knights', 'Grey Knight', true, 0),
+  ('8522ad04-43f0-9cbd-a497-3a413c94f1af', 'acf2686f-cb05-fc76-e0f7-c4065f881717', '4-9 Grey Knights', 'Grey Knight with Heavy Weapon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('e9a165cc-84d5-3084-a7c5-3b0285156741', '51afa74e-4fc5-ffd4-d7b7-fd3759b7cbf3', 'Grey Knights Relic Razorback [Legends]', 'dedicated_transport', '12"', 9, '3+', 10, 6, 2, '{"Dedicated Transport", "Vehicle", "Transport", "Smoke", "Imperium", "Relic Razorback"}', 6);
@@ -10501,7 +10975,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('bd92956b-4b66-8c70-1c0c-5c258f172cbc', 'bd16fda1-570d-bf58-fa02-91f6e23951ce', 'Canis Rex', 'epic_hero', '10"', 11, '3+', 26, 5, 10, '{"Epic Hero", "Character", "Imperium"}', 1);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('bd92956b-4b66-8c70-1c0c-5c258f172cbc', 1, 415);
+  ('bd92956b-4b66-8c70-1c0c-5c258f172cbc', 2, 415);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('bd92956b-4b66-8c70-1c0c-5c258f172cbc', '➤ Las-impulsor - high intensity', 'ranged', '24"', 'D6', '2+', 14, -3, '4', '{"Blast", "Sustained Hits 1"}'),
@@ -11037,7 +11511,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('2ba290ab-1e00-76b5-78c1-3c26598e3a7c', 'dfb55cea-1ae4-ad1d-5b2b-31a849ed4d2d', 'Chaplain Grimaldus', 'infantry', '6"', 4, '3', 4, 5, 1, '{"Infantry", "Imperium", "Tacticus"}', 1);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('2ba290ab-1e00-76b5-78c1-3c26598e3a7c', 1, 110);
+  ('2ba290ab-1e00-76b5-78c1-3c26598e3a7c', 4, 110);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('2ba290ab-1e00-76b5-78c1-3c26598e3a7c', 'Artificer Crozius', 'melee', NULL, '6', '2+', 6, -2, '2', '{}'),
@@ -11121,6 +11595,11 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('15bc7f0a-d355-e641-3b1f-ee2702759ec9', 'Exploit Their Cowardice', 'unique', 'Each time an enemy unit within Engagement Range of this unit is selected to Fall Back, after it ends that Fall Back move, if this unit is not within Engagement Range of one or more enemy units, this unit can make a Normal move.'),
   ('15bc7f0a-d355-e641-3b1f-ee2702759ec9', 'Templar Vows', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('f5427ba8-835d-03d6-6dba-7a15270e8d92', '15bc7f0a-d355-e641-3b1f-ee2702759ec9', 'Sword Brethren', 'Sword Brother', false, 0),
+  ('f7178a4f-eb75-0564-9edd-018178d0c4d0', '15bc7f0a-d355-e641-3b1f-ee2702759ec9', 'Sword Brethren', 'Sword Brother w/ Twin Lightning Claws', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('e1ddf9ac-f0ca-04f9-4573-43056540f213', 'dfb55cea-1ae4-ad1d-5b2b-31a849ed4d2d', 'Emperor''s Champion', 'character', '8"', 4, '2+', 5, 6, 1, '{"Character", "Infantry", "Imperium", "Tacticus", "Emperor''s Champion"}', 1);
@@ -11377,6 +11856,16 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('6b6a0e2f-3b6e-547b-0f3c-e3c48da5ff32', 'Righteous Zeal', 'unique', 'You can re-roll Advance and Charge rolls made for this unit.'),
   ('6b6a0e2f-3b6e-547b-0f3c-e3c48da5ff32', 'Templar Vows', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('7dd69507-f894-28c0-d24d-a49fbf02aa2e', '6b6a0e2f-3b6e-547b-0f3c-e3c48da5ff32', 'Neophytes', 'Neophyte w/Combat Knife', false, 0),
+  ('48efc2a8-4d6c-1cd1-9541-e262aeb5b32d', '6b6a0e2f-3b6e-547b-0f3c-e3c48da5ff32', 'Neophytes', 'Neophyte w/Astartes Shotgun', false, 0),
+  ('91571d9a-d7e8-b358-2766-eaa3314778f1', '6b6a0e2f-3b6e-547b-0f3c-e3c48da5ff32', 'Neophytes', 'Neophyte w/Boltgun', true, 0),
+  ('c89d54f8-e36d-c2cc-cd5a-eb5c7e0e52fa', '6b6a0e2f-3b6e-547b-0f3c-e3c48da5ff32', 'Initiates', 'Initiate w/Astartes Chainsword', false, 0),
+  ('dbf4646d-a7a9-ef4b-cc70-33778ce34cdb', '6b6a0e2f-3b6e-547b-0f3c-e3c48da5ff32', 'Initiates', 'Initiate w/Boltgun', true, 0),
+  ('542df06f-d6c5-9049-649c-f4997ad9f5b4', '6b6a0e2f-3b6e-547b-0f3c-e3c48da5ff32', 'Initiates', 'Initiate w/Heavy', false, 0),
+  ('4e554167-7081-5200-5ae1-dbed1f7e6311', '6b6a0e2f-3b6e-547b-0f3c-e3c48da5ff32', 'Initiates', 'Initiate w/Special', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('de906d5e-4848-1002-dd36-ca19d9c82387', 'dfb55cea-1ae4-ad1d-5b2b-31a849ed4d2d', 'Execrator', 'character', '6"', 4, '3+', 4, 5, 1, '{"Infantry", "Character", "Chaplain", "Imperium", "Tacticus", "Execrator"}', 3);
 
@@ -11445,6 +11934,13 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('dd202c28-6e1b-095f-e9b3-4f553f062148', 'Judgement of the Weak', 'unique', 'Each time an enemy unit (excluding MONSTERS and VEHICLES) within engagement range of this unit Falls Back, all models in that enemy unit must take a Desperate Escape test. When doing so, if that enemy unit is Battle-shocked, subtract 1 from each of those tests.'),
   ('dd202c28-6e1b-095f-e9b3-4f553f062148', 'Templar Vows', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('6651ce54-92a4-db27-e547-9b59dc6bc7da', 'dd202c28-6e1b-095f-e9b3-4f553f062148', 'Terminators', 'Terminator Sergeant', false, 0),
+  ('78634084-1f29-0e7a-da7f-efa18e151b89', 'dd202c28-6e1b-095f-e9b3-4f553f062148', 'Terminators', 'Terminator w/ Power Fist', false, 0),
+  ('1a65c140-76fa-89cf-47b5-a4a779eba96f', 'dd202c28-6e1b-095f-e9b3-4f553f062148', 'Terminators', 'Terminator w/ Chain Fist', false, 0),
+  ('22123487-8f65-d674-76a7-cc4a277eb0e5', 'dd202c28-6e1b-095f-e9b3-4f553f062148', 'Terminators', 'Terminator w/ Heavy Weapon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('ddf5afcc-0e86-edc2-e924-68bbd72cb033', 'dfb55cea-1ae4-ad1d-5b2b-31a849ed4d2d', 'Land Raider Crusader', 'vehicle', '12"', 12, '2+', 16, 6, 5, '{"Vehicle", "Land Raider Crusader", "Smoke", "Imperium", "Transport", "Land Raider"}', 3);
 
@@ -11481,6 +11977,13 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('448af280-d73d-2c9e-f134-f756615785bd', 'Vitruous Onslaught', 'unique', 'Each time a model in this unit makes an attack that targets the closest eligible target, you can re-roll a Wound roll of 1.'),
   ('448af280-d73d-2c9e-f134-f756615785bd', 'Templar Vows', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('532e6a3e-6add-1015-3c8b-e9fd073623c0', '448af280-d73d-2c9e-f134-f756615785bd', 'Sternguard Veterans', 'Sternguard Veteran w/ Bolt Rifle', false, 0),
+  ('009f3c82-78ee-9012-7d54-94311badfc23', '448af280-d73d-2c9e-f134-f756615785bd', 'Sternguard Veterans', 'Sternguard Veteran Sergeant', false, 0),
+  ('172cbdc0-33ae-dc4f-ec5e-cff37c30a470', '448af280-d73d-2c9e-f134-f756615785bd', 'Sternguard Veterans', 'Sternguard Veteran w/ Special Weapon', false, 0),
+  ('9eab8e7a-149a-40ba-b217-d13c5d5cdb3c', '448af280-d73d-2c9e-f134-f756615785bd', 'Sternguard Veterans', 'Sternguard Veteran w/ Combi-weapon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('f82ee23c-fd53-f5a5-a1b8-adeb2a51287e', 'dfb55cea-1ae4-ad1d-5b2b-31a849ed4d2d', 'Emperor''s Champion (Anointed)', 'character', '8"', 4, '2+', 5, 6, 1, '{"Character", "Infantry", "Imperium", "Tacticus", "Emperor''s Champion"}', 1);
@@ -11539,6 +12042,12 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('518fd1ec-70c3-6db0-ddcf-26804633ffa7', 'Oath of Moment', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('711a4d18-8f41-35ff-cc80-907852f55e80', '518fd1ec-70c3-6db0-ddcf-26804633ffa7', 'Death Company Intercessors', 'Death Company Intercessor', true, 0),
+  ('ecb24b5d-850d-d16e-95fb-06ea8c73b58c', '518fd1ec-70c3-6db0-ddcf-26804633ffa7', 'Death Company Intercessors', 'Intercessor w/ melee weapon', false, 0),
+  ('10ef435f-a4ee-f109-dad5-54252c4acfa2', '518fd1ec-70c3-6db0-ddcf-26804633ffa7', 'Death Company Intercessors', 'Intercessor w/ alternate pistol', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('b2cbaed3-015d-5b76-cbec-7e658164bcac', '114247ec-a074-acbb-22f7-70a5055b0545', 'Astorath', 'epic_hero', '12"', 4, '2+', 5, 5, 1, '{"Epic Hero", "Character", "Infantry", "Fly", "Jump Pack", "Imperium", "Chaplain", "Astorath"}', 1);
@@ -11927,6 +12436,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('e67968ee-af67-5c88-4c4d-8bab69d5fb39', 'Attached Unit', 'unique', 'If a Chaplain model from your army with the Leader ability can be attached to Assault Intercessors with Jump Packs, it can be attached to this unit instead'),
   ('e67968ee-af67-5c88-4c4d-8bab69d5fb39', 'Oath of Moment', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('f82dc48c-26b0-12ec-f741-78c2c526a76b', 'e67968ee-af67-5c88-4c4d-8bab69d5fb39', 'Death Company Marines', 'Death Company Marine', true, 0),
+  ('5f5e9f91-c879-7bfa-1858-7b30a0a86a72', 'e67968ee-af67-5c88-4c4d-8bab69d5fb39', 'Death Company Marines', 'Death Company Marine w/ alternate weapons', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('22f2aa51-1abf-db4c-4c05-ec2d959128ef', '114247ec-a074-acbb-22f7-70a5055b0545', 'Sanguinary Priest on Bike [Legends]', 'character', '12"', 5, '3+', 5, 6, 2, '{"Character", "Mounted", "Imperium", "Sanguinary Priest"}', 3);
 
@@ -12059,6 +12573,12 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('eb4f81be-1cc4-8dd6-e959-dbfb04c63277', 'Attached Unit', 'unique', 'If a Chaplain model from your army with the Leader ability can be attached to Intercessor Squad, it can be attached to this unit instead.'),
   ('eb4f81be-1cc4-8dd6-e959-dbfb04c63277', 'Oath of Moment', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('74432198-ceed-a60a-cda5-1488b6561d9e', 'eb4f81be-1cc4-8dd6-e959-dbfb04c63277', 'Death Company Marines', 'Death Company Marine w/Bolt Rifle', true, 0),
+  ('65d07d7e-8754-3f6f-8f56-d86f209022ad', 'eb4f81be-1cc4-8dd6-e959-dbfb04c63277', 'Death Company Marines', 'Death Company Marine w/Eviscerator', false, 0),
+  ('32726611-269b-07e3-c36f-ec97009daeef', 'eb4f81be-1cc4-8dd6-e959-dbfb04c63277', 'Death Company Marines', 'Death Company Marine w/ alternate weapons', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('b4611b23-e3f9-fd51-2bfe-6478ce8644cf', '114247ec-a074-acbb-22f7-70a5055b0545', 'Death Company Marines', 'infantry', '6"', 4, '3+', 2, 6, 1, '{"Infantry", "Imperium", "Death Company Marines", "Tacticus", "Death Company"}', 3);
 
@@ -12073,6 +12593,12 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('b4611b23-e3f9-fd51-2bfe-6478ce8644cf', 'An Honourable Death in Combat', 'unique', 'Each time a model in this unit makes an attack, that attack has the [SUSTAINED HITS 1] ability if this unit is below its Starting Strength, or the [SUSTAINED HITS 2] ability if this unit is Below Half-strength.'),
   ('b4611b23-e3f9-fd51-2bfe-6478ce8644cf', 'Attached Unit', 'unique', 'If a Chaplain model from your army with the Leader ability can be attached to Assault Intercessor Squad, it can be attached to this unit instead.'),
   ('b4611b23-e3f9-fd51-2bfe-6478ce8644cf', 'Oath of Moment', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('ca450a9d-1d39-d54d-0082-5deffabd59aa', 'b4611b23-e3f9-fd51-2bfe-6478ce8644cf', 'Death Company Marines', 'Death Company Marine w/Eviscerator', false, 0),
+  ('de209e31-278c-ff2d-32ad-92298b16cf5b', 'b4611b23-e3f9-fd51-2bfe-6478ce8644cf', 'Death Company Marines', 'Death Company Marine', true, 0),
+  ('3fb7402e-a539-ee4e-860a-f20c402f2804', 'b4611b23-e3f9-fd51-2bfe-6478ce8644cf', 'Death Company Marines', 'Death Company Marine w/ alternate weapons', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('24b1e4f0-bcb6-a150-f8e3-0c9ea8dec358', '114247ec-a074-acbb-22f7-70a5055b0545', 'Death Company Dreadnought', 'vehicle', '8"', 10, '2+', 12, 6, 4, '{"Vehicle", "Walker", "Imperium", "Dreadnought", "Death Company Dreadnought", "Death Company"}', 3);
@@ -12411,11 +12937,17 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('9dcff714-a14e-8fd9-64f5-33a9487b98cb', 'Invulnerable Save', 'invulnerable', '5+'),
   ('9dcff714-a14e-8fd9-64f5-33a9487b98cb', 'Oath of Moment', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('87939c44-5917-4333-266d-40749e0760d1', '9dcff714-a14e-8fd9-64f5-33a9487b98cb', 'Ravenwing Black Knights', 'Ravenwing Huntmaster', false, 0),
+  ('fe82b705-ef2b-5759-3a96-e9cccbeffc71', '9dcff714-a14e-8fd9-64f5-33a9487b98cb', 'Ravenwing Black Knights', 'Ravenwing Black Knight', false, 0),
+  ('bcf0d251-daf0-7948-23f9-b22ef27ba0fe', '9dcff714-a14e-8fd9-64f5-33a9487b98cb', 'Ravenwing Black Knights', 'Ravenwing Black Knight w/ Grenade Launcher', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('867a7628-9ece-fa8b-a26f-953d71465ddf', 'cd8ddc78-26c7-2bce-a07e-951ebb75be84', 'Ravenwing Command Squad', 'character', '12"', 5, '3+', 4, 6, 2, '{"Mounted", "Imperium", "Ravenwing Command Squad", "Ravenwing", "Character"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('867a7628-9ece-fa8b-a26f-953d71465ddf', 1, 120);
+  ('867a7628-9ece-fa8b-a26f-953d71465ddf', 3, 120);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('867a7628-9ece-fa8b-a26f-953d71465ddf', 'Black Knight combat weapon', 'melee', NULL, '3', '3+', 5, -2, '1', '{"Devastating Wounds"}'),
@@ -12433,6 +12965,13 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('867a7628-9ece-fa8b-a26f-953d71465ddf', 'Astartes Banner', 'unique', 'While this unit contains a Ravenwing Ancient, add 1 to the Objective Control characteristic of models in this unit.'),
   ('867a7628-9ece-fa8b-a26f-953d71465ddf', 'Honour or Death', 'unique', 'While this unit contains a Ravenwing Champion, add 1 to Advance and Charge rolls made for this unit and you can target this unit with the Heroic Intervention Stratagem for 0CP.'),
   ('867a7628-9ece-fa8b-a26f-953d71465ddf', 'Oath of Moment', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('494e06ff-fd67-7beb-f94c-215a48abdc47', '867a7628-9ece-fa8b-a26f-953d71465ddf', 'Ravenwing Champion wargear', 'Bolt Pistol', true, 0),
+  ('de7cb4b0-f5b6-98a5-45c4-13d7e8e1764e', '867a7628-9ece-fa8b-a26f-953d71465ddf', 'Ravenwing Champion wargear', 'Master-crafted power weapon', false, 0),
+  ('2a27f786-b647-2543-d1ee-4f60b43b7ac5', '867a7628-9ece-fa8b-a26f-953d71465ddf', 'Ravenwing Champion: Plasma Talon', 'Plasma talon', true, 0),
+  ('b181b17f-73ef-59d3-54f7-b8aaacf1884d', '867a7628-9ece-fa8b-a26f-953d71465ddf', 'Ravenwing Champion: Plasma Talon', 'Astartes grenade launcher', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('d38af8ee-3a2d-2676-84d8-9645419af994', 'cd8ddc78-26c7-2bce-a07e-951ebb75be84', 'Deathwing Knights', 'infantry', '5"', 5, '2+', 4, 6, 1, '{"Infantry", "Imperium", "Deathwing Knights", "Terminator", "Deathwing"}', 3);
@@ -12453,6 +12992,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('d38af8ee-3a2d-2676-84d8-9645419af994', 'Teleport Homer', 'unique', 'At the start of the battle, you can set up one Teleport Homer token for this unit anywhere on the battlefield that is not in your opponent’s deployment zone. If you do, once per battle, you can target this unit with the Rapid Ingress Stratagem for 0CP, but when resolving that Stratagem, you must set this unit up within 3" horizontally of that token and not within 9" horizontally of any enemy models. That token is then removed.'),
   ('d38af8ee-3a2d-2676-84d8-9645419af994', 'Oath of Moment', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('9e35494d-2d91-9c26-b464-f7a8d0944564', 'd38af8ee-3a2d-2676-84d8-9645419af994', 'Deathwing Knights', 'Deathwing Knight', false, 0),
+  ('4fa867b4-42f8-1c60-e303-df03a9ebab3e', 'd38af8ee-3a2d-2676-84d8-9645419af994', 'Deathwing Knights', 'Knight Master', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('0fbd59b1-887a-d2e2-ff2e-cf283c9d1748', 'cd8ddc78-26c7-2bce-a07e-951ebb75be84', 'Deathwing Terminator Squad', 'infantry', '5"', 5, '2+', 3, 6, 1, '{"Infantry", "Imperium", "Deathwing Terminator Squad", "Terminator", "Deathwing"}', 3);
 
@@ -12472,6 +13016,13 @@ In addition, each time a model in this unit makes an attack that targets your Oa
   ('0fbd59b1-887a-d2e2-ff2e-cf283c9d1748', 'Attached Unit', 'unique', 'If a Character unit from your army with the Leader ability can be attached to a Terminator Squad, it can be attached to this unit instead.'),
   ('0fbd59b1-887a-d2e2-ff2e-cf283c9d1748', 'Teleport Homer', 'unique', 'At the start of the battle, you can set up one Teleport Homer token for this unit anywhere on the battlefield that is not in your opponent’s deployment zone. If you do, once per battle, you can target this unit with the Rapid Ingress Stratagem for 0CP, but when resolving that Stratagem, you must set this unit up within 3" horizontally of that token and not within 9" horizontally of any enemy models. That token is then removed.'),
   ('0fbd59b1-887a-d2e2-ff2e-cf283c9d1748', 'Oath of Moment', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('5b78e347-bc15-9d0c-1a6e-c1d01e89aed8', '0fbd59b1-887a-d2e2-ff2e-cf283c9d1748', 'Squad Members', 'Deathwing Sergeant', false, 0),
+  ('543b4c97-46a0-e645-c048-0d2e765b9c5d', '0fbd59b1-887a-d2e2-ff2e-cf283c9d1748', 'Squad Members', 'Deathwing Terminator', true, 0),
+  ('f1e1217a-ebd3-cac0-6126-1eb1e547317e', '0fbd59b1-887a-d2e2-ff2e-cf283c9d1748', 'Squad Members', 'Deathwing Terminator w/ Chainfist', false, 0),
+  ('0c263c3a-5f81-e4e4-bdcd-9ac2184121cf', '0fbd59b1-887a-d2e2-ff2e-cf283c9d1748', 'Squad Members', 'Deathwing Terminator w/ Heavy Weapon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('d7b9d1ff-bc0b-9c44-b142-31221eb16c8f', 'cd8ddc78-26c7-2bce-a07e-951ebb75be84', 'Inner Circle Companions', 'infantry', '6"', 4, '3+', 3, 6, 2, '{"Infantry", "Imperium", "Tacticus", "Inner Circle Companions", "Deathwing"}', 3);
@@ -12571,6 +13122,18 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('3b6892ea-05c6-bc53-d18c-1ec84f7acd2b', 'Attached Unit', 'unique', 'If a Character unit from your army with the Leader ability can be attached to a Terminator Squad, it can be attached to this unit instead.'),
   ('3b6892ea-05c6-bc53-d18c-1ec84f7acd2b', 'Oath of Moment', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('50f6c252-17d0-429f-3061-e09e54cc2653', '3b6892ea-05c6-bc53-d18c-1ec84f7acd2b', 'Deathwing Command Squad Members', 'Deathwing Ancient', false, 0),
+  ('086dbe22-daf5-4161-3af3-70917954c14c', '3b6892ea-05c6-bc53-d18c-1ec84f7acd2b', 'Deathwing Command Squad Members', 'Deathwing Apothecary', false, 0),
+  ('0e2c7e2c-0733-9d4a-87e1-842611f9f226', '3b6892ea-05c6-bc53-d18c-1ec84f7acd2b', 'Deathwing Command Squad Members', 'Deathwing Champion', false, 0),
+  ('22b22c0a-6ac5-ab0b-de2b-0585e37ce2cd', '3b6892ea-05c6-bc53-d18c-1ec84f7acd2b', 'Deathwing Command Squad Members', 'Deathwing Command Terminator', true, 0),
+  ('114d49d3-d2a8-385f-ba46-88f8c17ff37d', '3b6892ea-05c6-bc53-d18c-1ec84f7acd2b', 'Deathwing Command Squad Members', 'Deathwing Terminator w/ Chainfist', false, 0),
+  ('9d2b5730-1a4b-ed4e-8255-5dd672af5d23', '3b6892ea-05c6-bc53-d18c-1ec84f7acd2b', 'Deathwing Command Squad Members', 'Deathwing Terminator w/ Heavy Weapon', false, 0),
+  ('abf90ddc-4c83-2125-48af-486e0b839706', '3b6892ea-05c6-bc53-d18c-1ec84f7acd2b', 'Deathwing Command Squad Members', 'Deathwing Command Terminator w/ Power Weapon', false, 0),
+  ('ce6864a8-bff0-5b1a-ac62-f403b9a219e7', '3b6892ea-05c6-bc53-d18c-1ec84f7acd2b', 'Deathwing Command Squad Members', 'Deathwing Command Terminator w/ Twin Claws', false, 0),
+  ('efc148ad-1cf4-0f8e-6998-00b6ce3ace14', '3b6892ea-05c6-bc53-d18c-1ec84f7acd2b', 'Deathwing Command Squad Members', 'Deathwing Command Terminator w/ Hammer & Shield', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 
 -- ============================================================
 -- SEED DATA: Deathwatch
@@ -12664,7 +13227,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('d64e5a01-e0b3-0e92-b6ed-b70e4d01efb8', '1bcade8c-c517-4e08-0fb5-27145949d234', 'Kill Team Cassius [Legends]', 'infantry', '6"', 4, '3+', 4, 5, 2, '{"Infantry", "Imperium", "Kill Team", "Kill Team Cassius", "Deathwatch", "Ordo Xenos"}', 1);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('d64e5a01-e0b3-0e92-b6ed-b70e4d01efb8', 1, 220);
+  ('d64e5a01-e0b3-0e92-b6ed-b70e4d01efb8', 11, 220);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('d64e5a01-e0b3-0e92-b6ed-b70e4d01efb8', 'Artificer crozius', 'melee', NULL, '5', '2+', 6, -1, '2', '{}'),
@@ -12705,11 +13268,17 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('c4c9e116-807a-12fa-ae80-eae6d14f8846', 'Attached Unit', 'unique', 'If a CHARACTER unit from your army with the Leader ability can be attached to a TERMINATOR SQUAD, it can be attached to this unit instead.'),
   ('c4c9e116-807a-12fa-ae80-eae6d14f8846', 'Oath of Moment', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('1ecf7de1-a6ec-1bdc-5c36-5b8f474641fb', 'c4c9e116-807a-12fa-ae80-eae6d14f8846', 'Deathwatch Terminators', 'Deathwatch Terminator', true, 0),
+  ('f740f515-1e6d-9b49-4549-fafcd2fc6b65', 'c4c9e116-807a-12fa-ae80-eae6d14f8846', 'Deathwatch Terminators', 'Deathwatch Terminator w/ Heavy Weapon', false, 0),
+  ('6c8f0f7a-eee0-20db-c7dc-eac6f7a43b3f', 'c4c9e116-807a-12fa-ae80-eae6d14f8846', 'Deathwatch Terminators', 'Deathwatch Terminator Sergeant', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('39099c71-ea61-e814-186a-2d442135c1ff', '1bcade8c-c517-4e08-0fb5-27145949d234', 'Fortis Kill Team', 'infantry', '6"', 4, '3+', 2, 6, 2, '{"Infantry", "Imperium", "Fortis Kill Team", "Tacticus", "Kill Team"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('39099c71-ea61-e814-186a-2d442135c1ff', 9, 180);
+  ('39099c71-ea61-e814-186a-2d442135c1ff', 10, 180);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('39099c71-ea61-e814-186a-2d442135c1ff', 'Deathwatch bolt rifle', 'ranged', '24"', '2', '3+', 5, -2, '1', '{"Assault", "Heavy", "Lethal Hits"}'),
@@ -12726,6 +13295,13 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('39099c71-ea61-e814-186a-2d442135c1ff', 'Fortis Doctrines', 'unique', 'Each time a model in this unit makes an attack that targets a unit that is below its Starting Strength, add 1 to the Hit roll. If that attack targets a unit that is Below Half-strength, add 1 to the Hit roll and add 1 to the Wound roll instead.'),
   ('39099c71-ea61-e814-186a-2d442135c1ff', 'Attached Unit', 'unique', 'If a CHARACTER from your army with the Leader ability can be attached to an INTERCESSOR SQUAD, it can be attached to this unit instead.'),
   ('39099c71-ea61-e814-186a-2d442135c1ff', 'Oath of Moment', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('dbb18fc6-4738-d740-71a0-5d215f377bb0', '39099c71-ea61-e814-186a-2d442135c1ff', 'Squad Members', 'Kill Team Intercessor', false, 0),
+  ('db0c055d-0781-c235-6297-b963689f4897', '39099c71-ea61-e814-186a-2d442135c1ff', 'Squad Members', 'Kill Team Intercessor w/ grenade launcher', false, 0),
+  ('20e60cc4-c0cd-e960-fea7-bc4351b0ff62', '39099c71-ea61-e814-186a-2d442135c1ff', 'Squad Members', 'Kill Team Intercessor w/ heavy bolt pistol', false, 0),
+  ('755cc1b8-80bb-6acb-c472-163de6d8b370', '39099c71-ea61-e814-186a-2d442135c1ff', 'Squad Members', 'Kill Team Intercessor w/ pyreblaster', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('80ac3521-d570-3576-c202-efaeffe1c415', '1bcade8c-c517-4e08-0fb5-27145949d234', 'Spectrus Kill Team', 'infantry', '6"', 4, '3+', 2, 6, 1, '{"Infantry", "Imperium", "Smoke", "Spectrus Kill Team", "Kill Team", "Phobos"}', 3);
@@ -12750,11 +13326,17 @@ If this unit has a Leader unit attached to it during the Declare Battle Formatio
   ('80ac3521-d570-3576-c202-efaeffe1c415', 'Spectrus Doctrines', 'unique', 'At the end of your opponent’s turn, if this unit is more than 6" away from all enemy units, you can remove this unit from the battlefield and place it into Strategic Reserves.'),
   ('80ac3521-d570-3576-c202-efaeffe1c415', 'Oath of Moment', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('2996dcd6-fb82-9c36-2117-47120f8e240a', '80ac3521-d570-3576-c202-efaeffe1c415', 'Squad Members', 'Kill Team Infiltrator', true, 0),
+  ('d4bf8954-0e62-7203-a167-9a2686a05a8e', '80ac3521-d570-3576-c202-efaeffe1c415', 'Squad Members', 'Kill Team Infiltrator w/ occulus bolt carbine', false, 0),
+  ('20ad97c7-2e6c-adb3-9083-91342c5a2d7c', '80ac3521-d570-3576-c202-efaeffe1c415', 'Squad Members', 'Kill Team Infiltrator w/ wargear', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('df6599ec-3f00-1b19-a5bd-adeeaa0fc780', '1bcade8c-c517-4e08-0fb5-27145949d234', 'Talonstrike Kill Team', 'infantry', '12"', 4, '3+', 2, 6, 1, '{"Infantry", "Fly", "Jump Pack", "Imperium", "Kill Team", "Talonstrike Kill Team"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('df6599ec-3f00-1b19-a5bd-adeeaa0fc780', 9, 275);
+  ('df6599ec-3f00-1b19-a5bd-adeeaa0fc780', 10, 275);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('df6599ec-3f00-1b19-a5bd-adeeaa0fc780', '➤ Plasma pistol - Standard', 'ranged', '12"', '1', '3+', 7, -2, '1', '{"Pistol"}'),
@@ -12770,6 +13352,12 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
 - Melee weapons equipped by models in this unit have the [LANCE] ability.'),
   ('df6599ec-3f00-1b19-a5bd-adeeaa0fc780', 'Attached Unit', 'unique', 'If a CHARACTER unit from your army with the Leader ability can be attached to an ASSAULT INTERCESSORS WITH JUMP PACKS unit, it can be attached to this unit instead.'),
   ('df6599ec-3f00-1b19-a5bd-adeeaa0fc780', 'Oath of Moment', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('3a782274-7364-0e6b-b817-085d53aae9ca', 'df6599ec-3f00-1b19-a5bd-adeeaa0fc780', 'Unit Composition', 'Intercessor w/ heavy bolt pistol and Jump Pack', true, 0),
+  ('bc484dd2-2ec7-45bb-61f9-e0a176c41446', 'df6599ec-3f00-1b19-a5bd-adeeaa0fc780', 'Unit Composition', 'Heavy Intercessor w/ Jump Pack', false, 0),
+  ('76ce3d02-ae6d-f233-97fd-79d9e5e051a1', 'df6599ec-3f00-1b19-a5bd-adeeaa0fc780', 'Unit Composition', 'Intercessor w/ plasma pistol and Jump Pack', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 
 -- ============================================================
@@ -13111,6 +13699,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('9bc606fd-844b-e4c6-54f2-636f941da1e6', 'Berserk Charge', 'unique', 'This unit is eligible to declare a charge in a turn in which it Advanced'),
   ('9bc606fd-844b-e4c6-54f2-636f941da1e6', 'Oath of Moment', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('850af2f2-8910-5462-cbfa-2abbd16c0ee4', '9bc606fd-844b-e4c6-54f2-636f941da1e6', 'Blood Claws', 'Blood Claw', true, 0),
+  ('dffac8f6-2b62-e1bc-e3cc-f3d53fed1da3', '9bc606fd-844b-e4c6-54f2-636f941da1e6', 'Blood Claws', 'Blood Claw Pack Leader', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('f04b1e2e-8596-4795-1151-a0b98c1c2a84', '46508f25-3def-c901-ed8e-41492ee211aa', 'Grey Hunters', 'battleline', '7"', 4, '3+', 2, 6, 3, '{"Infantry", "Battleline", "Imperium", "Grey Hunters", "Tacticus"}', 6);
 
@@ -13127,6 +13720,11 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('f04b1e2e-8596-4795-1151-a0b98c1c2a84', 'Cunning Hunters', 'unique', 'Each time a model in this unit makes an attack, re-roll a Wound roll of 1. If the target is within range of an objective marker, you can re-roll the Wound roll instead.'),
   ('f04b1e2e-8596-4795-1151-a0b98c1c2a84', 'Oath of Moment', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('6332dc33-2786-a2c9-8e59-fe1ceb6a647e', 'f04b1e2e-8596-4795-1151-a0b98c1c2a84', 'Grey Hunters', 'Grey Hunter Pack Leader', false, 0),
+  ('9315c8e0-cd45-f934-22bc-d68251246699', 'f04b1e2e-8596-4795-1151-a0b98c1c2a84', 'Grey Hunters', 'Grey Hunter', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('b8022096-06ee-26a9-83f6-e487c4e06b72', '46508f25-3def-c901-ed8e-41492ee211aa', 'Wolf Guard [Legends]', 'infantry', '6"', 4, '3+', 2, 5, 1, '{"Infantry", "Imperium", "Wolf Guard"}', 3);
@@ -13145,6 +13743,15 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('b8022096-06ee-26a9-83f6-e487c4e06b72', 'Chosen Companions', 'unique', 'While a CHARACTER model is leading this unit, each time a model in this unit makes an attack, add 1 to the Hit roll.'),
   ('b8022096-06ee-26a9-83f6-e487c4e06b72', 'Attached Unit', 'unique', 'If a CHARACTER unit from your army with the Leader ability can be attached to an STERNGUARD VETERAN SQUAD or VANGUARD VETERAN SQUAD, it can instead be attached to this unit.'),
   ('b8022096-06ee-26a9-83f6-e487c4e06b72', 'Oath of Moment', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('31608e71-c0be-f940-2abe-cec4d2f43165', 'b8022096-06ee-26a9-83f6-e487c4e06b72', '1 Wolf Guard Pack Leader and 4-9 Wolf Guard', 'Wolf Guard w/ boltgun', false, 0),
+  ('918869f3-4937-981d-4e81-0407e50f7258', 'b8022096-06ee-26a9-83f6-e487c4e06b72', '1 Wolf Guard Pack Leader and 4-9 Wolf Guard', 'Wolf Guard w/ combi-weapon', false, 0),
+  ('00aea2c5-3238-50a5-3581-496d14b45b9b', 'b8022096-06ee-26a9-83f6-e487c4e06b72', '1 Wolf Guard Pack Leader and 4-9 Wolf Guard', 'Wolf Guard w/ plasma pistol', false, 0),
+  ('4ac86b86-bb88-7a07-fd92-cd57ced0a4de', 'b8022096-06ee-26a9-83f6-e487c4e06b72', '1 Wolf Guard Pack Leader and 4-9 Wolf Guard', 'Wolf Guard w/ storm bolter', false, 0),
+  ('349aa34c-ff7f-3ab3-033d-6f2906b5f2f5', 'b8022096-06ee-26a9-83f6-e487c4e06b72', '1 Wolf Guard Pack Leader and 4-9 Wolf Guard', 'Wolf Guard w/ storm shield', false, 0),
+  ('21d28996-45a7-e504-815f-fe75ba3b2162', 'b8022096-06ee-26a9-83f6-e487c4e06b72', '1 Wolf Guard Pack Leader and 4-9 Wolf Guard', 'Wolf Guard w/ bolt pistol', true, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('b75907bc-75e0-d026-a70d-6e00163a1a6a', '46508f25-3def-c901-ed8e-41492ee211aa', 'Lukas the Trickster [Legends]', 'epic_hero', '6"', 4, '3+', 4, 6, 1, '{"Infantry", "Character", "Epic Hero", "Imperium", "Lukas the Trickster"}', 1);
@@ -13170,7 +13777,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('ff84463d-322f-9fa1-469d-5a8a896cecf4', '46508f25-3def-c901-ed8e-41492ee211aa', 'Wolf Guard Terminators', 'infantry', '6"', 5, '2+', 3, 6, 1, '{"Infantry", "Imperium", "Terminator", "Wolf Guard Terminators", "Wolf Guard"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('ff84463d-322f-9fa1-469d-5a8a896cecf4', 4, 170),
+  ('ff84463d-322f-9fa1-469d-5a8a896cecf4', 5, 170),
   ('ff84463d-322f-9fa1-469d-5a8a896cecf4', 6, 340);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -13184,6 +13791,12 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('ff84463d-322f-9fa1-469d-5a8a896cecf4', 'Rugged Resilience', 'unique', 'Each time an attack targets this unit, if the Strength characteristic of that attack is greater than the Toughness characteristic of this unit, subtract 1 from the Wound roll.'),
   ('ff84463d-322f-9fa1-469d-5a8a896cecf4', 'Oath of Moment', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('fc850706-9b7e-f79f-ecda-90f367232d9a', 'ff84463d-322f-9fa1-469d-5a8a896cecf4', '4-9 Terminators', 'Wolf Guard Terminator w/ storm bolter', true, 0),
+  ('642b7dc6-ae36-fc93-b9f1-f84cda19c25b', 'ff84463d-322f-9fa1-469d-5a8a896cecf4', '4-9 Terminators', 'Wolf Guard Terminator w/ Assault Cannon', false, 0),
+  ('0ba192f7-6c4a-0943-0310-be6f50880293', 'ff84463d-322f-9fa1-469d-5a8a896cecf4', '4-9 Terminators', 'Wolf Guard Terminator w/ storm shield', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('b160f102-0ae7-50d5-b63c-d124e1acccb2', '46508f25-3def-c901-ed8e-41492ee211aa', 'Hounds of Morkai [Legends]', 'infantry', '6"', 4, '3+', 2, 6, 1, '{"Infantry", "Smoke", "Imperium", "Phobos", "Hounds of Morkai"}', 3);
@@ -13206,7 +13819,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('3a26dea3-fc6d-0323-32a5-030b5cccdc88', '46508f25-3def-c901-ed8e-41492ee211aa', 'Wulfen Dreadnought', 'vehicle', '9"', 9, '2+', 8, 6, 1, '{"Vehicle", "Walker", "Imperium", "Dreadnought", "Wulfen"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('3a26dea3-fc6d-0323-32a5-030b5cccdc88', 2, 135);
+  ('3a26dea3-fc6d-0323-32a5-030b5cccdc88', 1, 135);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('3a26dea3-fc6d-0323-32a5-030b5cccdc88', 'Great wolf claw', 'melee', NULL, '6', '3+', 10, -3, '3', '{}'),
@@ -13258,6 +13871,13 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('8a618583-3936-bb7a-96c3-6d2b07e1621a', 'Thunderous Charge', 'unique', 'Each time a model in this unit makes a melee attack with its Wolf Guard weapon, if it made a Charge move this turn, add 1 to the Damage characteristic of that attack'),
   ('8a618583-3936-bb7a-96c3-6d2b07e1621a', 'Oath of Moment', 'faction', '');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('43208c6a-1a9d-b3d8-ade5-85ae41aca7bc', '8a618583-3936-bb7a-96c3-6d2b07e1621a', 'Thunderwolf Cavalry', 'Thunderwolf w/ plasma pistol', false, 0),
+  ('9dd8c9a2-c17b-bf92-4d9a-85863f673917', '8a618583-3936-bb7a-96c3-6d2b07e1621a', 'Thunderwolf Cavalry', 'Thunderwolf w/ boltgun', false, 0),
+  ('ce6b873b-8a8f-d213-a2df-4dfa1446f646', '8a618583-3936-bb7a-96c3-6d2b07e1621a', 'Thunderwolf Cavalry', 'Thunderwolf w/ storm shield', false, 0),
+  ('d2497ed4-363a-0693-1e0b-9a6b51e53b05', '8a618583-3936-bb7a-96c3-6d2b07e1621a', 'Thunderwolf Cavalry', 'Thunderwolf w/ bolt pistol', true, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('3967643d-861e-4eae-258f-a0ec5ef14ccb', '46508f25-3def-c901-ed8e-41492ee211aa', 'Fenrisian Wolves', 'beast', '10"', 4, '6+', 1, 8, 1, '{"Beast", "Imperium", "Fenrisian Wolves"}', 3);
 
@@ -13277,7 +13897,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('79297224-06a3-bae0-eb93-d9dd5bb29383', '46508f25-3def-c901-ed8e-41492ee211aa', 'Skyclaws [Legends]', 'infantry', '12"', 4, '3+', 2, 6, 1, '{"Infantry", "Jump Pack", "Fly", "Imperium", "Skyclaws"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('79297224-06a3-bae0-eb93-d9dd5bb29383', 4, 90),
+  ('79297224-06a3-bae0-eb93-d9dd5bb29383', 5, 90),
   ('79297224-06a3-bae0-eb93-d9dd5bb29383', 6, 165),
   ('79297224-06a3-bae0-eb93-d9dd5bb29383', 11, 240);
 
@@ -13299,7 +13919,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('b2e8d344-03a8-e989-c420-35766e577f5d', '46508f25-3def-c901-ed8e-41492ee211aa', 'Long Fangs [Legends]', 'infantry', '6"', 4, '3+', 2, 6, 1, '{"Infantry", "Imperium", "Long Fangs"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('b2e8d344-03a8-e989-c420-35766e577f5d', 4, 120),
+  ('b2e8d344-03a8-e989-c420-35766e577f5d', 5, 120),
   ('b2e8d344-03a8-e989-c420-35766e577f5d', 6, 145);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -13321,6 +13941,17 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('b2e8d344-03a8-e989-c420-35766e577f5d', 'Attached Unit', 'unique', 'If a CHARACTER unit from your army with the Leader ability can be attached to a DEVASTATOR SQUAD, it can instead be attached to this unit.'),
   ('b2e8d344-03a8-e989-c420-35766e577f5d', 'Armorium Cherub', 'unique', 'Once per battle, after making a Hit roll for a model in this unit, you can change that roll to an unmodified 6.'),
   ('b2e8d344-03a8-e989-c420-35766e577f5d', 'Oath of Moment', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('1325b894-2359-f194-3c18-741d0825fa28', 'b2e8d344-03a8-e989-c420-35766e577f5d', '4-5 Long Fangs', 'Long Fang w/ boltgun', true, 0),
+  ('fbb3e99b-caf3-816f-a471-497937949a07', 'b2e8d344-03a8-e989-c420-35766e577f5d', '4-5 Long Fangs', 'Long Fang w/ lascannon', false, 0),
+  ('26c95e6f-5522-3c45-76b8-e5ed29999255', 'b2e8d344-03a8-e989-c420-35766e577f5d', '4-5 Long Fangs', 'Long Fang w/ heavy bolter', false, 0),
+  ('06b8cd55-19f7-2852-de85-719435f12279', 'b2e8d344-03a8-e989-c420-35766e577f5d', '4-5 Long Fangs', 'Long Fang w/ grav-cannon', false, 0),
+  ('a6d8e439-8173-3d2c-0a4d-33cbc89cc5ee', 'b2e8d344-03a8-e989-c420-35766e577f5d', '4-5 Long Fangs', 'Long Fang w/ missile launcher', false, 0),
+  ('667b7c95-a510-fa54-a3d2-0aee013647e2', 'b2e8d344-03a8-e989-c420-35766e577f5d', '4-5 Long Fangs', 'Long Fang w/ plasma cannon', false, 0),
+  ('63724a3f-bd30-ab9d-a8d6-6d10aee88606', 'b2e8d344-03a8-e989-c420-35766e577f5d', '4-5 Long Fangs', 'Long Fang w/ multi-melta', false, 0),
+  ('b76cc98c-2bd1-c9fe-3995-f646b244b32e', 'b2e8d344-03a8-e989-c420-35766e577f5d', '4-5 Long Fangs', 'Long Fang w/ heavy flamer', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('4f11608e-c240-ca81-e806-2d2da3d36351', '46508f25-3def-c901-ed8e-41492ee211aa', 'Stormfang Gunship [Legends]', 'vehicle', '20+"', 10, '3+', 14, 6, 1, '{"Vehicle", "Aircraft", "Fly", "Transport", "Stormfang Gunship", "Imperium"}', 3);
@@ -13426,7 +14057,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('0c384245-40b0-ad37-799a-0aa73d9476b6', '46508f25-3def-c901-ed8e-41492ee211aa', 'Wolf Guard Pack Leader in Terminator Armour [Legends]', 'character', '5"', 5, '2+', 3, 6, 1, '{"Infantry", "Character", "Imperium", "Terminator", "Pack Leader", "Wolf Guard Pack Leader in Terminator Armour"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('0c384245-40b0-ad37-799a-0aa73d9476b6', 2, 40);
+  ('0c384245-40b0-ad37-799a-0aa73d9476b6', 1, 40);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('0c384245-40b0-ad37-799a-0aa73d9476b6', '➤ Cyclone missile launcher - frag', 'ranged', '36"', '2D6', '3+', 4, 0, '1', '{"Blast"}'),
@@ -13515,7 +14146,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('7370b955-d939-5dda-3b4f-ba9779c19f17', '46508f25-3def-c901-ed8e-41492ee211aa', 'Wolf Scouts [Legends]', 'infantry', '6"', 4, '4+', 2, 6, 1, '{"Infantry", "Smoke", "Imperium", "Scout Squad", "Wolf Scouts"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('7370b955-d939-5dda-3b4f-ba9779c19f17', 4, 80),
+  ('7370b955-d939-5dda-3b4f-ba9779c19f17', 5, 80),
   ('7370b955-d939-5dda-3b4f-ba9779c19f17', 6, 160);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -13530,6 +14161,13 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('7370b955-d939-5dda-3b4f-ba9779c19f17', 'Guerrilla Tactics', 'unique', 'At the end of your opponent’s turn, if this unit is more than 6" away from all enemy models, you can remove this unit from the battlefield and place it into
 Strategic Reserves.'),
   ('7370b955-d939-5dda-3b4f-ba9779c19f17', 'Oath of Moment', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('41998a06-c353-e996-158b-9a344b032d5f', '7370b955-d939-5dda-3b4f-ba9779c19f17', '4-9 Wolf Scouts', 'Wolf Scout w/ boltgun', true, 0),
+  ('3173ca55-39d4-b829-d230-57535e2401ae', '7370b955-d939-5dda-3b4f-ba9779c19f17', '4-9 Wolf Scouts', 'Wolf Scout w/ shotgun', false, 0),
+  ('abcf15f0-edc4-dcab-7495-ef479ef14e00', '7370b955-d939-5dda-3b4f-ba9779c19f17', '4-9 Wolf Scouts', 'Wolf Scout w/ combat knife', false, 0),
+  ('044b9f66-7a47-ecc3-a10e-a7b83abe51d2', '7370b955-d939-5dda-3b4f-ba9779c19f17', '4-9 Wolf Scouts', 'Wolf Scout w/ special weapon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('32c06f47-0e38-2c3e-6198-69aeb1143052', '46508f25-3def-c901-ed8e-41492ee211aa', 'Venerable Dreadnought', 'vehicle', '8"', 9, '2+', 8, 6, 3, '{"Vehicle", "Walker", "Smoke", "Imperium", "Dreadnought", "Venerable Dreadnought"}', 3);
@@ -13670,6 +14308,11 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('4833d67a-054e-7fff-177f-5bf609775297', 'Hammer Blow', 'unique', 'In the Fight phase, after this unit has fought, select one enemy MONSTER or VEHICLE unit hit by one or more of those attacks. Until the end of the next turn, that enemy unit is suppressed. While a unit is suppressed, each time a model in that unit makes an attack, subtract 1 from the Hit roll.'),
   ('4833d67a-054e-7fff-177f-5bf609775297', 'Oath of Moment', 'faction', '');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('cddba189-5a0a-3114-143e-1b1053b6de7b', '4833d67a-054e-7fff-177f-5bf609775297', 'Wulfen', 'Wulfen w/Death Totem', true, 0),
+  ('6063f044-16ba-81cb-9ff0-7bc6675d8668', '4833d67a-054e-7fff-177f-5bf609775297', 'Wulfen', 'Wulfen w/Auto-launcher', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('d7f68f8a-a918-b7a0-4168-0bf266a5f19a', '46508f25-3def-c901-ed8e-41492ee211aa', 'Wolf Scouts', 'infantry', '7"', 4, '3+', 2, 6, 1, '{"Infantry", "Smoke", "Imperium", "Phobos", "Wolf Scouts"}', 3);
@@ -13988,7 +14631,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('f8ad285c-7cd6-ac4e-f523-d053e63c2aa4', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Fabius Bile', 'epic_hero', '6"', 4, '3+', 5, 6, 1, '{"Epic Hero"}', 1);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('f8ad285c-7cd6-ac4e-f523-d053e63c2aa4', 1, 100);
+  ('f8ad285c-7cd6-ac4e-f523-d053e63c2aa4', 2, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('f8ad285c-7cd6-ac4e-f523-d053e63c2aa4', 'Xyclos needler', 'ranged', '18"', '3', '2+', 2, -1, '2', '{"Anti-INFANTRY 2+", "Pistol"}'),
@@ -14256,7 +14899,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('20b09fcc-53ec-cec4-3434-1bce2d55cea2', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Dark Apostle', 'character', '6"', 4, '3+', 4, 5, 1, '{"Character", "Infantry", "Chaos"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('20b09fcc-53ec-cec4-3434-1bce2d55cea2', 1, 65);
+  ('20b09fcc-53ec-cec4-3434-1bce2d55cea2', 3, 65);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('20b09fcc-53ec-cec4-3434-1bce2d55cea2', 'Accursed crozius', 'melee', NULL, '5', '2+', 6, -1, '2', '{}'),
@@ -14273,6 +14916,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('20b09fcc-53ec-cec4-3434-1bce2d55cea2', 'Demagogue', 'unique', 'Once per battle, at the start of any phase, you can select one friendly HERETIC ASTARTES unit that is Battle-shocked and within 9" of this unit’s DARK APOSTLE model. That unit is no longer Battle-shocked.'),
   ('20b09fcc-53ec-cec4-3434-1bce2d55cea2', 'Malign Sacrifice', 'unique', 'At the start of the Fight phase, if this unit contains one or more Dark Disciple models, you can select one of those models and one enemy unit within Engagement Range of this unit, then roll one D6: on a 2-5, that enemy unit suffers 1 mortal wound; on a 6, that enemy unit suffers D3 mortal wounds. That Dark Disciple model is then destroyed.'),
   ('20b09fcc-53ec-cec4-3434-1bce2d55cea2', 'Invulnerable Save', 'invulnerable', 'Models in this unit have a 4+ invulnerable save.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('e70d78e7-bb24-c585-40ff-a688b34df9d0', '20b09fcc-53ec-cec4-3434-1bce2d55cea2', 'Dark Apostle wargear', 'Accursed crozius', true, 0),
+  ('6965b6fe-0e8c-56d6-7eb9-76ee5ac27ff8', '20b09fcc-53ec-cec4-3434-1bce2d55cea2', 'Dark Apostle wargear', 'Bolt pistol', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('0515dfcf-344d-0173-fec7-9dedbd9efad4', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Dark Commune', 'character', '6"', 3, '6+', 1, 7, 1, '{"Character", "Damned", "Infantry", "Dark Commune", "Chaos"}', 3);
@@ -14296,11 +14944,17 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('0515dfcf-344d-0173-fec7-9dedbd9efad4', 'Faithful Flock', 'unique', 'While this unit is leading a unit and contains a CULT DEMAGOGUE model, models in that unit have a 5+ invulnerable save.'),
   ('0515dfcf-344d-0173-fec7-9dedbd9efad4', 'Dark Ritual', 'unique', 'Once per battle, in your Command phase, if this unit contains a CULT DEMAGOGUE model, it can use this ability. If it does, until the end of the turn, this unit can declare a charge in a turn in which it Advanced and each time a model in this unit makes an attack, add 1 to the Hit roll and add 1 to the Wound roll.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('cb330b28-4cbd-1295-fcc5-7cbf5f6dbbb6', '0515dfcf-344d-0173-fec7-9dedbd9efad4', 'Dark Commune', 'Blessed Blades', false, 0),
+  ('72ff3759-8646-05be-2a22-a75749f810ed', '0515dfcf-344d-0173-fec7-9dedbd9efad4', 'Dark Commune', 'Iconarch', false, 0),
+  ('9f5382a9-4789-560b-aa6b-57ccb98d3ea2', '0515dfcf-344d-0173-fec7-9dedbd9efad4', 'Dark Commune', 'Mindwitch', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('1c926959-6bb2-0694-212a-b6880fb49db4', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Legionaries', 'battleline', '6"', 4, '3+', 2, 6, 2, '{"Infantry", "Battleline", "Chaos", "Legionaries"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('1c926959-6bb2-0694-212a-b6880fb49db4', 4, 90),
+  ('1c926959-6bb2-0694-212a-b6880fb49db4', 5, 90),
   ('1c926959-6bb2-0694-212a-b6880fb49db4', 6, 170);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -14320,11 +14974,30 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('1c926959-6bb2-0694-212a-b6880fb49db4', 'Veterans of the Long War', 'unique', 'Each time a model in this unit targets an enemy unit with a melee attack, re-roll a Wound roll of 1. If that enemy unit is within range of an objective marker, you can re-roll the Wound roll instead.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('25e0fa35-a48c-83a4-fc5b-7d98441c5f0c', '1c926959-6bb2-0694-212a-b6880fb49db4', 'Aspiring Champion wargear', 'Close combat weapon', true, 0),
+  ('1ce1e4a5-43be-28c0-f611-469bf5dc7e77', '1c926959-6bb2-0694-212a-b6880fb49db4', 'Aspiring Champion: Replace bolt pistol', 'Accursed weapon', true, 0),
+  ('2ab8f434-a4ba-2fde-b034-94286daa7f63', '1c926959-6bb2-0694-212a-b6880fb49db4', 'Aspiring Champion: Replace bolt pistol', 'Astartes chainsword', false, 0),
+  ('0dba21bb-ef73-8d57-dc49-c1c1fa1bfc22', '1c926959-6bb2-0694-212a-b6880fb49db4', 'Aspiring Champion: Replace bolt pistol', 'Heavy melee weapon', false, 0),
+  ('1ada51df-7064-9981-c429-de59a8a257ba', '1c926959-6bb2-0694-212a-b6880fb49db4', 'Aspiring Champion: Replace bolt pistol', 'Bolt pistol', false, 0),
+  ('0970cd46-a0a3-7ca1-fe7c-f3887d70e4b2', '1c926959-6bb2-0694-212a-b6880fb49db4', 'Aspiring Champion: Replace bolt pistol', 'Plasma pistol', false, 0),
+  ('28111fad-7f45-066f-9ed6-a9ac3f23c58c', '1c926959-6bb2-0694-212a-b6880fb49db4', 'Aspiring Champion: Replace boltgun', 'Accursed weapon', true, 0),
+  ('edd2ccd0-5918-6c1c-804d-93b0835ccb70', '1c926959-6bb2-0694-212a-b6880fb49db4', 'Aspiring Champion: Replace boltgun', 'Astartes chainsword', false, 0),
+  ('b178a606-f4cc-d69d-cb14-d65a764c4da1', '1c926959-6bb2-0694-212a-b6880fb49db4', 'Aspiring Champion: Replace boltgun', 'Heavy melee weapon', false, 0),
+  ('2ee7e2a0-225e-98b8-d493-55efff083d97', '1c926959-6bb2-0694-212a-b6880fb49db4', 'Aspiring Champion: Replace boltgun', 'Boltgun', false, 0),
+  ('0ff37ce0-31e0-bc24-d24a-a0b76ab97030', '1c926959-6bb2-0694-212a-b6880fb49db4', 'Aspiring Champion: Replace boltgun', 'Plasma pistol', false, 0),
+  ('2c73fdc0-02a3-c56a-35c7-7f0d709d7397', '1c926959-6bb2-0694-212a-b6880fb49db4', '4 - 9 Legionaries', 'Legionary w/ boltgun', true, 0),
+  ('d9761750-dee0-dc89-30b1-066167ef3727', '1c926959-6bb2-0694-212a-b6880fb49db4', '4 - 9 Legionaries', 'Legionary w/ chainsword', false, 0),
+  ('7f63b5c5-f0d6-61f8-3b06-984b59a3bd2c', '1c926959-6bb2-0694-212a-b6880fb49db4', '4 - 9 Legionaries', 'Legionary w/ heavy melee weapon', false, 0),
+  ('f642456e-a177-bb51-c007-b6ad3e7fa6f1', '1c926959-6bb2-0694-212a-b6880fb49db4', '4 - 9 Legionaries', 'Legionary w/ balefire tome', false, 0),
+  ('3bc0da5f-0fd4-5404-8b82-156a08e40135', '1c926959-6bb2-0694-212a-b6880fb49db4', '4 - 9 Legionaries', 'Legionary w/ other weapon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('60210570-299e-328c-cbb4-eea504b8dc1c', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Cultist Mob', 'battleline', '6"', 3, '6+', 1, 7, 1, '{"Infantry", "Battleline", "Chaos", "Cultist Mob", "Damned"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('60210570-299e-328c-cbb4-eea504b8dc1c', 1, 50),
+  ('60210570-299e-328c-cbb4-eea504b8dc1c', 10, 50),
   ('60210570-299e-328c-cbb4-eea504b8dc1c', 11, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -14339,7 +15012,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('7ca31257-9491-1792-4a53-62c3aacec288', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Accursed Cultists', 'infantry', '6"', 4, '6+', 3, 7, 1, '{"Infantry", "Chaos", "Accursed Cultists", "Damned"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('7ca31257-9491-1792-4a53-62c3aacec288', 1, 90),
+  ('7ca31257-9491-1792-4a53-62c3aacec288', 8, 90),
   ('7ca31257-9491-1792-4a53-62c3aacec288', 9, 195);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -14368,6 +15041,17 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('7677491e-34e5-da7e-7dd0-d86ccfab0703', 'Despoilers', 'unique', 'Each time this unit makes a Dark Pact, until the end of the phase, each time a model in this unit makes an attack, you can re-roll the Hit roll.'),
   ('7677491e-34e5-da7e-7dd0-d86ccfab0703', 'Invulnerable Save', 'invulnerable', 'Models in this unit have a 4+ invulnerable save.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('010aacc0-d0ed-40c2-b165-a1e4c52af91e', '7677491e-34e5-da7e-7dd0-d86ccfab0703', '4-9 Chaos Terminators', 'Accursed weapon and combi-bolter', true, 0),
+  ('77bed7e3-ff8d-3369-758a-0fe01c28d8ad', '7677491e-34e5-da7e-7dd0-d86ccfab0703', '4-9 Chaos Terminators', 'Accursed weapon and combi-weapon', false, 0),
+  ('4fda84e9-b697-6c51-55d1-ba632d87d9e6', '7677491e-34e5-da7e-7dd0-d86ccfab0703', '4-9 Chaos Terminators', 'Power fist and combi-weapon', false, 0),
+  ('d14a0fac-84c4-bf2a-6527-3d5d88016c3d', '7677491e-34e5-da7e-7dd0-d86ccfab0703', '4-9 Chaos Terminators', 'Chainfist and combi-bolter', false, 0),
+  ('91999586-7914-1c30-96ec-42d29be9546f', '7677491e-34e5-da7e-7dd0-d86ccfab0703', '4-9 Chaos Terminators', 'Heavy weapon', false, 0),
+  ('c9d5f0c1-d350-2f77-17b5-fd92d8246689', '7677491e-34e5-da7e-7dd0-d86ccfab0703', '4-9 Chaos Terminators', 'Power fist and combi-bolter', false, 0),
+  ('57d95a36-f699-8c98-bc44-fada3543c691', '7677491e-34e5-da7e-7dd0-d86ccfab0703', '4-9 Chaos Terminators', 'Chainfist and combi-weapon', false, 0),
+  ('54a786ed-0f10-cad4-f864-8de0c176e82e', '7677491e-34e5-da7e-7dd0-d86ccfab0703', '4-9 Chaos Terminators', 'Paired accursed weapons', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('57d5d25c-f83c-e5aa-8353-fdeb92a532ad', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Master of Executions', 'character', '6"', 4, '3+', 4, 6, 1, '{"Infantry", "Character", "Chaos", "Master of Executions"}', 3);
@@ -14424,11 +15108,22 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('a920fa52-60bf-1ab7-8a50-215eaa3bd6e0', 'Chosen Marauders', 'unique', 'This unit is eligible to shoot and declare a charge in a turn in which it Advanced or Fell Back.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('8940c612-cf82-ee92-a46f-baf1205d4662', 'a920fa52-60bf-1ab7-8a50-215eaa3bd6e0', '4-9 Chosen', 'Chosen w/ boltgun', true, 0),
+  ('4f730694-3d5f-a6b9-82c9-53bd25f846c1', 'a920fa52-60bf-1ab7-8a50-215eaa3bd6e0', '4-9 Chosen', 'Chosen w/ boltgun and plasma pistol', false, 0),
+  ('832f4acb-cc43-c522-0a78-1cb69fbdee3e', 'a920fa52-60bf-1ab7-8a50-215eaa3bd6e0', '4-9 Chosen', 'Chosen w/ combi-weapon and bolt pistol', false, 0),
+  ('49344cfb-c6c1-0f51-e8ff-6074801b0439', 'a920fa52-60bf-1ab7-8a50-215eaa3bd6e0', '4-9 Chosen', 'Chosen w/ paired accursed weapons and plasma pistol', false, 0),
+  ('1b6da0ef-bfc1-6d67-6c72-6825a8a481be', 'a920fa52-60bf-1ab7-8a50-215eaa3bd6e0', '4-9 Chosen', 'Chosen w/ power fist and bolt pistol', false, 0),
+  ('4bc48d41-dcc3-0fec-8e5b-3f27124f71ad', 'a920fa52-60bf-1ab7-8a50-215eaa3bd6e0', '4-9 Chosen', 'Chosen w/ combi-weapon and plasma pistol', false, 0),
+  ('1938f0cd-4d1f-874d-0fae-77c12a4ee969', 'a920fa52-60bf-1ab7-8a50-215eaa3bd6e0', '4-9 Chosen', 'Chosen w/ paired accursed weapons and bolt pistol', false, 0),
+  ('5200e07a-e977-40dd-1584-86c323ad24cd', 'a920fa52-60bf-1ab7-8a50-215eaa3bd6e0', '4-9 Chosen', 'Chosen w/ power fist and plasma pistol', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('2b965fa1-3332-16a6-bcb3-b85cd92b3a51', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Noise Marines', 'infantry', '6"', 5, '3+', 2, 6, 1, '{"Infantry", "Chaos", "Slaanesh", "Noise Marines", "Cults of the Dark Gods"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('2b965fa1-3332-16a6-bcb3-b85cd92b3a51', 5, 145);
+  ('2b965fa1-3332-16a6-bcb3-b85cd92b3a51', 6, 145);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('2b965fa1-3332-16a6-bcb3-b85cd92b3a51', 'Power sword', 'melee', NULL, '4', '3+', 5, -2, '1', '{}'),
@@ -14441,6 +15136,14 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('2b965fa1-3332-16a6-bcb3-b85cd92b3a51', 'Terrifying Crescendo', 'unique', 'In your Shooting phase, after this unit has shot, select one enemy unit hit by one or more of those attacks. Until the start of your next Shooting phase, each time a Battle-shock or Leadership test is taken for that enemy unit, subtract 1 from that test.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('d6d6721a-9277-c13c-3d4d-41413217864f', '2b965fa1-3332-16a6-bcb3-b85cd92b3a51', 'Disharmonist wargear', 'Close combat weapon', true, 0),
+  ('9c03cdea-3113-5c95-9720-667a5cc13b65', '2b965fa1-3332-16a6-bcb3-b85cd92b3a51', 'Disharmonist: Replace sonic blaster', 'Screamer pistol and power sword', true, 0),
+  ('9cf6f955-450e-b873-9231-68fd1292bd46', '2b965fa1-3332-16a6-bcb3-b85cd92b3a51', 'Disharmonist: Replace sonic blaster', 'Sonic blaster', false, 0),
+  ('5a9b52a4-66c5-ebc2-735d-1c70bc8d0faa', '2b965fa1-3332-16a6-bcb3-b85cd92b3a51', '5 Noise Marines', 'Noise Marine w/ sonic blaster', true, 0),
+  ('22214f25-4bbd-6f6a-f47e-b73db5a52645', '2b965fa1-3332-16a6-bcb3-b85cd92b3a51', '5 Noise Marines', 'Noise Marine w/ blastmaster', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('3831bd35-392c-fe8f-2bce-150375e40995', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Venomcrawler', 'vehicle', '12"', 9, '3+', 9, 6, 3, '{"Vehicle", "Walker", "Chaos", "Daemon", "Venomcrawler"}', 3);
@@ -14466,7 +15169,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('e5bddbbd-1ad3-5e1a-07c0-e7a6fa0bc869', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Chaos Bikers', 'mounted', '12"', 5, '3+', 3, 6, 2, '{"Mounted", "Chaos", "Chaos Bikers"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('e5bddbbd-1ad3-5e1a-07c0-e7a6fa0bc869', 2, 70),
+  ('e5bddbbd-1ad3-5e1a-07c0-e7a6fa0bc869', 3, 70),
   ('e5bddbbd-1ad3-5e1a-07c0-e7a6fa0bc869', 4, 130);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -14480,11 +15183,23 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('e5bddbbd-1ad3-5e1a-07c0-e7a6fa0bc869', 'Rapid Assault', 'unique', 'Each time a model in this unit makes a melee attack, if this unit made a Charge move this turn, improve the Strength characteristic of that attack by 1.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('800dc417-ba89-3d8d-2ea7-ae3c5db26662', 'e5bddbbd-1ad3-5e1a-07c0-e7a6fa0bc869', 'Biker Champion wargear', 'Combi-bolter', true, 0),
+  ('7dd0fb92-ba03-932f-78ff-b4c14f3adc26', 'e5bddbbd-1ad3-5e1a-07c0-e7a6fa0bc869', 'Biker Champion wargear', 'Close combat weapon', false, 0),
+  ('d75ed520-8c8e-622d-305c-ffde5dd72ce3', 'e5bddbbd-1ad3-5e1a-07c0-e7a6fa0bc869', 'Biker Champion: Replace bolt pistol', 'Accursed weapon', true, 0),
+  ('2f69e842-f3dc-9a9b-761f-3b483aa553aa', 'e5bddbbd-1ad3-5e1a-07c0-e7a6fa0bc869', 'Biker Champion: Replace bolt pistol', 'Astartes chainsword', false, 0),
+  ('f8f8c53d-c1f9-d6c4-e1e3-d85f9c0448ef', 'e5bddbbd-1ad3-5e1a-07c0-e7a6fa0bc869', 'Biker Champion: Replace bolt pistol', 'Bolt pistol', false, 0),
+  ('a6358612-ade5-d437-a968-0dbd5aa19225', 'e5bddbbd-1ad3-5e1a-07c0-e7a6fa0bc869', 'Biker Champion: Replace bolt pistol', 'Plasma pistol', false, 0),
+  ('9d7cab93-10be-68bb-fbcb-f6579356a65d', 'e5bddbbd-1ad3-5e1a-07c0-e7a6fa0bc869', 'Biker Champion: Replace bolt pistol', 'Power fist', false, 0),
+  ('28b81fad-fc63-e6f9-5f2d-3284c81e6945', 'e5bddbbd-1ad3-5e1a-07c0-e7a6fa0bc869', '2-5 Bikers', 'Biker w/ combi-bolter and bolt pistol', true, 0),
+  ('2b43373a-6565-c53d-dbeb-145f2688074b', 'e5bddbbd-1ad3-5e1a-07c0-e7a6fa0bc869', '2-5 Bikers', 'Biker w/ combi-bolter and chainsword', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('e1420e86-7501-371d-151a-5ab9c6fb7c6e', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Raptors', 'infantry', '12"', 4, '3+', 2, 6, 1, '{"Infantry", "Fly", "Jump Pack", "Chaos", "Raptors"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('e1420e86-7501-371d-151a-5ab9c6fb7c6e', 4, 110),
+  ('e1420e86-7501-371d-151a-5ab9c6fb7c6e', 5, 110),
   ('e1420e86-7501-371d-151a-5ab9c6fb7c6e', 6, 210);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -14497,6 +15212,18 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('e1420e86-7501-371d-151a-5ab9c6fb7c6e', 'Fearsome (Aura)', 'unique', 'While an enemy unit is within 6" of this unit, each time that enemy unit takes a Battle-shock or Leadership test, subtract 1 from the result.'),
   ('e1420e86-7501-371d-151a-5ab9c6fb7c6e', 'Terrifying Assault', 'unique', 'At the start of the Fight phase, each enemy unit within Engagement Range of one or more units with this ability must take a Battle-shock test.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('6b350825-e9ac-1158-b012-b1a5c9310bdc', 'e1420e86-7501-371d-151a-5ab9c6fb7c6e', 'Raptor Champion: Melee weapon', 'Astartes chainsword', true, 0),
+  ('6687ad7f-9b05-bcaa-c915-0ae88fa6c468', 'e1420e86-7501-371d-151a-5ab9c6fb7c6e', 'Raptor Champion: Melee weapon', 'Accursed weapon', false, 0),
+  ('cb154d08-6188-06ce-ac50-fcde60352ce5', 'e1420e86-7501-371d-151a-5ab9c6fb7c6e', 'Raptor Champion: Melee weapon', 'Heavy melee weapon', false, 0),
+  ('d7943c40-b09d-8b6d-e586-1d52a26c5fdc', 'e1420e86-7501-371d-151a-5ab9c6fb7c6e', 'Raptor Champion: Pistol', 'Bolt pistol', true, 0),
+  ('fcafab6b-29fc-b8f8-e429-43019277cdef', 'e1420e86-7501-371d-151a-5ab9c6fb7c6e', 'Raptor Champion: Pistol', 'Plasma pistol', false, 0),
+  ('e1ce665e-be0f-4257-379b-9198a3f89746', 'e1420e86-7501-371d-151a-5ab9c6fb7c6e', '4-9 Raptors', 'Raptor', true, 0),
+  ('0d362096-ade9-9987-1877-df106fd2ad2e', 'e1420e86-7501-371d-151a-5ab9c6fb7c6e', '4-9 Raptors', 'Raptor w/ plasma pistol', false, 0),
+  ('607aa6c6-394a-50f8-8af9-6e4efe6cba50', 'e1420e86-7501-371d-151a-5ab9c6fb7c6e', '4-9 Raptors', 'Raptor w/ heavy melee weapon', false, 0),
+  ('2100ddc5-d687-1712-e81b-463f8e6691ca', 'e1420e86-7501-371d-151a-5ab9c6fb7c6e', '4-9 Raptors', 'Raptor w/ mutations', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('aba9dc72-59c8-8fce-2c96-50306183a8b8', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Warp Talons', 'infantry', '12"', 4, '3+', 2, 6, 1, '{"Infantry", "Fly", "Jump Pack", "Chaos", "Daemon", "Warp Talons"}', 3);
@@ -14513,11 +15240,16 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('aba9dc72-59c8-8fce-2c96-50306183a8b8', 'Warp Strike', 'unique', 'At the end of the Fight phase, if this unit destroyed one or more enemy units this phase and is not within Engagement Range of one or more enemy units, you can remove this unit from the battlefield and place it into Strategic Reserves.'),
   ('aba9dc72-59c8-8fce-2c96-50306183a8b8', 'Invulnerable Save (5+)', 'invulnerable', 'Models in this unit have a 5+ invulnerable save.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('37d00933-f04d-f838-ae70-af018307a01b', 'aba9dc72-59c8-8fce-2c96-50306183a8b8', '5-10 Warp Talons', 'Warp Talon Champion', true, 0),
+  ('a1848774-1d58-24e5-5d69-1e3a994a74d3', 'aba9dc72-59c8-8fce-2c96-50306183a8b8', '5-10 Warp Talons', 'Warp Talon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('a152a999-491c-3d36-89cd-a2a091e95970', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Havocs', 'infantry', '5"', 5, '3+', 2, 6, 1, '{"Infantry", "Chaos", "Havocs"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('a152a999-491c-3d36-89cd-a2a091e95970', 4, 125);
+  ('a152a999-491c-3d36-89cd-a2a091e95970', 5, 125);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('a152a999-491c-3d36-89cd-a2a091e95970', 'Power fist', 'melee', NULL, '3', '3+', 8, -2, '2', '{}'),
@@ -14534,11 +15266,29 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('a152a999-491c-3d36-89cd-a2a091e95970', 'Stabilisation Talons', 'unique', 'Each time a model in this unit makes an attack with a ranged weapon, you can ignore any or all modifiers to the Hit roll and any or all modifiers to the Ballistic Skill characteristic of that weapon.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('91aa16e4-618e-2ecf-4f08-e25fb6de83d6', 'a152a999-491c-3d36-89cd-a2a091e95970', 'Havoc Champion: Melee weapon', 'Accursed weapon', true, 0),
+  ('efc84a5d-daa5-bf58-6959-51647c7c2b40', 'a152a999-491c-3d36-89cd-a2a091e95970', 'Havoc Champion: Melee weapon', 'Power fist', false, 0),
+  ('456849fa-843e-12bf-8445-4321a5dd856c', 'a152a999-491c-3d36-89cd-a2a091e95970', 'Havoc Champion: Melee weapon', 'Astartes chainsword', false, 0),
+  ('31c58eab-ec9c-6b70-66cd-79d5ae324da3', 'a152a999-491c-3d36-89cd-a2a091e95970', 'Havoc Champion: Ranged weapon', 'Flamer', true, 0),
+  ('ddb7de8b-4956-0966-48c0-826696ac8c43', 'a152a999-491c-3d36-89cd-a2a091e95970', 'Havoc Champion: Ranged weapon', 'Plasma gun', false, 0),
+  ('9fb19fa3-7b56-cbdc-ffdd-306ba98f273d', 'a152a999-491c-3d36-89cd-a2a091e95970', 'Havoc Champion: Ranged weapon', 'Plasma pistol', false, 0),
+  ('3967e974-a980-b108-54b0-a610aa698478', 'a152a999-491c-3d36-89cd-a2a091e95970', 'Havoc Champion: Ranged weapon', 'Accursed weapon', false, 0),
+  ('0d04e63a-9568-7323-45ce-722eef7e28d4', 'a152a999-491c-3d36-89cd-a2a091e95970', 'Havoc Champion: Ranged weapon', 'Power fist', false, 0),
+  ('55397886-e3cf-2e98-babf-ec830e48fb75', 'a152a999-491c-3d36-89cd-a2a091e95970', 'Havoc Champion: Ranged weapon', 'Boltgun', false, 0),
+  ('380351e3-fcb4-5af9-6977-f9adfd867468', 'a152a999-491c-3d36-89cd-a2a091e95970', 'Havoc Champion: Ranged weapon', 'Meltagun', false, 0),
+  ('81d2cf19-bc6f-d8fd-340d-c4001eb52224', 'a152a999-491c-3d36-89cd-a2a091e95970', '4 Havocs', 'Havoc w/ autocannon', false, 0),
+  ('b9fe4fc4-1edb-367c-21ab-fe02932e4f82', 'a152a999-491c-3d36-89cd-a2a091e95970', '4 Havocs', 'Havoc w/ lascannon', false, 0),
+  ('659444e9-d662-c26b-b475-d08bd9bb0c3e', 'a152a999-491c-3d36-89cd-a2a091e95970', '4 Havocs', 'Havoc w/ missile launcher', false, 0),
+  ('16ee06c0-eb80-aaed-a118-b345d8202cef', 'a152a999-491c-3d36-89cd-a2a091e95970', '4 Havocs', 'Havoc w/ reaper chaincannon', false, 0),
+  ('3cba087d-f7b5-e175-642f-078a371dee79', 'a152a999-491c-3d36-89cd-a2a091e95970', '4 Havocs', 'Havoc w/ heavy bolter', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('6b2da25f-6692-943a-4269-13694c74ddfa', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Obliterators', 'infantry', '4"', 7, '2+', 5, 6, 2, '{"Infantry", "Chaos", "Daemon", "Obliterators"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('6b2da25f-6692-943a-4269-13694c74ddfa', 1, 160),
+  ('6b2da25f-6692-943a-4269-13694c74ddfa', 2, 160),
   ('6b2da25f-6692-943a-4269-13694c74ddfa', 3, 360);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -14551,6 +15301,11 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('6b2da25f-6692-943a-4269-13694c74ddfa', 'Warp Rift Firepower', 'unique', 'Once per battle, during the Shooting phase, this unit can use this ability. If it does, until the end of the phase, ranged weapons equipped by models in this unit have the [INDIRECT FIRE] ability.'),
   ('6b2da25f-6692-943a-4269-13694c74ddfa', 'Invulnerable Save', 'invulnerable', 'Models in this unit have a 5+ invulnerable save.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('52e52da8-568f-6d8b-a815-41ae277d9f4d', '6b2da25f-6692-943a-4269-13694c74ddfa', 'Obliterator wargear', 'Crushing fists', true, 0),
+  ('d5a9947d-f5a0-e70c-a2ea-ff5a61e392c3', '6b2da25f-6692-943a-4269-13694c74ddfa', 'Obliterator wargear', 'Fleshmetal guns', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('95f3543e-bf67-458b-c50f-3d3f3d929332', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Noctilith Crown', 'fortification', '-', 11, '3+', 14, 6, 1, '{"Fortification", "Chaos", "Noctilith Crown"}', 3);
@@ -14586,7 +15341,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('0eca66f1-e32e-12f9-e761-d57fa9c78887', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Traitor Guardsmen Squad', 'infantry', '6"', 3, '5+', 1, 7, 2, '{"Infantry", "Chaos", "Traitor Guardsmen Squad", "Damned"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('0eca66f1-e32e-12f9-e761-d57fa9c78887', 9, 70);
+  ('0eca66f1-e32e-12f9-e761-d57fa9c78887', 10, 70);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('0eca66f1-e32e-12f9-e761-d57fa9c78887', 'Chainsword', 'melee', NULL, '3', '4+', 3, 0, '1', '{}'),
@@ -14611,7 +15366,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('ab7ec099-5c4e-59f3-1cf9-fc81fc541f10', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Fellgor Beastmen', 'infantry', '6"', 4, '5+', 1, 7, 1, '{"Infantry", "Chaos", "Fellgor Beastmen", "Damned"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('ab7ec099-5c4e-59f3-1cf9-fc81fc541f10', 9, 70);
+  ('ab7ec099-5c4e-59f3-1cf9-fc81fc541f10', 10, 70);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('ab7ec099-5c4e-59f3-1cf9-fc81fc541f10', 'Chainsword', 'melee', NULL, '3', '4+', 4, 0, '1', '{}'),
@@ -14628,11 +15383,17 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('ab7ec099-5c4e-59f3-1cf9-fc81fc541f10', 'Bestial Raiders', 'unique', 'If this unit begins the game in Strategic Reserves, it can be set up in the Reinforcements step of your first, second or third Movement phase, regardless of any mission rules. If this unit is in Strategic Reserves, for the purposes of setting it up on the battlefield, treat the current battle round number as being one higher than it actually is.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('884cadac-0dc1-a510-26d4-71768edccfcf', 'ab7ec099-5c4e-59f3-1cf9-fc81fc541f10', '9 Beastmen', 'Beastman', true, 0),
+  ('24b8976d-0f67-c9e3-9472-932a924f01ed', 'ab7ec099-5c4e-59f3-1cf9-fc81fc541f10', '9 Beastmen', 'Beastman w/ great weapon', false, 0),
+  ('b5383458-2d25-1430-f234-c51b9251cfa9', 'ab7ec099-5c4e-59f3-1cf9-fc81fc541f10', '9 Beastmen', 'Beastman w/ corrupted stave', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('48152a74-fe26-063d-a3ca-fd084dd6e1e1', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Traitor Enforcer', 'character', '6"', 3, '5+', 3, 6, 1, '{"Character", "Damned"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('48152a74-fe26-063d-a3ca-fd084dd6e1e1', 1, 55);
+  ('48152a74-fe26-063d-a3ca-fd084dd6e1e1', 2, 55);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('48152a74-fe26-063d-a3ca-fd084dd6e1e1', 'Power fist', 'melee', NULL, '3', '3+', 6, -2, '2', '{}'),
@@ -14644,6 +15405,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
 ■ TRAITOR GUARDSMAN SQUAD'),
   ('48152a74-fe26-063d-a3ca-fd084dd6e1e1', 'Brutal Example', 'unique', 'Once per turn, while this unit is leading a unit and contains a TRAITOR ENFORCER model, you can target that unit with the Fire Overwatch Stratagem for 0CP, and can do so even if you have already targeted a different unit from your army with that Stratagem this phase. Each time you use this ability, one Bodyguard model in that unit is destroyed.'),
   ('48152a74-fe26-063d-a3ca-fd084dd6e1e1', 'Mutated Bodyguard', 'unique', 'While this unit contains a Traitor Ogryn model, CHARACTER models in this unit have the Feel No Pain 4+ ability.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('93f9235f-e48b-b530-0aed-4ca6174bebee', '48152a74-fe26-063d-a3ca-fd084dd6e1e1', 'Traitor Enforcer wargear', 'Power fist', true, 0),
+  ('ac70c62e-7af7-eb7a-9a1b-86dc1e9de306', '48152a74-fe26-063d-a3ca-fd084dd6e1e1', 'Traitor Enforcer wargear', 'Bolt pistol', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('9769538b-c764-2bc7-1782-bcfcf5d66b72', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Chaos Land Raider', 'vehicle', '10"', 12, '2+', 16, 6, 5, '{"Vehicle", "Transport", "Smoke", "Chaos", "Land Raider"}', 3);
@@ -14931,7 +15697,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('fa6b388d-c392-d36d-4192-da64b3682e0f', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Chaos Spawn', 'beast', '8"', 5, '4+', 4, 7, 1, '{"Beast", "Chaos", "Chaos Spawn"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('fa6b388d-c392-d36d-4192-da64b3682e0f', 1, 70);
+  ('fa6b388d-c392-d36d-4192-da64b3682e0f', 2, 70);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('fa6b388d-c392-d36d-4192-da64b3682e0f', 'Hideous Mutations', 'melee', NULL, 'D6+2', '4+', 5, -1, '2', '{}'),
@@ -14944,7 +15710,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('1b9a98c6-c363-3e23-a927-379ceba93ee9', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Khorne Berzerkers', 'battleline', '8"', 4, '3+', 2, 6, 2, '{"Infantry", "Battleline", "Chaos", "Khorne", "Berzerkers"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('1b9a98c6-c363-3e23-a927-379ceba93ee9', 9, 180);
+  ('1b9a98c6-c363-3e23-a927-379ceba93ee9', 10, 180);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('1b9a98c6-c363-3e23-a927-379ceba93ee9', 'Chainblade', 'melee', NULL, '4', '3+', 4, -1, '1', '{}'),
@@ -14954,11 +15720,17 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('1b9a98c6-c363-3e23-a927-379ceba93ee9', 'Blood Surge', 'unique', 'In your opponent''s Shooting phase, each time an enemy unit has shot, if any models from this unit were destroyed as a result of those attacks, this unit can make a Blood Surge move. To do so, roll one D6 and add 2 to the roll: models in this unit move a number of inches up to this result, but this unit must finish that move as close as possible to the closest enemy unit (excluding ^^**Aircraft^^**). When doing so, those models can be moved within Engagement Range of that enemy unit. This unit cannot make a Blood Surge move while it is Battle-shocked or within Engagement Range of one or more enemy units, and can only make one Blood Surge move per phase.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('18b38f58-7b18-017e-7873-5d76bd0cbb44', '1b9a98c6-c363-3e23-a927-379ceba93ee9', 'Khorne Berzerker Champion wargear', 'Chainblade', true, 0),
+  ('48b04aa8-0923-c2a4-0009-86519f0468ac', '1b9a98c6-c363-3e23-a927-379ceba93ee9', 'Khorne Berzerker Champion: Pistol', 'Plasma pistol', true, 0),
+  ('792c67c7-0dc5-c737-8dd7-862252e4d3ca', '1b9a98c6-c363-3e23-a927-379ceba93ee9', 'Khorne Berzerker Champion: Pistol', 'Bolt pistol', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('e121df64-8b3b-6d1f-d56b-9b8ca83f3680', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Rubric Marines', 'battleline', '6"', 4, '3+', 2, 7, 2, '{"Infantry", "Battleline", "Chaos", "Tzeentch", "Rubric Marines", "Rubricae"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('e121df64-8b3b-6d1f-d56b-9b8ca83f3680', 4, 100);
+  ('e121df64-8b3b-6d1f-d56b-9b8ca83f3680', 5, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('e121df64-8b3b-6d1f-d56b-9b8ca83f3680', 'Force weapon', 'melee', NULL, '3', '3+', 6, -1, 'D3', '{"Psychic"}'),
@@ -14975,11 +15747,21 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('e121df64-8b3b-6d1f-d56b-9b8ca83f3680', 'Bringers of Change', 'unique', 'Each time a model in this unit makes a ranged attack, re-roll a Wound roll of 1. If the target of that attack is within range of an objective marker you do not control, you can re-roll the Wound roll instead.'),
   ('e121df64-8b3b-6d1f-d56b-9b8ca83f3680', 'Invulnerable Save', 'invulnerable', 'Models in this unit have a 5+ invulnerable save.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('6b93bc9b-4681-1100-c8d1-3f977963cc58', 'e121df64-8b3b-6d1f-d56b-9b8ca83f3680', 'Aspiring Sorcerer wargear', 'Force weapon', true, 0),
+  ('a9fa398a-83cf-60f8-6441-b69d6f375922', 'e121df64-8b3b-6d1f-d56b-9b8ca83f3680', 'Aspiring Sorcerer wargear', 'Malefic Curse', false, 0),
+  ('1bea92d4-58cf-4a03-ccc9-eb22332070fd', 'e121df64-8b3b-6d1f-d56b-9b8ca83f3680', 'Aspiring Sorcerer: Pistol', 'Inferno bolt pistol', true, 0),
+  ('7736f17b-9d79-a3a4-2f85-3bc22d514b25', 'e121df64-8b3b-6d1f-d56b-9b8ca83f3680', 'Aspiring Sorcerer: Pistol', 'Warpflame pistol', false, 0),
+  ('b262374f-4b86-497d-6f47-75ea241ef4d4', 'e121df64-8b3b-6d1f-d56b-9b8ca83f3680', '4-9 Rubric Marines', 'Rubric Marine w/ inferno boltgun', true, 0),
+  ('fa5e3d47-2363-0722-efe7-904002b725d0', 'e121df64-8b3b-6d1f-d56b-9b8ca83f3680', '4-9 Rubric Marines', 'Rubric Marine w/ warpflamer', false, 0),
+  ('9d092f1e-8407-40fd-f05a-1bd1f272b9a9', 'e121df64-8b3b-6d1f-d56b-9b8ca83f3680', '4-9 Rubric Marines', 'Rubric Marine w/ soulreaper cannon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('63658230-1a4d-d333-f29d-12a8ec8b9e78', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Plague Marines', 'battleline', '5"', 6, '3+', 2, 6, 2, '{"Infantry", "Battleline", "Chaos", "Nurgle", "Plague Marines"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('63658230-1a4d-d333-f29d-12a8ec8b9e78', 4, 95),
+  ('63658230-1a4d-d333-f29d-12a8ec8b9e78', 5, 95),
   ('63658230-1a4d-d333-f29d-12a8ec8b9e78', 6, 130),
   ('63658230-1a4d-d333-f29d-12a8ec8b9e78', 8, 190);
 
@@ -14998,6 +15780,22 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('63658230-1a4d-d333-f29d-12a8ec8b9e78', 'Infused with the Blessings of Nurgle', 'unique', 'In your Shooting phase, each time this unit is selected to shoot, after this unit has shot, select one enemy unit hit by one or more of those attacks. Until the start of your next turn, that unit is Afflicted.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('ea929558-9053-ac55-630c-970b694f9852', '63658230-1a4d-d333-f29d-12a8ec8b9e78', 'Plague Champion: Plague knives', 'Power fist', true, 0),
+  ('f00ca8d9-7ed5-810f-76c6-599d6ccb2e59', '63658230-1a4d-d333-f29d-12a8ec8b9e78', 'Plague Champion: Plague knives', 'Plague knives', false, 0),
+  ('3a8b2b28-558e-a654-c56c-b8878bd37fa1', '63658230-1a4d-d333-f29d-12a8ec8b9e78', 'Plague Champion: Plague knives', 'Bubotic weapons', false, 0),
+  ('19b0dc2e-8862-0ef8-925d-46ad2c9fe970', '63658230-1a4d-d333-f29d-12a8ec8b9e78', 'Plague Champion: Boltgun', 'Plague bolt pistol', true, 0),
+  ('f61063fa-774e-6788-5eca-3a4dcb3f44cd', '63658230-1a4d-d333-f29d-12a8ec8b9e78', 'Plague Champion: Boltgun', 'Plasma gun', false, 0),
+  ('bd8dcf85-8b6e-f84a-30c4-8a0c3f5c00fe', '63658230-1a4d-d333-f29d-12a8ec8b9e78', 'Plague Champion: Boltgun', 'Boltgun', false, 0),
+  ('dc0ed8c5-8004-83a6-8a63-299e79257cb5', '63658230-1a4d-d333-f29d-12a8ec8b9e78', 'Plague Champion: Boltgun', 'Plasma pistol', false, 0),
+  ('0dfccc0a-ebfd-d1c4-d0f2-f689408427af', '63658230-1a4d-d333-f29d-12a8ec8b9e78', 'Plague Marines', 'Plague Marine w/ bubotic weapons', false, 0),
+  ('223c63bf-4e6b-b2c9-e453-0faa1bed1e5f', '63658230-1a4d-d333-f29d-12a8ec8b9e78', 'Plague Marines', 'Plague Marine w/ heavy plague weapon', false, 0),
+  ('5ebbf5e0-8df6-83b5-7ad8-ad70fb8d6c1e', '63658230-1a4d-d333-f29d-12a8ec8b9e78', 'Plague Marines', 'Plague Marine w/ blight launcher', false, 0),
+  ('b6bad587-aec9-8a24-efe2-3c70c8339268', '63658230-1a4d-d333-f29d-12a8ec8b9e78', 'Plague Marines', 'Plague Marine w/ boltgun', true, 0),
+  ('50f3c0ef-99a8-5779-163e-df535e9f3d09', '63658230-1a4d-d333-f29d-12a8ec8b9e78', 'Plague Marines', 'Plague Marine w/ plague spewer', false, 0),
+  ('8701a059-f0b5-6f96-7742-4ff7ae637901', '63658230-1a4d-d333-f29d-12a8ec8b9e78', 'Plague Marines', 'Plague Marine w/ icon of despair', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('f397832b-f20d-e8c5-0490-c248663952a8', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Heldrake', 'vehicle', '20"+', 9, '3+', 12, 6, 1, '{"Vehicle", "Fly", "Aircraft", "Chaos", "Daemon", "Heldrake"}', 3);
@@ -15397,7 +16195,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('e3163d52-e810-2d09-4f1f-dc4c1ff71bba', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Renegade Heavy Weapons Squad [Legends]', 'infantry', '6"', 3, '5+', 2, 7, 2, '{"Infantry", "Chaos", "Renegade Heavy Weapons Squad", "Damned"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('e3163d52-e810-2d09-4f1f-dc4c1ff71bba', 1, 75);
+  ('e3163d52-e810-2d09-4f1f-dc4c1ff71bba', 3, 75);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('e3163d52-e810-2d09-4f1f-dc4c1ff71bba', 'Renegade firearm', 'ranged', '24"', '1', '4+', 3, 0, '1', '{"Rapid Fire 1"}'),
@@ -15418,7 +16216,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('8c94ac3b-5d6e-7d6a-a66c-da8cbd9842c1', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Renegade Plague Ogryns [Legends]', 'infantry', '5"', 7, '5+', 3, 7, 1, '{"Infantry", "Chaos", "Nurgle", "Renegade Plague Ogryns", "Damned"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('8c94ac3b-5d6e-7d6a-a66c-da8cbd9842c1', 1, 95);
+  ('8c94ac3b-5d6e-7d6a-a66c-da8cbd9842c1', 3, 95);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('8c94ac3b-5d6e-7d6a-a66c-da8cbd9842c1', 'Ogryn plague claws', 'melee', NULL, '3', '3+', 6, -1, '2', '{"Lethal Hits"}'),
@@ -15431,7 +16229,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('9ba9398a-e34b-d947-acf8-139cd73aad2a', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Mutilators [Legends]', 'infantry', '4"', 7, '2+', 4, 6, 2, '{"Infantry", "Chaos", "Daemon", "Mutilators"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('9ba9398a-e34b-d947-acf8-139cd73aad2a', 1, 185);
+  ('9ba9398a-e34b-d947-acf8-139cd73aad2a', 3, 185);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('9ba9398a-e34b-d947-acf8-139cd73aad2a', '➤ Fleshmetal weapons - strike', 'melee', NULL, '4', '3+', 6, -2, '2', '{}'),
@@ -15446,7 +16244,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('49c8cbda-acc4-e97b-19ca-1a56c2ae6a12', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Mutoid Vermin [Legends]', 'infantry', '8"', 2, '7+', 1, 8, 1, '{"Swarm", "Chaos", "Nurgle", "Mutoid Vermin", "Damned"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('49c8cbda-acc4-e97b-19ca-1a56c2ae6a12', 1, 85);
+  ('49c8cbda-acc4-e97b-19ca-1a56c2ae6a12', 16, 85);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('49c8cbda-acc4-e97b-19ca-1a56c2ae6a12', 'Diseased claws and fangs', 'melee', NULL, '2', '4+', 2, 0, '1', '{"Lethal Hits"}');
@@ -15458,7 +16256,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('5575d96d-8804-107d-8da6-9f540db93ee9', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Gellerpox Infected [Legends]', 'infantry', '5"', 5, '6+', 1, 7, 1, '{"Infantry", "Chaos", "Nurgle", "Gellerpox Infected", "Damned"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('5575d96d-8804-107d-8da6-9f540db93ee9', 1, 125);
+  ('5575d96d-8804-107d-8da6-9f540db93ee9', 7, 125);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('5575d96d-8804-107d-8da6-9f540db93ee9', 'Brutal weapons', 'melee', NULL, '2', '4+', 4, 0, '1', '{}'),
@@ -15482,6 +16280,11 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('48fe1bea-3f63-0a36-0231-a670ade29fcb', 'Ogryn Combat Stimms', 'unique', 'Each time a model in this unit is destroyed by a melee attack, if that model has not fought this phase, roll one D6. On a 4+, do not remove it from play; that destroyed model can fight after the attacking model’s unit has finished making its attacks, and is then removed from play.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('19ddbaf2-2407-46ba-b59e-5b172af7f859', '48fe1bea-3f63-0a36-0231-a670ade29fcb', 'Ogryn Brutes', 'Brute w/ Ogryn weapon', true, 0),
+  ('f6b66f16-7c48-2f0c-fe1c-bf352f543cfd', '48fe1bea-3f63-0a36-0231-a670ade29fcb', 'Ogryn Brutes', 'Brute w/ power drill', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('5f49ced9-10c5-cc23-ae67-1d252844f1df', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Rogue Psyker [Legends]', 'character', '6"', 3, '5+', 3, 7, 1, '{"Infantry", "Character", "Psyker", "Chaos", "Rogue Psyker", "Damned"}', 3);
@@ -15514,7 +16317,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('c35077e0-a6a3-64a2-4f30-76371cdfd91a', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Negavolt Cultists [Legends]', 'infantry', '6"', 3, '7+', 1, 7, 1, '{"Infantry", "Chaos", "Negavolt Cultists", "Damned"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('c35077e0-a6a3-64a2-4f30-76371cdfd91a', 1, 55);
+  ('c35077e0-a6a3-64a2-4f30-76371cdfd91a', 4, 55);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('c35077e0-a6a3-64a2-4f30-76371cdfd91a', 'Electro-goads', 'melee', NULL, '3', '3+', 4, 0, '1', '{"Sustained Hits 2"}'),
@@ -15568,7 +16371,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('d3fb4542-c631-732a-df78-362ac7a4c402', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Renegade Ogryn Beast Handler [Legends]', 'beast', '6"', 6, '5+', 4, 7, 1, '{"Beast", "Chaos", "Renegade Ogryn Beast Handler", "Damned"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('d3fb4542-c631-732a-df78-362ac7a4c402', 1, 40);
+  ('d3fb4542-c631-732a-df78-362ac7a4c402', 4, 40);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('d3fb4542-c631-732a-df78-362ac7a4c402', 'Mauler goad and ripper claw', 'melee', NULL, '4', '3+', 6, -1, '2', '{}'),
@@ -15708,7 +16511,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('6b36b77e-a098-3939-556f-68b4a00598f7', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Cultist Mob with Firearms [Legends]', 'battleline', '6"', 3, '6+', 1, 7, 1, '{"Infantry", "Battleline", "Chaos", "Damned", "Cultist Mob with Firearms"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('6b36b77e-a098-3939-556f-68b4a00598f7', 9, 50),
+  ('6b36b77e-a098-3939-556f-68b4a00598f7', 10, 50),
   ('6b36b77e-a098-3939-556f-68b4a00598f7', 11, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -15723,11 +16526,22 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('6b36b77e-a098-3939-556f-68b4a00598f7', 'For the Dark Gods', 'unique', 'At the end of your Command phase, if this unit is within range of an objective marker  you control, that objective marker remains under your control, even if you have no models within range of it, until your opponent controls it at the start or end of any turn.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('aedc7bbc-9be0-7c6b-50f5-2d13fe39b936', '6b36b77e-a098-3939-556f-68b4a00598f7', 'Cultist Champion wargear', 'Bolt pistol and brutal assault weapon', true, 0),
+  ('bcda0908-f804-aed4-dfe2-20171c1580ff', '6b36b77e-a098-3939-556f-68b4a00598f7', 'Cultist Champion wargear', 'Autopistol and brutal assault weapon', false, 0),
+  ('ec288601-6a58-04b9-cf77-76e0a942fdc1', '6b36b77e-a098-3939-556f-68b4a00598f7', 'Cultist Champion wargear', 'Autogun and close combat weapon', false, 0),
+  ('62035294-d379-2d9a-64d5-e32849223a87', '6b36b77e-a098-3939-556f-68b4a00598f7', '9 - 19 Cultists', 'Cultist w/ autopistol and brutal assault weapon', false, 0),
+  ('1c062d8f-75ca-58dd-0460-ae9cc0a9371e', '6b36b77e-a098-3939-556f-68b4a00598f7', '9 - 19 Cultists', 'Cultist w/ autogun and close combat weapon', false, 0),
+  ('f49a607b-7cb7-ac28-eee5-2898449d9620', '6b36b77e-a098-3939-556f-68b4a00598f7', '9 - 19 Cultists', 'Cultist w/ flamer', false, 0),
+  ('9eec6893-21a3-8555-7091-722ecf9d4fa9', '6b36b77e-a098-3939-556f-68b4a00598f7', '9 - 19 Cultists', 'Cultist w/ cultist grenade launcher', false, 0),
+  ('e019649d-2a1c-a08a-0587-b554c65e708a', '6b36b77e-a098-3939-556f-68b4a00598f7', '9 - 19 Cultists', 'Cultist w/ heavy stubber', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('13c930f7-9448-9504-0b1f-efb5352e229d', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Nemesis Claw', 'infantry', '6"', 4, '3+', 2, 6, 1, '{"Infantry", "Psyker", "Nemesis Claw", "Chaos"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('13c930f7-9448-9504-0b1f-efb5352e229d', 4, 110),
+  ('13c930f7-9448-9504-0b1f-efb5352e229d', 5, 110),
   ('13c930f7-9448-9504-0b1f-efb5352e229d', 6, 190);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -15747,11 +16561,27 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('13c930f7-9448-9504-0b1f-efb5352e229d', 'Visions of Suffering (Psychic)', 'unique', 'Each time a model in this unit makes an attack that targets an enemy unit that is below its Starting Strength, add 1 to the Hit roll. If that enemy unit is Below Half-strength, add 1 to the Wound roll as well.'),
   ('13c930f7-9448-9504-0b1f-efb5352e229d', 'Attached Unit', 'unique', 'If a CHARACTER UNIT unit from your army with the Leader ability (excluding EPIC HEROES) can be attached to a LEGIONARIES unit, it can be attached to this unit instead.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('31b2689b-ce0a-d5f9-5d6e-a2d584387b53', '13c930f7-9448-9504-0b1f-efb5352e229d', 'Visionary: Melee weapon', 'Nostraman chainblade', true, 0),
+  ('37a74d11-92d7-a7ec-daea-ed5df58db7c8', '13c930f7-9448-9504-0b1f-efb5352e229d', 'Visionary: Melee weapon', 'Accursed weapon', false, 0),
+  ('bd76cb66-2612-96a3-6c63-77c44730cedf', '13c930f7-9448-9504-0b1f-efb5352e229d', 'Visionary: Melee weapon', 'Power fist', false, 0),
+  ('4f5b4626-3067-8584-f432-dcebc3e5ae3f', '13c930f7-9448-9504-0b1f-efb5352e229d', 'Visionary: Pistol', 'Bolt pistol', true, 0),
+  ('4ae11b75-4b61-8393-4a3b-374eb96fc0e3', '13c930f7-9448-9504-0b1f-efb5352e229d', 'Visionary: Pistol', 'Plasma pistol', false, 0),
+  ('c281d392-a3d4-c1d3-61e0-552f620fd1cf', '13c930f7-9448-9504-0b1f-efb5352e229d', '4 - 9 Legionaries', 'Legionary w/ boltgun', true, 0),
+  ('fc4cf884-11b2-356c-5d33-c82eca9874c3', '13c930f7-9448-9504-0b1f-efb5352e229d', '4 - 9 Legionaries', 'Legionary w/ chainsword', false, 0),
+  ('028525bc-98bd-41e2-dba8-46382e308eff', '13c930f7-9448-9504-0b1f-efb5352e229d', '4 - 9 Legionaries', 'Legionary w/ heavy weapon', false, 0),
+  ('ee471766-c7d0-e778-8877-5f81fe7d0c9f', '13c930f7-9448-9504-0b1f-efb5352e229d', '4 - 9 Legionaries', 'Legionary w/ special weapon', false, 0),
+  ('4ea95983-fed9-c778-5916-a0ebf52fc3ee', '13c930f7-9448-9504-0b1f-efb5352e229d', '4 - 9 Legionaries', 'Legionary w/ accursed weapon', false, 0),
+  ('1d6e5812-3e58-3654-f558-981923a3f02e', '13c930f7-9448-9504-0b1f-efb5352e229d', '4 - 9 Legionaries', 'Legionary w/ Nostraman chainglaive', false, 0),
+  ('6c42762a-5a56-b2c2-ac93-591e437010e7', '13c930f7-9448-9504-0b1f-efb5352e229d', '4 - 9 Legionaries', 'Legionary w/ paired accursed weapons', false, 0),
+  ('996a2ade-94c2-d1e2-f9b7-a63bba784a86', '13c930f7-9448-9504-0b1f-efb5352e229d', '4 - 9 Legionaries', 'Legionary w/ voice eater', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('d908ead6-a027-4332-23a3-02c502e6927f', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Masters of the Maelstrom', 'epic_hero', '6"', 4, '3+', 4, 6, 1, '{"Epic Hero", "Infantry", "Chaos", "Chaos Undivided", "Masters of the Maelstrom"}', 1);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('d908ead6-a027-4332-23a3-02c502e6927f', 1, 115);
+  ('d908ead6-a027-4332-23a3-02c502e6927f', 5, 115);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('d908ead6-a027-4332-23a3-02c502e6927f', 'Absolver bolt pistol', 'ranged', '18"', '1', '3+', 5, -1, '2', '{"Pistol"}'),
@@ -15777,7 +16607,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('8e1886e8-2423-e4df-0315-120b4b6b0c4e', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Red Corsairs Raiders', 'infantry', '6"', 4, '3+', 3, 6, 2, '{"Infantry", "Red Corsairs Raiders", "Chaos"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('8e1886e8-2423-e4df-0315-120b4b6b0c4e', 4, 110),
+  ('8e1886e8-2423-e4df-0315-120b4b6b0c4e', 5, 110),
   ('8e1886e8-2423-e4df-0315-120b4b6b0c4e', 6, 220);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -16174,7 +17004,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('33bb6099-f3d1-667e-3895-c2fe40b6b7bb', '7681fa27-38bd-e56b-fa36-6a2bb17edb46', 'Plague Marines', 'battleline', '5"', 6, '3+', 2, 6, 2, '{"Infantry", "Chaos", "Nurgle", "Battleline", "Plague Marines"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('33bb6099-f3d1-667e-3895-c2fe40b6b7bb', 4, 95),
+  ('33bb6099-f3d1-667e-3895-c2fe40b6b7bb', 5, 95),
   ('33bb6099-f3d1-667e-3895-c2fe40b6b7bb', 6, 130),
   ('33bb6099-f3d1-667e-3895-c2fe40b6b7bb', 8, 190);
 
@@ -16197,11 +17027,27 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('33bb6099-f3d1-667e-3895-c2fe40b6b7bb', 'Infused with the Blessings of Nurgle', 'unique', 'In your Shooting phase, each time this unit is selected to shoot, after this unit has shot, select one enemy unit hit by one or more of those attacks. Until the start of your next turn, that unit is Afflicted.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('0a4cf188-def3-a1f2-f806-4482c5162945', '33bb6099-f3d1-667e-3895-c2fe40b6b7bb', 'Plague Champion: Plague knives options', 'Power fist', true, 0),
+  ('dd91d5e3-6183-fcee-daa3-d9d6bcfd7837', '33bb6099-f3d1-667e-3895-c2fe40b6b7bb', 'Plague Champion: Plague knives options', 'Plague knives', false, 0),
+  ('87aa84e6-cc13-3eb8-bd23-b05656144597', '33bb6099-f3d1-667e-3895-c2fe40b6b7bb', 'Plague Champion: Plague knives options', 'Bubotic weapons', false, 0),
+  ('909417b0-ee78-dbde-b5e2-b1e0f922e6e2', '33bb6099-f3d1-667e-3895-c2fe40b6b7bb', 'Plague Champion: Boltgun options', 'Bolt pistol', true, 0),
+  ('f59c6fbb-91f2-0c3c-c2d5-218db7796431', '33bb6099-f3d1-667e-3895-c2fe40b6b7bb', 'Plague Champion: Boltgun options', 'Boltgun', false, 0),
+  ('bac5f5bd-6c27-f50d-4a96-5a6799fe427a', '33bb6099-f3d1-667e-3895-c2fe40b6b7bb', 'Plague Champion: Boltgun options', 'Plasma gun', false, 0),
+  ('39b0734f-5e29-b1b3-96fc-328c8cac3203', '33bb6099-f3d1-667e-3895-c2fe40b6b7bb', 'Plague Champion: Boltgun options', 'Plasma pistol', false, 0),
+  ('822ddddd-e559-bc70-8e62-c419f8f35dfa', '33bb6099-f3d1-667e-3895-c2fe40b6b7bb', 'Plague Marines', 'Plague Marine w/ bubotic weapons', false, 0),
+  ('6250e442-fb24-2182-d8c5-59db6457a4f9', '33bb6099-f3d1-667e-3895-c2fe40b6b7bb', 'Plague Marines', 'Plague Marine w/ heavy plague weapon', false, 0),
+  ('ab004877-a5a8-f5aa-1d1a-d3d3ed6bb668', '33bb6099-f3d1-667e-3895-c2fe40b6b7bb', 'Plague Marines', 'Plague Marine w/ blight launcher', false, 0),
+  ('bbea492c-879b-719d-e1ef-b9c3839f0f31', '33bb6099-f3d1-667e-3895-c2fe40b6b7bb', 'Plague Marines', 'Plague Marine w/ boltgun', true, 0),
+  ('eb8d928f-a707-71e2-5aa7-92eb92f72d5b', '33bb6099-f3d1-667e-3895-c2fe40b6b7bb', 'Plague Marines', 'Plague Marine w/ plague spewer', false, 0),
+  ('f0aae4c0-b39b-3e1d-4771-08199131d93b', '33bb6099-f3d1-667e-3895-c2fe40b6b7bb', 'Plague Marines', 'Plague Marine w/ icon of despair', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('0d4359e9-e08b-172d-ce2b-9c513f653635', '7681fa27-38bd-e56b-fa36-6a2bb17edb46', 'Death Guard Cultists [Legends]', 'infantry', '6"', 3, '6+', 1, 7, 1, '{"Infantry", "Chaos", "Nurgle", "Cultists"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('0d4359e9-e08b-172d-ce2b-9c513f653635', 9, 50),
+  ('0d4359e9-e08b-172d-ce2b-9c513f653635', 10, 50),
   ('0d4359e9-e08b-172d-ce2b-9c513f653635', 11, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -16211,6 +17057,13 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
   ('0d4359e9-e08b-172d-ce2b-9c513f653635', 'Heavy stubber', 'ranged', '36"', '3', '5+', 4, 0, '1', '{"Rapid Fire 3"}'),
   ('0d4359e9-e08b-172d-ce2b-9c513f653635', '➤ Grenade launcher - frag', 'ranged', '24"', 'D3', '4+', 4, 0, '1', '{"Blast"}'),
   ('0d4359e9-e08b-172d-ce2b-9c513f653635', '➤ Grenade launcher - krak', 'ranged', '24"', '1', '4+', 9, -2, 'D3', '{}');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('a47da405-cf84-ac4a-c3bd-2f0e50b9693e', '0d4359e9-e08b-172d-ce2b-9c513f653635', '9-19 Cultists', 'Cultist', true, 0),
+  ('091af593-50d3-49e4-d22d-6d3b103eeb0d', '0d4359e9-e08b-172d-ce2b-9c513f653635', '9-19 Cultists', 'Cultist w/ flamer', false, 0),
+  ('9fd0aea5-7371-ae56-7395-203e1778f0e8', '0d4359e9-e08b-172d-ce2b-9c513f653635', '9-19 Cultists', 'Cultist w/ heavy stubber', false, 0),
+  ('90e1d224-9fda-c50b-59de-1e0c024e5f09', '0d4359e9-e08b-172d-ce2b-9c513f653635', '9-19 Cultists', 'Cultist w/ grenade launcher', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('94e3c426-f4de-9253-deee-14a5027e602b', '7681fa27-38bd-e56b-fa36-6a2bb17edb46', 'Poxwalkers', 'infantry', '5"', 4, '7+', 1, 8, 1, '{"Infantry", "Chaos", "Nurgle", "Poxwalkers"}', 3);
@@ -16331,7 +17184,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('c094b119-26bf-e905-ce3b-42a0d528ecb6', '7681fa27-38bd-e56b-fa36-6a2bb17edb46', 'Deathshroud Terminators', 'infantry', '5"', 7, '2+', 4, 6, 1, '{"Infantry", "Chaos", "Nurgle", "Deathshroud Terminators", "Terminator"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('c094b119-26bf-e905-ce3b-42a0d528ecb6', 2, 160),
+  ('c094b119-26bf-e905-ce3b-42a0d528ecb6', 3, 160),
   ('c094b119-26bf-e905-ce3b-42a0d528ecb6', 4, 320);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -16392,7 +17245,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('b5aee18f-2903-22c6-4ef2-a7d3595bc9f8', '7681fa27-38bd-e56b-fa36-6a2bb17edb46', 'Blightlord Terminators', 'infantry', '5"', 7, '2+', 3, 6, 1, '{"Infantry", "Chaos", "Nurgle", "Blightlord Terminators", "Terminator"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('b5aee18f-2903-22c6-4ef2-a7d3595bc9f8', 2, 115),
+  ('b5aee18f-2903-22c6-4ef2-a7d3595bc9f8', 3, 115),
   ('b5aee18f-2903-22c6-4ef2-a7d3595bc9f8', 4, 185),
   ('b5aee18f-2903-22c6-4ef2-a7d3595bc9f8', 6, 370);
 
@@ -16410,11 +17263,21 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('b5aee18f-2903-22c6-4ef2-a7d3595bc9f8', 'Invulnerable Save', 'invulnerable', 'Models in this unit have a 4+ invulnerable save.'),
   ('b5aee18f-2903-22c6-4ef2-a7d3595bc9f8', 'Blistering Fusillade', 'unique', 'If this unit has a Starting Strength of 5 or more, or if a ^^**Character^^** is leading this unit, then each time a model in this unit makes a ranged attack that targets an Afflicted unit, improve the Strength and Armour Penetration characteristics of that attack by 1.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('4f1b64a7-2d44-9b02-3f7e-6077509612c9', 'b5aee18f-2903-22c6-4ef2-a7d3595bc9f8', '2-9 Blightlord Terminators', 'Blightlord Terminator w/ combi-bolter', true, 0),
+  ('9652ce20-d81a-7945-b2c9-48f191af317f', 'b5aee18f-2903-22c6-4ef2-a7d3595bc9f8', '2-9 Blightlord Terminators', 'Blightlord Terminator w/ combi-weapon', false, 0),
+  ('e471a29d-7885-de76-f077-7003c94c2590', 'b5aee18f-2903-22c6-4ef2-a7d3595bc9f8', '2-9 Blightlord Terminators', 'Blightlord Terminator w/ plague spewer and CCW', false, 0),
+  ('53bce54a-5050-5c4a-9528-9468d15f3b8e', 'b5aee18f-2903-22c6-4ef2-a7d3595bc9f8', '2-9 Blightlord Terminators', 'Blightlord Terminator w/ flail', false, 0),
+  ('347c4907-38cf-b0b4-22b6-4be8d5562214', 'b5aee18f-2903-22c6-4ef2-a7d3595bc9f8', '2-9 Blightlord Terminators', 'Blightlord Terminator w/ blight launcher', false, 0),
+  ('02a60bdd-46cb-146f-76cd-0c9f85823d3b', 'b5aee18f-2903-22c6-4ef2-a7d3595bc9f8', '2-9 Blightlord Terminators', 'Blightlord Terminator w/ reaper autocannon', false, 0),
+  ('49c28a14-2436-f823-fe38-530cb9fb9cce', 'b5aee18f-2903-22c6-4ef2-a7d3595bc9f8', '2-9 Blightlord Terminators', 'Blightlord Terminator w/ plague spewer and bubotic blade', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('7c934abd-67e3-a2f5-8a0c-264937d997e3', '7681fa27-38bd-e56b-fa36-6a2bb17edb46', 'Chaos Spawn', 'beast', '8"', 7, '4+', 4, 7, 1, '{"Beast", "Chaos", "Nurgle", "Spawn"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('7c934abd-67e3-a2f5-8a0c-264937d997e3', 1, 80);
+  ('7c934abd-67e3-a2f5-8a0c-264937d997e3', 2, 80);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('7c934abd-67e3-a2f5-8a0c-264937d997e3', 'Hideous Mutations', 'melee', NULL, 'D6+2', '4+', 5, -1, '2', '{}');
@@ -16711,7 +17574,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('2fbb90a3-1565-6e8c-6c23-4f8626b9f5f2', '7681fa27-38bd-e56b-fa36-6a2bb17edb46', 'Gellerpox Infected [Legends]', 'infantry', '5"', 5, '6+', 1, 7, 1, '{"Infantry", "Chaos", "Nurgle", "Gellerpox Infected"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('2fbb90a3-1565-6e8c-6c23-4f8626b9f5f2', 1, 125);
+  ('2fbb90a3-1565-6e8c-6c23-4f8626b9f5f2', 7, 125);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('2fbb90a3-1565-6e8c-6c23-4f8626b9f5f2', 'Brutal weapons', 'melee', NULL, '2', '4+', 4, 0, '1', '{}'),
@@ -16768,7 +17631,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('ca7cc575-1af6-8677-6e5f-6353c23c65d4', '7681fa27-38bd-e56b-fa36-6a2bb17edb46', 'Mutoid Vermin [Legends]', 'infantry', '8"', 2, '7+', 1, 8, 1, '{"Swarm", "Chaos", "Nurgle", "Mutoid Vermin"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('ca7cc575-1af6-8677-6e5f-6353c23c65d4', 1, 85);
+  ('ca7cc575-1af6-8677-6e5f-6353c23c65d4', 16, 85);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('ca7cc575-1af6-8677-6e5f-6353c23c65d4', 'Diseased claws and fangs', 'melee', NULL, '2', '4+', 2, 0, '1', '{"Lethal Hits"}');
@@ -16877,7 +17740,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('443c5ff2-3f86-4d77-7553-e78e4902c6e2', '7681fa27-38bd-e56b-fa36-6a2bb17edb46', 'Plaguebearers', 'battleline', '5"', 5, '7+', 2, 7, 2, '{"Infantry", "Battleline", "Chaos", "Daemon", "Nurgle", "Plaguebearers", "Summoned"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('443c5ff2-3f86-4d77-7553-e78e4902c6e2', 1, 110);
+  ('443c5ff2-3f86-4d77-7553-e78e4902c6e2', 10, 110);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('443c5ff2-3f86-4d77-7553-e78e4902c6e2', 'Plaguesword', 'melee', NULL, '2', '3+', 4, -1, '1', '{"Lethal Hits"}');
@@ -16890,7 +17753,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('2c418d84-3d07-ed8f-669f-2c0108ed1ab7', '7681fa27-38bd-e56b-fa36-6a2bb17edb46', 'Plague Drones', 'mounted', '10"', 8, '6+', 5, 7, 2, '{"Mounted", "Fly", "Chaos", "Daemon", "Nurgle", "Summoned", "Plague Drones"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('2c418d84-3d07-ed8f-669f-2c0108ed1ab7', 1, 115),
+  ('2c418d84-3d07-ed8f-669f-2c0108ed1ab7', 3, 115),
   ('2c418d84-3d07-ed8f-669f-2c0108ed1ab7', 4, 230);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -16923,7 +17786,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('242b82ef-9471-1aa8-dad6-9a139bdf448a', '7681fa27-38bd-e56b-fa36-6a2bb17edb46', 'Nurglings', 'infantry', '5"', 3, '7+', 4, 8, 1, '{"Swarm", "Chaos", "Daemon", "Nurgle", "Summoned", "Nurglings"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('242b82ef-9471-1aa8-dad6-9a139bdf448a', 1, 40),
+  ('242b82ef-9471-1aa8-dad6-9a139bdf448a', 3, 40),
   ('242b82ef-9471-1aa8-dad6-9a139bdf448a', 4, 70);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -17186,7 +18049,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('0bebe529-db33-e66f-0043-581b158e1a5e', 'c7aaf3ae-906a-f9ef-bf24-03f6a82dfb44', 'Chaos Spawn', 'beast', '8"', 5, '4+', 4, 7, 1, '{"Beast", "Chaos", "Tzeentch", "Spawn", "Mutant"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('0bebe529-db33-e66f-0043-581b158e1a5e', 1, 65);
+  ('0bebe529-db33-e66f-0043-581b158e1a5e', 2, 65);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('0bebe529-db33-e66f-0043-581b158e1a5e', 'Hideous Mutations', 'melee', NULL, 'D6+2', '4+', 5, -1, '2', '{}');
@@ -17479,7 +18342,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('e39b8daa-4b8f-04da-acf3-932665a75ef1', 'c7aaf3ae-906a-f9ef-bf24-03f6a82dfb44', 'Rubric Marines', 'battleline', '6"', 4, '3+', 2, 7, 2, '{"Infantry", "Battleline", "Chaos", "Tzeentch", "Rubric Marines", "Rubricae"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('e39b8daa-4b8f-04da-acf3-932665a75ef1', 4, 100);
+  ('e39b8daa-4b8f-04da-acf3-932665a75ef1', 5, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('e39b8daa-4b8f-04da-acf3-932665a75ef1', 'Force weapon', 'melee', NULL, '3', '3+', 6, -1, 'D3', '{"Psychic"}'),
@@ -17495,11 +18358,17 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('e39b8daa-4b8f-04da-acf3-932665a75ef1', 'Bringers of Change', 'unique', 'Each time a model in this unit makes a ranged attack, re-roll a Wound roll of 1. If the attack targets a unit within range of an objective marker you do not control, you can re-roll the Wound roll instead.'),
   ('e39b8daa-4b8f-04da-acf3-932665a75ef1', 'Invulnerable Save', 'invulnerable', 'Models in this unit have a 5+ invulnerable save.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('7a953489-c2f9-abec-f64c-88a132cb0866', 'e39b8daa-4b8f-04da-acf3-932665a75ef1', '4-9 Rubric Marines', 'Rubric Marine w/ inferno boltgun', true, 0),
+  ('880cf616-3e11-5b04-bf1c-c97df9726c12', 'e39b8daa-4b8f-04da-acf3-932665a75ef1', '4-9 Rubric Marines', 'Rubric Marine w/ warpflamer', false, 0),
+  ('fa1e0612-99b9-faa4-fe83-b47d74347640', 'e39b8daa-4b8f-04da-acf3-932665a75ef1', '4-9 Rubric Marines', 'Rubric Marine w/ soulreaper cannon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('436da648-b9d9-742a-ebd0-76c9b598aac0', 'c7aaf3ae-906a-f9ef-bf24-03f6a82dfb44', 'Scarab Occult Terminators', 'infantry', '5"', 5, '2+', 3, 7, 1, '{"Infantry", "Chaos", "Tzeentch", "Scarab Occult", "Rubricae", "Terminator"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('436da648-b9d9-742a-ebd0-76c9b598aac0', 4, 180);
+  ('436da648-b9d9-742a-ebd0-76c9b598aac0', 5, 180);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('436da648-b9d9-742a-ebd0-76c9b598aac0', 'Force weapon', 'melee', NULL, '4', '3+', 6, -1, 'D3', '{"Psychic"}'),
@@ -17617,7 +18486,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('07523b44-fc08-670a-441d-8c7f30e72ece', 'c7aaf3ae-906a-f9ef-bf24-03f6a82dfb44', 'Tzaangor Enlightened', 'mounted', '10"', 4, '5+', 2, 7, 2, '{"Mounted", "Fly", "Chaos", "Tzeentch", "Tzaangor Enlightened", "Mutant"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('07523b44-fc08-670a-441d-8c7f30e72ece', 2, 45);
+  ('07523b44-fc08-670a-441d-8c7f30e72ece', 3, 45);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('07523b44-fc08-670a-441d-8c7f30e72ece', 'Autopistol', 'ranged', '12"', '1', '4+', 3, 0, '1', '{"Pistol"}'),
@@ -17627,6 +18496,11 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('07523b44-fc08-670a-441d-8c7f30e72ece', 'Invulnerable Save', 'invulnerable', 'Models in this unit have a 5+ invulnerable save.'),
   ('07523b44-fc08-670a-441d-8c7f30e72ece', 'Prophesied Doom', 'unique', 'Each time this unit makes a Charge move, select one enemy unit within Engagement Range of it, then roll one D6 for each model in this unit that is within Engagement Range of that enemy unit: for each 4+, that enemy unit suffers 1 mortal wound.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('833f19f0-6d14-b6a7-c86f-68f64dcfcb92', '07523b44-fc08-670a-441d-8c7f30e72ece', '2-5 Enlightened', 'Divining spear Enlightened', true, 0),
+  ('1aa9e37a-1669-20ce-a931-9303815205c8', '07523b44-fc08-670a-441d-8c7f30e72ece', '2-5 Enlightened', 'Pistol and chainsword Enlightened', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('babb83f3-75aa-b80d-a251-76bfdd6d1875', 'c7aaf3ae-906a-f9ef-bf24-03f6a82dfb44', 'Tzaangor Shaman', 'character', '10"', 4, '5+', 4, 7, 2, '{"Mounted", "Character", "Fly", "Psyker", "Chaos", "Tzeentch", "Tzaangor Shaman", "Infantry", "Mutant"}', 3);
@@ -17653,7 +18527,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('b8608b81-e4cf-35cc-8750-e466874a3a36', 'c7aaf3ae-906a-f9ef-bf24-03f6a82dfb44', 'Tzaangors', 'infantry', '6"', 4, '6+', 1, 7, 1, '{"Infantry", "Chaos", "Tzeentch", "Tzaangors", "Mutant"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('b8608b81-e4cf-35cc-8750-e466874a3a36', 9, 70);
+  ('b8608b81-e4cf-35cc-8750-e466874a3a36', 10, 70);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('b8608b81-e4cf-35cc-8750-e466874a3a36', 'Chainsword', 'melee', NULL, '3', '4+', 4, 0, '1', '{}'),
@@ -17665,7 +18539,9 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
 
 INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
   ('c244df6a-7f62-c773-8c6e-411b60322691', 'b8608b81-e4cf-35cc-8750-e466874a3a36', 'Wargear', 'Brayhorn', true, 0),
-  ('bc6b29a5-1e68-850f-8605-212bc88e11ec', 'b8608b81-e4cf-35cc-8750-e466874a3a36', 'Wargear', 'Herd banner', false, 0)
+  ('bc6b29a5-1e68-850f-8605-212bc88e11ec', 'b8608b81-e4cf-35cc-8750-e466874a3a36', 'Wargear', 'Herd banner', false, 0),
+  ('b3d924dc-b434-1831-c987-74d82dc79ff5', 'b8608b81-e4cf-35cc-8750-e466874a3a36', '9-19 Tzaangors', 'Tzaangor w/ Tzaangor blades', true, 0),
+  ('87f688f0-b109-7ab7-2348-231b80dd3192', 'b8608b81-e4cf-35cc-8750-e466874a3a36', '9-19 Tzaangors', 'Tzaangor w/ pistol and chainsword', false, 0)
 ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
@@ -17810,11 +18686,16 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('b4d345e5-d476-c632-b426-645af05248fd', 'Prophetic Sentinels', 'unique', 'Once per battle round, you can target this unit with the Fire Overwatch or Heroic Intervention Stratagem for 0CP.'),
   ('b4d345e5-d476-c632-b426-645af05248fd', 'Invulnerable Save', 'invulnerable', 'Models in this unit have a 5+ invulnerable save.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('c0f806ab-7a68-38ee-0b8c-ce29025e4d45', 'b4d345e5-d476-c632-b426-645af05248fd', '2-4 Sekhetar Robots', 'Sekhetar Robot w/ pyreflux meltagun', true, 0),
+  ('9c8fef56-3625-d467-f3b5-ba0fb30e2591', 'b4d345e5-d476-c632-b426-645af05248fd', '2-4 Sekhetar Robots', 'Sekhetar Robot w/ warpflame projector and claw', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('d1e1e9c9-7000-df7e-218a-60278bcfe1d3', 'c7aaf3ae-906a-f9ef-bf24-03f6a82dfb44', 'Tzaangor Enlightened with Fatecaster greatbows', 'mounted', '10"', 4, '5+', 2, 7, 2, '{"Mounted", "Fly", "Chaos", "Tzeentch", "Tzaangor Enlightened", "Mutant", "Tzaangor Enlightened with Fatecaster greatbows"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('d1e1e9c9-7000-df7e-218a-60278bcfe1d3', 1, 55);
+  ('d1e1e9c9-7000-df7e-218a-60278bcfe1d3', 3, 55);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('d1e1e9c9-7000-df7e-218a-60278bcfe1d3', 'Fatecaster greatbow', 'ranged', '30"', '2', '4+', 5, -2, '2', '{"Ignores Cover", "Lethal Hits", "Precision"}'),
@@ -17852,7 +18733,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('72e4c442-5b2d-e370-5f9d-de57827be91d', 'c7aaf3ae-906a-f9ef-bf24-03f6a82dfb44', 'Flamers', 'infantry', '9"', 4, '7+', 3, 7, 1, '{"Infantry", "Fly", "Chaos", "Daemon", "Tzeentch", "Summoned", "Flamers"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('72e4c442-5b2d-e370-5f9d-de57827be91d', 1, 65),
+  ('72e4c442-5b2d-e370-5f9d-de57827be91d', 3, 65),
   ('72e4c442-5b2d-e370-5f9d-de57827be91d', 4, 130);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -17867,7 +18748,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('c8cf796e-b2bc-6bc0-5261-1eb86d76acc5', 'c7aaf3ae-906a-f9ef-bf24-03f6a82dfb44', 'Screamers', 'beast', '14"', 4, '6+', 3, 7, 1, '{"Beast", "Fly", "Chaos", "Daemon", "Tzeentch", "Summoned", "Screamers"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('c8cf796e-b2bc-6bc0-5261-1eb86d76acc5', 1, 80),
+  ('c8cf796e-b2bc-6bc0-5261-1eb86d76acc5', 3, 80),
   ('c8cf796e-b2bc-6bc0-5261-1eb86d76acc5', 4, 160);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -17881,7 +18762,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('5c1c2245-c31d-965c-149e-754c3fc2068a', 'c7aaf3ae-906a-f9ef-bf24-03f6a82dfb44', 'Pink Horrors', 'battleline', '6"', 3, '7+', 1, 8, 1, '{"Infantry", "Battleline", "Chaos", "Daemon", "Tzeentch", "Summoned", "Horrors"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('5c1c2245-c31d-965c-149e-754c3fc2068a', 1, 115);
+  ('5c1c2245-c31d-965c-149e-754c3fc2068a', 10, 115);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('5c1c2245-c31d-965c-149e-754c3fc2068a', 'Blue claws (ref. only)', 'melee', NULL, '1', '5+', 3, 0, '1', '{}'),
@@ -17919,7 +18800,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('70f41575-0ae2-9998-b7df-f948186f712b', 'c7aaf3ae-906a-f9ef-bf24-03f6a82dfb44', 'Blue Horrors', 'battleline', '6"', 3, '7+', 1, 8, 1, '{"Infantry", "Battleline", "Chaos", "Daemon", "Tzeentch", "Summoned", "Horrors"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('70f41575-0ae2-9998-b7df-f948186f712b', 1, 90);
+  ('70f41575-0ae2-9998-b7df-f948186f712b', 10, 90);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('70f41575-0ae2-9998-b7df-f948186f712b', 'Coruscating Yellow flames (ref. only)', 'ranged', '18"', '2', '5+', 2, -1, '1', '{"Pistol", "Psychic"}'),
@@ -18212,7 +19093,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('8bd1c82f-7055-09fa-f8ce-ec84c4551f82', 'dd2936a0-6cc2-791b-ad34-8323b51b6e9d', 'Khorne Berzerkers', 'battleline', '8"', 4, '3+', 2, 6, 2, '{"Infantry", "Battleline", "Chaos", "Khorne", "Berzerkers"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('8bd1c82f-7055-09fa-f8ce-ec84c4551f82', 9, 180);
+  ('8bd1c82f-7055-09fa-f8ce-ec84c4551f82', 10, 180);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('8bd1c82f-7055-09fa-f8ce-ec84c4551f82', 'Bolt pistol', 'ranged', '12"', '1', '4+', 4, 0, '1', '{"Pistol"}'),
@@ -18226,7 +19107,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('c7beacd1-8115-157e-e3bb-a59e99c97d2a', 'dd2936a0-6cc2-791b-ad34-8323b51b6e9d', 'Chaos Terminators', 'infantry', '7"', 5, '2+', 3, 6, 1, '{"Infantry", "Chaos", "Khorne", "Terminator", "Terminator Squad"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('c7beacd1-8115-157e-e3bb-a59e99c97d2a', 4, 175);
+  ('c7beacd1-8115-157e-e3bb-a59e99c97d2a', 5, 175);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('c7beacd1-8115-157e-e3bb-a59e99c97d2a', 'Combi-weapon', 'ranged', '24"', '1', '4+', 4, 0, '1', '{"Anti-Infantry 4+", "Devastating Wounds", "Rapid Fire 1"}'),
@@ -18242,11 +19123,22 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('c7beacd1-8115-157e-e3bb-a59e99c97d2a', 'Invulnerable Save', 'invulnerable', 'Model in this unit have a 4+ invulnerable save.'),
   ('c7beacd1-8115-157e-e3bb-a59e99c97d2a', 'Bloody Fury', 'unique', 'Each time a model in this unit makes a ranged attack that targets the closest enemy unit, you can re-roll the Hit roll. Each time this unit declares a charge that targets the closest enemy unit, you can re-roll the Charge roll.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('7668ea7f-978a-5788-619c-c6ad34438a7d', 'c7beacd1-8115-157e-e3bb-a59e99c97d2a', '4 - 9 Terminators', 'Combi-bolter, accursed weapon', true, 0),
+  ('8b639bc3-2803-2dc4-7a13-32c4675260c1', 'c7beacd1-8115-157e-e3bb-a59e99c97d2a', '4 - 9 Terminators', 'Combi-bolter, chainfist', false, 0),
+  ('70b655fb-18c9-6f06-7357-e9a7b344dd11', 'c7beacd1-8115-157e-e3bb-a59e99c97d2a', '4 - 9 Terminators', 'Combi-bolter, power fist', false, 0),
+  ('2c658304-4848-29a0-d777-5d881880e34c', 'c7beacd1-8115-157e-e3bb-a59e99c97d2a', '4 - 9 Terminators', 'Combi-weapon, accursed weapon', false, 0),
+  ('d5664551-4239-89fb-0fa4-44fbbfa6cbdb', 'c7beacd1-8115-157e-e3bb-a59e99c97d2a', '4 - 9 Terminators', 'Combi-weapon, chainfist', false, 0),
+  ('c979f94b-ffec-b455-a22a-9bb00697ca50', 'c7beacd1-8115-157e-e3bb-a59e99c97d2a', '4 - 9 Terminators', 'Combi-weapon, power fist', false, 0),
+  ('8b932ccf-59e7-7ad0-6822-1943806f71ac', 'c7beacd1-8115-157e-e3bb-a59e99c97d2a', '4 - 9 Terminators', 'Paired accursed weapons', false, 0),
+  ('df99cb95-8a15-dd9c-8f88-36a060e6edbf', 'c7beacd1-8115-157e-e3bb-a59e99c97d2a', '4 - 9 Terminators', 'Heavy weapon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('35c90c93-3116-fcbd-426b-6d7236d90d0d', 'dd2936a0-6cc2-791b-ad34-8323b51b6e9d', 'Jakhals', 'infantry', '7"', 4, '6+', 1, 7, 1, '{"Infantry", "Chaos", "Khorne", "Jakhals"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('35c90c93-3116-fcbd-426b-6d7236d90d0d', 1, 65);
+  ('35c90c93-3116-fcbd-426b-6d7236d90d0d', 2, 65);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('35c90c93-3116-fcbd-426b-6d7236d90d0d', 'Autopistol', 'ranged', '12"', '1', '4+', 3, 0, '1', '{"Pistol"}'),
@@ -18258,11 +19150,16 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('35c90c93-3116-fcbd-426b-6d7236d90d0d', 'Objective Ravaged', 'unique', 'At the end of your Command phase, if this unit is within range of an objective marker you control, that objective marker remains under your control until your opponent''s Level of Control over that objective marker is greater than yours at the end of a phase.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('c7073872-72bc-198e-ecd3-1220027a17e1', '35c90c93-3116-fcbd-426b-6d7236d90d0d', 'Dishonoured', 'Dishonoured w/ skullsmasher and mangler', false, 0),
+  ('1c8de787-6e2f-196a-e731-1555d4d76c30', '35c90c93-3116-fcbd-426b-6d7236d90d0d', 'Dishonoured', 'Dishonoured w/ paired manglers', true, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('41eaa997-1b46-c748-bb52-532feff84799', 'dd2936a0-6cc2-791b-ad34-8323b51b6e9d', 'Eightbound', 'infantry', '10"', 6, '3+', 3, 6, 1, '{"Infantry", "Chaos", "Khorne", "Daemon", "Eightbound", "Possessed"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('41eaa997-1b46-c748-bb52-532feff84799', 1, 135);
+  ('41eaa997-1b46-c748-bb52-532feff84799', 3, 135);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('41eaa997-1b46-c748-bb52-532feff84799', 'Chainblades', 'melee', NULL, '5', '3+', 8, -2, '2', '{}');
@@ -18275,7 +19172,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('278b00c9-5f10-6f1a-776e-62f7e65d541a', 'dd2936a0-6cc2-791b-ad34-8323b51b6e9d', 'Exalted Eightbound', 'infantry', '10"', 6, '3+', 3, 6, 1, '{"Infantry", "Chaos", "Khorne", "Daemon", "Exalted Eightbound", "Possessed"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('278b00c9-5f10-6f1a-776e-62f7e65d541a', 1, 140);
+  ('278b00c9-5f10-6f1a-776e-62f7e65d541a', 3, 140);
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('278b00c9-5f10-6f1a-776e-62f7e65d541a', 'Rend and Tear', 'unique', 'Each time a model in this unit makes a melee attack that targets a ^^**Monster^^** or ^^**Vehicle^^** unit, until the end of the phase, improve the Damage characteristic of that attack by 1.'),
@@ -18534,7 +19431,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('d444df83-cbb9-3734-73fb-1ae6b2009c7d', 'dd2936a0-6cc2-791b-ad34-8323b51b6e9d', 'Chaos Spawn', 'beast', '10"', 5, '4+', 4, 7, 1, '{"Beast", "Chaos", "Khorne", "Spawn"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('d444df83-cbb9-3734-73fb-1ae6b2009c7d', 1, 90);
+  ('d444df83-cbb9-3734-73fb-1ae6b2009c7d', 2, 90);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('d444df83-cbb9-3734-73fb-1ae6b2009c7d', 'Hideous Mutations', 'melee', NULL, 'D6+4', '4+', 5, -1, '2', '{}');
@@ -18618,7 +19515,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('62897c34-a09e-b20e-7675-8aaebe55db1a', 'dd2936a0-6cc2-791b-ad34-8323b51b6e9d', 'Goremongers', 'infantry', '9"', 4, '6+', 1, 7, 1, '{"Infantry", "Chaos", "Khorne", "Goremongers"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('62897c34-a09e-b20e-7675-8aaebe55db1a', 7, 75);
+  ('62897c34-a09e-b20e-7675-8aaebe55db1a', 8, 75);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('62897c34-a09e-b20e-7675-8aaebe55db1a', 'Autopistol', 'ranged', '12"', '1', '4+', 3, 0, '1', '{"Pistol"}'),
@@ -18628,6 +19525,12 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('62897c34-a09e-b20e-7675-8aaebe55db1a', 'Loping Speed', 'unique', 'Once per turn, when an enemy unit ends a Normal, Advance or Fall Back move within 9" of this unit, if this unit is not within Engagement Range of one or more enemy units, it can make a Normal move of up to D6".');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('540f2955-58d3-01dd-5832-4d1d5253213e', '62897c34-a09e-b20e-7675-8aaebe55db1a', '7 Goremongers', 'Goremonger w/ blood harpoon', false, 0),
+  ('2485581a-caed-8fd9-7211-d04d5a7fa4e0', '62897c34-a09e-b20e-7675-8aaebe55db1a', '7 Goremongers', 'Goremonger w/ 2 pistols', false, 0),
+  ('06e30d96-691e-d963-86ea-915b66399e73', '62897c34-a09e-b20e-7675-8aaebe55db1a', '7 Goremongers', 'Goremonger w/ chainblade', true, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('9636d6b5-e419-5c43-422a-2dc609674413', 'dd2936a0-6cc2-791b-ad34-8323b51b6e9d', 'Slaughterbound', 'character', '10"', 6, '3+', 6, 6, 1, '{"Character", "Infantry", "Chaos", "Khorne", "Daemon", "Possessed", "Slaughterbound"}', 3);
@@ -18696,7 +19599,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('c3214e94-02e4-87e2-2bde-1f50291e7bff', 'dd2936a0-6cc2-791b-ad34-8323b51b6e9d', 'Bloodletters', 'battleline', '8"', 4, '7+', 1, 7, 1, '{"Infantry", "Battleline", "Chaos", "Daemon", "Khorne", "Summoned"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('c3214e94-02e4-87e2-2bde-1f50291e7bff', 1, 90);
+  ('c3214e94-02e4-87e2-2bde-1f50291e7bff', 10, 90);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('c3214e94-02e4-87e2-2bde-1f50291e7bff', 'Hellblade', 'melee', NULL, '2', '3+', 5, -2, '2', '{}');
@@ -18709,7 +19612,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('1a63c4e3-3827-9447-81e2-c697175b85f3', 'dd2936a0-6cc2-791b-ad34-8323b51b6e9d', 'Bloodcrushers', 'mounted', '10"', 7, '3+', 4, 7, 2, '{"Mounted", "Chaos", "Daemon", "Khorne", "Summoned", "Bloodcrushers"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('1a63c4e3-3827-9447-81e2-c697175b85f3', 1, 110),
+  ('1a63c4e3-3827-9447-81e2-c697175b85f3', 3, 110),
   ('1a63c4e3-3827-9447-81e2-c697175b85f3', 4, 220);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -19495,7 +20398,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('a63f753e-b89f-e4ef-1cb6-6310e82b1d6c', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Bloodcrushers', 'mounted', '10"', 7, '3+', 4, 7, 2, '{"Mounted", "Chaos", "Daemon", "Khorne", "Bloodcrushers", "Khorne non-Battleline", "Shadow Legion"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('a63f753e-b89f-e4ef-1cb6-6310e82b1d6c', 1, 110),
+  ('a63f753e-b89f-e4ef-1cb6-6310e82b1d6c', 3, 110),
   ('a63f753e-b89f-e4ef-1cb6-6310e82b1d6c', 4, 220);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -19510,7 +20413,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('1c6dfb74-d15a-5d14-d119-1d5e3dc11ab3', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Bloodletters', 'battleline', '8"', 4, '7+', 1, 7, 2, '{"Infantry", "Battleline", "Chaos", "Daemon", "Khorne", "Bloodletters", "Khorne Battleline", "Shadow Legion"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('1c6dfb74-d15a-5d14-d119-1d5e3dc11ab3', 1, 110);
+  ('1c6dfb74-d15a-5d14-d119-1d5e3dc11ab3', 10, 110);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('1c6dfb74-d15a-5d14-d119-1d5e3dc11ab3', 'Hellblade', 'melee', NULL, '2', '3+', 5, -2, '2', '{}');
@@ -19568,7 +20471,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('9ea7eb78-143d-19df-65e0-9e20a238a4f2', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Blue Horrors', 'battleline', '6"', 3, '7+', 1, 8, 1, '{"Infantry", "Battleline", "Chaos", "Daemon", "Tzeentch", "Tzeentch Battleline", "Shadow Legion"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('9ea7eb78-143d-19df-65e0-9e20a238a4f2', 1, 125);
+  ('9ea7eb78-143d-19df-65e0-9e20a238a4f2', 10, 125);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('9ea7eb78-143d-19df-65e0-9e20a238a4f2', 'Coruscating Yellow flames (ref. only)', 'ranged', '18"', '2', '5+', 2, -1, '1', '{"Pistol", "Psychic"}'),
@@ -19717,7 +20620,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('b211ec74-939e-4527-eb6d-35c11ebecc05', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Daemonettes', 'battleline', '9"', 3, '7+', 1, 7, 2, '{"Infantry", "Battleline", "Chaos", "Daemon", "Slaanesh", "Daemonettes", "Slaanesh Battleline", "Shadow Legion"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('b211ec74-939e-4527-eb6d-35c11ebecc05', 1, 100);
+  ('b211ec74-939e-4527-eb6d-35c11ebecc05', 10, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('b211ec74-939e-4527-eb6d-35c11ebecc05', 'Slashing claws', 'melee', NULL, '3', '3+', 4, -1, '1', '{"Devastating Wounds"}');
@@ -19826,7 +20729,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('10c31dc2-cb33-2521-e38c-1732174fe6a1', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Fiends', 'beast', '12"', 5, '7+', 4, 7, 2, '{"Beast", "Chaos", "Daemon", "Slaanesh", "Fiends", "Slaanesh non-Battleline", "Shadow Legion"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('10c31dc2-cb33-2521-e38c-1732174fe6a1', 1, 95),
+  ('10c31dc2-cb33-2521-e38c-1732174fe6a1', 3, 95),
   ('10c31dc2-cb33-2521-e38c-1732174fe6a1', 4, 190);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -19840,7 +20743,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('fb2d68ae-f824-e78a-fe7f-6a0ee83cda43', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Flamers', 'infantry', '9"', 4, '7+', 3, 7, 1, '{"Infantry", "Fly", "Chaos", "Daemon", "Tzeentch", "Flamers", "Tzeentch non-Battleline", "Shadow Legion"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('fb2d68ae-f824-e78a-fe7f-6a0ee83cda43', 1, 65),
+  ('fb2d68ae-f824-e78a-fe7f-6a0ee83cda43', 3, 65),
   ('fb2d68ae-f824-e78a-fe7f-6a0ee83cda43', 4, 130);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -19894,7 +20797,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('262de936-6990-ade7-0d6e-68c9afbe1dfe', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Furies [Legends]', 'infantry', '12"', 3, '7+', 1, 8, 1, '{"Infantry", "Chaos", "Daemon", "Fly", "Furies", "Shadow Legion"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('262de936-6990-ade7-0d6e-68c9afbe1dfe', 1, 40),
+  ('262de936-6990-ade7-0d6e-68c9afbe1dfe', 5, 40),
   ('262de936-6990-ade7-0d6e-68c9afbe1dfe', 6, 80);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -20101,7 +21004,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('c5ccc15a-2d30-4bd7-5640-d0249321dbe6', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Nurglings', 'battleline', '5"', 3, '7+', 4, 8, 1, '{"Swarm", "Battleline", "Chaos", "Daemon", "Nurgle", "Nurglings", "Nurgle Battleline", "Shadow Legion"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('c5ccc15a-2d30-4bd7-5640-d0249321dbe6', 1, 40),
+  ('c5ccc15a-2d30-4bd7-5640-d0249321dbe6', 3, 40),
   ('c5ccc15a-2d30-4bd7-5640-d0249321dbe6', 4, 70);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -20115,7 +21018,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('2a53002b-be43-85ab-a944-d525f0f8ebda', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Pink Horrors', 'battleline', '6"', 3, '7+', 1, 8, 1, '{"Infantry", "Battleline", "Chaos", "Daemon", "Tzeentch", "Tzeentch Battleline", "Shadow Legion"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('2a53002b-be43-85ab-a944-d525f0f8ebda', 1, 140);
+  ('2a53002b-be43-85ab-a944-d525f0f8ebda', 10, 140);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('2a53002b-be43-85ab-a944-d525f0f8ebda', 'Coruscating Yellow flames (ref. only)', 'ranged', '18"', '2', '5+', 2, -1, '1', '{"Pistol", "Psychic"}'),
@@ -20137,7 +21040,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('25359bb2-1a06-c3be-70b2-4531ee9dd175', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Plague Drones', 'mounted', '10"', 8, '6+', 5, 7, 2, '{"Mounted", "Fly", "Chaos", "Daemon", "Nurgle", "Plague Drones", "Nurgle non-Battleline", "Shadow Legion"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('25359bb2-1a06-c3be-70b2-4531ee9dd175', 1, 110),
+  ('25359bb2-1a06-c3be-70b2-4531ee9dd175', 3, 110),
   ('25359bb2-1a06-c3be-70b2-4531ee9dd175', 4, 220);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -20153,7 +21056,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('53e123a3-eae2-0a2d-9ffd-4d1b097eb397', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Plague Toads [Legends]', 'beast', '7"', 8, '6+', 4, 7, 2, '{"Beast", "Chaos", "Daemon", "Nurgle", "Plague Toads", "Nurgle non-Battleline", "Shadow Legion"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('53e123a3-eae2-0a2d-9ffd-4d1b097eb397', 1, 120);
+  ('53e123a3-eae2-0a2d-9ffd-4d1b097eb397', 3, 120);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('53e123a3-eae2-0a2d-9ffd-4d1b097eb397', 'Grasping tongue', 'ranged', '9"', 'D3', '4+', 5, 0, '1', '{"Lethal Hits"}'),
@@ -20168,7 +21071,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('34647e92-085d-b465-90bb-5f87144e8b93', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Plaguebearers', 'battleline', '5"', 5, '7+', 2, 7, 2, '{"Infantry", "Battleline", "Chaos", "Daemon", "Nurgle", "Plaguebearers", "Nurgle Battleline", "Shadow Legion"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('34647e92-085d-b465-90bb-5f87144e8b93', 1, 110);
+  ('34647e92-085d-b465-90bb-5f87144e8b93', 10, 110);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('34647e92-085d-b465-90bb-5f87144e8b93', 'Plaguesword', 'melee', NULL, '2', '3+', 4, -1, '1', '{"Lethal Hits"}');
@@ -20181,7 +21084,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('09d7f097-a5cf-e317-07aa-fd700447546a', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Pox Riders [Legends]', 'mounted', '7"', 8, '6+', 5, 7, 2, '{"Mounted", "Chaos", "Daemon", "Nurgle", "Pox Riders", "Nurgle non-Battleline", "Shadow Legion"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('09d7f097-a5cf-e317-07aa-fd700447546a', 1, 160);
+  ('09d7f097-a5cf-e317-07aa-fd700447546a', 3, 160);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('09d7f097-a5cf-e317-07aa-fd700447546a', 'Grasping tongue', 'ranged', '9"', 'D3', '4+', 5, 0, '1', '{"Lethal Hits"}'),
@@ -20269,7 +21172,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('e752c890-fc33-632f-6d19-fd25f97bb628', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Screamers', 'beast', '14"', 4, '6+', 3, 7, 1, '{"Beast", "Fly", "Chaos", "Daemon", "Tzeentch", "Screamers", "Tzeentch non-Battleline", "Shadow Legion"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('e752c890-fc33-632f-6d19-fd25f97bb628', 1, 80),
+  ('e752c890-fc33-632f-6d19-fd25f97bb628', 3, 80),
   ('e752c890-fc33-632f-6d19-fd25f97bb628', 4, 160);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -20283,7 +21186,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('5f41c773-052f-4ed6-fc8a-693e1ce17353', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Seekers', 'mounted', '14"', 4, '7+', 2, 7, 1, '{"Mounted", "Chaos", "Daemon", "Slaanesh", "Seekers", "Slaanesh non-Battleline", "Shadow Legion"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('5f41c773-052f-4ed6-fc8a-693e1ce17353', 1, 80),
+  ('5f41c773-052f-4ed6-fc8a-693e1ce17353', 5, 80),
   ('5f41c773-052f-4ed6-fc8a-693e1ce17353', 6, 160);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -21397,7 +22300,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('d2b768e7-8a3c-3759-d86b-7aad27937aa5', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Guardian Defenders', 'battleline', '7"', 3, '4+', 1, 7, 2, '{"Guardian Defenders", "Battleline", "Infantry", "Guardians", "Aeldari", "Ynnari"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('d2b768e7-8a3c-3759-d86b-7aad27937aa5', 1, 100);
+  ('d2b768e7-8a3c-3759-d86b-7aad27937aa5', 11, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('d2b768e7-8a3c-3759-d86b-7aad27937aa5', 'Close Combat Weapon', 'melee', NULL, '1', '3+', 3, 0, '1', '{}'),
@@ -21567,7 +22470,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('e222bd0f-e9d8-81b9-5bf2-4280fded5c53', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Rangers', 'infantry', '7"', 3, '5+', 1, 7, 1, '{"Rangers", "Infantry", "Aeldari", "Ynnari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('e222bd0f-e9d8-81b9-5bf2-4280fded5c53', 1, 55);
+  ('e222bd0f-e9d8-81b9-5bf2-4280fded5c53', 5, 55);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('e222bd0f-e9d8-81b9-5bf2-4280fded5c53', 'Long rifle', 'ranged', '36"', '1', '3+', 4, -1, '2', '{"Heavy", "Precision"}'),
@@ -21625,7 +22528,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('a3c61cfd-748b-83d3-ad9e-4dc252cf0eaa', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Shroud Runners', 'mounted', '14"', 4, '5+', 3, 7, 2, '{"Shroud Runners", "Fly", "Mounted", "Aeldari", "Ynnari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('a3c61cfd-748b-83d3-ad9e-4dc252cf0eaa', 1, 80);
+  ('a3c61cfd-748b-83d3-ad9e-4dc252cf0eaa', 3, 80);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('a3c61cfd-748b-83d3-ad9e-4dc252cf0eaa', 'Long rifle', 'ranged', '36"', '1', '2+', 4, -1, '2', '{"Precision"}'),
@@ -21641,7 +22544,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('027f0154-1ae9-6f82-ff52-4505eb756e00', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Skyweavers', 'mounted', '14"', 4, '4+', 3, 6, 2, '{"Skyweavers", "Fly", "Mounted", "Smoke", "Harlequin Allies", "Aeldari", "Corsairs and Travelling Players"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('027f0154-1ae9-6f82-ff52-4505eb756e00', 1, 95);
+  ('027f0154-1ae9-6f82-ff52-4505eb756e00', 2, 95);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('027f0154-1ae9-6f82-ff52-4505eb756e00', 'Close Combat Weapon', 'melee', NULL, '4', '3+', 3, 0, '1', '{}'),
@@ -21710,7 +22613,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('4d5e43a4-e4c7-1fab-4e3e-2fcb5a89bbed', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Storm Guardians', 'battleline', '7"', 3, '4+', 2, 7, 1, '{"Storm Guardians", "Battleline", "Infantry", "Guardians", "Aeldari", "Ynnari"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('4d5e43a4-e4c7-1fab-4e3e-2fcb5a89bbed', 10, 110);
+  ('4d5e43a4-e4c7-1fab-4e3e-2fcb5a89bbed', 11, 110);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('4d5e43a4-e4c7-1fab-4e3e-2fcb5a89bbed', 'Close Combat Weapon', 'melee', NULL, '2', '3+', 3, 0, '1', '{}'),
@@ -21722,6 +22625,15 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('4d5e43a4-e4c7-1fab-4e3e-2fcb5a89bbed', 'Stormblades', 'unique', 'At the end of your Command phase, if this unit is within range of an objective marker you control, that objective marker remains under your control until your opponent''s Level of Control over that objective marker is greater than yours at the end of a phase.'),
   ('4d5e43a4-e4c7-1fab-4e3e-2fcb5a89bbed', 'Crewed Platform', 'unique', 'When the last Storm Guardian model in this unit is destroyed, any remaining Serpent’s Scale Platform models in this unit are also destroyed.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('fe9c399f-9c13-a1d3-a95c-337d7631ff41', '4d5e43a4-e4c7-1fab-4e3e-2fcb5a89bbed', '10 Storm Guardians', 'Storm Guardian', true, 0),
+  ('2c226d03-021e-78ee-e180-a3800334f76c', '4d5e43a4-e4c7-1fab-4e3e-2fcb5a89bbed', '10 Storm Guardians', 'Storm Guardian with Flamer', false, 0),
+  ('24521f8d-19b2-cf57-0d97-ce6d8149e90c', '4d5e43a4-e4c7-1fab-4e3e-2fcb5a89bbed', '10 Storm Guardians', 'Storm Guardian with Fusion Gun', false, 0),
+  ('8f39bff1-116d-0feb-a85c-63ff340224f1', '4d5e43a4-e4c7-1fab-4e3e-2fcb5a89bbed', '10 Storm Guardians', 'Storm Guardian with Power Sword', false, 0),
+  ('7c94d56c-2058-1490-90f1-9321eb7a3eaf', '4d5e43a4-e4c7-1fab-4e3e-2fcb5a89bbed', '10 Storm Guardians', 'Storm Guardian with Flamer & Power Sword', false, 0),
+  ('12fb920a-3383-2782-76dc-dff4620517dd', '4d5e43a4-e4c7-1fab-4e3e-2fcb5a89bbed', '10 Storm Guardians', 'Storm Guardian with Fusion Gun & Power Sword', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('3070b642-7f45-9f67-540c-d843e4072a9e', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Striking Scorpions', 'infantry', '7"', 3, '3+', 1, 6, 1, '{"Striking Scorpions", "Infantry", "Aeldari", "Aspect Warrior", "Ynnari"}', 3);
@@ -21924,6 +22836,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('80133a39-1b16-53fa-8d38-c4344bca8121', 'Psychic Communion (Psychic)', 'unique', 'Each time this unit is selected to shoot, for each ^^Warlock^^ model in this unit, until the end of the phase, add 1 to the Attacks and Strength characteristics of that model''s Destructor weapon for each other friendly ^^Aeldari Psyker^^ model within 6" of this model (to a maximum of +2).'),
   ('80133a39-1b16-53fa-8d38-c4344bca8121', 'Leader', 'core', 'At the start of the Declare Battle Formations step, if this unit is not an Attached unit, this unit can join one ^^Guardian Defenders^^ or ^^Storm Guardians^^ unit from your army (a unit cannot have more than one ^^Warlock Conclave^^ unit joined to it). If it does, until the end of the battle, every model in this unit counts as being part of that Bodyguard unit, and that Bodyguard unit’s Starting Strength is increased accordingly.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('cbfbea03-d567-f2f6-7845-ea50e1d0d5cf', '80133a39-1b16-53fa-8d38-c4344bca8121', '2-4 Warlocks', 'Warlock with Witchblade', true, 0),
+  ('ecde841b-aaea-7bed-965c-18e22e9cdf6a', '80133a39-1b16-53fa-8d38-c4344bca8121', '2-4 Warlocks', 'Warlock with Singing Spear', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('110d4457-66b7-5630-22fa-68df9c70e21b', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Warp Spiders', 'infantry', '12"', 3, '3+', 1, 6, 1, '{"Warp Spiders", "Infantry", "Fly", "Jump Pack", "Aeldari", "Aspect Warrior", "Ynnari"}', 3);
 
@@ -22058,7 +22975,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('74d87231-d97d-08fc-4a7f-aa1b0e6a3dca', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Wraithguard', 'infantry', '6"', 6, '2+', 3, 8, 1, '{"Infantry", "Wraithguard", "Wraith Construct", "Aeldari", "Ynnari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('74d87231-d97d-08fc-4a7f-aa1b0e6a3dca', 1, 170);
+  ('74d87231-d97d-08fc-4a7f-aa1b0e6a3dca', 5, 170);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('74d87231-d97d-08fc-4a7f-aa1b0e6a3dca', 'Close Combat Weapon', 'melee', NULL, '3', '4+', 5, 0, '1', '{}'),
@@ -22097,7 +23014,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('b1ca229b-ea4d-3bc8-0ca0-88f6c1a46743', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Wraithblades', 'infantry', '6"', 6, '2+', 3, 8, 1, '{"Wraithblades", "Infantry", "Wraith Construct", "Aeldari", "Ynnari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('b1ca229b-ea4d-3bc8-0ca0-88f6c1a46743', 1, 160);
+  ('b1ca229b-ea4d-3bc8-0ca0-88f6c1a46743', 5, 160);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('b1ca229b-ea4d-3bc8-0ca0-88f6c1a46743', 'Ghostswords', 'melee', NULL, '5', '4+', 5, -2, '2', '{}'),
@@ -22158,11 +23075,17 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('93f000de-09d3-1351-5b12-edf67c3536b5', 'Invulnerable Save', 'invulnerable', 'This unit has a 6+ Invulnerable save'),
   ('93f000de-09d3-1351-5b12-edf67c3536b5', 'Goaded Savagery (Pain)', 'unique', 'In the Fight phase, when you select this unit to fight, you can spend 1 of your Pain tokens to Empower this unit. While this unit is Empowered, if it contains a ^^**Beastmaster**^^ model, each time a ^^**Beast**^^ model in this unit makes a melee attack, you can re-roll the Hit roll and you can re-roll the Wound roll.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('e7d94a4a-4d3c-ed50-79bb-76aa0e0649db', '93f000de-09d3-1351-5b12-edf67c3536b5', 'Beasts', 'Clawed Fiend', false, 0),
+  ('e97f1421-d941-1955-c9d1-1ae35d517636', '93f000de-09d3-1351-5b12-edf67c3536b5', 'Beasts', 'Khymerae', false, 0),
+  ('ad6c84dc-2fb1-7a18-b146-b8b0cd89e7cc', '93f000de-09d3-1351-5b12-edf67c3536b5', 'Beasts', 'Razorwing Flock', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('36259d09-34e2-898b-7c67-b3b693cda7a3', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Court of the Archon [Legends]', 'infantry', '7"', 3, '5+', 2, 7, 1, '{"Court of the Archon", "Aeldari", "Kabal", "Infantry"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('36259d09-34e2-898b-7c67-b3b693cda7a3', 1, 95);
+  ('36259d09-34e2-898b-7c67-b3b693cda7a3', 4, 95);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('36259d09-34e2-898b-7c67-b3b693cda7a3', 'Shaimeshi Blade', 'melee', NULL, '4', '3+', 4, -2, '1', '{"Anti-Infantry 2+"}'),
@@ -22202,6 +23125,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('0a6aebc8-43c8-356e-fcdc-23309e12a651', 'Invulnerable Save', 'invulnerable', 'This unit has a 6+ Invulnerable save'),
   ('0a6aebc8-43c8-356e-fcdc-23309e12a651', 'Pain Parasite (Pain)', 'unique', 'In your Shooting phase or the Fight phase, when you select this unit to shoot or fight, you can spend 1 Pain token to Empower this unit. While Empowered, each time this unit shoots or fights, after it has resolved its attacks, if one or more enemy models were destroyed as a result of those attacks, one model in this unit regains up to 3 lost wounds (if all models in this unit have their starting number of wounds and this unit is below its Starting Strength, 1 model is returned to this unit with 3 wounds remaining).');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('fa7199b7-11e6-5ca0-1d6e-ee411e782131', '0a6aebc8-43c8-356e-fcdc-23309e12a651', 'Cronos wargear', 'Spirit Syphon', true, 0),
+  ('082a0ac3-f28b-84b3-a1ac-45371785de25', '0a6aebc8-43c8-356e-fcdc-23309e12a651', 'Cronos wargear', 'Spirit-leech Tentacles', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('27ac2563-870c-1833-6d55-8fb881203f30', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Drazhar', 'epic_hero', '7"', 3, '2+', 5, 6, 1, '{"Epic Hero", "Drazhar", "Aeldari", "Infantry", "Character", "Blades for Hire"}', 1);
 
@@ -22236,6 +23164,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('51be56a5-fc74-6a61-dcaa-c629017ce590', 'Monstrous Hulks', 'unique', 'This unit cannot embark within a ^^**Venom**^^, but it can embark within other ^^**Drukhari Transports**^^; when doing so, each ^^**Grotesque**^^ model takes up the space of 3 models.'),
   ('51be56a5-fc74-6a61-dcaa-c629017ce590', 'Macro-steroids (Pain)', 'unique', 'In the Fight phase, when you select this unit to fight, you can spend 1 of your Pain tokens to Empower this unit. While Empowered, melee weapons equipped by models in this unit have a Strength characteristic of 8 and the ^^**[LETHAL HITS]**^^ ability.'),
   ('51be56a5-fc74-6a61-dcaa-c629017ce590', 'Monstrous Charge', 'unique', 'Each time this unit ends a Charge move, select one enemy unit within Engagement Range of it, then roll one D6 for each model in this unit that is within Engagement Range of that enemy unit: for each 4+, that enemy unit suffers D3 mortal wounds.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('905fa152-1f5d-94f7-666c-d3c872f57e2b', '51be56a5-fc74-6a61-dcaa-c629017ce590', '3-6 Grotesques', 'Grotesque w/ paired monstrous weapons', true, 0),
+  ('80da02ed-b7ab-7c46-dfd8-c21163872536', '51be56a5-fc74-6a61-dcaa-c629017ce590', '3-6 Grotesques', 'Grotesque w/ Liquifier', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('a68601b2-eb48-4d9b-c6cf-94c135f78913', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Haemonculus', 'character', '7"', 4, '5+', 5, 7, 1, '{"Haemonculus", "Haemonculus Covens", "Aeldari", "Character", "Infantry"}', 3);
@@ -22315,6 +23248,14 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('3b6a4c00-db85-6ba3-38cc-166e80d1158c', 'Invulnerable Save', 'invulnerable', 'This unit has a 6+ Invulnerable save'),
   ('3b6a4c00-db85-6ba3-38cc-166e80d1158c', 'Cruel Enforcers', 'unique', 'At the end of your Command phase, if this unit is within range of an objective marker you control, that objective marker remains under you control, until your opponent''s Level of Control over that objective marker is greater than yours at the end of a phase.'),
   ('3b6a4c00-db85-6ba3-38cc-166e80d1158c', 'Sadistic Raiders (Pain)', 'unique', 'In your Shooting phase or the Fight phase, when you select this unit to shoot or fight, you can spend 1 Pain token to Empower this unit. While Empowered, each time a model in this unit makes an attack, re-roll a Wound roll of 1. If the target is within range of an objective marker, you can re-roll the Wound roll instead.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('00ba5243-371d-00c3-3eca-15f621735e93', '3b6a4c00-db85-6ba3-38cc-166e80d1158c', '9 Kabalite Warriors', 'Kabalite Warrior with Shredder', false, 0),
+  ('3c8dc8f2-8744-4e88-5361-170b047e7e1f', '3b6a4c00-db85-6ba3-38cc-166e80d1158c', '9 Kabalite Warriors', 'Kabalite Warrior', true, 0),
+  ('3b157a39-abeb-d252-f48c-b4cb3ac00411', '3b6a4c00-db85-6ba3-38cc-166e80d1158c', '9 Kabalite Warriors', 'Kabalite Warrior with Blaster', false, 0),
+  ('f072eae4-d682-9d75-212f-68ca97bdce6a', '3b6a4c00-db85-6ba3-38cc-166e80d1158c', '9 Kabalite Warriors', 'Kabalite Warrior with Splinter Cannon', false, 0),
+  ('d69c857b-c76d-8d98-c86a-1ee82d95366f', '3b6a4c00-db85-6ba3-38cc-166e80d1158c', '9 Kabalite Warriors', 'Kabalite Warrior with Dark Lance', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('b877d2e8-061b-ffd1-e2d9-ee74d90b1f8e', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Lelith Hesperax', 'epic_hero', '8"', 3, '6+', 4, 6, 1, '{"Lelith Hesperax", "Aeldari", "Wych Cult", "Succubus", "Epic Hero", "Character", "Infantry"}', 1);
@@ -22445,6 +23386,12 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('b46f7d63-0892-c787-4541-f0f2339406b7', 'Eviscerating Fly-by', 'unique', 'Each time this unit ends a Normal or Advance move, you can select one enemy unit (excluding ^^**Monster **^^and ^^**Vehicle**^^ units) that it moved over during that move, then roll one D6 for each model in this unit: for each 4+, that enemy unit suffers 1 mortal wound.'),
   ('b46f7d63-0892-c787-4541-f0f2339406b7', 'Matchless Swiftness (Pain)', 'unique', 'In your Movement phase, when you select this unit to Advance, you can spend 1 Pain token to Empower this unit. While Empowered, each time this unit Advances, do not make an Advance roll. Instead, until the end of the phase, add 8" to the Move characteristic of models in this unit.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('2d01fedd-ea96-542f-1f95-0fa5d40ac658', 'b46f7d63-0892-c787-4541-f0f2339406b7', '2-5 Reavers', 'Reaver', false, 0),
+  ('99eb46cf-76de-6199-d247-f3ebc7498c40', 'b46f7d63-0892-c787-4541-f0f2339406b7', '2-5 Reavers', 'Reaver with Blaster', false, 0),
+  ('46e57cd2-1dd2-a5b1-8c2c-4ca064be0cff', 'b46f7d63-0892-c787-4541-f0f2339406b7', '2-5 Reavers', 'Reaver with Heat Lance', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('b55b07c6-4bdd-0f7e-3388-cfa25ba4189c', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Scourges with Heavy Weapons', 'infantry', '14"', 3, '4+', 1, 7, 1, '{"Scourges", "Aeldari", "Fly", "Infantry", "Jump Pack", "Blades for Hire", "Scourges with Heavy Weapons"}', 3);
 
@@ -22508,6 +23455,19 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('02b26f25-991d-bc79-19b1-c80e8a1d3d17', 'Invulnerable Save', 'invulnerable', 'This unit has a 6+ Invulnerable save'),
   ('02b26f25-991d-bc79-19b1-c80e8a1d3d17', 'Devoted to Pain', 'unique', 'If a model in this unit is equipped with 2 macro-scalpels, those weapons have the ^^**[Twin-Linked]**^^ ability.'),
   ('02b26f25-991d-bc79-19b1-c80e8a1d3d17', 'Mindless Killing Machines (Pain)', 'unique', 'At the start of the Fight phase, you can spend 1 Pain token to Empower this unit. While Empowered, each time a model in this unit is destroyed by a melee attack, if that model has not fought this phase, roll one D6. On a 2+, do not remove it from play; that destroyed model can fight after the attacking unit has finished making its attacks, and it is then removed from play.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('1b081a77-7334-0f78-19dd-32db70b372c2', '02b26f25-991d-bc79-19b1-c80e8a1d3d17', 'Talos: Arm 1', 'Macro-Scalpel', true, 0),
+  ('6ec96419-0a6e-6c92-fb1a-e0c554d6872e', '02b26f25-991d-bc79-19b1-c80e8a1d3d17', 'Talos: Arm 1', 'Talos Ichor Injector', false, 0),
+  ('be571acc-e8c6-b7a3-6000-85304ae82286', '02b26f25-991d-bc79-19b1-c80e8a1d3d17', 'Talos: Arm 1', 'Twin Liquifier Gun', false, 0),
+  ('666ff3b1-aff7-ec70-9c79-95ea7fdcf2b1', '02b26f25-991d-bc79-19b1-c80e8a1d3d17', 'Talos: Arm 2', 'Chain-flails', true, 0),
+  ('363408f5-4a6a-49a9-253d-a181caa97c6f', '02b26f25-991d-bc79-19b1-c80e8a1d3d17', 'Talos: Arm 2', 'Talos Gauntlet', false, 0),
+  ('9c45c545-983a-e284-2c89-07c0d9fc74b8', '02b26f25-991d-bc79-19b1-c80e8a1d3d17', 'Talos: Arm 2', 'Macro-Scalpel', false, 0),
+  ('61941f6e-2e74-0058-cf1f-2d91770ae21d', '02b26f25-991d-bc79-19b1-c80e8a1d3d17', 'Talos: Tail Weapon', 'Twin Splinter Cannon', true, 0),
+  ('66506705-8e61-265f-b828-bf09ca20f01a', '02b26f25-991d-bc79-19b1-c80e8a1d3d17', 'Talos: Tail Weapon', 'Twin Haywire Blasters', false, 0),
+  ('381d2137-5a97-f279-17fa-dfd463198ad2', '02b26f25-991d-bc79-19b1-c80e8a1d3d17', 'Talos: Tail Weapon', 'Twin Heat Lance', false, 0),
+  ('1d6588ed-1e5f-a761-387a-763543ba651c', '02b26f25-991d-bc79-19b1-c80e8a1d3d17', 'Talos: Tail Weapon', 'Stinger Pod', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('175666f4-8645-5850-eb67-11c350541f77', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Urien Rakarth [Legends]', 'epic_hero', '7"', 4, '6+', 5, 6, 1, '{"Urien Rakarth", "Haemonculus Covens", "Aeldari", "Haemonculus", "Character", "Epic Hero", "Infantry"}', 1);
@@ -22598,6 +23558,14 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
 ■ Melee weapons equipped by non-^^**Character**^^ models in this unit have an Attacks characteristic of 3.
 ■ Melee weapons equipped by non-^^**Character**^^ models in this unit have an Attacks characteristic of 4 and the ^^**[Hazardous]**^^ ability.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('4a558ea0-07bd-dcce-8e63-d9828d1a666a', 'ec80baff-f78f-cd6f-e4cf-451342692ff0', '4-9 Wracks', 'Wrack', true, 0),
+  ('33529789-f822-ff60-0aac-d275012dced5', 'ec80baff-f78f-cd6f-e4cf-451342692ff0', '4-9 Wracks', 'Wrack with Hexrifle', false, 0),
+  ('f7826819-0c80-0b3c-265c-2b31401a626a', 'ec80baff-f78f-cd6f-e4cf-451342692ff0', '4-9 Wracks', 'Wrack with Liquifier Gun', false, 0),
+  ('30329c57-b751-38e5-74b1-1f9d9a46ade9', 'ec80baff-f78f-cd6f-e4cf-451342692ff0', '4-9 Wracks', 'Wrack with Ossefactor', false, 0),
+  ('8598611b-ef8b-dd8c-274d-38e2ed7c3211', 'ec80baff-f78f-cd6f-e4cf-451342692ff0', '4-9 Wracks', 'Wrack with Stinger Pistol', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('2bed286c-3b4f-fdea-024a-81981c7360bb', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Wyches', 'battleline', '8"', 3, '6+', 1, 7, 2, '{"Wyches", "Wych Cult", "Aeldari", "Battleline", "Infantry"}', 6);
 
@@ -22616,6 +23584,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
 This unit has a 4+ Invulnerable save against melee attacks.'),
   ('2bed286c-3b4f-fdea-024a-81981c7360bb', 'No Escape', 'unique', 'Each time an enemy unit (excluding ^^**Monsters**^^ and ^^**Vehicles**^^) within Engagement Range of one or more units from your army with this ability Falls Back, all models in that enemy unit must take Desperate Escape test. When doing so, if that enemy unit is Battle-shocked, subtract 1 from each of those tests.'),
   ('2bed286c-3b4f-fdea-024a-81981c7360bb', 'Acrobatic Gladiators (Pain)', 'unique', 'At the start of your Charge phase, you can spend 1 Pain token to Empower this unit. While Empowered, this unit is eligible to declare a charge in a turn in which it Advanced or Fell Back.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('d254692d-436a-2dec-09f7-d509c6b15c14', '2bed286c-3b4f-fdea-024a-81981c7360bb', '9 Wyches', 'Wych', true, 0),
+  ('7d93dbfa-24f0-ce16-418d-01e86ae1b48e', '2bed286c-3b4f-fdea-024a-81981c7360bb', '9 Wyches', 'Wych w/ Gladiatorial weapons', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('059d748d-f8b0-f332-f253-ea58e913776c', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Cobra [Legends]', 'vehicle', '14"', 11, '2+', 24, 6, 8, '{"Vehicle", "Titanic", "Fly", "Cobra", "Aeldari"}', 3);
@@ -22679,7 +23652,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('ee393f0a-2b9f-c064-faa0-417e40ba4436', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Hornet [Legends]', 'vehicle', '14"', 7, '3+', 8, 6, 2, '{"Vehicle", "Fly", "Hornet", "Aeldari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('ee393f0a-2b9f-c064-faa0-417e40ba4436', 2, 100);
+  ('ee393f0a-2b9f-c064-faa0-417e40ba4436', 1, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('ee393f0a-2b9f-c064-faa0-417e40ba4436', 'Wraithbone Hull', 'melee', NULL, '3', '4+', 6, 0, '1', '{}'),
@@ -22804,7 +23777,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('f6137a43-be87-9b70-a6b5-c70979192408', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Shadow Spectres [Legends]', 'infantry', '12"', 3, '3+', 2, 6, 1, '{"Infantry", "Fly", "Shadow Spectres", "Jump Pack", "Aeldari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('f6137a43-be87-9b70-a6b5-c70979192408', 5, 115);
+  ('f6137a43-be87-9b70-a6b5-c70979192408', 6, 115);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('f6137a43-be87-9b70-a6b5-c70979192408', '➤ Prism Rifle - dispersed', 'ranged', '18"', 'D6', '3+', 4, -1, '1', '{"Blast"}'),
@@ -23002,7 +23975,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('8dc4d214-705c-1fd0-9ca5-719ca48183f5', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Corsair Cloud Dancer Band [Legends]', 'mounted', '14"', 4, '3+', 2, 6, 2, '{"Mounted", "Anhrathe", "Corsair Cloud Dancer Band", "Corsairs and Travelling Players", "Aeldari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('8dc4d214-705c-1fd0-9ca5-719ca48183f5', 3, 105);
+  ('8dc4d214-705c-1fd0-9ca5-719ca48183f5', 4, 105);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('8dc4d214-705c-1fd0-9ca5-719ca48183f5', 'Close combat weapon', 'melee', NULL, '2', '3+', 3, 0, '1', '{}'),
@@ -23203,6 +24176,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('145e36ea-dd32-7032-9893-e5ad582c8213', 'Runes of Battle (Psychic)', 'unique', 'Weapons equipped by models in this unit have the [Ignores Cover] ability.'),
   ('145e36ea-dd32-7032-9893-e5ad582c8213', 'Invulnerable Save (Warlock)', 'invulnerable', 'A Warlock Skyrunner has a 4+ Invulnerable save.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('4c9a185b-e9f1-b3e8-321e-5c89ca02f1f6', '145e36ea-dd32-7032-9893-e5ad582c8213', '1-2 Warlock Skyrunners', 'Warlock Skyrunner with Witchblade', true, 0),
+  ('6b3e70e7-b2ab-dcdf-785f-732efd590e26', '145e36ea-dd32-7032-9893-e5ad582c8213', '1-2 Warlock Skyrunners', 'Warlock Skyrunner with Singing Spear', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('61233640-2c51-5d57-c24c-ec97700c4657', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Ynnari Archon', 'character', '8"', 3, '4+', 4, 6, 1, '{"Character", "Infantry", "Aeldari", "Archon"}', 3);
 
@@ -23385,6 +24363,12 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('eef76c06-16dd-1825-6d2d-a3ad7b84c8f9', 'Invulnerable Save', 'invulnerable', 'This unit has a 6+ invulnerable save.'),
   ('eef76c06-16dd-1825-6d2d-a3ad7b84c8f9', 'Eviscerating Fly-by', 'unique', 'Each time this unit ends a Normal move, you can select one enemy unit (excluding Monster and Vehicle units) that it moved over during that move. If you do, roll one D6 for each model in this unit: for each 4+, that enemy unit suffers 1 mortal wound.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('8800060b-a0a4-62a2-9bc3-acefedda8115', 'eef76c06-16dd-1825-6d2d-a3ad7b84c8f9', '2-5 Reavers', 'Reaver', false, 0),
+  ('5842c999-d60c-efd1-4598-bf99d343ea79', 'eef76c06-16dd-1825-6d2d-a3ad7b84c8f9', '2-5 Reavers', 'Reaver with Blaster', false, 0),
+  ('84b25c4b-c694-eaf6-633d-7dc2ec13ae1a', 'eef76c06-16dd-1825-6d2d-a3ad7b84c8f9', '2-5 Reavers', 'Reaver with Heat Lance', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('1b1e413a-3cad-f876-20eb-67b60e4cc92d', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Ynnari Raider', 'dedicated_transport', '14"', 8, '4+', 10, 6, 2, '{"Raider", "Aeldari", "Dedicated Transport", "Fly", "Vehicle", "Transport"}', 6);
 
@@ -23466,6 +24450,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('a778ce3f-5077-9819-5ca1-6099cf21c729', 'Invulnerable Save', 'invulnerable', 'This unit has a 5+ Invulnerable save'),
   ('a778ce3f-5077-9819-5ca1-6099cf21c729', 'Murderous Crossfire', 'unique', 'After this unit has shot, select one enemy unit hit by one or more of those attacks. Until the end of the phase, each time a friendly ^^**Drukhari**^^ unit makes a ranged attack that targets that enemy unit, improve the Armour Penetration characteristic of that attack by 1. The same enemy unit can only be affected by this ability once per turn.'),
   ('a778ce3f-5077-9819-5ca1-6099cf21c729', 'Swooping Descent (Pain)', 'unique', 'In your Movement phase, you can spend 1 Pain token to Empower this unit. While Empowered, each time a model in this unit is set up on the battlefield using the Deep Strike ability, it can be set up anywhere on the battlefield that is more than 6" horizontally away from all enemy units. When doing so, if this unit is set up within 9" of one or more enemy units, until the end of the turn, it is not eligible to declare a charge.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('77dc364a-f34f-1b71-d16e-44fd63f869fa', 'a778ce3f-5077-9819-5ca1-6099cf21c729', 'Scourge w/ special weapon', 'Scourge with Special Weapon', false, 0),
+  ('56ebe6d6-5a7a-97b9-5435-7f042fe67681', 'a778ce3f-5077-9819-5ca1-6099cf21c729', 'Scourge w/ special weapon', 'Scourge', true, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('5edec5dc-4de4-7a54-6571-fa9babd91e33', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Prince Yriel', 'epic_hero', '7"', 3, '3+', 5, 6, 1, '{"Prince Yriel", "Infantry", "Character", "Epic Hero", "Aeldari", "Anhrathe"}', 1);
@@ -24315,7 +25304,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('e680dcc2-1eb3-94eb-7d7c-6d4df3416dca', '485f89b8-3530-2805-7fbb-d258f261802b', 'Guardian Defenders', 'battleline', '7"', 3, '4+', 1, 7, 2, '{"Guardian Defenders", "Battleline", "Infantry", "Guardians", "Aeldari", "Ynnari"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('e680dcc2-1eb3-94eb-7d7c-6d4df3416dca', 1, 100);
+  ('e680dcc2-1eb3-94eb-7d7c-6d4df3416dca', 11, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('e680dcc2-1eb3-94eb-7d7c-6d4df3416dca', 'Close Combat Weapon', 'melee', NULL, '1', '3+', 3, 0, '1', '{}'),
@@ -24485,7 +25474,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('f1a97894-cbff-203e-d766-59db823d9d3e', '485f89b8-3530-2805-7fbb-d258f261802b', 'Rangers', 'infantry', '7"', 3, '5+', 1, 7, 1, '{"Rangers", "Infantry", "Aeldari", "Ynnari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('f1a97894-cbff-203e-d766-59db823d9d3e', 1, 55);
+  ('f1a97894-cbff-203e-d766-59db823d9d3e', 5, 55);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('f1a97894-cbff-203e-d766-59db823d9d3e', 'Long rifle', 'ranged', '36"', '1', '3+', 4, -1, '2', '{"Heavy", "Precision"}'),
@@ -24543,7 +25532,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('7215c367-69de-7fa0-ed0e-3ceb34016317', '485f89b8-3530-2805-7fbb-d258f261802b', 'Shroud Runners', 'mounted', '14"', 4, '5+', 3, 7, 2, '{"Shroud Runners", "Fly", "Mounted", "Aeldari", "Ynnari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('7215c367-69de-7fa0-ed0e-3ceb34016317', 1, 80);
+  ('7215c367-69de-7fa0-ed0e-3ceb34016317', 3, 80);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('7215c367-69de-7fa0-ed0e-3ceb34016317', 'Long rifle', 'ranged', '36"', '1', '2+', 4, -1, '2', '{"Precision"}'),
@@ -24559,7 +25548,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('eeba53d6-208b-0269-b68c-6f84f7a359e8', '485f89b8-3530-2805-7fbb-d258f261802b', 'Skyweavers', 'mounted', '14"', 4, '4+', 3, 6, 2, '{"Skyweavers", "Fly", "Mounted", "Smoke", "Harlequin Allies", "Aeldari", "Corsairs and Travelling Players"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('eeba53d6-208b-0269-b68c-6f84f7a359e8', 1, 95);
+  ('eeba53d6-208b-0269-b68c-6f84f7a359e8', 2, 95);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('eeba53d6-208b-0269-b68c-6f84f7a359e8', 'Close Combat Weapon', 'melee', NULL, '4', '3+', 3, 0, '1', '{}'),
@@ -24628,7 +25617,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('38b1e1bf-00c3-912f-ab67-d3a527865585', '485f89b8-3530-2805-7fbb-d258f261802b', 'Storm Guardians', 'battleline', '7"', 3, '4+', 2, 7, 1, '{"Storm Guardians", "Battleline", "Infantry", "Guardians", "Aeldari", "Ynnari"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('38b1e1bf-00c3-912f-ab67-d3a527865585', 10, 110);
+  ('38b1e1bf-00c3-912f-ab67-d3a527865585', 11, 110);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('38b1e1bf-00c3-912f-ab67-d3a527865585', 'Close Combat Weapon', 'melee', NULL, '2', '3+', 3, 0, '1', '{}'),
@@ -24640,6 +25629,15 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('38b1e1bf-00c3-912f-ab67-d3a527865585', 'Stormblades', 'unique', 'At the end of your Command phase, if this unit is within range of an objective marker you control, that objective marker remains under your control until your opponent''s Level of Control over that objective marker is greater than yours at the end of a phase.'),
   ('38b1e1bf-00c3-912f-ab67-d3a527865585', 'Crewed Platform', 'unique', 'When the last Storm Guardian model in this unit is destroyed, any remaining Serpent’s Scale Platform models in this unit are also destroyed.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('bc98e189-ad42-c52b-8e2e-71025de97e11', '38b1e1bf-00c3-912f-ab67-d3a527865585', '10 Storm Guardians', 'Storm Guardian', true, 0),
+  ('012d09b9-a81b-0424-f1b4-67a0eb0218f1', '38b1e1bf-00c3-912f-ab67-d3a527865585', '10 Storm Guardians', 'Storm Guardian with Flamer', false, 0),
+  ('47ede983-a52e-8d4d-746f-951ba4f92141', '38b1e1bf-00c3-912f-ab67-d3a527865585', '10 Storm Guardians', 'Storm Guardian with Fusion Gun', false, 0),
+  ('221093d5-522a-e15d-c0e9-719e1a631c23', '38b1e1bf-00c3-912f-ab67-d3a527865585', '10 Storm Guardians', 'Storm Guardian with Power Sword', false, 0),
+  ('4ea6da2b-3973-cd78-213f-21cf183277f5', '38b1e1bf-00c3-912f-ab67-d3a527865585', '10 Storm Guardians', 'Storm Guardian with Flamer & Power Sword', false, 0),
+  ('b76a6a48-fbdb-a48d-9c0f-a59cfb5ebe24', '38b1e1bf-00c3-912f-ab67-d3a527865585', '10 Storm Guardians', 'Storm Guardian with Fusion Gun & Power Sword', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('ef3c42e0-d290-a14e-ea00-b677b851e146', '485f89b8-3530-2805-7fbb-d258f261802b', 'Striking Scorpions', 'infantry', '7"', 3, '3+', 1, 6, 1, '{"Striking Scorpions", "Infantry", "Aeldari", "Aspect Warrior", "Ynnari"}', 3);
@@ -24842,6 +25840,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('5d8f1f18-725f-35c5-4746-7580cfff0a9c', 'Psychic Communion (Psychic)', 'unique', 'Each time this unit is selected to shoot, for each ^^Warlock^^ model in this unit, until the end of the phase, add 1 to the Attacks and Strength characteristics of that model''s Destructor weapon for each other friendly ^^Aeldari Psyker^^ model within 6" of this model (to a maximum of +2).'),
   ('5d8f1f18-725f-35c5-4746-7580cfff0a9c', 'Leader', 'core', 'At the start of the Declare Battle Formations step, if this unit is not an Attached unit, this unit can join one ^^Guardian Defenders^^ or ^^Storm Guardians^^ unit from your army (a unit cannot have more than one ^^Warlock Conclave^^ unit joined to it). If it does, until the end of the battle, every model in this unit counts as being part of that Bodyguard unit, and that Bodyguard unit’s Starting Strength is increased accordingly.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('d9a9e6cf-77f2-aa2b-421a-97ff07cd69af', '5d8f1f18-725f-35c5-4746-7580cfff0a9c', '2-4 Warlocks', 'Warlock with Witchblade', true, 0),
+  ('ad2cf909-36fe-ba85-814e-be68dadb7d0a', '5d8f1f18-725f-35c5-4746-7580cfff0a9c', '2-4 Warlocks', 'Warlock with Singing Spear', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('7e32bc42-dd4d-493a-7b3b-ac844c28cdd4', '485f89b8-3530-2805-7fbb-d258f261802b', 'Warp Spiders', 'infantry', '12"', 3, '3+', 1, 6, 1, '{"Warp Spiders", "Infantry", "Fly", "Jump Pack", "Aeldari", "Aspect Warrior", "Ynnari"}', 3);
 
@@ -24976,7 +25979,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('3b5ccbf1-3201-7f06-109c-af7b54bbea8e', '485f89b8-3530-2805-7fbb-d258f261802b', 'Wraithguard', 'infantry', '6"', 6, '2+', 3, 8, 1, '{"Infantry", "Wraithguard", "Wraith Construct", "Aeldari", "Ynnari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('3b5ccbf1-3201-7f06-109c-af7b54bbea8e', 1, 170);
+  ('3b5ccbf1-3201-7f06-109c-af7b54bbea8e', 5, 170);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('3b5ccbf1-3201-7f06-109c-af7b54bbea8e', 'Close Combat Weapon', 'melee', NULL, '3', '4+', 5, 0, '1', '{}'),
@@ -25015,7 +26018,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('151c458e-b584-6d9f-d201-58f4d03dc50c', '485f89b8-3530-2805-7fbb-d258f261802b', 'Wraithblades', 'infantry', '6"', 6, '2+', 3, 8, 1, '{"Wraithblades", "Infantry", "Wraith Construct", "Aeldari", "Ynnari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('151c458e-b584-6d9f-d201-58f4d03dc50c', 1, 160);
+  ('151c458e-b584-6d9f-d201-58f4d03dc50c', 5, 160);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('151c458e-b584-6d9f-d201-58f4d03dc50c', 'Ghostswords', 'melee', NULL, '5', '4+', 5, -2, '2', '{}'),
@@ -25076,11 +26079,17 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('1314f851-e669-4361-9e5a-c4ddd8092ec4', 'Invulnerable Save', 'invulnerable', 'This unit has a 6+ Invulnerable save'),
   ('1314f851-e669-4361-9e5a-c4ddd8092ec4', 'Goaded Savagery (Pain)', 'unique', 'In the Fight phase, when you select this unit to fight, you can spend 1 of your Pain tokens to Empower this unit. While this unit is Empowered, if it contains a ^^**Beastmaster**^^ model, each time a ^^**Beast**^^ model in this unit makes a melee attack, you can re-roll the Hit roll and you can re-roll the Wound roll.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('057c944e-5e8a-11ad-4bc1-d19f8f570f32', '1314f851-e669-4361-9e5a-c4ddd8092ec4', 'Beasts', 'Clawed Fiend', false, 0),
+  ('c7a290c2-6c5a-2fba-2fce-c89b23b57182', '1314f851-e669-4361-9e5a-c4ddd8092ec4', 'Beasts', 'Khymerae', false, 0),
+  ('ae110b36-fdac-af56-4710-13855651812d', '1314f851-e669-4361-9e5a-c4ddd8092ec4', 'Beasts', 'Razorwing Flock', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('0b523132-2f75-3c69-d093-17ff98da32f3', '485f89b8-3530-2805-7fbb-d258f261802b', 'Court of the Archon [Legends]', 'infantry', '7"', 3, '5+', 2, 7, 1, '{"Court of the Archon", "Aeldari", "Kabal", "Infantry"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('0b523132-2f75-3c69-d093-17ff98da32f3', 1, 95);
+  ('0b523132-2f75-3c69-d093-17ff98da32f3', 4, 95);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('0b523132-2f75-3c69-d093-17ff98da32f3', 'Shaimeshi Blade', 'melee', NULL, '4', '3+', 4, -2, '1', '{"Anti-Infantry 2+"}'),
@@ -25120,6 +26129,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('829b0238-01ed-6e1c-dd77-7c4fae248455', 'Invulnerable Save', 'invulnerable', 'This unit has a 6+ Invulnerable save'),
   ('829b0238-01ed-6e1c-dd77-7c4fae248455', 'Pain Parasite (Pain)', 'unique', 'In your Shooting phase or the Fight phase, when you select this unit to shoot or fight, you can spend 1 Pain token to Empower this unit. While Empowered, each time this unit shoots or fights, after it has resolved its attacks, if one or more enemy models were destroyed as a result of those attacks, one model in this unit regains up to 3 lost wounds (if all models in this unit have their starting number of wounds and this unit is below its Starting Strength, 1 model is returned to this unit with 3 wounds remaining).');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('de65ba2a-90ab-c3aa-3bf8-6442895f389b', '829b0238-01ed-6e1c-dd77-7c4fae248455', 'Cronos wargear', 'Spirit Syphon', true, 0),
+  ('657a80d1-b7be-0d53-d533-d6ba806f8df7', '829b0238-01ed-6e1c-dd77-7c4fae248455', 'Cronos wargear', 'Spirit-leech Tentacles', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('31f24e6d-3fd3-e3b7-3b1c-3319186ebb39', '485f89b8-3530-2805-7fbb-d258f261802b', 'Drazhar', 'epic_hero', '7"', 3, '2+', 5, 6, 1, '{"Epic Hero", "Drazhar", "Aeldari", "Infantry", "Character", "Blades for Hire"}', 1);
 
@@ -25154,6 +26168,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('d1665799-b1ce-ca03-51be-a3bf53c856f5', 'Monstrous Hulks', 'unique', 'This unit cannot embark within a ^^**Venom**^^, but it can embark within other ^^**Drukhari Transports**^^; when doing so, each ^^**Grotesque**^^ model takes up the space of 3 models.'),
   ('d1665799-b1ce-ca03-51be-a3bf53c856f5', 'Macro-steroids (Pain)', 'unique', 'In the Fight phase, when you select this unit to fight, you can spend 1 of your Pain tokens to Empower this unit. While Empowered, melee weapons equipped by models in this unit have a Strength characteristic of 8 and the ^^**[LETHAL HITS]**^^ ability.'),
   ('d1665799-b1ce-ca03-51be-a3bf53c856f5', 'Monstrous Charge', 'unique', 'Each time this unit ends a Charge move, select one enemy unit within Engagement Range of it, then roll one D6 for each model in this unit that is within Engagement Range of that enemy unit: for each 4+, that enemy unit suffers D3 mortal wounds.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('3ec4b0ba-ba0b-c428-d7e7-b4e65e7b81be', 'd1665799-b1ce-ca03-51be-a3bf53c856f5', '3-6 Grotesques', 'Grotesque w/ paired monstrous weapons', true, 0),
+  ('9a29e6dd-6377-8b94-fc36-f4386c827a3d', 'd1665799-b1ce-ca03-51be-a3bf53c856f5', '3-6 Grotesques', 'Grotesque w/ Liquifier', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('bf640aac-b6db-4472-e11c-6dbdb3e91407', '485f89b8-3530-2805-7fbb-d258f261802b', 'Haemonculus', 'character', '7"', 4, '5+', 5, 7, 1, '{"Haemonculus", "Haemonculus Covens", "Aeldari", "Character", "Infantry"}', 3);
@@ -25233,6 +26252,14 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('56b555c5-ee76-2fdf-6d4b-31e0c9dd29d3', 'Invulnerable Save', 'invulnerable', 'This unit has a 6+ Invulnerable save'),
   ('56b555c5-ee76-2fdf-6d4b-31e0c9dd29d3', 'Cruel Enforcers', 'unique', 'At the end of your Command phase, if this unit is within range of an objective marker you control, that objective marker remains under you control, until your opponent''s Level of Control over that objective marker is greater than yours at the end of a phase.'),
   ('56b555c5-ee76-2fdf-6d4b-31e0c9dd29d3', 'Sadistic Raiders (Pain)', 'unique', 'In your Shooting phase or the Fight phase, when you select this unit to shoot or fight, you can spend 1 Pain token to Empower this unit. While Empowered, each time a model in this unit makes an attack, re-roll a Wound roll of 1. If the target is within range of an objective marker, you can re-roll the Wound roll instead.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('8925bca6-1efd-2129-18b2-b6e52102e6cd', '56b555c5-ee76-2fdf-6d4b-31e0c9dd29d3', '9 Kabalite Warriors', 'Kabalite Warrior with Shredder', false, 0),
+  ('4c0cd51f-b0fc-21f9-b8b4-474212e51ab2', '56b555c5-ee76-2fdf-6d4b-31e0c9dd29d3', '9 Kabalite Warriors', 'Kabalite Warrior', true, 0),
+  ('0caf5a3e-a233-365d-00ac-df6b4b113bc5', '56b555c5-ee76-2fdf-6d4b-31e0c9dd29d3', '9 Kabalite Warriors', 'Kabalite Warrior with Blaster', false, 0),
+  ('2438e21e-d457-1e61-8a5f-1ea20dc5c7d4', '56b555c5-ee76-2fdf-6d4b-31e0c9dd29d3', '9 Kabalite Warriors', 'Kabalite Warrior with Splinter Cannon', false, 0),
+  ('36c90b39-e6bb-6e17-16fb-8e2a896a875f', '56b555c5-ee76-2fdf-6d4b-31e0c9dd29d3', '9 Kabalite Warriors', 'Kabalite Warrior with Dark Lance', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('dc346677-bc9a-3b16-71a8-d1c969e525dc', '485f89b8-3530-2805-7fbb-d258f261802b', 'Lelith Hesperax', 'epic_hero', '8"', 3, '6+', 4, 6, 1, '{"Lelith Hesperax", "Aeldari", "Wych Cult", "Succubus", "Epic Hero", "Character", "Infantry"}', 1);
@@ -25363,6 +26390,12 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('57d82096-e6f8-163f-9d19-a206e4dbc9b5', 'Eviscerating Fly-by', 'unique', 'Each time this unit ends a Normal or Advance move, you can select one enemy unit (excluding ^^**Monster **^^and ^^**Vehicle**^^ units) that it moved over during that move, then roll one D6 for each model in this unit: for each 4+, that enemy unit suffers 1 mortal wound.'),
   ('57d82096-e6f8-163f-9d19-a206e4dbc9b5', 'Matchless Swiftness (Pain)', 'unique', 'In your Movement phase, when you select this unit to Advance, you can spend 1 Pain token to Empower this unit. While Empowered, each time this unit Advances, do not make an Advance roll. Instead, until the end of the phase, add 8" to the Move characteristic of models in this unit.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('15cd8865-5525-0898-54c5-d7641631e35f', '57d82096-e6f8-163f-9d19-a206e4dbc9b5', '2-5 Reavers', 'Reaver', false, 0),
+  ('07ae55e1-5bce-ed3e-0482-b8c363823e8a', '57d82096-e6f8-163f-9d19-a206e4dbc9b5', '2-5 Reavers', 'Reaver with Blaster', false, 0),
+  ('8c0d9bee-469c-3ead-a46f-048cc39b610a', '57d82096-e6f8-163f-9d19-a206e4dbc9b5', '2-5 Reavers', 'Reaver with Heat Lance', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('4a7c7565-9c17-5528-7d66-4ce972ff61ce', '485f89b8-3530-2805-7fbb-d258f261802b', 'Scourges with Heavy Weapons', 'infantry', '14"', 3, '4+', 1, 7, 1, '{"Scourges", "Aeldari", "Fly", "Infantry", "Jump Pack", "Blades for Hire", "Scourges with Heavy Weapons"}', 3);
 
@@ -25426,6 +26459,19 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('b5805ca5-9ce3-502b-af47-625e5346c130', 'Invulnerable Save', 'invulnerable', 'This unit has a 6+ Invulnerable save'),
   ('b5805ca5-9ce3-502b-af47-625e5346c130', 'Devoted to Pain', 'unique', 'If a model in this unit is equipped with 2 macro-scalpels, those weapons have the ^^**[Twin-Linked]**^^ ability.'),
   ('b5805ca5-9ce3-502b-af47-625e5346c130', 'Mindless Killing Machines (Pain)', 'unique', 'At the start of the Fight phase, you can spend 1 Pain token to Empower this unit. While Empowered, each time a model in this unit is destroyed by a melee attack, if that model has not fought this phase, roll one D6. On a 2+, do not remove it from play; that destroyed model can fight after the attacking unit has finished making its attacks, and it is then removed from play.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('7d896f47-4864-1327-f9d6-74b8cffefb5e', 'b5805ca5-9ce3-502b-af47-625e5346c130', 'Talos: Arm 1', 'Macro-Scalpel', true, 0),
+  ('7c9e21e8-e1c2-d78a-54a4-476c09530ef4', 'b5805ca5-9ce3-502b-af47-625e5346c130', 'Talos: Arm 1', 'Talos Ichor Injector', false, 0),
+  ('def43077-f0e8-a64e-61ff-619a2f489b25', 'b5805ca5-9ce3-502b-af47-625e5346c130', 'Talos: Arm 1', 'Twin Liquifier Gun', false, 0),
+  ('ebb38535-c6ef-963b-7cab-499bbee087e7', 'b5805ca5-9ce3-502b-af47-625e5346c130', 'Talos: Arm 2', 'Chain-flails', true, 0),
+  ('dd773fe4-d3a5-e9bf-8b1a-02f258c1ef37', 'b5805ca5-9ce3-502b-af47-625e5346c130', 'Talos: Arm 2', 'Talos Gauntlet', false, 0),
+  ('cfc5a890-0087-de24-ca86-67297810c7e4', 'b5805ca5-9ce3-502b-af47-625e5346c130', 'Talos: Arm 2', 'Macro-Scalpel', false, 0),
+  ('4e31bc0e-d3dd-4eb1-53df-d600ea8ac84f', 'b5805ca5-9ce3-502b-af47-625e5346c130', 'Talos: Tail Weapon', 'Twin Splinter Cannon', true, 0),
+  ('a332734b-4114-2831-1b83-75e934c6239b', 'b5805ca5-9ce3-502b-af47-625e5346c130', 'Talos: Tail Weapon', 'Twin Haywire Blasters', false, 0),
+  ('4baa1acb-9d34-b1fe-4c12-e498381f2242', 'b5805ca5-9ce3-502b-af47-625e5346c130', 'Talos: Tail Weapon', 'Twin Heat Lance', false, 0),
+  ('cc444ca4-0c90-29ca-0572-32612f4b2616', 'b5805ca5-9ce3-502b-af47-625e5346c130', 'Talos: Tail Weapon', 'Stinger Pod', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('b8f2ec9f-283e-cf74-9375-58f086670324', '485f89b8-3530-2805-7fbb-d258f261802b', 'Urien Rakarth [Legends]', 'epic_hero', '7"', 4, '6+', 5, 6, 1, '{"Urien Rakarth", "Haemonculus Covens", "Aeldari", "Haemonculus", "Character", "Epic Hero", "Infantry"}', 1);
@@ -25516,6 +26562,14 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
 ■ Melee weapons equipped by non-^^**Character**^^ models in this unit have an Attacks characteristic of 3.
 ■ Melee weapons equipped by non-^^**Character**^^ models in this unit have an Attacks characteristic of 4 and the ^^**[Hazardous]**^^ ability.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('dce252ae-e149-93cf-e157-721c8a7cdde5', '6c34b2cd-7617-8226-f284-79a7bb456981', '4-9 Wracks', 'Wrack', true, 0),
+  ('740fb578-f346-64ab-1072-5c688ef63299', '6c34b2cd-7617-8226-f284-79a7bb456981', '4-9 Wracks', 'Wrack with Hexrifle', false, 0),
+  ('cc34c46a-39cf-eeca-aed9-9ed2cb2ae973', '6c34b2cd-7617-8226-f284-79a7bb456981', '4-9 Wracks', 'Wrack with Liquifier Gun', false, 0),
+  ('0c9f166f-3535-d140-1db0-18f0c5f819e2', '6c34b2cd-7617-8226-f284-79a7bb456981', '4-9 Wracks', 'Wrack with Ossefactor', false, 0),
+  ('95753d20-d1c8-daf1-f10e-1380aa387f7e', '6c34b2cd-7617-8226-f284-79a7bb456981', '4-9 Wracks', 'Wrack with Stinger Pistol', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('6dbaf5c1-26bc-2cc1-0723-c17328f15d42', '485f89b8-3530-2805-7fbb-d258f261802b', 'Wyches', 'battleline', '8"', 3, '6+', 1, 7, 2, '{"Wyches", "Wych Cult", "Aeldari", "Battleline", "Infantry"}', 6);
 
@@ -25534,6 +26588,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
 This unit has a 4+ Invulnerable save against melee attacks.'),
   ('6dbaf5c1-26bc-2cc1-0723-c17328f15d42', 'No Escape', 'unique', 'Each time an enemy unit (excluding ^^**Monsters**^^ and ^^**Vehicles**^^) within Engagement Range of one or more units from your army with this ability Falls Back, all models in that enemy unit must take Desperate Escape test. When doing so, if that enemy unit is Battle-shocked, subtract 1 from each of those tests.'),
   ('6dbaf5c1-26bc-2cc1-0723-c17328f15d42', 'Acrobatic Gladiators (Pain)', 'unique', 'At the start of your Charge phase, you can spend 1 Pain token to Empower this unit. While Empowered, this unit is eligible to declare a charge in a turn in which it Advanced or Fell Back.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('7510e64c-8c09-02a3-160e-2c7ddf7d34aa', '6dbaf5c1-26bc-2cc1-0723-c17328f15d42', '9 Wyches', 'Wych', true, 0),
+  ('b9e9283d-ce6e-85ba-b9c4-3780c3a999f0', '6dbaf5c1-26bc-2cc1-0723-c17328f15d42', '9 Wyches', 'Wych w/ Gladiatorial weapons', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('fc21755d-38f0-8083-8542-56dffebd4334', '485f89b8-3530-2805-7fbb-d258f261802b', 'Cobra [Legends]', 'vehicle', '14"', 11, '2+', 24, 6, 8, '{"Vehicle", "Titanic", "Fly", "Cobra", "Aeldari"}', 3);
@@ -25597,7 +26656,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('e18c5475-58c5-6bbe-b459-3bc597b975b4', '485f89b8-3530-2805-7fbb-d258f261802b', 'Hornet [Legends]', 'vehicle', '14"', 7, '3+', 8, 6, 2, '{"Vehicle", "Fly", "Hornet", "Aeldari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('e18c5475-58c5-6bbe-b459-3bc597b975b4', 2, 100);
+  ('e18c5475-58c5-6bbe-b459-3bc597b975b4', 1, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('e18c5475-58c5-6bbe-b459-3bc597b975b4', 'Wraithbone Hull', 'melee', NULL, '3', '4+', 6, 0, '1', '{}'),
@@ -25722,7 +26781,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('cd2e9ad4-e969-4de3-8546-4c3db1a811c4', '485f89b8-3530-2805-7fbb-d258f261802b', 'Shadow Spectres [Legends]', 'infantry', '12"', 3, '3+', 2, 6, 1, '{"Infantry", "Fly", "Shadow Spectres", "Jump Pack", "Aeldari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('cd2e9ad4-e969-4de3-8546-4c3db1a811c4', 5, 115);
+  ('cd2e9ad4-e969-4de3-8546-4c3db1a811c4', 6, 115);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('cd2e9ad4-e969-4de3-8546-4c3db1a811c4', '➤ Prism Rifle - dispersed', 'ranged', '18"', 'D6', '3+', 4, -1, '1', '{"Blast"}'),
@@ -25920,7 +26979,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('82006422-7727-fcc7-9237-282d0486fabd', '485f89b8-3530-2805-7fbb-d258f261802b', 'Corsair Cloud Dancer Band [Legends]', 'mounted', '14"', 4, '3+', 2, 6, 2, '{"Mounted", "Anhrathe", "Corsair Cloud Dancer Band", "Corsairs and Travelling Players", "Aeldari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('82006422-7727-fcc7-9237-282d0486fabd', 3, 105);
+  ('82006422-7727-fcc7-9237-282d0486fabd', 4, 105);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('82006422-7727-fcc7-9237-282d0486fabd', 'Close combat weapon', 'melee', NULL, '2', '3+', 3, 0, '1', '{}'),
@@ -26121,6 +27180,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('04d703c0-d5cc-f7b5-4dbe-1d1d34a9ddeb', 'Runes of Battle (Psychic)', 'unique', 'Weapons equipped by models in this unit have the [Ignores Cover] ability.'),
   ('04d703c0-d5cc-f7b5-4dbe-1d1d34a9ddeb', 'Invulnerable Save (Warlock)', 'invulnerable', 'A Warlock Skyrunner has a 4+ Invulnerable save.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('67f1f668-1d79-e388-bcc7-c9a12370f693', '04d703c0-d5cc-f7b5-4dbe-1d1d34a9ddeb', '1-2 Warlock Skyrunners', 'Warlock Skyrunner with Witchblade', true, 0),
+  ('161265d8-c570-2507-8719-dc93b174f189', '04d703c0-d5cc-f7b5-4dbe-1d1d34a9ddeb', '1-2 Warlock Skyrunners', 'Warlock Skyrunner with Singing Spear', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('765cad94-335f-6162-b08f-18bd51a63b04', '485f89b8-3530-2805-7fbb-d258f261802b', 'Ynnari Archon', 'character', '8"', 3, '4+', 4, 6, 1, '{"Character", "Infantry", "Aeldari", "Archon"}', 3);
 
@@ -26303,6 +27367,12 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('ab2f9c7b-1ad8-dccf-669b-afb58fb26f82', 'Invulnerable Save', 'invulnerable', 'This unit has a 6+ invulnerable save.'),
   ('ab2f9c7b-1ad8-dccf-669b-afb58fb26f82', 'Eviscerating Fly-by', 'unique', 'Each time this unit ends a Normal move, you can select one enemy unit (excluding Monster and Vehicle units) that it moved over during that move. If you do, roll one D6 for each model in this unit: for each 4+, that enemy unit suffers 1 mortal wound.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('7a43f17a-8771-aabb-0903-856382ae4292', 'ab2f9c7b-1ad8-dccf-669b-afb58fb26f82', '2-5 Reavers', 'Reaver', false, 0),
+  ('1322e85e-effb-4fd4-caa2-e97e19ee8857', 'ab2f9c7b-1ad8-dccf-669b-afb58fb26f82', '2-5 Reavers', 'Reaver with Blaster', false, 0),
+  ('03e2361e-bf8e-9e0a-f89e-3d82d6c0da52', 'ab2f9c7b-1ad8-dccf-669b-afb58fb26f82', '2-5 Reavers', 'Reaver with Heat Lance', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('e43d982c-d37e-a9aa-680c-666d961b2b73', '485f89b8-3530-2805-7fbb-d258f261802b', 'Ynnari Raider', 'dedicated_transport', '14"', 8, '4+', 10, 6, 2, '{"Raider", "Aeldari", "Dedicated Transport", "Fly", "Vehicle", "Transport"}', 6);
 
@@ -26384,6 +27454,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('127558db-fb8d-2b8e-bf98-68bc6f374c8d', 'Invulnerable Save', 'invulnerable', 'This unit has a 5+ Invulnerable save'),
   ('127558db-fb8d-2b8e-bf98-68bc6f374c8d', 'Murderous Crossfire', 'unique', 'After this unit has shot, select one enemy unit hit by one or more of those attacks. Until the end of the phase, each time a friendly ^^**Drukhari**^^ unit makes a ranged attack that targets that enemy unit, improve the Armour Penetration characteristic of that attack by 1. The same enemy unit can only be affected by this ability once per turn.'),
   ('127558db-fb8d-2b8e-bf98-68bc6f374c8d', 'Swooping Descent (Pain)', 'unique', 'In your Movement phase, you can spend 1 Pain token to Empower this unit. While Empowered, each time a model in this unit is set up on the battlefield using the Deep Strike ability, it can be set up anywhere on the battlefield that is more than 6" horizontally away from all enemy units. When doing so, if this unit is set up within 9" of one or more enemy units, until the end of the turn, it is not eligible to declare a charge.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('0e60c2ec-8566-7ac9-d0ed-7afe75aefd05', '127558db-fb8d-2b8e-bf98-68bc6f374c8d', 'Scourge w/ special weapon', 'Scourge with Special Weapon', false, 0),
+  ('ef229884-59c1-6071-69f7-2c931fe367f9', '127558db-fb8d-2b8e-bf98-68bc6f374c8d', 'Scourge w/ special weapon', 'Scourge', true, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('5011465d-de6e-8968-74e4-ac31a9058f67', '485f89b8-3530-2805-7fbb-d258f261802b', 'Prince Yriel', 'epic_hero', '7"', 3, '3+', 5, 6, 1, '{"Prince Yriel", "Infantry", "Character", "Epic Hero", "Aeldari", "Anhrathe"}', 1);
@@ -26528,7 +27603,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('04da6cbd-907c-bb28-ca28-aab35c70c34a', 'bdfb2412-05ad-2eea-a05a-45693e822400', 'Hearthkyn Warriors', 'battleline', '5"', 5, '4+', 1, 7, 2, '{"Infantry", "Battleline", "Hearthkyn Warriors"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('04da6cbd-907c-bb28-ca28-aab35c70c34a', 9, 100);
+  ('04da6cbd-907c-bb28-ca28-aab35c70c34a', 10, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('04da6cbd-907c-bb28-ca28-aab35c70c34a', 'Close combat weapon', 'melee', NULL, '1', '4+', 4, 0, '1', '{}'),
@@ -26546,6 +27621,12 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('04da6cbd-907c-bb28-ca28-aab35c70c34a', 'Luck Has, Need Keeps, Toil Earns', 'unique', 'At the end of your Command phase, if this unit is within range of an objective marker you control, that objective marker remains under your control, until your opponent''s Level of Control over that is greater than yours at the end of a phase.'),
   ('04da6cbd-907c-bb28-ca28-aab35c70c34a', 'Pan-spectral Scanning', 'unique', 'Each time a model in this unit makes a ranged attack, re-roll a Hit roll of 1.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('e1aa0105-f72c-892a-d282-a3f9c39e076f', '04da6cbd-907c-bb28-ca28-aab35c70c34a', 'Hearthkyn Warriors', 'Hearthkyn Warrior w/ bolter', true, 0),
+  ('2a678f47-b5c2-a16b-dd58-46312e63a3ee', '04da6cbd-907c-bb28-ca28-aab35c70c34a', 'Hearthkyn Warriors', 'Hearthkyn Warrior w/ ion blaster', false, 0),
+  ('06820bb5-417a-0648-968d-d0574962779d', '04da6cbd-907c-bb28-ca28-aab35c70c34a', 'Hearthkyn Warriors', 'Hearthkyn Warrior w/ plasma knife', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('bfb6a238-27b6-c292-c6d7-741f795869f3', 'bdfb2412-05ad-2eea-a05a-45693e822400', 'Ûthar the Destined', 'epic_hero', '5"', 5, '3+', 5, 6, 1, '{"Infantry", "Character", "Epic Hero", "Ûthar the Destined"}', 1);
@@ -26623,7 +27704,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('4cdb7053-2402-70ed-d996-d74adff7920a', 'bdfb2412-05ad-2eea-a05a-45693e822400', 'Grimnyr', 'character', '5"', 5, '4+', 4, 6, 1, '{"Infantry", "Character"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('4cdb7053-2402-70ed-d996-d74adff7920a', 1, 65);
+  ('4cdb7053-2402-70ed-d996-d74adff7920a', 3, 65);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('4cdb7053-2402-70ed-d996-d74adff7920a', 'Ancestral ward stave', 'melee', NULL, '2', '3+', 7, -1, 'D3', '{"Psychic"}'),
@@ -26639,6 +27720,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('4cdb7053-2402-70ed-d996-d74adff7920a', 'Fortify (Psychic)', 'unique', 'While this model is leading a unit, models in that unit have the Feel No Pain 5+ ability.'),
   ('4cdb7053-2402-70ed-d996-d74adff7920a', 'Grimnyr''s Regard', 'unique', 'Once per battle, at the start of any phase, you can select one friendly ^^**Leagues of Votann**^^ unit that is Battle-shocked and within 12" of this unit''s ^^**Grimnyr**^^ model. That unit is no longer Battle-shocked.'),
   ('4cdb7053-2402-70ed-d996-d74adff7920a', 'Unit Composition', 'unique', 'If this unit’s Grimnyr model is ever destroyed, all of this unit’s remaining CORV models are also destroyed. While embarking within a ^^**Transport^^** and while embarked within a ^^**Transport^^**, each CORV model takes up the space of 0 models.’');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('93b8a198-676e-f234-9b48-4ed9735b3e36', '4cdb7053-2402-70ed-d996-d74adff7920a', 'Grimnyr wargear', 'Ancestral ward stave', true, 0),
+  ('bd7920ee-bd7a-01d7-941a-3d174ee7dddf', '4cdb7053-2402-70ed-d996-d74adff7920a', 'Grimnyr wargear', 'Ancestral Wrath', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('f23f8816-c67e-b5e5-1e7f-11dd5689c9ff', 'bdfb2412-05ad-2eea-a05a-45693e822400', 'Brôkhyr Iron-master', 'character', '5"', 5, '4+', 4, 7, 1, '{"Infantry", "Character", "Brôkhyr"}', 3);
@@ -26664,11 +27750,18 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('f23f8816-c67e-b5e5-1e7f-11dd5689c9ff', 'Unit Composition', 'unique', 'If this unit’s Brôkhyr Iron‑master model is ever destroyed, all of this unit’s remaining E‑COG models are also destroyed. While embarking within a ^^**Transport^^** and while embarked within a ^^**Transport^^**, each E‑COG model takes up the space of 0 models.'),
   ('f23f8816-c67e-b5e5-1e7f-11dd5689c9ff', 'Forgewrought Expertise', 'unique', 'At the end of your Movement phase, this model can repair one friendly ^^**Leagues of Votann Vehicle, Exoframe^^** or ^^**Ironkin Steeljacks^^** unit within 3" of it. One model in that unit regains up to D3 lost wounds, or up to 3 lost wounds if this unit contains an Ironkin Assistant model. Each unit can only be repaired once per turn.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('4fa3d843-30e3-a292-b949-f2b21aa83c2e', 'f23f8816-c67e-b5e5-1e7f-11dd5689c9ff', 'Brôkhyr Iron-master wargear', 'Graviton hammer', true, 0),
+  ('86062c39-fc35-5b8c-2c2f-e222171e8e67', 'f23f8816-c67e-b5e5-1e7f-11dd5689c9ff', 'Brôkhyr Iron-master wargear', 'Graviton rifle', false, 0),
+  ('0b6f9663-8c3e-8004-c057-c48d05ee0530', 'f23f8816-c67e-b5e5-1e7f-11dd5689c9ff', 'Assistants', 'E-COG', false, 0),
+  ('979a6cbc-1fb1-9b56-134a-95b6710369bc', 'f23f8816-c67e-b5e5-1e7f-11dd5689c9ff', 'Assistants', 'Ironkyn Assistant', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('1c2365bb-960f-9338-d9af-7c11234136ea', 'bdfb2412-05ad-2eea-a05a-45693e822400', 'Einhyr Hearthguard', 'infantry', '5"', 5, '2+', 2, 7, 1, '{"Infantry", "Exoarmour", "Einhyr Hearthguard"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('1c2365bb-960f-9338-d9af-7c11234136ea', 4, 135);
+  ('1c2365bb-960f-9338-d9af-7c11234136ea', 5, 135);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('1c2365bb-960f-9338-d9af-7c11234136ea', 'Exo-armour grenade launcher', 'ranged', '24"', 'D3', '3+', 3, 0, '1', '{"Blast"}'),
@@ -26694,6 +27787,12 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('aa57bc6d-aab2-53e6-973a-5a128e67a616', 'Cyberstimms', 'unique', 'Each time a model in this unit is destroyed by a melee attack, if that model has not fought this phase, roll one D6, adding one to the result if units from your army have Fortify Takeover: on a 4+, do not remove it from play. The destroyed model can fight after the attacking unit has finished making its attacks, and is then removed from play.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('947a6c9e-cfec-6762-1e5b-5a1a978c3625', 'aa57bc6d-aab2-53e6-973a-5a128e67a616', '5 - 10 Beserks', 'Beserk', true, 0),
+  ('580080e3-006b-9c13-cdcc-6c4e79fa520a', 'aa57bc6d-aab2-53e6-973a-5a128e67a616', '5 - 10 Beserks', 'Beserk w/ twin concussion gauntlets', false, 0),
+  ('0d9527bb-4131-0000-f389-7c936509daa3', 'aa57bc6d-aab2-53e6-973a-5a128e67a616', '5 - 10 Beserks', 'Beserk w/ mole grenade launcher', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('a61d4fc3-8660-c8cb-f9f5-cf7fa6435e52', 'bdfb2412-05ad-2eea-a05a-45693e822400', 'Hernkyn Pioneers', 'mounted', '12"', 6, '4+', 3, 7, 2, '{"Mounted", "Fly", "Hernkyn Pioneers"}', 3);
 
@@ -26710,6 +27809,13 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('a61d4fc3-8660-c8cb-f9f5-cf7fa6435e52', 'Outflanking Mag-Riders', 'unique', 'At the end of your opponent’s turn, if this unit is wholly within 9" of one or more battlefield edges and not within Engagement Range of one or more enemy units, you can remove it from the battlefield and place it into Strategic Reserves.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('783d1f89-3ce6-edb4-cc83-e615e8842ec1', 'a61d4fc3-8660-c8cb-f9f5-cf7fa6435e52', '3 - 6 Pioneers', 'Hernkyn Pioneer', true, 0),
+  ('a8961b2b-7d90-c462-4086-b51740212d69', 'a61d4fc3-8660-c8cb-f9f5-cf7fa6435e52', '3 - 6 Pioneers', 'Hernkyn Pioneer w/ comms array', false, 0),
+  ('94ff0a00-08e4-7cce-21e7-116e3f36460d', 'a61d4fc3-8660-c8cb-f9f5-cf7fa6435e52', '3 - 6 Pioneers', 'Hernkyn Pioneer w/ pan-spectral scanner', false, 0),
+  ('586f7a4f-457f-957c-6392-c8d53454b723', 'a61d4fc3-8660-c8cb-f9f5-cf7fa6435e52', '3 - 6 Pioneers', 'Hernkyn Pioneer w/ searchlight', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('730413f9-8a20-6bc2-c969-c87c00ca6596', 'bdfb2412-05ad-2eea-a05a-45693e822400', 'Sagitaur', 'dedicated_transport', '12"', 9, '3+', 9, 7, 2, '{"Vehicle", "Transport", "Dedicated Transport", "Sagitaur"}', 6);
@@ -26739,7 +27845,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('51b2991a-2dc9-5389-41a0-07da99d2fec5', 'bdfb2412-05ad-2eea-a05a-45693e822400', 'Brôkhyr Thunderkyn', 'infantry', '5"', 6, '3+', 2, 7, 1, '{"Infantry", "Exoframe", "Thunderkyn", "Brôkhyr"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('51b2991a-2dc9-5389-41a0-07da99d2fec5', 1, 80);
+  ('51b2991a-2dc9-5389-41a0-07da99d2fec5', 3, 80);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('51b2991a-2dc9-5389-41a0-07da99d2fec5', 'Close combat weapon', 'melee', NULL, '2', '4+', 4, 0, '1', '{}'),
@@ -26798,6 +27904,13 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('be171c42-7bdf-cbd1-2ded-17c4e1874509', 'Pragmatic Hunters', 'unique', 'Once per turn, when an enemy unit ends a Normal, Advance or Fall Back move within 9" of this unit, it can make a Normal move of up to D6".');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('9f96248f-076e-4bcc-8888-50a73ba906d0', 'be171c42-7bdf-cbd1-2ded-17c4e1874509', '9 Hernkyn Yaegir', 'Hernkyn Yaegir w/ bolt shotgun', true, 0),
+  ('a3d2dfc5-5d39-15b9-df8f-29bdd0739562', 'be171c42-7bdf-cbd1-2ded-17c4e1874509', '9 Hernkyn Yaegir', 'Hernkyn Yaegir w/ APM launcher', false, 0),
+  ('6e50c1cf-8c52-b7db-d5cf-91e81300285f', 'be171c42-7bdf-cbd1-2ded-17c4e1874509', '9 Hernkyn Yaegir', 'Hernkyn Yaegir w/ magna-coil rifle', false, 0),
+  ('5302b99e-d339-5778-184b-32f498466db0', 'be171c42-7bdf-cbd1-2ded-17c4e1874509', '9 Hernkyn Yaegir', 'Hernkyn Yaegir w/ revolver and knife', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('20663e1c-a069-604f-bdf3-238f8964ef61', 'bdfb2412-05ad-2eea-a05a-45693e822400', 'Buri Aegnirssen', 'epic_hero', '5"', 6, '3+', 5, 6, 1, '{"Epic Hero", "Infantry", "Character", "Buri Aegnirssen"}', 1);
@@ -26897,7 +28010,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('b43f36f2-f5bf-13f7-aed9-5f846e2f42be', 'bdfb2412-05ad-2eea-a05a-45693e822400', 'Ironkin Steeljacks with Melee Weapons', 'infantry', '5"', 6, '2+', 3, 7, 1, '{"Infantry", "Ironkin Steeljacks", "Ironkin Steeljacks with Melee Weapons"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('b43f36f2-f5bf-13f7-aed9-5f846e2f42be', 2, 85),
+  ('b43f36f2-f5bf-13f7-aed9-5f846e2f42be', 3, 85),
   ('b43f36f2-f5bf-13f7-aed9-5f846e2f42be', 4, 170);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -26908,11 +28021,16 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('b43f36f2-f5bf-13f7-aed9-5f846e2f42be', 'Merciless Eradication', 'unique', 'Each time an enemy unit (excluding ^^**Monsters^^** and ^^**Vehicles^^**) that is within Engagement Range of this unit Falls Back, all models in that enemy unit must take a Desperate Escape test. When doing so, if that enemy unit is Battle-shocked, subtract 1 from each of those tests.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('646d3020-2a41-ab28-19fb-acf569d0fa63', 'b43f36f2-f5bf-13f7-aed9-5f846e2f42be', '2-5 Ironkin Steeljacks', 'Ironkin Steeljack w/ concussion gauntlet', false, 0),
+  ('38f9dfb1-29ec-2181-70d3-85fe34f5ded1', 'b43f36f2-f5bf-13f7-aed9-5f846e2f42be', '2-5 Ironkin Steeljacks', 'Ironkin Steeljack w/ plasma sword', true, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('d27e98c7-f6cd-84db-1d34-de93ced74db7', 'bdfb2412-05ad-2eea-a05a-45693e822400', 'Cthonian Earthshakers', 'infantry', '4"', 6, '4+', 6, 7, 2, '{"Infantry", "Artillery", "Cthonian", "Earthshakers"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('d27e98c7-f6cd-84db-1d34-de93ced74db7', 1, 110);
+  ('d27e98c7-f6cd-84db-1d34-de93ced74db7', 2, 110);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('d27e98c7-f6cd-84db-1d34-de93ced74db7', 'Plasma picks', 'melee', NULL, '4', '3+', 5, -2, '1', '{}'),
@@ -27155,6 +28273,13 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('7452f2a0-430a-e74a-01a1-2151f2dbad8c', 'Outrider Gangs', 'unique', 'Each time you use the Cult Ambush ability to set this unit back up on the battlefield, in addition to the normal rules, all of its models must be set up wholly within 9" of a battlefield edge and at least one of its models must be touching one of your Cult Ambush markers (that marker is then removed from the battlefield). If this cannot be done, this unit cannot be set back up.'),
   ('7452f2a0-430a-e74a-01a1-2151f2dbad8c', 'Demolition Run', 'unique', 'Once per battle round, in your Movement phase, when this unit ends a Normal, Advance, or Fall Back move, you can select one enemy unit within 6" of and visible to this unit and roll one D6 for each ATALAN JACKALS model in this unit: for each 4+, that enemy unit suffers 1 mortal wound (to a maximum of 6 mortal wounds.)');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('64bb7b19-360a-102b-05dc-09c7f6c336e7', '7452f2a0-430a-e74a-01a1-2151f2dbad8c', '4-8 Jackals', 'Atalan Jackal w/ Grenade launcher', false, 0),
+  ('49b90758-f5e2-40ed-d7f8-a7596770c2fc', '7452f2a0-430a-e74a-01a1-2151f2dbad8c', '4-8 Jackals', 'Atalan Jackal', true, 0),
+  ('8901607f-650e-43a4-7929-48200c5ff6a1', '7452f2a0-430a-e74a-01a1-2151f2dbad8c', '4-8 Jackals', 'Atalan Jackal w/ Atalan power weapon', false, 0),
+  ('db9282b0-24b4-55da-6185-eb6ecda64796', '7452f2a0-430a-e74a-01a1-2151f2dbad8c', '4-8 Jackals', 'Atalan Jackal w/ Grenade launcher & power weapon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('dfb5b284-099c-4643-4850-0d3813519f0a', '1a0a76be-49ed-bffd-d138-967d8780a12f', 'Biophagus', 'character', '6"', 3, '5+', 3, 7, 1, '{"Biophagus", "Infantry", "Character", "Great Devourer"}', 3);
 
@@ -27262,6 +28387,12 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
 
 If, at the start of the battle, no model in this unit is equipped with a hand flamer, each time this unit makes a Brood Surge move, it can be moved up to 6" instead of up to D6". A unit cannot make a Brood Surge move while it is Battle-shocked.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('051d2f15-51b0-8e69-3e1e-b1597cf4c12d', '8a26b9de-51bf-459d-d32f-1be6cfd285f5', '4-9 Hybrid Metamorphs', 'Hybrid Metamorph w/ Autopistol', true, 0),
+  ('158ca172-2950-6a4e-e605-75d0bc0435b4', '8a26b9de-51bf-459d-d32f-1be6cfd285f5', '4-9 Hybrid Metamorphs', 'Hybrid Metamorph w/ Cult Icon', false, 0),
+  ('ed041e30-4db5-4b6e-6c1a-78a826af81f6', '8a26b9de-51bf-459d-d32f-1be6cfd285f5', '4-9 Hybrid Metamorphs', 'Hybrid Metamorph w/ Hand Flamer', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('63c6df49-60ba-158c-2d5f-538d398a11ba', '1a0a76be-49ed-bffd-d138-967d8780a12f', 'Jackal Alphus', 'character', '12"', 4, '5', 4, 7, 1, '{"Jackal Alphus", "Character", "Great Devourer", "Mounted"}', 3);
 
@@ -27362,6 +28493,13 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('0f3cb6c4-e165-7900-3e9e-62faa8fed319', 'A Plan Generations in the Making', 'unique', 'At the end of your Command phase, if this unit is within range of an objective marker you control, that objective marker remains under your control, even if you have no models within range of it, until your opponent controls it at the start or end of any turn.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('59ea79ec-a157-a4c9-902e-f34298aaa480', '0f3cb6c4-e165-7900-3e9e-62faa8fed319', '9-19 Neophyte Hybrids', 'Neophyte Hybrid w/ Hybrid Firearm', true, 0),
+  ('16cd3742-b5ec-111a-9cea-c20b5d060c29', '0f3cb6c4-e165-7900-3e9e-62faa8fed319', '9-19 Neophyte Hybrids', 'Neophyte Hybrid w/ Hybrid Firearm & Cult Icon', false, 0),
+  ('67b1cc4e-752b-c8cb-c859-a6d846d7c1d0', '0f3cb6c4-e165-7900-3e9e-62faa8fed319', '9-19 Neophyte Hybrids', 'Neophyte Hybrid w/ Heavy Weapon', false, 0),
+  ('3fae8d82-4f6a-57d0-de03-6d0a658dab35', '0f3cb6c4-e165-7900-3e9e-62faa8fed319', '9-19 Neophyte Hybrids', 'Neophyte Hybrid w/ Special Weapon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('2307cabb-a36d-a5de-3d3e-685131be4cc2', '1a0a76be-49ed-bffd-d138-967d8780a12f', 'Nexos', 'character', '6"', 3, '5+', 3, 7, 1, '{"Nexos", "Infantry", "Character", "Great Devourer"}', 3);
@@ -27574,7 +28712,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('3283a00d-367b-6c21-9a22-70152907eafc', '1a0a76be-49ed-bffd-d138-967d8780a12f', 'Gargoyles', 'battleline', '12"', 3, '6+', 1, 8, 2, '{"Battleline", "Infantry", "Fly", "Gargoyles", "Great Devourer", "Endless Multitude", "Vanguard Invader"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('3283a00d-367b-6c21-9a22-70152907eafc', 1, 85);
+  ('3283a00d-367b-6c21-9a22-70152907eafc', 10, 85);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('3283a00d-367b-6c21-9a22-70152907eafc', 'Blinding venom', 'melee', NULL, '1', '4+', 3, 0, '1', '{}'),
@@ -27582,6 +28720,11 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('3283a00d-367b-6c21-9a22-70152907eafc', 'Winged Swarm', 'unique', 'In your Shooting phase, after this unit has shot, if it is not within Engagement Range of any enemy units, it can make a Normal move of up to 6". If it does, until the end of the turn, this unit is not eligible to declare a charge.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('c0013fa9-ea29-b882-2ee4-9dbac930cccc', '3283a00d-367b-6c21-9a22-70152907eafc', 'Gargoyles wargear', 'Blinding venom', true, 0),
+  ('a7faf262-36c5-9360-75e6-5ffc3ddce3df', '3283a00d-367b-6c21-9a22-70152907eafc', 'Gargoyles wargear', 'Fleshborer', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('37ffe071-0052-b0d5-6513-065026ccccc6', '1a0a76be-49ed-bffd-d138-967d8780a12f', 'Hyperadapted Raveners', 'character', '10"', 5, '4+', 6, 7, 1, '{"Infantry", "Great Devourer", "Vanguard Invader", "Burrowers", "Hyperadapted Raveners", "Character"}', 3);
@@ -27597,6 +28740,12 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('37ffe071-0052-b0d5-6513-065026ccccc6', 'Alpha Invader', 'unique', 'Weapons equipped by models in this unit have the **[SUSTAINED HITS 1]** ability.'),
   ('37ffe071-0052-b0d5-6513-065026ccccc6', 'Hypersensory Array', 'unique', 'Once per battle round, you can target this unit with the Rapid Ingress or Heroic Intervention Stratagem for 0CP, and can do so even if you have already targeted a different unit with that Stratagem this turn.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('b8e52046-bd7f-6706-57ce-28b689f60e0d', '37ffe071-0052-b0d5-6513-065026ccccc6', 'Wargear', 'Prime claws and talons', true, 0),
+  ('fb4df8a0-ba68-aeb0-2885-d226b4344a53', '37ffe071-0052-b0d5-6513-065026ccccc6', 'Raveners', 'Ravener', false, 0),
+  ('4fd3c639-621a-106f-d18b-8e2fe640ee11', '37ffe071-0052-b0d5-6513-065026ccccc6', 'Raveners', 'Ravener w/ Venom bolt', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('f64a4071-1553-ce68-1969-8e5092e6b8bd', '1a0a76be-49ed-bffd-d138-967d8780a12f', 'Lictor', 'infantry', '8"', 6, '4+', 6, 7, 1, '{"Infantry", "Great Devourer", "Lictor", "Vanguard Invader"}', 3);
@@ -28232,6 +29381,11 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('b5e70cbb-ca07-463a-505d-59b3463ddfcd', 'Their Number is Legion', 'unique', 'Each time this unit’s Reanimation Protocols activate, you can re-roll the dice to see how many wounds are regenerated.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('e72ec4f3-d9b4-f1da-5872-a5913c16b5d1', 'b5e70cbb-ca07-463a-505d-59b3463ddfcd', '10-20 Warriors', 'Warrior w/ gauss flayer', true, 0),
+  ('1d3d8a78-1a8c-65dd-2532-19da9abc2072', 'b5e70cbb-ca07-463a-505d-59b3463ddfcd', '10-20 Warriors', 'Warrior w/ gauss reaper', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('313fe51c-18f0-d221-eb6c-3f4003474273', '78cd7e8b-c84c-7d52-ddb1-ad8b25a215c7', 'Immortals', 'battleline', '5"', 5, '3+', 1, 7, 2, '{"Infantry", "Battleline", "Immortals"}', 6);
 
@@ -28329,7 +29483,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('aa17fc66-116f-352c-8a56-76fff1574a5f', '78cd7e8b-c84c-7d52-ddb1-ad8b25a215c7', 'Cryptothralls', 'infantry', '5"', 4, '3+', 3, 8, 1, '{"Infantry", "Cryptothralls"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('aa17fc66-116f-352c-8a56-76fff1574a5f', 1, 60);
+  ('aa17fc66-116f-352c-8a56-76fff1574a5f', 2, 60);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('aa17fc66-116f-352c-8a56-76fff1574a5f', 'Scouring eye', 'ranged', '6"', '2', '4+', 5, -1, '1', '{}'),
@@ -28519,6 +29673,15 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('a58f010c-910c-b7f4-70a4-a1157495544e', 'Wraith Form', 'unique', 'Each time this unit ends a Normal move, you can select one enemy unit it moved over during that move and roll one D6 for each model in this unit: for each 4+, that enemy unit suffers 1 mortal wound.'),
   ('a58f010c-910c-b7f4-70a4-a1157495544e', 'Invulnerable Save', 'invulnerable', 'Models in this unit have a 4+ invulnerable save.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('d0c0fbd8-46bc-9576-0dac-1d7177b6cc83', 'a58f010c-910c-b7f4-70a4-a1157495544e', '3-6 Wraiths', 'Wraith w/ claws and beamer', false, 0),
+  ('f3c809c3-126d-df30-4e92-ca5215a976a3', 'a58f010c-910c-b7f4-70a4-a1157495544e', '3-6 Wraiths', 'Wraith w/ claws and particle caster', false, 0),
+  ('6e8a5519-fdbd-6c74-852f-12a391fbe7f4', 'a58f010c-910c-b7f4-70a4-a1157495544e', '3-6 Wraiths', 'Wraith w/ claws', true, 0),
+  ('b976a750-7d71-4d6e-508f-0619dfdb3977', 'a58f010c-910c-b7f4-70a4-a1157495544e', '3-6 Wraiths', 'Wraith w/ coils', false, 0),
+  ('f4af5f2b-def5-5ec0-b20d-d8562a3b0a82', 'a58f010c-910c-b7f4-70a4-a1157495544e', '3-6 Wraiths', 'Wraith w/ coils and beamer', false, 0),
+  ('41c82880-1e15-c189-cd1c-44d9ebdb8231', 'a58f010c-910c-b7f4-70a4-a1157495544e', '3-6 Wraiths', 'Wraith w/ coils and particle caster', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('36445dba-2abd-a407-8da2-81235a0d8e83', '78cd7e8b-c84c-7d52-ddb1-ad8b25a215c7', 'Annihilation Barge', 'vehicle', '10"', 8, '3+', 9, 7, 3, '{"Vehicle", "Fly", "Annihilation Barge"}', 3);
@@ -28732,7 +29895,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('381a1b1f-967e-6651-86b5-713753dc7de2', '78cd7e8b-c84c-7d52-ddb1-ad8b25a215c7', 'The Silent King', 'epic_hero', '8"', 10, '2+', 16, 6, 6, '{"Vehicle", "Epic Hero", "Triarch"}', 1);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('381a1b1f-967e-6651-86b5-713753dc7de2', 1, 400);
+  ('381a1b1f-967e-6651-86b5-713753dc7de2', 3, 400);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('381a1b1f-967e-6651-86b5-713753dc7de2', 'Sceptre of Eternal Glory', 'ranged', '24"', '2', '2+', 10, -3, '3', '{"Devastating Wounds"}'),
@@ -28934,6 +30097,13 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('6808ac92-af49-935e-a375-3ef2fd603479', 'Harassment Swarm (Aura)', 'unique', 'While an enemy unit (excluding ^^**Monsters^^** and ^^**Vehicles^^**) is within 3" of this unit, each time a model in that unit makes an attack, subtract 1 from the Hit roll.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('be0f65c4-e87a-b115-6b1e-628577d796d6', '6808ac92-af49-935e-a375-3ef2fd603479', '5 Macrocytes', 'Canoptek Macrocyte w/ atomiser beam', false, 0),
+  ('137b2074-9bf7-a005-1074-447be7fcb366', '6808ac92-af49-935e-a375-3ef2fd603479', '5 Macrocytes', 'Canoptek Macrocyte w/ tesla caster', false, 0),
+  ('3caa678f-7ea8-c55e-4264-5be489137de1', '6808ac92-af49-935e-a375-3ef2fd603479', '5 Macrocytes', 'Canoptek Macrocyte w/ accelerator mandible', false, 0),
+  ('23057ad4-4a7b-a58f-8f41-91d8d360a03c', '6808ac92-af49-935e-a375-3ef2fd603479', '5 Macrocytes', 'Canoptek Macrocyte w/ gauss scalpel', true, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('86b3d6dd-89cf-fd01-5128-0c9e2594a11b', '78cd7e8b-c84c-7d52-ddb1-ad8b25a215c7', 'Canoptek Tomb Crawlers', 'beast', '5"', 4, '3+', 3, 8, 1, '{"Beast", "Canoptek", "Tomb Crawlers"}', 3);
 
@@ -28948,6 +30118,10 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('86b3d6dd-89cf-fd01-5128-0c9e2594a11b', 'Weapon Sentinels', 'unique', 'Each time a model in this unit makes a ranged attack that targets a unit within 12", you can ignore any or all modifiers to the following: that attack’s Ballistic Skill characteristic; the Hit roll; the Wound roll.'),
   ('86b3d6dd-89cf-fd01-5128-0c9e2594a11b', 'Canoptek Retinue', 'unique', 'At the start of the Declare Battle Formations step, this unit can join one other unit from your army that is being led by a ^^**Cryptek^^** model (a unit cannot have more than one ^^**Tomb Crawlers^^** unit joined to it and cannot have both a ^^**Tomb Crawlers^^** and a ^^**Cryptothralls^^** unit joined to it). If it does, until the end of the battle, every model in this unit counts as being part of that Bodyguard unit, and that Bodyguard unit’s Starting Strength is increased accordingly.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('8e7f0e18-6e58-f109-f4e0-b09ebf908b74', '86b3d6dd-89cf-fd01-5128-0c9e2594a11b', '2 Tomb Crawlers', 'Tomb Crawler w/ twin gauss reaper', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('22da2994-575a-3b68-1409-f736144c9640', '78cd7e8b-c84c-7d52-ddb1-ad8b25a215c7', 'Geomancer', 'character', '8"', 4, '4+', 4, 6, 1, '{"Infantry", "Character", "Cryptek", "Geomancer"}', 3);
@@ -29326,6 +30500,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('8b73a01a-b096-6c8b-eeb0-dd6359b4ef47', 'Get Da Good Bitz', 'unique', 'At the end of your Command phase, if this unit is within range of an objective marker you control, that objective marker remains under your control, even if you have no models within range of it, until your opponent controls it at the start or end of any turn.'),
   ('8b73a01a-b096-6c8b-eeb0-dd6359b4ef47', 'Bodyguard', 'unique', 'If this unit has a Starting Strength of 20, you can attach up to two Leader units to it instead of one (but only if one of those is a WARBOSS model). If you do, and this unit is destroyed, the Leader units attached to it become separate units with their original Starting Strengths.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('af943b28-dddf-9084-0ef8-9a59c69d92dc', '8b73a01a-b096-6c8b-eeb0-dd6359b4ef47', 'Boyz (9-19)', 'Boy w/ Slugga and choppa', true, 0),
+  ('ec1f1c7a-21b9-3a60-3e6b-e7ed37c4ae3e', '8b73a01a-b096-6c8b-eeb0-dd6359b4ef47', 'Boyz (9-19)', 'Boy w/ Shoota and close combat weapon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('3b8ccb48-6209-902d-7e49-5ba29b046877', 'b686c03c-f50a-5d2b-a411-5e63ca847dc5', 'Burna Boyz', 'infantry', '6"', 5, '5+', 1, 7, 1, '{"Infantry", "Burna Boyz"}', 3);
 
@@ -29446,6 +30625,11 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('6ddad157-bebd-7ecb-163b-6b6d8634b9b5', 'Deff from Above', 'unique', 'Each time this unit ends a Normal move, you can select one enemy unit it moved over during that move and roll one D6 for each model in this unit: for each 4+, that enemy unit suffers 1 mortal wound.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('4ae793da-bce7-18ec-3c88-714bb486359f', '6ddad157-bebd-7ecb-163b-6b6d8634b9b5', 'Deffkoptas (3-6)', 'Deffkopta', true, 0),
+  ('b8b44987-008c-e28a-5eb9-8994c361c2bd', '6ddad157-bebd-7ecb-163b-6b6d8634b9b5', 'Deffkoptas (3-6)', 'Deffkopta w/ Kustom mega-blasta', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('5ccb6846-7f14-e730-f294-b47e3cada715', 'b686c03c-f50a-5d2b-a411-5e63ca847dc5', 'Flash Gitz', 'infantry', '6"', 5, '4+', 2, 7, 1, '{"Infantry", "Flash Gitz"}', 3);
 
@@ -29463,7 +30647,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('cc82b94c-4d0a-8710-19f4-e82f5d12ef63', 'b686c03c-f50a-5d2b-a411-5e63ca847dc5', 'Ghazghkull Thraka', 'epic_hero', '5"', 6, '2+', 10, 6, 4, '{"Infantry", "Epic Hero", "Character"}', 1);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('cc82b94c-4d0a-8710-19f4-e82f5d12ef63', 1, 235);
+  ('cc82b94c-4d0a-8710-19f4-e82f5d12ef63', 2, 235);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('cc82b94c-4d0a-8710-19f4-e82f5d12ef63', 'Mork’s Roar', 'ranged', '36"', '12', '5+', 5, 0, '1', '{"Rapid Fire 4"}'),
@@ -29584,6 +30768,13 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
 - On a 3-4, until the end of the phase, add 1 to the Strength characteristic of ranged weapons equipped by models in this unit.
 - On a 5-6, until the end of the phase, add 1 to the Attacks characteristic of ranged weapons equipped by models in this unit.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('aa951f42-701d-75fc-b658-bd13a46ad742', '281ecc7a-468c-3530-3111-cba4aacaea30', 'Killa Kans (3-6)', 'Killa Kan w/ Kan shoota', true, 0),
+  ('36ad56c7-85a6-6f93-eb9c-9544a65153cc', '281ecc7a-468c-3530-3111-cba4aacaea30', 'Killa Kans (3-6)', 'Killa Kan w/ Grotzooka', false, 0),
+  ('858a5f86-c230-7e44-d2dc-7a4da5bdaaea', '281ecc7a-468c-3530-3111-cba4aacaea30', 'Killa Kans (3-6)', 'Killa Kan w/ Rokkit launcha', false, 0),
+  ('2638fc1e-5722-a9ea-18fd-ed20a3d870ca', '281ecc7a-468c-3530-3111-cba4aacaea30', 'Killa Kans (3-6)', 'Killa Kan w/ Skorcha', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('339245b0-3164-724d-7068-ce1aba182f11', 'b686c03c-f50a-5d2b-a411-5e63ca847dc5', 'Kommandos', 'infantry', '6"', 5, '5+', 1, 7, 1, '{"Infantry", "Kommandos", "Smoke"}', 3);
 
@@ -29608,7 +30799,12 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
 
 INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
   ('d4fe7949-69b8-ab09-e87c-6a16c653d31b', '339245b0-3164-724d-7068-ce1aba182f11', 'Wargear', 'Distraction Grot', true, 0),
-  ('450ee991-747c-7098-f2ed-b57447556edc', '339245b0-3164-724d-7068-ce1aba182f11', 'Wargear', 'Bomb Squig', false, 0)
+  ('450ee991-747c-7098-f2ed-b57447556edc', '339245b0-3164-724d-7068-ce1aba182f11', 'Wargear', 'Bomb Squig', false, 0),
+  ('08820c22-1979-0c6d-3fcb-6790eb0e2c89', '339245b0-3164-724d-7068-ce1aba182f11', 'Kommandos (9)', 'Kommandos w/ Slugga and choppa', true, 0),
+  ('e6b3031f-c95c-98cc-4e1d-97caca0ae337', '339245b0-3164-724d-7068-ce1aba182f11', 'Kommandos (9)', 'Kommandos w/ Kustom shoota', false, 0),
+  ('ef62e7bc-937c-7743-8355-3ec9d24b9849', '339245b0-3164-724d-7068-ce1aba182f11', 'Kommandos (9)', 'Kommandos w/ Breacha ram', false, 0),
+  ('03c7d3e1-39c9-3c55-bb82-9f04ff9359a1', '339245b0-3164-724d-7068-ce1aba182f11', 'Kommandos (9)', 'Kommandos w/ Burna', false, 0),
+  ('fd6b4f9f-5ae3-6b2c-502f-94f62f5dd0b3', '339245b0-3164-724d-7068-ce1aba182f11', 'Kommandos (9)', 'Kommandos w/ Rokkit launcha', false, 0)
 ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
@@ -29679,6 +30875,15 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
   ('0dbd0a88-62b2-bd3c-50b7-a45d643a5c19', 'Kombi-weapon', 'ranged', '24"', '1', '5+', 4, 0, '1', '{"Anti-Infantry 4+", "Devastating Wounds", "Rapid Fire 1"}'),
   ('0dbd0a88-62b2-bd3c-50b7-a45d643a5c19', 'Killsaw', 'melee', NULL, '2', '4+', 12, -3, '2', '{}'),
   ('0dbd0a88-62b2-bd3c-50b7-a45d643a5c19', 'Twin killsaw', 'melee', NULL, '2', '4+', 12, -3, '2', '{"Twin-linked"}');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('ecb58b30-7a1c-c0a3-f46b-d52e91654f13', '0dbd0a88-62b2-bd3c-50b7-a45d643a5c19', 'Meganobz (2-6)', 'Meganob w/ Kustom shoota and power klaw', true, 0),
+  ('1c6cad6a-bf6a-68fb-5e7e-5509078b81c9', '0dbd0a88-62b2-bd3c-50b7-a45d643a5c19', 'Meganobz (2-6)', 'Meganob w/ Kombi-weapon and power klaw', false, 0),
+  ('3ab061cd-1714-da49-d65b-d838440325a2', '0dbd0a88-62b2-bd3c-50b7-a45d643a5c19', 'Meganobz (2-6)', 'Meganob w/ Kombi-weapon and killsaw', false, 0),
+  ('fc8c0daf-a0aa-98c2-c49f-ef51f2f0ef41', '0dbd0a88-62b2-bd3c-50b7-a45d643a5c19', 'Meganobz (2-6)', 'Meganob w/ Kustom shoota and killsaw', false, 0),
+  ('8c566ad6-5a4d-a682-e2a7-a92cacbb4ec4', '0dbd0a88-62b2-bd3c-50b7-a45d643a5c19', 'Meganobz (2-6)', 'Meganob w/ Killsaw and power klaw', false, 0),
+  ('e9171559-07f0-533a-8c1c-572a45475ae5', '0dbd0a88-62b2-bd3c-50b7-a45d643a5c19', 'Meganobz (2-6)', 'Meganob w/ Twin killsaw', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('bc3cce7f-d99a-10d8-c183-e9a027ec507e', 'b686c03c-f50a-5d2b-a411-5e63ca847dc5', 'Megatrakk Scrapjet', 'vehicle', '12"', 7, '4+', 9, 7, 3, '{"Vehicle", "Megatrakk Scrapjet", "Speed Freeks"}', 3);
@@ -29798,6 +31003,12 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('c329a4cb-a846-0537-f5d0-f875cf0ea0f5', 'Da Boss’ Ladz', 'unique', 'While a WARBOSS model is leading this unit, each time an attack targets this unit, if the Strength characteristic of that attack is greater than the Toughness characteristic of this unit, subtract 1 from the Wound roll.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('0dcb4b6f-b629-8253-7116-19cc51a02208', 'c329a4cb-a846-0537-f5d0-f875cf0ea0f5', 'Nobz (4-9)', 'Nob w/ Slugga and big choppa', true, 0),
+  ('f13b5f74-e4c1-d955-3885-4796fbd25704', 'c329a4cb-a846-0537-f5d0-f875cf0ea0f5', 'Nobz (4-9)', 'Nob w/ Slugga and power klaw', false, 0),
+  ('4029a5f2-0a79-3549-e31d-e60b76095f6d', 'c329a4cb-a846-0537-f5d0-f875cf0ea0f5', 'Nobz (4-9)', 'Nob w/ Kombi-weapon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('f9967221-3713-0732-ce0d-363e0245039b', 'b686c03c-f50a-5d2b-a411-5e63ca847dc5', 'Painboss', 'character', '6"', 5, '4+', 4, 7, 1, '{"Character", "Infantry", "Beast Snagga", "Painboss"}', 3);
@@ -29941,6 +31152,12 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('2c677aef-0c52-1699-eee8-da17c2098105', 'Tank Hunters', 'unique', 'Each time a model in this unit makes an attack that targets a MONSTER or VEHICLE unit, add 1 to the Hit roll and add 1 to the Wound roll.'),
   ('2c677aef-0c52-1699-eee8-da17c2098105', 'Attached Unit', 'unique', 'If a CHARACTER unit from your army with the Leader ability can be attached to a LOOTAS unit, it can be attached to this unit instead.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('7123cbcb-8dcb-8110-53a0-0be10e45b226', '2c677aef-0c52-1699-eee8-da17c2098105', 'Tankbustas', 'Tankbusta w/ Rokkit launcha', true, 0),
+  ('d808a91c-0e25-323c-2887-73801a68e37f', '2c677aef-0c52-1699-eee8-da17c2098105', 'Tankbustas', 'Tankbusta w/ Two rokkit launchas', false, 0),
+  ('55b1d95f-a0ae-4989-2bd8-14c743dc2d7b', '2c677aef-0c52-1699-eee8-da17c2098105', 'Tankbustas', 'Tankbusta w/ Pulsa rokkit', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('86102f68-d12c-f389-4172-8e79e6b0c25c', 'b686c03c-f50a-5d2b-a411-5e63ca847dc5', 'Trukk', 'dedicated_transport', '12"', 8, '4+', 10, 7, 2, '{"Dedicated Transport", "Vehicle", "Transport", "Trukk"}', 6);
 
@@ -29977,6 +31194,12 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('7037f0e9-3c45-4637-0f7f-a19184a58878', 'Drive-by Dakka', 'unique', 'Each time a model in this unit makes a ranged attack that targets a unit within 9", improve the Armour Penetration characteristic of that attack by 1.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('0034c687-d390-2d1e-f1fc-0074529b5321', '7037f0e9-3c45-4637-0f7f-a19184a58878', 'Warbikers (2-5)', 'Warbiker', true, 0),
+  ('ced2debe-3ff9-a4a7-8fd2-a0ed5b970b20', '7037f0e9-3c45-4637-0f7f-a19184a58878', 'Warbikers (2-5)', 'Warbiker w/ Slugga', false, 0),
+  ('229b30b1-9b6b-d704-16ac-1579b6e02a63', '7037f0e9-3c45-4637-0f7f-a19184a58878', 'Warbikers (2-5)', 'Warbiker w/ Choppa', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('963b42bf-8ab9-d01f-6f7c-42f95f85455b', 'b686c03c-f50a-5d2b-a411-5e63ca847dc5', 'Warboss', 'character', '6"', 5, '4+', 6, 6, 1, '{"Warboss", "Character", "Infantry"}', 3);
@@ -30305,7 +31528,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('0f80f9e5-570e-b198-14e7-8f1a6e83e951', 'b686c03c-f50a-5d2b-a411-5e63ca847dc5', 'Nobz on Warbikes [Legends]', 'mounted', '12"', 6, '4+', 4, 7, 2, '{"Mounted", "Speed Freeks", "Nobz on Warbikes"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('0f80f9e5-570e-b198-14e7-8f1a6e83e951', 1, 125);
+  ('0f80f9e5-570e-b198-14e7-8f1a6e83e951', 3, 125);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('0f80f9e5-570e-b198-14e7-8f1a6e83e951', 'Twin dakkagun', 'ranged', '18"', '3', '5+', 5, 0, '1', '{"Assault", "Rapid Fire 2", "Twin-linked"}'),
@@ -30405,7 +31628,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('996c3fdc-8120-a2b1-fa8c-0a0a96b61d47', 'b686c03c-f50a-5d2b-a411-5e63ca847dc5', 'Deffkoptas with Big Shootas [Legends]', 'vehicle', '12"', 6, '4+', 4, 7, 2, '{"Vehicle", "Deffkoptas with Big Shootas", "Fly"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('996c3fdc-8120-a2b1-fa8c-0a0a96b61d47', 1, 130);
+  ('996c3fdc-8120-a2b1-fa8c-0a0a96b61d47', 3, 130);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('996c3fdc-8120-a2b1-fa8c-0a0a96b61d47', 'Killsaw', 'melee', NULL, '3', '4+', 12, -3, '2', '{}'),
@@ -30417,6 +31640,15 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('996c3fdc-8120-a2b1-fa8c-0a0a96b61d47', 'Deff from Above', 'unique', 'Each time this unit ends a Normal move, you can select one enemy unit it moved over during that move and roll one D6 for each model in this unit: for each 4+, that enemy unit suffers 1 mortal wound.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('118928aa-efab-c094-9a78-130f798cc2b4', '996c3fdc-8120-a2b1-fa8c-0a0a96b61d47', 'Deffkoptas with Big Shootas wargear', 'Slugga', true, 0),
+  ('c22990ef-52f1-a6b4-695e-380693800621', '996c3fdc-8120-a2b1-fa8c-0a0a96b61d47', 'Deffkoptas with Big Shootas wargear', 'Spinnin’ blades', false, 0),
+  ('02f74466-0ff0-98c6-f51b-4b241f39fcf5', '996c3fdc-8120-a2b1-fa8c-0a0a96b61d47', 'Deffkoptas with Big Shootas: Killsaw', 'Killsaw', true, 0),
+  ('724f00f4-a7d9-cca0-8016-61a6058ac9f4', '996c3fdc-8120-a2b1-fa8c-0a0a96b61d47', 'Deffkoptas with Big Shootas: Twin Big Shootas', 'Twin big shoota', true, 0),
+  ('5b9c460f-d8b0-b444-c44e-2a6059a76bb3', '996c3fdc-8120-a2b1-fa8c-0a0a96b61d47', 'Deffkoptas with Big Shootas: Twin Big Shootas', 'Kopta rokkits', false, 0),
+  ('ca186205-3a9c-0b06-f616-2cd1655290ae', '996c3fdc-8120-a2b1-fa8c-0a0a96b61d47', 'Deffkoptas with Big Shootas: Twin Big Shootas', 'Kustom mega-blasta', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('eee74b63-d11e-946a-0522-add6c68eb795', 'b686c03c-f50a-5d2b-a411-5e63ca847dc5', 'Kill Krusha [Legends]', 'vehicle', '10"', 12, '3+', 22, 7, 8, '{"Vehicle", "Titanic", "Transport", "Kill Krusha"}', 3);
@@ -30704,6 +31936,12 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('90b44274-e003-73cb-4880-ed2c48934d80', 'Attached Unit', 'unique', 'If a CHARACTER unit from your army with the Leader ability can be attached to a BOYZ unit, it can be attached to this unit instead.'),
   ('90b44274-e003-73cb-4880-ed2c48934d80', 'Trophy Hunters', 'unique', 'Each time this unit declares a charge, you can re-roll the Charge roll.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('48b8e87e-d552-651b-aff5-03e27a63d5c6', '90b44274-e003-73cb-4880-ed2c48934d80', 'Breaka Boyz', 'Breaka Boy', true, 0),
+  ('aa6365df-e9c2-0cb8-fe4c-cb89803d1d11', '90b44274-e003-73cb-4880-ed2c48934d80', 'Breaka Boyz', 'Breaka Boy w/ Tankhammer', false, 0),
+  ('4d8a3c32-8c3c-1fab-f6b2-50c57715c8b9', '90b44274-e003-73cb-4880-ed2c48934d80', 'Breaka Boyz', 'Breaka Boy w/ Knucklebustas', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('c65184ce-8a5d-0cb0-e011-dd15d8d80f6c', 'b686c03c-f50a-5d2b-a411-5e63ca847dc5', 'Battlewagon', 'vehicle', '10"', 10, '3+', 16, 7, 5, '{"Vehicle", "Transport", "Battlewagon"}', 3);
 
@@ -30753,6 +31991,11 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('44336702-84aa-2d3e-130f-d795671aa337', 'Monster Hunters', 'unique', 'Each time a model in this unit makes an attack that targets a MONSTER or VEHICLE unit, you can re-roll the Hit roll.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('e8f0e27b-d287-40ec-2b53-1536fe03f9e1', '44336702-84aa-2d3e-130f-d795671aa337', 'Beast Snagga Boyz', 'Beast Snagga Boy w/ Thump gun', false, 0),
+  ('22d08960-e480-f08e-8cd0-69d3b4b85973', '44336702-84aa-2d3e-130f-d795671aa337', 'Beast Snagga Boyz', 'Beast Snagga Boy', true, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('8a38f07b-d7c3-acab-5b1a-ad6c50b5aa6a', 'b686c03c-f50a-5d2b-a411-5e63ca847dc5', 'Beastboss', 'character', '6"', 5, '4+', 6, 6, 1, '{"Character", "Infantry", "Beast Snagga", "Beastboss", "Warboss"}', 3);
@@ -31161,7 +32404,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('f055abd0-ac79-5b7c-f212-6c6e4c664a15', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Aun''va [Legends]', 'epic_hero', '6"', 3, '5+', 5, 7, 1, '{"Epic Hero", "Non-Kroot"}', 1);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('f055abd0-ac79-5b7c-f212-6c6e4c664a15', 1, 65);
+  ('f055abd0-ac79-5b7c-f212-6c6e4c664a15', 3, 65);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('f055abd0-ac79-5b7c-f212-6c6e4c664a15', 'Close combat weapon', 'melee', NULL, '1', '6+', 2, 0, '1', '{}'),
@@ -31240,11 +32483,16 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
 
 Designer’s Note: Place a Support Turret token next to this unit to remind you.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('a92a49b6-fdc0-2f5a-f0c1-34ab07b2afb3', 'a3eb4295-226f-ca41-d183-4f5b79ca5eb4', 'Fire Warriors', 'Fire Warrior w/ pulse carbine', false, 0),
+  ('89ca9945-55d1-9298-a0dd-2b6778ca0a70', 'a3eb4295-226f-ca41-d183-4f5b79ca5eb4', 'Fire Warriors', 'Fire Warrior w/ pulse rifle', true, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('d6587f62-bb67-95ed-0fab-cb3978221a21', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Breacher Team', 'battleline', '6"', 3, '4+', 1, 7, 2, '{"Infantry", "Battleline", "Markerlight", "Fire Warrior", "Breacher Team", "Non-Kroot"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('d6587f62-bb67-95ed-0fab-cb3978221a21', 1, 90);
+  ('d6587f62-bb67-95ed-0fab-cb3978221a21', 9, 90);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('d6587f62-bb67-95ed-0fab-cb3978221a21', 'Pulse pistol', 'ranged', '12"', '1', '4+', 5, 0, '1', '{"Pistol"}'),
@@ -31279,6 +32527,11 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('68d7d595-6b1d-3562-5677-4159190c8244', 'Fieldcraft', 'unique', 'At the end of the your Command phase, if this unit within range of an objective marker you control, that objective marker remains under your control, even if you have no models within range of it, until your opponent controls it at the start or end of any turn.'),
   ('68d7d595-6b1d-3562-5677-4159190c8244', 'Bodyguard', 'unique', 'If this unit has a Starting Strength of 20, you can attach up to two Leader units to it instead of one, provided those Leaders are not duplicates (e.g. you cannot attach two WAR SHAPERS to this unit). If you do, and this unit is destroyed, the Leader units attached to it become separate units with their original Starting Strengths.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('4b076b9e-7a5a-6d3e-10f1-60f27be4b15e', '68d7d595-6b1d-3562-5677-4159190c8244', '9-19 Kroot Carnivores', 'Kroot Carnivores', true, 0),
+  ('1cc9e3ef-2e6a-43c8-eab4-098eb62883b8', '68d7d595-6b1d-3562-5677-4159190c8244', '9-19 Kroot Carnivores', 'Kroot Carnivore w/ tanglebomb launcher', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('4adc702a-8fb1-3732-daac-031d5584d6f4', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Krootox Riders', 'mounted', '7"', 6, '5+', 5, 7, 2, '{"Mounted", "Kroot", "Krootox Riders"}', 3);
 
@@ -31296,11 +32549,16 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('4adc702a-8fb1-3732-daac-031d5584d6f4', 'Kroot Packmates', 'unique', 'Once per turn, in your opponent''s Shooting phase, when a friendly KROOT INFANTRY unit within 6" of this unit is selected as the target of an attack, one unit from your army with this ability can use it. If it does, after that enemy unit has finished making its attacks, that unit with this ability can shoot as if it were your Shooting phase, but when resolving those attacks it can only target that enemy unit (and only if it is an eligible target).');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('01ef25e1-4053-f70c-0d1e-e83ec3f261b3', '4adc702a-8fb1-3732-daac-031d5584d6f4', 'Krootox Riders', 'Krootox Rider w/ repeater cannon', true, 0),
+  ('cf6bca53-fc66-d9dd-b1ed-27cedd7cbdfb', '4adc702a-8fb1-3732-daac-031d5584d6f4', 'Krootox Riders', 'Krootox Rider w/ tanglecannon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('53287f55-daa9-e40a-6ee1-b8e8996d3401', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Crisis Battlesuits [Legends]', 'vehicle', '10"', 5, '3+', 4, 7, 2, '{"Vehicle", "Walker", "Fly", "Battlesuit", "Crisis", "Non-Kroot"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('53287f55-daa9-e40a-6ee1-b8e8996d3401', 1, 200);
+  ('53287f55-daa9-e40a-6ee1-b8e8996d3401', 2, 200);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('53287f55-daa9-e40a-6ee1-b8e8996d3401', 'T''au flamer', 'ranged', '12"', 'D6', 'N/A', 4, 0, '1', '{"Ignores Cover", "Torrent"}'),
@@ -31319,6 +32577,21 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('53287f55-daa9-e40a-6ee1-b8e8996d3401', 'Turbo-jets', 'unique', 'Each time this unit Advances, do not make an Advance roll for it. Instead, until the end of the phase, add 6" to the Move characteristic of models in this unit.'),
   ('53287f55-daa9-e40a-6ee1-b8e8996d3401', 'Crisis Bodyguard', 'unique', 'If a CHARACTER unit from your army with the Leader ability can be attached to a CRISIS FIREKNIFE BATTLESUIT unit, it can be attached to this unit instead.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('598b6281-fefc-0626-4880-ebc0715bdff7', '53287f55-daa9-e40a-6ee1-b8e8996d3401', 'Crisis Shas’ui wargear', 'Drones (0-2)', true, 0),
+  ('1b3ebffc-7738-b7ae-ffac-5e3b755fae0d', '53287f55-daa9-e40a-6ee1-b8e8996d3401', 'Crisis Shas’ui wargear', 'Battlesuit fists', false, 0),
+  ('59106a9e-7603-5a57-4093-7413fffb7230', '53287f55-daa9-e40a-6ee1-b8e8996d3401', 'Crisis Shas’ui: Support Systems (1-4)', 'Battlesuit support system', true, 0),
+  ('e57ab57e-ac9b-fe4d-1db5-10ebc6ed504f', '53287f55-daa9-e40a-6ee1-b8e8996d3401', 'Crisis Shas’ui: Support Systems (1-4)', 'Shield generator', false, 0),
+  ('8bd5d0e1-f935-08c2-672c-cb8ee2d46715', '53287f55-daa9-e40a-6ee1-b8e8996d3401', 'Crisis Shas’ui: Support Systems (1-4)', 'T''au flamer', false, 0),
+  ('8a1b21f1-eef8-ddba-48d6-304c5aca3051', '53287f55-daa9-e40a-6ee1-b8e8996d3401', 'Crisis Shas’ui: Support Systems (1-4)', 'Weapon support system', false, 0),
+  ('89854859-0cae-d51f-8f7b-96b5de44598f', '53287f55-daa9-e40a-6ee1-b8e8996d3401', 'Crisis Shas’ui: Support Systems (1-4)', 'Burst cannon', false, 0),
+  ('8367fb00-3b9c-1e19-f44f-4e5d3206ec3e', '53287f55-daa9-e40a-6ee1-b8e8996d3401', 'Crisis Shas’ui: Support Systems (1-4)', 'Missile pod', false, 0),
+  ('ca2b78cb-ffea-2c97-a17c-7664b75c3982', '53287f55-daa9-e40a-6ee1-b8e8996d3401', 'Crisis Shas’ui: Support Systems (1-4)', 'Plasma rifle', false, 0),
+  ('037ef8ae-df7b-8706-de02-cc21415ca649', '53287f55-daa9-e40a-6ee1-b8e8996d3401', 'Crisis Shas’ui: Support Systems (1-4)', 'Airbursting fragmentation projector', false, 0),
+  ('bb2283c2-2921-0df8-baf8-2d5f812232a7', '53287f55-daa9-e40a-6ee1-b8e8996d3401', 'Crisis Shas’ui: Support Systems (1-4)', 'Cyclic ion blaster', false, 0),
+  ('1b1e8160-31cb-ac8d-fb05-5a19b1522258', '53287f55-daa9-e40a-6ee1-b8e8996d3401', 'Crisis Shas’ui: Support Systems (1-4)', 'Fusion blaster', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('4c39c916-125b-4eb9-8a3d-0f2769c7da7b', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Stealth Battlesuits', 'infantry', '8"', 4, '3+', 2, 7, 1, '{"Infantry", "Fly", "Battlesuit", "Stealth", "Markerlight", "Non-Kroot"}', 3);
 
@@ -31336,6 +32609,11 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('4c39c916-125b-4eb9-8a3d-0f2769c7da7b', 'Forward Observers', 'unique', 'Each time this unit is an Observer unit, until the end of the phase, each time a ranged attack is made by a model in a Guided unit that targets their Spotted unit, re-roll a Hit roll of 1 and re-roll a Wound roll of 1.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('d3bc1653-5821-a4af-5609-d11578f2e0bf', '4c39c916-125b-4eb9-8a3d-0f2769c7da7b', 'Stealth Shas''ui', 'Stealth Shas''ui w/ burst cannon', true, 0),
+  ('4509271e-6c5f-59d6-b1ed-ede8255ec502', '4c39c916-125b-4eb9-8a3d-0f2769c7da7b', 'Stealth Shas''ui', 'Stealth Shas''ui w/ fusion blaster', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('e50dbd71-1ba9-ef2d-34fd-984ce584ea89', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Ghostkeel Battlesuit', 'vehicle', '10"', 8, '2+', 12, 7, 3, '{"Vehicle", "Walker", "Fly", "Smoke", "Battlesuit", "Ghostkeel", "Non-Kroot"}', 3);
@@ -31412,6 +32690,11 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('28a35165-ff48-b174-6cee-1e5ba9222579', 'Target Uploaded', 'unique', 'Each time a model in this unit makes an attack that targets their Spotted unit, improve the Ballistic Skill characteristic of that attack by 1 and that attack has the **[IGNORES COVER]** ability.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('8a160d64-1186-31ee-dc13-f9dad0f2fb8d', '28a35165-ff48-b174-6cee-1e5ba9222579', 'Pathfinders', 'Pathfinders w/ pulse carbine', false, 0),
+  ('ef8306ff-a6c4-7e0d-b5a9-46bf921dc96a', '28a35165-ff48-b174-6cee-1e5ba9222579', 'Pathfinders', 'Pathfinders w/ pulse carbine and grenade launcher', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('c053ae1a-7aab-e950-69db-544b4820c2df', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Vespid Stingwings', 'infantry', '12"', 4, '4+', 1, 7, 1, '{"Infantry", "Fly", "Vespid Stingwings", "Non-Kroot"}', 3);
 
@@ -31429,6 +32712,13 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('c053ae1a-7aab-e950-69db-544b4820c2df', 'Airborne Agility', 'unique', 'At the end of your opponent’s turn, if this unit is not within Engagement Range of one or more enemy units, you can remove it from the battlefield and place it into Strategic Reserves.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('eba3517e-b022-71d3-7188-36932d4e56ae', 'c053ae1a-7aab-e950-69db-544b4820c2df', '4-9 Vespid Stingwings', 'Vespid Stingwings w/ Neutron Blaster', true, 0),
+  ('d9c964ff-60ef-2023-e44a-fe9abe0ed68b', 'c053ae1a-7aab-e950-69db-544b4820c2df', '4-9 Vespid Stingwings', 'Vespid Stingwings w/ T''au Flamer', false, 0),
+  ('7ac992c5-ff0d-e9f8-ce2a-04273864ad7a', 'c053ae1a-7aab-e950-69db-544b4820c2df', '4-9 Vespid Stingwings', 'Vespid Stingwings w/ Neutron Grenade Launcher', false, 0),
+  ('8d385e84-38e6-f54f-3966-d09b707f74bf', 'c053ae1a-7aab-e950-69db-544b4820c2df', '4-9 Vespid Stingwings', 'Vespid Stingwings w/ Neutron Rail Rifle', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('0671dba9-5e91-7436-1487-7fefdcb16cc2', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Kroot Hounds', 'beast', '12"', 3, '6+', 1, 8, 1, '{"Beast", "Kroot", "Hounds"}', 3);
@@ -31689,7 +32979,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('820a2b48-e150-af0d-2fac-97d430b10462', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Tactical Drones [Legends]', 'infantry', '8"', 3, '4+', 1, 7, 1, '{"Drone", "Fly", "Tactical Drones", "Non-Kroot"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('820a2b48-e150-af0d-2fac-97d430b10462', 1, 70);
+  ('820a2b48-e150-af0d-2fac-97d430b10462', 4, 70);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('820a2b48-e150-af0d-2fac-97d430b10462', 'Close combat weapon', 'melee', NULL, '1', '6+', 3, 0, '1', '{}'),
@@ -31700,7 +32990,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('6fe992f2-ea89-ea26-ff00-d637fef6a685', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Kroot Farstalkers', 'infantry', '7"', 3, '6+', 1, 7, 1, '{"Infantry", "Kroot", "Farstalkers"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('6fe992f2-ea89-ea26-ff00-d637fef6a685', 9, 85);
+  ('6fe992f2-ea89-ea26-ff00-d637fef6a685', 11, 85);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('6fe992f2-ea89-ea26-ff00-d637fef6a685', 'Ripping fangs', 'melee', NULL, '3', '3+', 3, 0, '1', '{}'),
@@ -31712,6 +33002,11 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
   ('6fe992f2-ea89-ea26-ff00-d637fef6a685', 'Ritual blade', 'melee', NULL, '3', '3+', 5, 0, '1', '{}'),
   ('6fe992f2-ea89-ea26-ff00-d637fef6a685', 'T''au tech rifle', 'ranged', '30"', '1', '4+', 5, 0, '1', '{"Rapid Fire 1"}'),
   ('6fe992f2-ea89-ea26-ff00-d637fef6a685', 'Onager Gauntlet', 'melee', NULL, '4', '3+', 14, -3, '3', '{"Devastating Wounds"}');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('33a53be7-478d-b8d8-bacb-3a8d0fc01a1d', '6fe992f2-ea89-ea26-ff00-d637fef6a685', 'Kroot Farstalkers', 'Kroot Farstalker', false, 0),
+  ('dc97ce56-59fd-78f5-9f4b-873fded126fd', '6fe992f2-ea89-ea26-ff00-d637fef6a685', 'Kroot Farstalkers', 'Kroot Farstalker w/ Farstalker firearm and Pech''ra', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('22639b27-be1b-0b75-34ef-a1fe2cffd299', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'R''varna Battlesuit [Legends]', 'vehicle', '8"', 10, '2+', 15, 7, 4, '{"Vehicle", "Walker", "Fly", "R''varna", "Battlesuit", "Non-Kroot"}', 3);
@@ -31778,7 +33073,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('744d89f0-0232-1646-1a13-da245c05524a', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Remora Stealth Drones [Legends]', 'vehicle', '16"', 6, '3+', 5, 7, 1, '{"Vehicle", "Fly", "Markerlight", "Remora Stealth Drones", "Non-Kroot"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('744d89f0-0232-1646-1a13-da245c05524a', 1, 160);
+  ('744d89f0-0232-1646-1a13-da245c05524a', 2, 160);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('744d89f0-0232-1646-1a13-da245c05524a', 'Close combat weapon', 'melee', NULL, '1', '5+', 4, 0, '1', '{}'),
@@ -31788,6 +33083,12 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('744d89f0-0232-1646-1a13-da245c05524a', 'Aerial Disengagement', 'unique', 'Once per turn, when an enemy unit ends a Normal, Advance or Fall Back move within 9" of this unit, if this unit is not within Engagement Range of one or more enemy units, it can make a Normal move of up to 6".');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('d2e150ee-ef71-7ca5-820a-0fb773587bcf', '744d89f0-0232-1646-1a13-da245c05524a', 'Remora Stealth Drone wargear', 'Close combat weapon', true, 0),
+  ('54b50376-5bd6-92ec-db66-01aa0d632f5f', '744d89f0-0232-1646-1a13-da245c05524a', 'Remora Stealth Drone wargear', 'Remora seeker missile', false, 0),
+  ('8296d117-0acd-b888-0ee6-b3ac63cb3f3e', '744d89f0-0232-1646-1a13-da245c05524a', 'Remora Stealth Drone wargear', 'Twin long-barrelled burst cannon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('2e3e163d-4ff0-ee7b-c861-fb7fabb984e9', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Ta''unar Supremacy Armour', 'vehicle', '8"', 13, '2+', 30, 7, 10, '{"Vehicle", "Titanic", "Walker", "Towering", "Ta''unar Supremacy Armour", "Non-Kroot"}', 3);
@@ -31985,6 +33286,11 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('2ecc85e6-f7ab-25dd-c711-a8831483480c', 'Drone Escort', 'unique', 'Once per turn, in your opponent’s Shooting phase, when a friendly T''AU EMPIRE unit within 6" of this unit is selected as the target of an attack, one unit from your army with this ability can use it. If it does, after that enemy unit has finished making its attacks, the unit using this ability can shoot as if it were your Shooting phase, but when resolving those attacks it can only target that enemy unit (and only if it is an eligible target).');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('250e388c-6c3e-5d01-b5ae-67e05dda21ad', '2ecc85e6-f7ab-25dd-c711-a8831483480c', 'Heavy Gun Drones', 'Heavy Gun Drone w/ Burst cannon and markerlight', true, 0),
+  ('410a77ea-8845-5faa-7aa9-7a5f6355ad15', '2ecc85e6-f7ab-25dd-c711-a8831483480c', 'Heavy Gun Drones', 'Heavy Gun Drone w/ Twin burst cannon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('0549381b-05d9-930b-7052-d10140573a2b', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Great Knarloc [Legends]', 'monster', '9"', 8, '4+', 10, 7, 3, '{"Monster", "Kroot", "Great Knarloc"}', 3);
 
@@ -32038,7 +33344,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('58e48839-6195-b46b-8022-2ed97341a5a6', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Knarloc Riders [Legends]', 'mounted', '7"', 5, '5+', 4, 7, 2, '{"Mounted", "Kroot", "Knarloc Riders"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('58e48839-6195-b46b-8022-2ed97341a5a6', 1, 110);
+  ('58e48839-6195-b46b-8022-2ed97341a5a6', 3, 110);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('58e48839-6195-b46b-8022-2ed97341a5a6', 'Knarloc beak and talons', 'melee', NULL, '4', '3+', 6, -1, '1', '{"Extra Attacks"}'),
@@ -32091,7 +33397,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('a6f00b72-8880-2f2c-f12b-de41bf454593', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Crisis Sunforge Battlesuits', 'vehicle', '10"', 5, '3+', 4, 7, 2, '{"Vehicle", "Walker", "Fly", "Battlesuit", "Crisis", "Sunforge", "Non-Kroot"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('a6f00b72-8880-2f2c-f12b-de41bf454593', 1, 140);
+  ('a6f00b72-8880-2f2c-f12b-de41bf454593', 2, 140);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('a6f00b72-8880-2f2c-f12b-de41bf454593', 'Twin pulse carbine', 'ranged', '20"', '2', '5+', 5, 0, '1', '{"Assault", "Twin-linked"}'),
@@ -32104,11 +33410,17 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('a6f00b72-8880-2f2c-f12b-de41bf454593', 'Sunforge', 'unique', 'Each time a model in this unit makes a ranged attack that targets a **^^Monster^^** or **^^Vehicle^^** unit, you can re-roll the Wound roll and you can re-roll the Damage roll.'),
   ('a6f00b72-8880-2f2c-f12b-de41bf454593', 'Invulnerable Save (4+)', 'invulnerable', 'This unit has a 4+ Invulnerable Save');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('81041ff7-75ed-71a7-4189-3bb8604468a5', 'a6f00b72-8880-2f2c-f12b-de41bf454593', 'Crisis Sunforge Shas’ui wargear', 'Drones (0-2)', true, 0),
+  ('f7432fa2-28e5-7e12-de8d-04d28a5d477d', 'a6f00b72-8880-2f2c-f12b-de41bf454593', 'Crisis Sunforge Shas’ui wargear', 'Battlesuit fists', false, 0),
+  ('16cffb75-7a56-4efd-14e8-b37c59c1bc02', 'a6f00b72-8880-2f2c-f12b-de41bf454593', 'Crisis Sunforge Shas’ui wargear', 'Fusion blaster', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('7691d748-2fda-153a-8f08-95809afca1db', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Crisis Fireknife Battlesuits', 'vehicle', '10"', 5, '3+', 4, 7, 2, '{"Vehicle", "Walker", "Fly", "Battlesuit", "Crisis", "Fireknife", "Non-Kroot"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('7691d748-2fda-153a-8f08-95809afca1db', 1, 120);
+  ('7691d748-2fda-153a-8f08-95809afca1db', 2, 120);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('7691d748-2fda-153a-8f08-95809afca1db', 'Plasma rifle', 'ranged', '18"', '1', '4+', 8, -3, '3', '{}'),
@@ -32121,11 +33433,18 @@ INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('7691d748-2fda-153a-8f08-95809afca1db', 'Fireknife', 'unique', 'Each time a model in this unit makes a ranged attack, re-roll a Hit roll of 1. If that attack targets a unit that is at its Starting Strength, you can re-roll the Hit roll instead.'),
   ('7691d748-2fda-153a-8f08-95809afca1db', 'Weapon Support System', 'unique', 'Each time a model in this unit makes a ranged attack, you can ignore any or all modifiers to the Hit roll.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('46791545-54e7-9bdf-7101-3d9ec6143202', '7691d748-2fda-153a-8f08-95809afca1db', 'Crisis Fireknife Shas’ui wargear', 'Drones (0-2)', true, 0),
+  ('4ae8e951-d5ff-795d-982e-ad866093ce58', '7691d748-2fda-153a-8f08-95809afca1db', 'Crisis Fireknife Shas’ui wargear', 'Battlesuit fists', false, 0),
+  ('e0a05435-6dc6-1941-97eb-63da2cc58d85', '7691d748-2fda-153a-8f08-95809afca1db', 'Crisis Fireknife Shas’ui: Weapons', 'Plasma rifle', true, 0),
+  ('edc88232-ff10-5de2-a379-89a107a69326', '7691d748-2fda-153a-8f08-95809afca1db', 'Crisis Fireknife Shas’ui: Weapons', 'Missile pod', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('bd81704c-e431-c2bb-01d7-b16d2fbea865', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Crisis Starscythe Battlesuits', 'vehicle', '10"', 5, '3+', 4, 7, 2, '{"Vehicle", "Walker", "Fly", "Battlesuit", "Crisis", "Starscythe", "Non-Kroot"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('bd81704c-e431-c2bb-01d7-b16d2fbea865', 1, 110);
+  ('bd81704c-e431-c2bb-01d7-b16d2fbea865', 2, 110);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('bd81704c-e431-c2bb-01d7-b16d2fbea865', 'Burst cannon', 'ranged', '18"', '4', '4+', 5, 0, '1', '{}'),
@@ -32138,6 +33457,13 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('bd81704c-e431-c2bb-01d7-b16d2fbea865', 'Starscythe', 'unique', 'Each time a model in this unit makes a ranged attack (excluding attacks that target MONSTERS and VEHICLES), improve the Armour Penetration characteristic of that attack by 1.'),
   ('bd81704c-e431-c2bb-01d7-b16d2fbea865', 'Battlesuit Support System', 'unique', 'The unit is eligible to shoot in a turn in which it Fell Back.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('25917772-a927-056a-bcb8-9976fc43ce04', 'bd81704c-e431-c2bb-01d7-b16d2fbea865', 'Crisis Starscythe Shas’ui wargear', 'Drones (0-2)', true, 0),
+  ('6eca7286-760d-717e-9c8a-5f641df485ee', 'bd81704c-e431-c2bb-01d7-b16d2fbea865', 'Crisis Starscythe Shas’ui wargear', 'Battlesuit fists', false, 0),
+  ('141ef32a-1488-a0cd-225f-2d1fdcb32153', 'bd81704c-e431-c2bb-01d7-b16d2fbea865', 'Crisis Starscythe Shas’ui: Weapons', 'Burst cannon', true, 0),
+  ('ae0d2bb1-ccfc-3c05-3607-18c41115af73', 'bd81704c-e431-c2bb-01d7-b16d2fbea865', 'Crisis Starscythe Shas’ui: Weapons', 'T''au flamer', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('3e279143-62ed-96a7-eaf6-1c9b0d4cd7a8', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Kroot Trail Shaper', 'character', '7"', 3, '6+', 3, 7, 1, '{"Infantry", "Character", "Kroot", "Shaper", "Trail Shaper"}', 3);
@@ -32675,7 +34001,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('22d82d4e-e420-6398-7abc-8fe7478e763e', '29048f43-09c7-cf02-c71b-6ef2dc3070b3', 'Spore Mines', 'beast', '4"', 1, '7+', 1, 8, 1, '{"Spore Mines", "Beast", "Fly", "Great Devourer"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('22d82d4e-e420-6398-7abc-8fe7478e763e', 1, 55);
+  ('22d82d4e-e420-6398-7abc-8fe7478e763e', 3, 55);
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('5dbefca4-b12f-1743-49f2-94392d8fbc05', '29048f43-09c7-cf02-c71b-6ef2dc3070b3', 'Exocrine', 'monster', '8"', 10, '3+', 14, 8, 4, '{"Monster", "Great Devourer", "Exocrine"}', 3);
@@ -32727,6 +34053,11 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('52abffc5-1154-7408-2df3-1be05406c74c', 'Defensive Stance', 'unique', 'Each time you target this unit with the Fire Overwatch Stratagem, while resolving that Stratagem, hits are scored on unmodified Hit rolls of 5+, or unmodified Hit rolls of 4+ instead if this unit is within range of an objective marker that you control.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('b920b232-9c7b-888e-ee66-ff726546527d', '52abffc5-1154-7408-2df3-1be05406c74c', '3-6 Hive Guard', 'Hive Guard w/ shockcannon', true, 0),
+  ('ae97e9b0-a3f3-49b1-5979-ab27021c252e', '52abffc5-1154-7408-2df3-1be05406c74c', '3-6 Hive Guard', 'Hive Guard w/ impaler cannon', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('0fed5af4-cf58-3337-f19c-2a404c036931', '29048f43-09c7-cf02-c71b-6ef2dc3070b3', 'Tyrannofex', 'monster', '9"', 12, '2+', 16, 8, 5, '{"Monster", "Great Devourer", "Tyrannofex"}', 3);
@@ -32842,7 +34173,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('131b2a1d-fce7-f99d-db8b-1c7892bcde5d', '29048f43-09c7-cf02-c71b-6ef2dc3070b3', 'Barbgaunts', 'infantry', '6"', 4, '4+', 2, 8, 1, '{"Barbgaunts", "Infantry", "Great Devourer"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('131b2a1d-fce7-f99d-db8b-1c7892bcde5d', 1, 55);
+  ('131b2a1d-fce7-f99d-db8b-1c7892bcde5d', 5, 55);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('131b2a1d-fce7-f99d-db8b-1c7892bcde5d', 'Barblauncher', 'ranged', '24"', 'D6', '4+', 5, 0, '1', '{"Blast", "Heavy"}'),
@@ -32850,6 +34181,11 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('131b2a1d-fce7-f99d-db8b-1c7892bcde5d', 'Disruption Bombardment', 'unique', 'In your Shooting phase, after this unit has shot, select one enemy INFANTRY unit hit by one or more of those attacks. Until the end of your opponent’s next turn, that enemy unit is disrupted. While a unit is disrupted, subtract 2 from its Move characteristic, and subtract 2 from Advance and Charge rolls made for it.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('a1f76565-3d77-23fa-47c8-68df8bcd0a49', '131b2a1d-fce7-f99d-db8b-1c7892bcde5d', 'Barbgaunt wargear', 'Barblauncher', true, 0),
+  ('f4f10d6a-eb39-143f-920e-dfae936ae0e2', '131b2a1d-fce7-f99d-db8b-1c7892bcde5d', 'Barbgaunt wargear', 'Chitinous claws and teeth', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('038087d8-4b0a-874c-2254-06ecf456a78a', '29048f43-09c7-cf02-c71b-6ef2dc3070b3', 'Barbed Hierodule [Legends]', 'monster', '8"', 12, '2+', 18, 8, 5, '{"Monster", "Great Devourer", "Barbed Hierodule"}', 3);
@@ -32972,6 +34308,11 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('09bf8151-c4f8-1075-c0a4-37cea3e0da9d', 'Chitinous Horrors', 'unique', 'While an enemy unit is within Engagement Range of one or more units with this ability, halve the Objective Control characteristic of models in that enemy unit.');
 
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('316a678f-1b45-f67e-14b2-50b0ed450b32', '09bf8151-c4f8-1075-c0a4-37cea3e0da9d', '3 Sky-slasher Swarms', 'Sky-slasher swarm', true, 0),
+  ('3fc983c6-dee1-2592-8d19-bf056f50cb24', '09bf8151-c4f8-1075-c0a4-37cea3e0da9d', '3 Sky-slasher Swarms', 'Sky-slasher swarm w/ spinemaws', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
+
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('8f26d907-806e-aef6-e714-e56237f99a37', '29048f43-09c7-cf02-c71b-6ef2dc3070b3', 'Malanthrope [Legends]', 'character', '6"', 5, '4+', 10, 7, 3, '{"Infantry", "Character", "Fly", "Great Devourer", "Synapse"}', 3);
 
@@ -33088,7 +34429,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('d78ebe4c-291c-4942-0a6f-2d68eab62bda', '29048f43-09c7-cf02-c71b-6ef2dc3070b3', 'Gargoyles', 'battleline', '12"', 3, '6+', 1, 8, 2, '{"Battleline", "Infantry", "Fly", "Gargoyles", "Great Devourer", "Endless Multitude", "Vanguard Invader"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('d78ebe4c-291c-4942-0a6f-2d68eab62bda', 1, 85);
+  ('d78ebe4c-291c-4942-0a6f-2d68eab62bda', 10, 85);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('d78ebe4c-291c-4942-0a6f-2d68eab62bda', 'Blinding venom', 'melee', NULL, '1', '4+', 3, 0, '1', '{}'),
@@ -33096,6 +34437,11 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('d78ebe4c-291c-4942-0a6f-2d68eab62bda', 'Winged Swarm', 'unique', 'In your Shooting phase, after this unit has shot, if it is not within Engagement Range of any enemy units, it can make a Normal move of up to 6". If it does, until the end of the turn, this unit is not eligible to declare a charge.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('0caf69fd-7580-9bce-d871-1839bb94a175', 'd78ebe4c-291c-4942-0a6f-2d68eab62bda', 'Gargoyles wargear', 'Blinding venom', true, 0),
+  ('3cb6fcfc-af9b-8d13-d38d-c842af2ecb0b', 'd78ebe4c-291c-4942-0a6f-2d68eab62bda', 'Gargoyles wargear', 'Fleshborer', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('72c4f7c8-5d1f-55d1-91f3-770f675327f1', '29048f43-09c7-cf02-c71b-6ef2dc3070b3', 'Hyperadapted Raveners', 'character', '10"', 5, '4+', 6, 7, 1, '{"Infantry", "Great Devourer", "Vanguard Invader", "Burrowers", "Hyperadapted Raveners", "Character"}', 3);
@@ -33111,6 +34457,12 @@ INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('72c4f7c8-5d1f-55d1-91f3-770f675327f1', 'Alpha Invader', 'unique', 'Weapons equipped by models in this unit have the **[SUSTAINED HITS 1]** ability.'),
   ('72c4f7c8-5d1f-55d1-91f3-770f675327f1', 'Hypersensory Array', 'unique', 'Once per battle round, you can target this unit with the Rapid Ingress or Heroic Intervention Stratagem for 0CP, and can do so even if you have already targeted a different unit with that Stratagem this turn.');
+
+INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES
+  ('0bcd65ed-99fc-739c-4971-4f9309094f62', '72c4f7c8-5d1f-55d1-91f3-770f675327f1', 'Wargear', 'Prime claws and talons', true, 0),
+  ('74d3cfe1-12ed-58fa-2d6d-4ccfb4f74870', '72c4f7c8-5d1f-55d1-91f3-770f675327f1', 'Raveners', 'Ravener', false, 0),
+  ('51330f79-509e-cfdb-4065-4d20433cfa9c', '72c4f7c8-5d1f-55d1-91f3-770f675327f1', 'Raveners', 'Ravener w/ Venom bolt', false, 0)
+ON CONFLICT (unit_id, group_name, name) DO NOTHING;
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('c244f56a-519f-9e01-e504-3d597ad6014e', '29048f43-09c7-cf02-c71b-6ef2dc3070b3', 'Lictor', 'infantry', '8"', 6, '4+', 6, 7, 1, '{"Infantry", "Great Devourer", "Lictor", "Vanguard Invader"}', 3);

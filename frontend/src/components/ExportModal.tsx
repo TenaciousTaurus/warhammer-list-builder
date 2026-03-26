@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { ArmyList, Unit, UnitPointsTier, ArmyListUnit, Enhancement, Detachment, Ability } from '../types/database';
+import { supabase } from '../lib/supabase';
 
 type UnitWithRelations = Unit & { unit_points_tiers: UnitPointsTier[]; abilities: Ability[] };
 
@@ -116,12 +117,22 @@ function generateExportText(
   return lines.join('\n');
 }
 
+function generateShareCode(): string {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
+  let code = '';
+  for (let i = 0; i < 8; i++) code += chars[Math.floor(Math.random() * chars.length)];
+  return code;
+}
+
 export function ExportModal({ list, listUnits, enhancements, listEnhancements, totalPoints, getUnitPoints, onClose, onImport }: ExportModalProps) {
   const [copied, setCopied] = useState(false);
-  const [importMode, setImportMode] = useState(false);
+  const [tab, setTab] = useState<'export' | 'import' | 'share'>('export');
   const [importText, setImportText] = useState('');
   const [importing, setImporting] = useState(false);
   const [importResult, setImportResult] = useState<{ success: boolean; matched: number; unmatched: string[] } | null>(null);
+  const [shareCode, setShareCode] = useState<string | null>(list.share_code ?? null);
+  const [shareCopied, setShareCopied] = useState(false);
+  const [sharing, setSharing] = useState(false);
 
   const exportText = generateExportText(list, listUnits, enhancements, listEnhancements, totalPoints, getUnitPoints);
 
@@ -130,6 +141,33 @@ export function ExportModal({ list, listUnits, enhancements, listEnhancements, t
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     });
+  }
+
+  async function handleGenerateShareLink() {
+    if (shareCode) return;
+    setSharing(true);
+    const code = generateShareCode();
+    const { error } = await supabase
+      .from('army_lists')
+      .update({ share_code: code })
+      .eq('id', list.id);
+    if (!error) {
+      setShareCode(code);
+    }
+    setSharing(false);
+  }
+
+  function handleCopyShareLink() {
+    if (!shareCode) return;
+    const url = `${window.location.origin}/shared/${shareCode}`;
+    navigator.clipboard.writeText(url).then(() => {
+      setShareCopied(true);
+      setTimeout(() => setShareCopied(false), 2000);
+    });
+  }
+
+  function handlePrint() {
+    window.print();
   }
 
   const textareaStyles = {
@@ -153,19 +191,13 @@ export function ExportModal({ list, listUnits, enhancements, listEnhancements, t
         style={{ maxHeight: '80vh', display: 'flex', flexDirection: 'column' }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-md)' }}>
-          <h2 className="modal-panel__title" style={{ marginBottom: 0 }}>
-            {importMode ? 'Import List' : 'Export List'}
-          </h2>
-          <button
-            className="btn"
-            onClick={() => setImportMode(!importMode)}
-          >
-            {importMode ? 'Back to Export' : 'Switch to Import'}
-          </button>
+        <div className="export-modal__tabs">
+          <button className={`export-modal__tab${tab === 'export' ? ' export-modal__tab--active' : ''}`} onClick={() => setTab('export')}>Export</button>
+          <button className={`export-modal__tab${tab === 'share' ? ' export-modal__tab--active' : ''}`} onClick={() => setTab('share')}>Share</button>
+          <button className={`export-modal__tab${tab === 'import' ? ' export-modal__tab--active' : ''}`} onClick={() => setTab('import')}>Import</button>
         </div>
 
-        {!importMode ? (
+        {tab === 'export' && (
           <>
             <textarea
               readOnly
@@ -173,16 +205,61 @@ export function ExportModal({ list, listUnits, enhancements, listEnhancements, t
               style={textareaStyles}
             />
             <div className="modal-panel__actions">
+              <button className="btn" onClick={handlePrint}>Print / PDF</button>
               <button className="btn" onClick={onClose}>Close</button>
               <button className="btn btn--primary" onClick={handleCopy}>
                 {copied ? 'Copied!' : 'Copy to Clipboard'}
               </button>
             </div>
           </>
-        ) : (
+        )}
+
+        {tab === 'share' && (
+          <>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 'var(--space-lg)', padding: 'var(--space-xl)' }}>
+              {shareCode ? (
+                <>
+                  <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)', textAlign: 'center' }}>
+                    Share this link with anyone to view your list:
+                  </p>
+                  <div style={{
+                    padding: 'var(--space-md)',
+                    background: 'rgba(10, 10, 15, 0.6)',
+                    border: '1px solid var(--glass-border)',
+                    borderRadius: 'var(--radius-md)',
+                    fontFamily: 'monospace',
+                    fontSize: 'var(--text-sm)',
+                    color: 'var(--color-gold)',
+                    wordBreak: 'break-all',
+                    textAlign: 'center',
+                  }}>
+                    {window.location.origin}/shared/{shareCode}
+                  </div>
+                  <button className="btn btn--primary" onClick={handleCopyShareLink}>
+                    {shareCopied ? 'Link Copied!' : 'Copy Share Link'}
+                  </button>
+                </>
+              ) : (
+                <>
+                  <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)', textAlign: 'center' }}>
+                    Generate a shareable link for this list. Anyone with the link can view it (read-only).
+                  </p>
+                  <button className="btn btn--primary" onClick={handleGenerateShareLink} disabled={sharing}>
+                    {sharing ? 'Generating...' : 'Generate Share Link'}
+                  </button>
+                </>
+              )}
+            </div>
+            <div className="modal-panel__actions">
+              <button className="btn" onClick={onClose}>Close</button>
+            </div>
+          </>
+        )}
+
+        {tab === 'import' && (
           <>
             <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)', marginBottom: 'var(--space-md)' }}>
-              Paste an exported list below. Note: importing will match units by name against the current faction's available units.
+              Paste an exported list below. Units are matched by name against the current faction.
             </p>
             <textarea
               value={importText}

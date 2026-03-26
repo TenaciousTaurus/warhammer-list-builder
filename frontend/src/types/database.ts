@@ -200,6 +200,7 @@ export type Database = {
           faction_id: string;
           detachment_id: string;
           points_limit: number;
+          share_code: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -210,6 +211,7 @@ export type Database = {
           faction_id: string;
           detachment_id: string;
           points_limit?: number;
+          share_code?: string | null;
         };
         Update: {
           id?: string;
@@ -218,6 +220,7 @@ export type Database = {
           faction_id?: string;
           detachment_id?: string;
           points_limit?: number;
+          share_code?: string | null;
         };
       };
       army_list_units: {

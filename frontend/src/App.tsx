@@ -3,6 +3,8 @@ import './App.css';
 import { ListsPage } from './pages/ListsPage';
 import { ListEditorPage } from './pages/ListEditorPage';
 import { UnitsPage } from './pages/UnitsPage';
+import { SharedListPage } from './pages/SharedListPage';
+import { PlayModePage } from './pages/PlayModePage';
 
 function App() {
   return (
@@ -35,6 +37,8 @@ function App() {
             <Route path="/" element={<ListsPage />} />
             <Route path="/list/:id" element={<ListEditorPage />} />
             <Route path="/units" element={<UnitsPage />} />
+            <Route path="/shared/:code" element={<SharedListPage />} />
+            <Route path="/play/:id" element={<PlayModePage />} />
           </Routes>
         </main>
       </div>
