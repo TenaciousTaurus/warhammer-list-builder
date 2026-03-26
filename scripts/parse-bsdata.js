@@ -465,89 +465,179 @@ function extractMaxPerList(node) {
 }
 
 /**
- * Extract wargear options from a unit's "Wargear" selection entry group.
- * Returns an array of { group_name, name, is_default, points }.
+ * Extract wargear options from a "Wargear" selectionEntryGroup.
+ * Handles direct entries, links, and subgroups.
  */
-function extractWargearOptions(node, entryIndex) {
+function extractWargearFromGroup(group, entryIndex) {
   const options = [];
 
-  for (const group of ensureArray(node?.selectionEntryGroups?.selectionEntryGroup)) {
-    if (group['@_name'] !== 'Wargear') continue;
+  // Direct entries (simple wargear options)
+  const directEntries = ensureArray(group?.selectionEntries?.selectionEntry)
+    .filter(e => e['@_type'] === 'upgrade');
 
-    // Check for direct entries (simple wargear options)
-    const directEntries = ensureArray(group?.selectionEntries?.selectionEntry)
-      .filter(e => e['@_type'] === 'upgrade');
-
-    if (directEntries.length > 0) {
-      directEntries.forEach((e, idx) => {
-        let pts = 0;
-        for (const c of ensureArray(e?.costs?.cost)) {
-          if (c['@_name'] === 'pts') pts = parseInt(c['@_value']) || 0;
-        }
-        options.push({
-          group_name: 'Wargear',
-          name: e['@_name'],
-          is_default: idx === 0,
-          points: pts,
-        });
+  if (directEntries.length > 0) {
+    directEntries.forEach((e, idx) => {
+      let pts = 0;
+      for (const c of ensureArray(e?.costs?.cost)) {
+        if (c['@_name'] === 'pts') pts = parseInt(c['@_value']) || 0;
+      }
+      options.push({
+        group_name: 'Wargear',
+        name: e['@_name'],
+        is_default: idx === 0,
+        points: pts,
       });
+    });
+  }
+
+  // Direct links (shared wargear references)
+  for (const link of ensureArray(group?.entryLinks?.entryLink)) {
+    const linkName = link['@_name'];
+    if (!linkName) continue;
+    let pts = 0;
+    for (const c of ensureArray(link?.costs?.cost)) {
+      if (c['@_name'] === 'pts') pts = parseInt(c['@_value']) || 0;
+    }
+    options.push({
+      group_name: 'Wargear',
+      name: linkName,
+      is_default: options.filter(o => o.group_name === 'Wargear').length === 0,
+      points: pts,
+    });
+  }
+
+  // Subgroups (e.g. "Weapon 1", "Weapon 2", "Plague knives options")
+  for (const subgroup of ensureArray(group?.selectionEntryGroups?.selectionEntryGroup)) {
+    const sgName = subgroup['@_name'] || 'Wargear';
+    let sgIdx = 0;
+
+    for (const e of ensureArray(subgroup?.selectionEntries?.selectionEntry)) {
+      if (e['@_type'] !== 'upgrade') continue;
+      let pts = 0;
+      for (const c of ensureArray(e?.costs?.cost)) {
+        if (c['@_name'] === 'pts') pts = parseInt(c['@_value']) || 0;
+      }
+      options.push({
+        group_name: sgName,
+        name: e['@_name'],
+        is_default: sgIdx === 0,
+        points: pts,
+      });
+      sgIdx++;
     }
 
-    // Check for direct links (shared wargear references)
-    for (const link of ensureArray(group?.entryLinks?.entryLink)) {
+    // Resolve links in subgroups
+    for (const link of ensureArray(subgroup?.entryLinks?.entryLink)) {
       const linkName = link['@_name'];
       if (!linkName) continue;
+      const targetName = linkName || (entryIndex.get(link['@_targetId']) || {})['@_name'];
+      if (!targetName) continue;
       let pts = 0;
       for (const c of ensureArray(link?.costs?.cost)) {
         if (c['@_name'] === 'pts') pts = parseInt(c['@_value']) || 0;
       }
       options.push({
-        group_name: 'Wargear',
-        name: linkName,
-        is_default: options.filter(o => o.group_name === 'Wargear').length === 0,
+        group_name: sgName,
+        name: targetName,
+        is_default: options.filter(o => o.group_name === sgName).length === 0,
         points: pts,
       });
+      sgIdx++;
+    }
+  }
+
+  return options;
+}
+
+/**
+ * Extract wargear options from a unit node.
+ * Looks at the top-level node AND inside child model-type selectionEntries,
+ * since multi-model units (e.g. Plague Marines) nest wargear inside
+ * individual model definitions (Plague Champion, Plague Marine).
+ */
+function extractWargearOptions(node, entryIndex) {
+  const options = [];
+  const seen = new Set(); // Deduplicate by group_name:name
+
+  function addOptions(opts) {
+    for (const opt of opts) {
+      const key = `${opt.group_name}:${opt.name}`;
+      if (!seen.has(key)) {
+        seen.add(key);
+        options.push(opt);
+      }
+    }
+  }
+
+  // 1) Check top-level selectionEntryGroups for "Wargear"
+  for (const group of ensureArray(node?.selectionEntryGroups?.selectionEntryGroup)) {
+    if (group['@_name'] === 'Wargear') {
+      addOptions(extractWargearFromGroup(group, entryIndex));
+    }
+    // Also check for "Replace X" style groups at the top level (e.g. vehicle loadouts)
+    if (group['@_name'] && group['@_name'].startsWith('Replace ')) {
+      addOptions(extractWargearFromGroup(group, entryIndex).map(o => ({
+        ...o,
+        group_name: group['@_name'],
+      })));
+    }
+  }
+
+  // 2) Recurse into child model-type selectionEntries (e.g. "Plague Champion", "Plague Marine")
+  for (const child of ensureArray(node?.selectionEntries?.selectionEntry)) {
+    if (child['@_type'] !== 'model') continue;
+    const modelName = child['@_name'] || '';
+
+    for (const group of ensureArray(child?.selectionEntryGroups?.selectionEntryGroup)) {
+      if (group['@_name'] === 'Wargear') {
+        const modelOpts = extractWargearFromGroup(group, entryIndex);
+        // Prefix group names with model name to avoid collisions between models
+        addOptions(modelOpts.map(o => ({
+          ...o,
+          group_name: modelOpts.length > 1 && o.group_name === 'Wargear'
+            ? `${modelName} wargear`
+            : o.group_name !== 'Wargear'
+              ? `${modelName}: ${o.group_name}`
+              : o.group_name,
+        })));
+      }
     }
 
-    // Check for subgroups (e.g. "Weapon 1", "Weapon 2", "Sponson Weapons")
-    for (const subgroup of ensureArray(group?.selectionEntryGroups?.selectionEntryGroup)) {
-      const sgName = subgroup['@_name'] || 'Wargear';
-      let sgIdx = 0;
+    // Also check entryLinks on models that resolve to shared entries with wargear
+    for (const link of ensureArray(child?.entryLinks?.entryLink)) {
+      if (link['@_type'] !== 'selectionEntryGroup') continue;
+      const target = entryIndex.get(link['@_targetId']);
+      if (!target || target['@_name'] !== 'Wargear') continue;
+      const modelOpts = extractWargearFromGroup(target, entryIndex);
+      addOptions(modelOpts.map(o => ({
+        ...o,
+        group_name: modelOpts.length > 1 && o.group_name === 'Wargear'
+          ? `${modelName} wargear`
+          : o.group_name !== 'Wargear'
+            ? `${modelName}: ${o.group_name}`
+            : o.group_name,
+      })));
+    }
+  }
 
-      for (const e of ensureArray(subgroup?.selectionEntries?.selectionEntry)) {
-        if (e['@_type'] !== 'upgrade') continue;
-        let pts = 0;
-        for (const c of ensureArray(e?.costs?.cost)) {
-          if (c['@_name'] === 'pts') pts = parseInt(c['@_value']) || 0;
-        }
-        options.push({
-          group_name: sgName,
+  // 3) Check for "model variant" pattern: selectionEntryGroups containing model-type entries
+  //    (e.g. Blightlord Terminators: "2-9 Blightlord Terminators" group with model variants)
+  for (const group of ensureArray(node?.selectionEntryGroups?.selectionEntryGroup)) {
+    if (group['@_name'] === 'Wargear') continue; // Already handled above
+    const modelEntries = ensureArray(group?.selectionEntries?.selectionEntry)
+      .filter(e => e['@_type'] === 'model');
+    if (modelEntries.length >= 2) {
+      // This is a model variant group — treat each model as a loadout option
+      const groupName = group['@_name'] || 'Loadout';
+      const defaultId = group['@_defaultSelectionEntryId'];
+      modelEntries.forEach((e) => {
+        addOptions([{
+          group_name: groupName,
           name: e['@_name'],
-          is_default: sgIdx === 0,
-          points: pts,
-        });
-        sgIdx++;
-      }
-
-      // Resolve links in subgroups
-      for (const link of ensureArray(subgroup?.entryLinks?.entryLink)) {
-        const linkName = link['@_name'];
-        if (!linkName) continue;
-        // Try to get name from target if link name is missing
-        const targetName = linkName || (entryIndex.get(link['@_targetId']) || {})['@_name'];
-        if (!targetName) continue;
-        let pts = 0;
-        for (const c of ensureArray(link?.costs?.cost)) {
-          if (c['@_name'] === 'pts') pts = parseInt(c['@_value']) || 0;
-        }
-        options.push({
-          group_name: sgName,
-          name: targetName,
-          is_default: options.filter(o => o.group_name === sgName).length === 0,
-          points: pts,
-        });
-        sgIdx++;
-      }
+          is_default: e['@_id'] === defaultId,
+          points: 0,
+        }]);
+      });
     }
   }
 

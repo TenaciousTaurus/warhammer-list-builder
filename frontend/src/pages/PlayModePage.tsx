@@ -5,7 +5,11 @@ import type { ArmyList, Unit, UnitPointsTier, ArmyListUnit, Enhancement, Detachm
 import { DatasheetView } from '../components/DatasheetView';
 import { CasualtyTracker } from '../components/CasualtyTracker';
 import { GameTracker } from '../components/GameTracker';
+import { SecondaryObjectives } from '../components/SecondaryObjectives';
+import { StratagemReference } from '../components/StratagemReference';
 import { getUnitPoints, ROLE_ORDER, ROLE_LABELS } from '../hooks/useListEditor';
+
+type PlayTab = 'army' | 'secondaries' | 'stratagems';
 
 type UnitWithRelations = Unit & { unit_points_tiers: UnitPointsTier[]; abilities: Ability[]; weapons: Weapon[] };
 type ArmyListUnitWithDetails = ArmyListUnit & { units: UnitWithRelations };
@@ -18,6 +22,7 @@ export function PlayModePage() {
   const [enhancements, setEnhancements] = useState<Enhancement[]>([]);
   const [listEnhancements, setListEnhancements] = useState<{ id: string; enhancement_id: string; army_list_unit_id: string }[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<PlayTab>('army');
   const [expandedUnits, setExpandedUnits] = useState<Set<string>>(new Set());
 
   useEffect(() => {
@@ -100,60 +105,83 @@ export function PlayModePage() {
       {/* Game Tracker */}
       <GameTracker listId={id} />
 
-      {/* Unit Cards */}
-      <div className="play-mode__units">
-        {ROLE_ORDER.map(role => {
-          const roleUnits = rosterByRole[role];
-          if (!roleUnits || roleUnits.length === 0) return null;
-          return (
-            <div key={role}>
-              <div className={`roster-section__header roster-section__header--${role}`}>
-                <span>{ROLE_LABELS[role]}</span>
-              </div>
-              {roleUnits.map(lu => {
-                const pts = getUnitPoints(lu.units, lu.model_count);
-                const enhAssignment = listEnhancements.find(le => le.army_list_unit_id === lu.id);
-                const enh = enhAssignment ? enhancements.find(e => e.id === enhAssignment.enhancement_id) : null;
-                const totalPts = pts + (enh?.points ?? 0);
-                const isExpanded = expandedUnits.has(lu.id);
-                const displayName = lu.model_count > 1 ? `${lu.model_count} ${lu.units.name}` : lu.units.name;
-                const isMultiWound = lu.units.wounds > 1 && lu.model_count <= 3;
-
-                return (
-                  <div key={lu.id} className={`play-mode__unit-card${isExpanded ? ' play-mode__unit-card--expanded' : ''}`}>
-                    <div className="play-mode__unit-header" onClick={() => toggleExpand(lu.id)}>
-                      <div>
-                        <span className="play-mode__unit-name">{displayName}</span>
-                        {enh && <span className="play-mode__unit-enh"> &middot; {enh.name}</span>}
-                      </div>
-                      <div className="play-mode__unit-right">
-                        <span className="play-mode__unit-pts">{totalPts} pts</span>
-                        <span className="play-mode__expand-arrow">{isExpanded ? '\u25B2' : '\u25BC'}</span>
-                      </div>
-                    </div>
-
-                    {/* Casualty tracker always visible */}
-                    <CasualtyTracker
-                      armyListUnitId={lu.id}
-                      listId={id}
-                      modelCount={lu.model_count}
-                      wounds={lu.units.wounds}
-                      isMultiWound={isMultiWound}
-                    />
-
-                    {/* Expandable datasheet */}
-                    {isExpanded && (
-                      <div className="play-mode__datasheet">
-                        <DatasheetView unit={lu.units} weapons={lu.units.weapons ?? []} />
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          );
-        })}
+      {/* Play Mode Tabs */}
+      <div className="play-mode__tabs">
+        <button className={`play-mode__tab${activeTab === 'army' ? ' play-mode__tab--active' : ''}`} onClick={() => setActiveTab('army')}>
+          Army
+        </button>
+        <button className={`play-mode__tab${activeTab === 'secondaries' ? ' play-mode__tab--active' : ''}`} onClick={() => setActiveTab('secondaries')}>
+          Secondaries
+        </button>
+        <button className={`play-mode__tab${activeTab === 'stratagems' ? ' play-mode__tab--active' : ''}`} onClick={() => setActiveTab('stratagems')}>
+          Stratagems
+        </button>
       </div>
+
+      {/* Tab Content */}
+      {activeTab === 'army' && (
+        <div className="play-mode__units">
+          {ROLE_ORDER.map(role => {
+            const roleUnits = rosterByRole[role];
+            if (!roleUnits || roleUnits.length === 0) return null;
+            return (
+              <div key={role}>
+                <div className={`roster-section__header roster-section__header--${role}`}>
+                  <span>{ROLE_LABELS[role]}</span>
+                </div>
+                {roleUnits.map(lu => {
+                  const pts = getUnitPoints(lu.units, lu.model_count);
+                  const enhAssignment = listEnhancements.find(le => le.army_list_unit_id === lu.id);
+                  const enh = enhAssignment ? enhancements.find(e => e.id === enhAssignment.enhancement_id) : null;
+                  const totalPts = pts + (enh?.points ?? 0);
+                  const isExpanded = expandedUnits.has(lu.id);
+                  const displayName = lu.model_count > 1 ? `${lu.model_count} ${lu.units.name}` : lu.units.name;
+                  const isMultiWound = lu.units.wounds > 1 && lu.model_count <= 3;
+
+                  return (
+                    <div key={lu.id} className={`play-mode__unit-card${isExpanded ? ' play-mode__unit-card--expanded' : ''}`}>
+                      <div className="play-mode__unit-header" onClick={() => toggleExpand(lu.id)}>
+                        <div>
+                          <span className="play-mode__unit-name">{displayName}</span>
+                          {enh && <span className="play-mode__unit-enh"> &middot; {enh.name}</span>}
+                        </div>
+                        <div className="play-mode__unit-right">
+                          <span className="play-mode__unit-pts">{totalPts} pts</span>
+                          <span className="play-mode__expand-arrow">{isExpanded ? '\u25B2' : '\u25BC'}</span>
+                        </div>
+                      </div>
+
+                      {/* Casualty tracker always visible */}
+                      <CasualtyTracker
+                        armyListUnitId={lu.id}
+                        listId={id}
+                        modelCount={lu.model_count}
+                        wounds={lu.units.wounds}
+                        isMultiWound={isMultiWound}
+                      />
+
+                      {/* Expandable datasheet */}
+                      {isExpanded && (
+                        <div className="play-mode__datasheet">
+                          <DatasheetView unit={lu.units} weapons={lu.units.weapons ?? []} />
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {activeTab === 'secondaries' && (
+        <SecondaryObjectives listId={id} />
+      )}
+
+      {activeTab === 'stratagems' && (
+        <StratagemReference />
+      )}
     </div>
   );
 }
