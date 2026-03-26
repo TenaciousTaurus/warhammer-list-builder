@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import type { ArmyList, Faction } from '../types/database';
 import { CreateListModal } from '../components/CreateListModal';
+import { ConfirmDialog } from '../components/ConfirmDialog';
 
 function relativeTime(dateStr: string): string {
   const now = Date.now();
@@ -30,6 +31,7 @@ export function ListsPage() {
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState<SortOption>('updated');
   const [groupByFaction, setGroupByFaction] = useState(true);
+  const [confirmDelete, setConfirmDelete] = useState<{ id: string; name: string } | null>(null);
 
   async function fetchLists() {
     setLoading(true);
@@ -47,6 +49,7 @@ export function ListsPage() {
 
   async function handleDelete(id: string) {
     await supabase.from('army_lists').delete().eq('id', id);
+    setConfirmDelete(null);
     fetchLists();
   }
 
@@ -106,7 +109,7 @@ export function ListsPage() {
           </button>
           <button
             className="btn btn--danger btn--icon list-card__delete"
-            onClick={() => handleDelete(list.id)}
+            onClick={() => setConfirmDelete({ id: list.id, name: list.name })}
             title="Delete list"
           >
             &#128465;
@@ -195,6 +198,17 @@ export function ListsPage() {
             setShowCreate(false);
             fetchLists();
           }}
+        />
+      )}
+
+      {confirmDelete && (
+        <ConfirmDialog
+          title="Delete Army List"
+          message={`Are you sure you want to delete "${confirmDelete.name}"? This cannot be undone.`}
+          confirmLabel="Delete"
+          variant="danger"
+          onConfirm={() => handleDelete(confirmDelete.id)}
+          onCancel={() => setConfirmDelete(null)}
         />
       )}
     </div>

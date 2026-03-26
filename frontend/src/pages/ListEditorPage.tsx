@@ -113,6 +113,8 @@ export function ListEditorPage() {
           onBack={() => navigate('/')}
           onExport={() => editor.setShowExport(true)}
           onPlay={() => navigate(`/play/${id}`)}
+          onUpdateName={editor.updateListName}
+          onUpdatePointsLimit={editor.updatePointsLimit}
         />
 
         <div className="list-editor__roster-list">

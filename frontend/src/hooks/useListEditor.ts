@@ -340,6 +340,19 @@ export function useListEditor(id: string | undefined) {
     fetchList();
   }
 
+  async function updateListName(name: string) {
+    if (!id) return;
+    await supabase.from('army_lists').update({ name }).eq('id', id);
+    setList(prev => prev ? { ...prev, name } : prev);
+  }
+
+  async function updatePointsLimit(limit: number) {
+    if (!id) return;
+    await supabase.from('army_lists').update({ points_limit: limit }).eq('id', id);
+    setList(prev => prev ? { ...prev, points_limit: limit } : prev);
+    fetchServerValidation();
+  }
+
   async function updateModelCount(armyListUnitId: string, modelCount: number) {
     await supabase
       .from('army_list_units')
@@ -509,6 +522,8 @@ export function useListEditor(id: string | undefined) {
     // Actions
     addUnit,
     removeUnit,
+    updateListName,
+    updatePointsLimit,
     updateModelCount,
     assignEnhancement,
     selectWargear,
