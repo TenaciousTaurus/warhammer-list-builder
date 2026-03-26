@@ -436,6 +436,26 @@ export function useListEditor(id: string | undefined) {
     return { success: true, matched: matched.length, unmatched };
   }
 
+  async function reorderUnits(fromIndex: number, toIndex: number) {
+    if (fromIndex === toIndex) return;
+    const reordered = [...listUnits];
+    const [moved] = reordered.splice(fromIndex, 1);
+    reordered.splice(toIndex, 0, moved);
+
+    // Optimistic update
+    setListUnits(reordered);
+
+    // Persist new sort_order values
+    const updates = reordered.map((lu, i) => ({
+      id: lu.id,
+      sort_order: i,
+    }));
+
+    for (const u of updates) {
+      await supabase.from('army_list_units').update({ sort_order: u.sort_order }).eq('id', u.id);
+    }
+  }
+
   function togglePickerRole(role: string) {
     setCollapsedPickerRoles(prev => {
       const next = new Set(prev);
@@ -493,6 +513,7 @@ export function useListEditor(id: string | undefined) {
     assignEnhancement,
     selectWargear,
     handleImport,
+    reorderUnits,
     togglePickerRole,
 
     // Helpers

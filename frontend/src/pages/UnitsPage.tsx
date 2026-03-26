@@ -1,13 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { supabase } from '../lib/supabase';
 import type { Faction, Unit, UnitPointsTier, Weapon, Ability } from '../types/database';
-import { StatLine } from '../components/StatLine';
+import { DatasheetView } from '../components/DatasheetView';
+import { ROLE_ORDER, ROLE_LABELS } from '../hooks/useListEditor';
 
 type UnitWithDetails = Unit & {
   unit_points_tiers: UnitPointsTier[];
   weapons: Weapon[];
   abilities: Ability[];
 };
+
+type SortOption = 'name' | 'points_asc' | 'points_desc' | 'wounds' | 'toughness';
 
 export function UnitsPage() {
   const [factions, setFactions] = useState<Faction[]>([]);
@@ -16,6 +19,9 @@ export function UnitsPage() {
   const [expandedUnit, setExpandedUnit] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('');
+  const [roleFilter, setRoleFilter] = useState<string>('all');
+  const [sort, setSort] = useState<SortOption>('name');
+  const [keywordFilter, setKeywordFilter] = useState('');
 
   useEffect(() => {
     supabase
@@ -34,6 +40,7 @@ export function UnitsPage() {
   useEffect(() => {
     if (!selectedFaction) return;
     setLoading(true);
+    setExpandedUnit(null);
     supabase
       .from('units')
       .select('*, unit_points_tiers(*), weapons(*), abilities(*)')
@@ -45,56 +52,161 @@ export function UnitsPage() {
       });
   }, [selectedFaction]);
 
-  const filteredUnits = units.filter(u =>
-    u.name.toLowerCase().includes(filter.toLowerCase())
-  );
+  // Available roles for this faction
+  const availableRoles = useMemo(() => {
+    const roles = new Set(units.map(u => u.role));
+    return ROLE_ORDER.filter(r => roles.has(r));
+  }, [units]);
+
+  // Get base points for sorting
+  function getBasePoints(unit: UnitWithDetails): number {
+    if (unit.unit_points_tiers.length === 0) return 0;
+    const sorted = [...unit.unit_points_tiers].sort((a, b) => a.model_count - b.model_count);
+    return sorted[0].points;
+  }
+
+  const filteredAndSorted = useMemo(() => {
+    let result = units;
+
+    // Name filter
+    if (filter) {
+      const q = filter.toLowerCase();
+      result = result.filter(u => u.name.toLowerCase().includes(q));
+    }
+
+    // Role filter
+    if (roleFilter !== 'all') {
+      result = result.filter(u => u.role === roleFilter);
+    }
+
+    // Keyword filter
+    if (keywordFilter) {
+      const q = keywordFilter.toLowerCase();
+      result = result.filter(u =>
+        u.keywords.some(kw => kw.toLowerCase().includes(q)) ||
+        u.abilities.some(a => a.name.toLowerCase().includes(q))
+      );
+    }
+
+    // Sort
+    result = [...result].sort((a, b) => {
+      switch (sort) {
+        case 'name': return a.name.localeCompare(b.name);
+        case 'points_asc': return getBasePoints(a) - getBasePoints(b);
+        case 'points_desc': return getBasePoints(b) - getBasePoints(a);
+        case 'wounds': return b.wounds - a.wounds;
+        case 'toughness': return b.toughness - a.toughness;
+        default: return 0;
+      }
+    });
+
+    return result;
+  }, [units, filter, roleFilter, keywordFilter, sort]);
+
+  // Stats summary
+  const statsSummary = useMemo(() => {
+    return {
+      total: units.length,
+      filtered: filteredAndSorted.length,
+    };
+  }, [units, filteredAndSorted]);
+
+  const invulnValue = (unit: UnitWithDetails) => {
+    const invuln = unit.abilities.find(a => a.type === 'invulnerable');
+    return invuln?.description?.match(/(\d\+)/)?.[1] ?? null;
+  };
 
   return (
     <div>
       <div className="units-page__header">
         <h2>Unit Browser</h2>
+        <span className="units-page__count">
+          {statsSummary.filtered === statsSummary.total
+            ? `${statsSummary.total} units`
+            : `${statsSummary.filtered} / ${statsSummary.total} units`}
+        </span>
       </div>
 
       <div className="units-page__filters">
-        <div className="form-group" style={{ maxWidth: '300px' }}>
+        <div className="form-group" style={{ minWidth: '200px' }}>
           <label>Faction</label>
           <select
             className="form-select"
             value={selectedFaction}
-            onChange={(e) => setSelectedFaction(e.target.value)}
+            onChange={(e) => { setSelectedFaction(e.target.value); setRoleFilter('all'); }}
           >
             {factions.map((f) => (
               <option key={f.id} value={f.id}>{f.name}</option>
             ))}
           </select>
         </div>
-        <div className="form-group" style={{ flex: 1, minWidth: '200px' }}>
-          <label>Search</label>
+        <div className="form-group" style={{ flex: 1, minWidth: '150px' }}>
+          <label>Search Name</label>
           <input
             className="form-input"
             type="text"
-            placeholder="Filter units by name..."
+            placeholder="Unit name..."
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
           />
         </div>
+        <div className="form-group" style={{ minWidth: '130px' }}>
+          <label>Keyword / Ability</label>
+          <input
+            className="form-input"
+            type="text"
+            placeholder="e.g. Fly, Psyker..."
+            value={keywordFilter}
+            onChange={(e) => setKeywordFilter(e.target.value)}
+          />
+        </div>
+      </div>
+
+      {/* Role filter chips + Sort */}
+      <div className="units-page__controls">
+        <div className="units-page__role-chips">
+          <button
+            className={`units-page__role-chip${roleFilter === 'all' ? ' units-page__role-chip--active' : ''}`}
+            onClick={() => setRoleFilter('all')}
+          >
+            All
+          </button>
+          {availableRoles.map(role => (
+            <button
+              key={role}
+              className={`units-page__role-chip units-page__role-chip--${role}${roleFilter === role ? ' units-page__role-chip--active' : ''}`}
+              onClick={() => setRoleFilter(roleFilter === role ? 'all' : role)}
+            >
+              {ROLE_LABELS[role]}
+            </button>
+          ))}
+        </div>
+        <select
+          className="form-select units-page__sort"
+          value={sort}
+          onChange={(e) => setSort(e.target.value as SortOption)}
+        >
+          <option value="name">Sort: Name A-Z</option>
+          <option value="points_asc">Sort: Points Low-High</option>
+          <option value="points_desc">Sort: Points High-Low</option>
+          <option value="wounds">Sort: Most Wounds</option>
+          <option value="toughness">Sort: Most Tough</option>
+        </select>
       </div>
 
       {loading ? (
         <p style={{ color: 'var(--color-text-muted)' }}>Loading units...</p>
-      ) : filteredUnits.length === 0 ? (
+      ) : filteredAndSorted.length === 0 ? (
         <div className="empty-state card">
           <div className="empty-state__title">No units found</div>
-          <p>{filter ? 'No units match your search.' : 'No units available for this faction yet.'}</p>
+          <p>{filter || keywordFilter ? 'No units match your filters.' : 'No units available for this faction yet.'}</p>
         </div>
       ) : (
-        <div className="units-page__grid">
-          {filteredUnits.map((unit) => {
+        <div className="units-page__list">
+          {filteredAndSorted.map((unit) => {
             const isExpanded = expandedUnit === unit.id;
-            const coreAbilities = unit.abilities.filter(a => a.type === 'core');
-            const factionAbilities = unit.abilities.filter(a => a.type === 'faction');
-            const uniqueAbilities = unit.abilities.filter(a => a.type === 'unique');
-            const invulnAbilities = unit.abilities.filter(a => a.type === 'invulnerable');
+            const inv = invulnValue(unit);
+            const basePoints = getBasePoints(unit);
 
             return (
               <div
@@ -102,132 +214,57 @@ export function UnitsPage() {
                 className={`unit-browser-card${isExpanded ? ' unit-browser-card--expanded' : ''}`}
                 onClick={() => setExpandedUnit(isExpanded ? null : unit.id)}
               >
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)', marginBottom: 'var(--space-sm)', flexWrap: 'wrap' }}>
-                      <h3 style={{ fontSize: 'var(--text-base)', margin: 0 }}>{unit.name}</h3>
+                {/* Collapsed view */}
+                <div className="unit-browser-card__header">
+                  <div className="unit-browser-card__left">
+                    <div className="unit-browser-card__title-row">
+                      <h3 className="unit-browser-card__name">{unit.name}</h3>
                       <span className={`role-badge role-badge--${unit.role}`}>
                         {unit.role.replace('_', ' ')}
                       </span>
                       {unit.max_per_list === 1 && (
-                        <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-role-epic-hero)', fontStyle: 'italic' }}>
-                          Unique
-                        </span>
-                      )}
-                      {unit.max_per_list > 1 && unit.max_per_list < 3 && (
-                        <span style={{ fontSize: 'var(--text-xs)', color: '#ef4444' }}>
-                          Max {unit.max_per_list}
-                        </span>
+                        <span className="unit-browser-card__unique">Unique</span>
                       )}
                     </div>
-                    <StatLine unit={unit} />
+                    <div className="unit-browser-card__quick-stats">
+                      <span>T{unit.toughness}</span>
+                      <span>W{unit.wounds}</span>
+                      <span>Sv{unit.save}</span>
+                      {inv && <span className="unit-browser-card__invuln">{inv}++</span>}
+                    </div>
                   </div>
-                  <div style={{ textAlign: 'right', flexShrink: 0, marginLeft: 'var(--space-md)' }}>
-                    {unit.unit_points_tiers
-                      .sort((a, b) => a.model_count - b.model_count)
-                      .map((tier) => (
-                        <div key={tier.id} style={{ fontSize: 'var(--text-sm)', color: 'var(--color-gold)', fontVariantNumeric: 'tabular-nums' }}>
-                          {tier.model_count} model{tier.model_count !== 1 ? 's' : ''}: {tier.points} pts
-                        </div>
-                      ))}
+                  <div className="unit-browser-card__right">
+                    <span className="unit-browser-card__points">{basePoints} pts</span>
+                    {unit.unit_points_tiers.length > 1 && (
+                      <span className="unit-browser-card__tiers">
+                        {unit.unit_points_tiers
+                          .sort((a, b) => a.model_count - b.model_count)
+                          .map(t => `${t.model_count}@${t.points}`)
+                          .join(' / ')}
+                      </span>
+                    )}
+                    <span className="unit-browser-card__expand">
+                      {isExpanded ? '\u25B2' : '\u25BC'}
+                    </span>
                   </div>
                 </div>
 
-                {/* Ability tags (always visible) */}
+                {/* Core ability chips (always visible) */}
                 {unit.abilities.length > 0 && (
-                  <div style={{ marginTop: 'var(--space-sm)', display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
-                    {invulnAbilities.map(a => (
-                      <span key={a.id} className="ability-tag ability-tag--invuln" title={a.description}>
-                        {a.name}
-                      </span>
+                  <div className="unit-browser-card__abilities">
+                    {unit.abilities.filter(a => a.type === 'core').map(a => (
+                      <span key={a.id} className="datasheet__core-chip datasheet__core-chip--core">{a.name}</span>
                     ))}
-                    {coreAbilities.map(a => (
-                      <span key={a.id} className="ability-tag ability-tag--core" title={a.description}>
-                        {a.name}
-                      </span>
-                    ))}
-                    {factionAbilities.map(a => (
-                      <span key={a.id} className="ability-tag ability-tag--faction" title={a.description}>
-                        {a.name}
-                      </span>
-                    ))}
-                    {uniqueAbilities.map(a => (
-                      <span key={a.id} className="ability-tag ability-tag--unique" title={a.description}>
-                        {a.name}
-                      </span>
+                    {unit.abilities.filter(a => a.type === 'faction').map(a => (
+                      <span key={a.id} className="datasheet__core-chip datasheet__core-chip--faction">{a.name}</span>
                     ))}
                   </div>
                 )}
 
-                {/* Expanded: ability descriptions */}
-                {isExpanded && unit.abilities.length > 0 && (
-                  <div style={{ marginTop: 'var(--space-md)', borderTop: '1px solid rgba(255,255,255,0.04)', paddingTop: 'var(--space-md)' }}>
-                    <h4 style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)', marginBottom: 'var(--space-sm)' }}>
-                      Abilities
-                    </h4>
-                    <div style={{ display: 'grid', gap: 'var(--space-xs)' }}>
-                      {unit.abilities.map(a => (
-                        <div key={a.id} style={{ fontSize: 'var(--text-sm)' }}>
-                          <span style={{ fontWeight: 600, color: 'var(--color-text-primary)' }}>{a.name}</span>
-                          <span style={{ color: 'var(--color-text-muted)', marginLeft: 4 }}>
-                            ({a.type})
-                          </span>
-                          <div style={{ color: 'var(--color-text-secondary)', marginLeft: 'var(--space-md)', fontSize: 'var(--text-xs)' }}>
-                            {a.description}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Expanded: weapons */}
-                {isExpanded && unit.weapons.length > 0 && (
-                  <div style={{ marginTop: 'var(--space-md)', borderTop: '1px solid rgba(255,255,255,0.04)', paddingTop: 'var(--space-md)' }}>
-                    <h4 style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)', marginBottom: 'var(--space-sm)' }}>
-                      Weapons
-                    </h4>
-                    <table className="weapons-table">
-                      <thead>
-                        <tr>
-                          <th>Name</th>
-                          <th>Range</th>
-                          <th>A</th>
-                          <th>BS/WS</th>
-                          <th>S</th>
-                          <th>AP</th>
-                          <th>D</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {unit.weapons.map((w) => (
-                          <tr key={w.id}>
-                            <td style={{ fontWeight: 600 }}>
-                              {w.name}
-                              {w.keywords.length > 0 && (
-                                <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)', marginLeft: 4 }}>
-                                  [{w.keywords.join(', ')}]
-                                </span>
-                              )}
-                            </td>
-                            <td>{w.range || 'Melee'}</td>
-                            <td>{w.attacks}</td>
-                            <td>{w.skill}</td>
-                            <td>{w.strength}</td>
-                            <td>{w.ap}</td>
-                            <td>{w.damage}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
-
-                {isExpanded && unit.keywords.length > 0 && (
-                  <div style={{ marginTop: 'var(--space-sm)' }}>
-                    <span style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)' }}>
-                      Keywords: {unit.keywords.join(', ')}
-                    </span>
+                {/* Expanded: full datasheet */}
+                {isExpanded && (
+                  <div className="unit-browser-card__datasheet" onClick={(e) => e.stopPropagation()}>
+                    <DatasheetView unit={unit} weapons={unit.weapons} />
                   </div>
                 )}
               </div>

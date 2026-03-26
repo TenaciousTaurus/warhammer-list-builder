@@ -12,22 +12,20 @@ interface RosterItemProps {
   isSelected: boolean;
   onClick: () => void;
   onRemove: () => void;
+  onMoveUp?: () => void;
+  onMoveDown?: () => void;
   unit?: Unit & { abilities: Ability[] };
   weapons?: Weapon[];
 }
 
 export function RosterItem({
   unitName, modelCount, points, enhancementName, enhancementPoints,
-  wargearSummary, isSelected, onClick, onRemove, unit, weapons,
+  wargearSummary, isSelected, onClick, onRemove, onMoveUp, onMoveDown, unit, weapons,
 }: RosterItemProps) {
   const [expanded, setExpanded] = useState(false);
   const totalPoints = points + (enhancementPoints ?? 0);
   const displayName = modelCount > 1 ? `${modelCount} ${unitName}` : unitName;
   const hasSubline = wargearSummary || enhancementName;
-
-  function handleClick() {
-    onClick();
-  }
 
   function handleExpandToggle(e: React.MouseEvent) {
     e.stopPropagation();
@@ -37,9 +35,29 @@ export function RosterItem({
   return (
     <div
       className={`roster-item${isSelected ? ' roster-item--selected' : ''}${expanded ? ' roster-item--expanded' : ''}`}
-      onClick={handleClick}
+      onClick={onClick}
     >
       <div className="roster-item__row1">
+        {/* Drag handle + move buttons */}
+        <div className="roster-item__drag-handle" title="Drag to reorder">
+          <span className="roster-item__grip">&#8942;&#8942;</span>
+          {(onMoveUp || onMoveDown) && (
+            <div className="roster-item__movers">
+              <button
+                className="roster-item__move-btn"
+                onClick={(e) => { e.stopPropagation(); onMoveUp?.(); }}
+                disabled={!onMoveUp}
+                title="Move up"
+              >&uarr;</button>
+              <button
+                className="roster-item__move-btn"
+                onClick={(e) => { e.stopPropagation(); onMoveDown?.(); }}
+                disabled={!onMoveDown}
+                title="Move down"
+              >&darr;</button>
+            </div>
+          )}
+        </div>
         <span className="roster-item__name">{displayName}</span>
         <div className="roster-item__right">
           <span className="roster-item__points">{totalPoints} pts</span>

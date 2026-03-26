@@ -59,6 +59,7 @@ export function ListEditorPage() {
             getWargearSummary={editor.getWargearSummary}
             onSelectUnit={editor.setSelectedArmyListUnitId}
             onRemoveUnit={editor.removeUnit}
+            onReorder={editor.reorderUnits}
           />
         </div>
       </div>
