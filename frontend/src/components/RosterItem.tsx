@@ -1,3 +1,7 @@
+import { useState } from 'react';
+import type { Unit, Ability, Weapon } from '../types/database';
+import { DatasheetView } from './DatasheetView';
+
 interface RosterItemProps {
   unitName: string;
   modelCount: number;
@@ -8,25 +12,46 @@ interface RosterItemProps {
   isSelected: boolean;
   onClick: () => void;
   onRemove: () => void;
+  unit?: Unit & { abilities: Ability[] };
+  weapons?: Weapon[];
 }
 
 export function RosterItem({
   unitName, modelCount, points, enhancementName, enhancementPoints,
-  wargearSummary, isSelected, onClick, onRemove,
+  wargearSummary, isSelected, onClick, onRemove, unit, weapons,
 }: RosterItemProps) {
+  const [expanded, setExpanded] = useState(false);
   const totalPoints = points + (enhancementPoints ?? 0);
   const displayName = modelCount > 1 ? `${modelCount} ${unitName}` : unitName;
   const hasSubline = wargearSummary || enhancementName;
 
+  function handleClick() {
+    onClick();
+  }
+
+  function handleExpandToggle(e: React.MouseEvent) {
+    e.stopPropagation();
+    setExpanded(!expanded);
+  }
+
   return (
     <div
-      className={`roster-item${isSelected ? ' roster-item--selected' : ''}`}
-      onClick={onClick}
+      className={`roster-item${isSelected ? ' roster-item--selected' : ''}${expanded ? ' roster-item--expanded' : ''}`}
+      onClick={handleClick}
     >
       <div className="roster-item__row1">
         <span className="roster-item__name">{displayName}</span>
         <div className="roster-item__right">
           <span className="roster-item__points">{totalPoints} pts</span>
+          {unit && (
+            <button
+              className="roster-item__expand"
+              onClick={handleExpandToggle}
+              title={expanded ? 'Collapse datasheet' : 'Expand datasheet'}
+            >
+              {expanded ? '\u25B2' : '\u25BC'}
+            </button>
+          )}
           <button
             className="roster-item__remove"
             onClick={(e) => { e.stopPropagation(); onRemove(); }}
@@ -45,6 +70,11 @@ export function RosterItem({
               {enhancementName}{enhancementPoints ? ` (+${enhancementPoints} pts)` : ''}
             </span>
           )}
+        </div>
+      )}
+      {expanded && unit && weapons && (
+        <div className="roster-item__datasheet">
+          <DatasheetView unit={unit} weapons={weapons} compact />
         </div>
       )}
     </div>

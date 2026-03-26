@@ -1,7 +1,7 @@
 -- ============================================================
 -- AUTO-GENERATED from BSData/wh40k-10e
 -- 26 factions, 1299 total units
--- Generated: 2026-02-20T21:04:46.219Z
+-- Generated: 2026-03-26T18:11:12.438Z
 -- ============================================================
 
 -- Clean existing seed data (preserve schema)
@@ -1005,7 +1005,6 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('bbd4b2da-73e3-67f5-885b-1527fd5ad2e5', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Bike Squad [Legends]', 'mounted', '12"', 5, '3+', 5, 6, 2, '{"Mounted", "Imperium", "Bike Squad"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('bbd4b2da-73e3-67f5-885b-1527fd5ad2e5', 3, 80),
   ('bbd4b2da-73e3-67f5-885b-1527fd5ad2e5', 4, 160);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -2560,7 +2559,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('ba0d9279-227e-52cf-bb16-e479cd286105', '9f7c3840-0b7c-face-ee6a-35dd8ca20220', 'Thunderfire Cannon [Legends]', 'vehicle', '3"', 6, '2+', 6, 6, 2, '{"Vehicle", "Imperium", "Thunderfire Cannon", "Artillery"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('ba0d9279-227e-52cf-bb16-e479cd286105', 1, 90);
+  ('ba0d9279-227e-52cf-bb16-e479cd286105', 2, 90);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('ba0d9279-227e-52cf-bb16-e479cd286105', 'Gunner''s Servo Arms', 'melee', NULL, '2', '3', 8, -2, '3', '{"Extra Attacks"}'),
@@ -4708,7 +4707,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('c9719222-8ca5-bf34-032d-9c44d52f5e00', 'd1d1e3b7-8f05-edbb-0805-80abfa63fc86', 'Aestred Thurga and Agathae Dolan', 'epic_hero', '6"', 3, '2+', 4, 6, 1, '{"Epic Hero", "Aestred Thurga and Agathae Dolan", "Character", "Imperium", "Infantry"}', 1);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('c9719222-8ca5-bf34-032d-9c44d52f5e00', 1, 70);
+  ('c9719222-8ca5-bf34-032d-9c44d52f5e00', 2, 70);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('c9719222-8ca5-bf34-032d-9c44d52f5e00', 'Blade of Vigil', 'melee', NULL, '4', '2+', 5, -2, '2', '{}'),
@@ -4721,7 +4720,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('7687f122-2af9-6646-89f4-65e131356107', 'd1d1e3b7-8f05-edbb-0805-80abfa63fc86', 'Arco-Flagellants', 'infantry', '7"', 3, '7+', 2, 8, 1, '{"Infantry", "Imperium", "Penitent"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('7687f122-2af9-6646-89f4-65e131356107', 1, 45),
+  ('7687f122-2af9-6646-89f4-65e131356107', 3, 45),
   ('7687f122-2af9-6646-89f4-65e131356107', 4, 140);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -5009,7 +5008,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('9d4342b0-f59f-7536-de20-3f79da2fa224', 'd1d1e3b7-8f05-edbb-0805-80abfa63fc86', 'Paragon Warsuits', 'vehicle', '8"', 7, '2+', 4, 7, 2, '{"Vehicle", "Walker", "Imperium", "Paragon Warsuits"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('9d4342b0-f59f-7536-de20-3f79da2fa224', 1, 210);
+  ('9d4342b0-f59f-7536-de20-3f79da2fa224', 3, 210);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('9d4342b0-f59f-7536-de20-3f79da2fa224', 'Paragon Storm Bolters', 'ranged', '24"', '2', '3+', 4, 0, '1', '{"Rapid Fire 2", "Twin-Linked"}'),
@@ -5069,7 +5068,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('79b53b76-5f60-7835-868f-cb3a80304227', 'd1d1e3b7-8f05-edbb-0805-80abfa63fc86', 'Retributor Squad', 'infantry', '6"', 3, '3+', 1, 7, 1, '{"Infantry", "Imperium", "Retributor Squad"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('79b53b76-5f60-7835-868f-cb3a80304227', 4, 120);
+  ('79b53b76-5f60-7835-868f-cb3a80304227', 5, 120);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('79b53b76-5f60-7835-868f-cb3a80304227', 'Condemnor boltgun', 'ranged', '24"', '1', '3+', 4, 0, '1', '{"Anti-Psyker 2+", "Devastating Wounds", "Precision", "Rapid Fire 1"}'),
@@ -5111,7 +5110,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('1f405619-ff16-6093-3cbf-7e28e9a0f5a5', 'd1d1e3b7-8f05-edbb-0805-80abfa63fc86', 'Seraphim Squad', 'infantry', '12"', 3, '3+', 1, 7, 1, '{"Infantry", "Fly", "Imperium", "Seraphim Squad", "Jump Pack"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('1f405619-ff16-6093-3cbf-7e28e9a0f5a5', 4, 80),
+  ('1f405619-ff16-6093-3cbf-7e28e9a0f5a5', 5, 80),
   ('1f405619-ff16-6093-3cbf-7e28e9a0f5a5', 6, 160);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -5175,7 +5174,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('39d9e3e7-c3f8-0eba-7842-ff7dc276c2d9', 'd1d1e3b7-8f05-edbb-0805-80abfa63fc86', 'Zephyrim Squad', 'infantry', '12"', 3, '3+', 1, 7, 1, '{"Infantry", "Fly", "Imperium", "Zephyrim Squad", "Jump Pack"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('39d9e3e7-c3f8-0eba-7842-ff7dc276c2d9', 1, 80),
+  ('39d9e3e7-c3f8-0eba-7842-ff7dc276c2d9', 5, 80),
   ('39d9e3e7-c3f8-0eba-7842-ff7dc276c2d9', 6, 160);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -5196,7 +5195,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('1e3aeb49-1a08-fc69-7f13-106640582310', 'd1d1e3b7-8f05-edbb-0805-80abfa63fc86', 'Daemonifuge', 'epic_hero', '8"', 3, '3+', 5, 7, 1, '{"Epic Hero", "Infantry", "Character", "Imperium", "Daemonifuge"}', 1);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('1e3aeb49-1a08-fc69-7f13-106640582310', 1, 85);
+  ('1e3aeb49-1a08-fc69-7f13-106640582310', 2, 85);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('1e3aeb49-1a08-fc69-7f13-106640582310', 'Sanctity', 'melee', NULL, '4', '2+', 6, -2, '2', '{"Anti-Chaos 2+", "Precision"}'),
@@ -5262,7 +5261,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('7c250512-4084-5dd5-494c-22bb8bd5f65d', 'd1d1e3b7-8f05-edbb-0805-80abfa63fc86', 'Crusaders [Legends]', 'infantry', '6"', 3, '3+', 2, 7, 1, '{"Infantry", "Imperium", "Crusaders"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('7c250512-4084-5dd5-494c-22bb8bd5f65d', 1, 40),
+  ('7c250512-4084-5dd5-494c-22bb8bd5f65d', 2, 40),
   ('7c250512-4084-5dd5-494c-22bb8bd5f65d', 3, 80);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -5310,7 +5309,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('7c7ba870-3234-0fcd-f3dc-431ddc76f1fb', 'd1d1e3b7-8f05-edbb-0805-80abfa63fc86', 'Celestian Insidiants', 'infantry', '6"', 3, '3+', 1, 7, 1, '{"Infantry", "Imperium", "Celestian Insidiants"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('7c7ba870-3234-0fcd-f3dc-431ddc76f1fb', 9, 120);
+  ('7c7ba870-3234-0fcd-f3dc-431ddc76f1fb', 10, 120);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('7c7ba870-3234-0fcd-f3dc-431ddc76f1fb', 'Inferno pistol', 'ranged', '6"', '1', '3+', 8, -4, 'D3', '{"Melta 2", "Pistol"}'),
@@ -5781,7 +5780,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('906e088a-7a4a-47cd-ab0e-621db7065ae3', '0027c41e-4cd4-481f-bbc5-7daf5dcc1452', 'Sagittarum Custodians', 'infantry', '6"', 6, '2+', 3, 6, 2, '{"Infantry", "Imperium", "Sagittarum Custodians"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('906e088a-7a4a-47cd-ab0e-621db7065ae3', 1, 225);
+  ('906e088a-7a4a-47cd-ab0e-621db7065ae3', 5, 225);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('906e088a-7a4a-47cd-ab0e-621db7065ae3', 'Adrastus bolt caliver', 'ranged', '36"', '3', '2+', 5, -1, '2', '{"Sustained Hits 1"}'),
@@ -6223,7 +6222,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('ad8c60d3-5ac9-88ec-fd96-88579b818bd8', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Corpuscarii Electro-Priests', 'infantry', '6"', 3, '7+', 1, 7, 1, '{"Electro-Priests", "Corpuscarii", "Imperium", "Infantry", "Cult Mechanicus"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('ad8c60d3-5ac9-88ec-fd96-88579b818bd8', 1, 65);
+  ('ad8c60d3-5ac9-88ec-fd96-88579b818bd8', 5, 65);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('ad8c60d3-5ac9-88ec-fd96-88579b818bd8', 'Electrostatic gauntlets', 'ranged', '12"', '3', '3+', 5, 0, '1', '{"Pistol", "Sustained Hits 2"}'),
@@ -6243,7 +6242,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('603ae73f-cd8f-f039-72a9-75dc9b6556e2', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Fulgurite Electro-Priests', 'infantry', '6"', 3, '7+', 1, 7, 1, '{"Electro-Priests", "Fulgurite", "Infantry", "Imperium", "Cult Mechanicus"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('603ae73f-cd8f-f039-72a9-75dc9b6556e2', 1, 70);
+  ('603ae73f-cd8f-f039-72a9-75dc9b6556e2', 5, 70);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('603ae73f-cd8f-f039-72a9-75dc9b6556e2', 'Electroleech stave', 'melee', NULL, '2', '3+', 6, -1, '2', '{"Devastating Wounds"}'),
@@ -6295,7 +6294,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('8672e40a-1627-562c-8b99-97d6846fa118', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Kastelan Robots', 'vehicle', '6"', 9, '2+', 7, 7, 2, '{"Kastelan Robots", "Imperium", "Vehicle", "Walker", "Legio Cybernetica"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('8672e40a-1627-562c-8b99-97d6846fa118', 1, 180);
+  ('8672e40a-1627-562c-8b99-97d6846fa118', 2, 180);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('8672e40a-1627-562c-8b99-97d6846fa118', 'Close combat weapon', 'melee', NULL, '3', '4+', 6, 0, '1', '{}'),
@@ -6408,7 +6407,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('48ffa629-2a72-e030-508d-ce483b360f68', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Pteraxii Skystalkers', 'infantry', '12"', 4, '4+', 2, 7, 1, '{"Skystalkers", "Imperium", "Infantry", "Fly", "Jump Pack", "Skitarii", "Pteraxii"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('48ffa629-2a72-e030-508d-ce483b360f68', 1, 75);
+  ('48ffa629-2a72-e030-508d-ce483b360f68', 5, 75);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('48ffa629-2a72-e030-508d-ce483b360f68', 'Flechette blaster', 'ranged', '12"', '5', '4+', 3, 0, '1', '{"Pistol"}'),
@@ -6434,7 +6433,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('051d8de1-44bc-8780-9cca-60b699d3db2c', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Pteraxii Sterylizors', 'infantry', '12"', 4, '4+', 2, 7, 1, '{"Sterylizors", "Imperium", "Infantry", "Fly", "Jump Pack", "Skitarii", "Pteraxii"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('051d8de1-44bc-8780-9cca-60b699d3db2c', 1, 80);
+  ('051d8de1-44bc-8780-9cca-60b699d3db2c', 5, 80);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('051d8de1-44bc-8780-9cca-60b699d3db2c', 'Flechette blaster', 'ranged', '12"', '5', '4+', 3, 0, '1', '{"Pistol"}'),
@@ -6456,7 +6455,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('99657f7b-5017-cf16-41e3-8c77bbb93b55', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Serberys Raiders', 'mounted', '12"', 4, '4+', 2, 7, 2, '{"Serberys Raiders", "Imperium", "Skitarii", "Mounted"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('99657f7b-5017-cf16-41e3-8c77bbb93b55', 2, 60);
+  ('99657f7b-5017-cf16-41e3-8c77bbb93b55', 3, 60);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('99657f7b-5017-cf16-41e3-8c77bbb93b55', 'Galvanic carbine', 'ranged', '18"', '3', '4+', 4, 0, '1', '{"Devastating Wounds"}'),
@@ -6479,7 +6478,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('6231b076-7727-a819-919a-bad125f0157d', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Serberys Sulphurhounds', 'mounted', '12"', 4, '4+', 2, 7, 2, '{"Serberys Sulphurhounds", "Imperium", "Skitarii", "Mounted"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('6231b076-7727-a819-919a-bad125f0157d', 2, 55);
+  ('6231b076-7727-a819-919a-bad125f0157d', 3, 55);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('6231b076-7727-a819-919a-bad125f0157d', 'Cavalry arc maul', 'melee', NULL, '1', '4+', 5, -1, '1', '{"Anti-Vehicle 4+", "Devastating Wounds", "Extra Attacks"}'),
@@ -6503,7 +6502,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('73436e35-bc1f-71cb-f0e8-7a7fb1a8b175', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Sicarian Infiltrators', 'infantry', '8"', 4, '4+', 2, 7, 1, '{"Imperium", "Skitarii", "Infantry", "Sicarian", "Infiltrators"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('73436e35-bc1f-71cb-f0e8-7a7fb1a8b175', 1, 75);
+  ('73436e35-bc1f-71cb-f0e8-7a7fb1a8b175', 5, 75);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('73436e35-bc1f-71cb-f0e8-7a7fb1a8b175', 'Power weapon', 'melee', NULL, '4', '4+', 4, -2, '1', '{}'),
@@ -6525,7 +6524,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('21cc5e08-dba2-247b-d320-27e75edf4c66', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Sicarian Ruststalkers', 'infantry', '8"', 4, '4+', 2, 7, 1, '{"Ruststalkers", "Imperium", "Infantry", "Skitarii", "Sicarian"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('21cc5e08-dba2-247b-d320-27e75edf4c66', 1, 80);
+  ('21cc5e08-dba2-247b-d320-27e75edf4c66', 5, 80);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('21cc5e08-dba2-247b-d320-27e75edf4c66', 'Transonic razor & chordclaw', 'melee', NULL, '3', '4+', 5, -2, '2', '{"Anti-Infantry 3+", "Precision"}'),
@@ -6576,7 +6575,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('5d0b80db-0c1e-24f9-e224-008ad99e4664', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Skitarii Rangers', 'battleline', '6"', 3, '4+', 1, 7, 2, '{"Rangers", "Imperium", "Infantry", "Skitarii", "Battleline"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('5d0b80db-0c1e-24f9-e224-008ad99e4664', 9, 85);
+  ('5d0b80db-0c1e-24f9-e224-008ad99e4664', 10, 85);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('5d0b80db-0c1e-24f9-e224-008ad99e4664', 'Alpha combat weapon', 'melee', NULL, '2', '4+', 5, -1, '1', '{}'),
@@ -6602,7 +6601,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('c03ab037-cda2-d284-0902-e587d18686cc', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Skitarii Vanguard', 'battleline', '6"', 3, '4+', 1, 7, 2, '{"Vanguard", "Imperium", "Infantry", "Skitarii", "Battleline"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('c03ab037-cda2-d284-0902-e587d18686cc', 9, 95);
+  ('c03ab037-cda2-d284-0902-e587d18686cc', 10, 95);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('c03ab037-cda2-d284-0902-e587d18686cc', 'Alpha combat weapon', 'melee', NULL, '2', '4+', 5, -1, '1', '{}'),
@@ -6836,7 +6835,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('5273743e-c662-6ca3-b5e7-4c5850785707', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Secutarii Hoplites [Legends]', 'infantry', '6"', 3, '5+', 1, 7, 1, '{"Secutarii Hoplites", "Infantry", "Imperium", "Skitarii"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('5273743e-c662-6ca3-b5e7-4c5850785707', 4, 65),
+  ('5273743e-c662-6ca3-b5e7-4c5850785707', 5, 65),
   ('5273743e-c662-6ca3-b5e7-4c5850785707', 6, 130);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -6861,7 +6860,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('d1f7b6f5-545b-710b-c225-421080d95e11', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Secutarii Peltasts [Legends]', 'infantry', '6"', 3, '5+', 1, 7, 1, '{"Infantry", "Secutarii Peltasts", "Skitarii", "Imperium"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('d1f7b6f5-545b-710b-c225-421080d95e11', 4, 50),
+  ('d1f7b6f5-545b-710b-c225-421080d95e11', 5, 50),
   ('d1f7b6f5-545b-710b-c225-421080d95e11', 6, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -7001,7 +7000,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('19895525-a961-c7f2-227e-a5fd632fba5b', '35a72817-74ad-d7d0-888e-f265f9f3bb3a', 'Servitor Battleclade', 'infantry', '6"', 4, '4+', 1, 8, 1, '{"Infantry", "Imperium", "Cult Mechanicus", "Servitor Battleclade"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('19895525-a961-c7f2-227e-a5fd632fba5b', 6, 60);
+  ('19895525-a961-c7f2-227e-a5fd632fba5b', 9, 60);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('19895525-a961-c7f2-227e-a5fd632fba5b', 'Mechanicus pistol', 'ranged', '12"', '1', '4+', 6, -1, '1', '{"Devastating Wounds", "Pistol"}'),
@@ -7428,7 +7427,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('b164ea60-a1da-e733-5221-fec0c9faaef5', '0040daa1-d4e4-b7a4-6642-eb071416cab2', 'Gaunt’s Ghosts', 'epic_hero', '6"', 3, '4+', 3, 6, 1, '{"Gaunt’s Ghosts", "Imperium", "Epic Hero", "Infantry"}', 1);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('b164ea60-a1da-e733-5221-fec0c9faaef5', 1, 100);
+  ('b164ea60-a1da-e733-5221-fec0c9faaef5', 6, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('b164ea60-a1da-e733-5221-fec0c9faaef5', 'Gaunt''s chainsword', 'melee', NULL, '5', '2+', 3, -1, '1', '{}'),
@@ -7677,7 +7676,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('4117f5bd-f6ba-fea2-7a2b-da16345bc1f6', '0040daa1-d4e4-b7a4-6642-eb071416cab2', 'Regimental Attachés [Legends]', 'infantry', '6"', 3, '5+', 1, 7, 1, '{"Regimental Attachés", "Imperium", "Infantry"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('4117f5bd-f6ba-fea2-7a2b-da16345bc1f6', 1, 40);
+  ('4117f5bd-f6ba-fea2-7a2b-da16345bc1f6', 3, 40);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('4117f5bd-f6ba-fea2-7a2b-da16345bc1f6', 'Astropath''s stave', 'melee', NULL, '1', '4+', 6, -1, 'D3', '{"Psychic"}'),
@@ -8807,7 +8806,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('711526ec-349b-5824-a5ee-ac2c7921b8f6', '0040daa1-d4e4-b7a4-6642-eb071416cab2', 'Rein and Raus [Legends]', 'epic_hero', '6"', 2, '6+', 1, 8, 1, '{"Epic Hero", "Infantry", "Imperium", "Character", "Rein and Raus"}', 1);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('711526ec-349b-5824-a5ee-ac2c7921b8f6', 1, 50);
+  ('711526ec-349b-5824-a5ee-ac2c7921b8f6', 2, 50);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('711526ec-349b-5824-a5ee-ac2c7921b8f6', 'Close Combat Weapon', 'melee', NULL, '1', '5+', 2, 0, '1', '{}'),
@@ -8886,7 +8885,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('b5a54c29-ea5e-5d28-c2c8-4342da73ad0b', '0040daa1-d4e4-b7a4-6642-eb071416cab2', 'Elysian Sniper Squad [Legends]', 'infantry', '6"', 3, '5+', 2, 7, 2, '{"Infantry", "Imperium", "Regiment", "Elysian Sniper Squad"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('b5a54c29-ea5e-5d28-c2c8-4342da73ad0b', 1, 65);
+  ('b5a54c29-ea5e-5d28-c2c8-4342da73ad0b', 3, 65);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('b5a54c29-ea5e-5d28-c2c8-4342da73ad0b', 'Lasgun', 'ranged', '24"', '1', '4+', 3, 0, '1', '{"Rapid Fire 1"}'),
@@ -9775,7 +9774,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('3c01a78f-dba0-5111-9024-2a71f0edc3ac', '51afa74e-4fc5-ffd4-d7b7-fd3759b7cbf3', 'Brotherhood Terminator Squad', 'battleline', '5"', 5, '2+', 3, 6, 2, '{"Battleline", "Infantry", "Psyker", "Imperium", "Terminator", "Brotherhood Terminator Squad"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('3c01a78f-dba0-5111-9024-2a71f0edc3ac', 1, 160),
+  ('3c01a78f-dba0-5111-9024-2a71f0edc3ac', 4, 160),
   ('3c01a78f-dba0-5111-9024-2a71f0edc3ac', 5, 200),
   ('3c01a78f-dba0-5111-9024-2a71f0edc3ac', 6, 320),
   ('3c01a78f-dba0-5111-9024-2a71f0edc3ac', 9, 400);
@@ -10501,7 +10500,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('bd92956b-4b66-8c70-1c0c-5c258f172cbc', 'bd16fda1-570d-bf58-fa02-91f6e23951ce', 'Canis Rex', 'epic_hero', '10"', 11, '3+', 26, 5, 10, '{"Epic Hero", "Character", "Imperium"}', 1);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('bd92956b-4b66-8c70-1c0c-5c258f172cbc', 1, 415);
+  ('bd92956b-4b66-8c70-1c0c-5c258f172cbc', 2, 415);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('bd92956b-4b66-8c70-1c0c-5c258f172cbc', '➤ Las-impulsor - high intensity', 'ranged', '24"', 'D6', '2+', 14, -3, '4', '{"Blast", "Sustained Hits 1"}'),
@@ -11037,7 +11036,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('2ba290ab-1e00-76b5-78c1-3c26598e3a7c', 'dfb55cea-1ae4-ad1d-5b2b-31a849ed4d2d', 'Chaplain Grimaldus', 'infantry', '6"', 4, '3', 4, 5, 1, '{"Infantry", "Imperium", "Tacticus"}', 1);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('2ba290ab-1e00-76b5-78c1-3c26598e3a7c', 1, 110);
+  ('2ba290ab-1e00-76b5-78c1-3c26598e3a7c', 4, 110);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('2ba290ab-1e00-76b5-78c1-3c26598e3a7c', 'Artificer Crozius', 'melee', NULL, '6', '2+', 6, -2, '2', '{}'),
@@ -12415,7 +12414,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('867a7628-9ece-fa8b-a26f-953d71465ddf', 'cd8ddc78-26c7-2bce-a07e-951ebb75be84', 'Ravenwing Command Squad', 'character', '12"', 5, '3+', 4, 6, 2, '{"Mounted", "Imperium", "Ravenwing Command Squad", "Ravenwing", "Character"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('867a7628-9ece-fa8b-a26f-953d71465ddf', 1, 120);
+  ('867a7628-9ece-fa8b-a26f-953d71465ddf', 3, 120);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('867a7628-9ece-fa8b-a26f-953d71465ddf', 'Black Knight combat weapon', 'melee', NULL, '3', '3+', 5, -2, '1', '{"Devastating Wounds"}'),
@@ -12664,7 +12663,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('d64e5a01-e0b3-0e92-b6ed-b70e4d01efb8', '1bcade8c-c517-4e08-0fb5-27145949d234', 'Kill Team Cassius [Legends]', 'infantry', '6"', 4, '3+', 4, 5, 2, '{"Infantry", "Imperium", "Kill Team", "Kill Team Cassius", "Deathwatch", "Ordo Xenos"}', 1);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('d64e5a01-e0b3-0e92-b6ed-b70e4d01efb8', 1, 220);
+  ('d64e5a01-e0b3-0e92-b6ed-b70e4d01efb8', 11, 220);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('d64e5a01-e0b3-0e92-b6ed-b70e4d01efb8', 'Artificer crozius', 'melee', NULL, '5', '2+', 6, -1, '2', '{}'),
@@ -12709,7 +12708,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('39099c71-ea61-e814-186a-2d442135c1ff', '1bcade8c-c517-4e08-0fb5-27145949d234', 'Fortis Kill Team', 'infantry', '6"', 4, '3+', 2, 6, 2, '{"Infantry", "Imperium", "Fortis Kill Team", "Tacticus", "Kill Team"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('39099c71-ea61-e814-186a-2d442135c1ff', 9, 180);
+  ('39099c71-ea61-e814-186a-2d442135c1ff', 10, 180);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('39099c71-ea61-e814-186a-2d442135c1ff', 'Deathwatch bolt rifle', 'ranged', '24"', '2', '3+', 5, -2, '1', '{"Assault", "Heavy", "Lethal Hits"}'),
@@ -12754,7 +12753,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('df6599ec-3f00-1b19-a5bd-adeeaa0fc780', '1bcade8c-c517-4e08-0fb5-27145949d234', 'Talonstrike Kill Team', 'infantry', '12"', 4, '3+', 2, 6, 1, '{"Infantry", "Fly", "Jump Pack", "Imperium", "Kill Team", "Talonstrike Kill Team"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('df6599ec-3f00-1b19-a5bd-adeeaa0fc780', 9, 275);
+  ('df6599ec-3f00-1b19-a5bd-adeeaa0fc780', 10, 275);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('df6599ec-3f00-1b19-a5bd-adeeaa0fc780', '➤ Plasma pistol - Standard', 'ranged', '12"', '1', '3+', 7, -2, '1', '{"Pistol"}'),
@@ -13170,7 +13169,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('ff84463d-322f-9fa1-469d-5a8a896cecf4', '46508f25-3def-c901-ed8e-41492ee211aa', 'Wolf Guard Terminators', 'infantry', '6"', 5, '2+', 3, 6, 1, '{"Infantry", "Imperium", "Terminator", "Wolf Guard Terminators", "Wolf Guard"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('ff84463d-322f-9fa1-469d-5a8a896cecf4', 4, 170),
+  ('ff84463d-322f-9fa1-469d-5a8a896cecf4', 5, 170),
   ('ff84463d-322f-9fa1-469d-5a8a896cecf4', 6, 340);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -13206,7 +13205,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('3a26dea3-fc6d-0323-32a5-030b5cccdc88', '46508f25-3def-c901-ed8e-41492ee211aa', 'Wulfen Dreadnought', 'vehicle', '9"', 9, '2+', 8, 6, 1, '{"Vehicle", "Walker", "Imperium", "Dreadnought", "Wulfen"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('3a26dea3-fc6d-0323-32a5-030b5cccdc88', 2, 135);
+  ('3a26dea3-fc6d-0323-32a5-030b5cccdc88', 1, 135);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('3a26dea3-fc6d-0323-32a5-030b5cccdc88', 'Great wolf claw', 'melee', NULL, '6', '3+', 10, -3, '3', '{}'),
@@ -13277,7 +13276,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('79297224-06a3-bae0-eb93-d9dd5bb29383', '46508f25-3def-c901-ed8e-41492ee211aa', 'Skyclaws [Legends]', 'infantry', '12"', 4, '3+', 2, 6, 1, '{"Infantry", "Jump Pack", "Fly", "Imperium", "Skyclaws"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('79297224-06a3-bae0-eb93-d9dd5bb29383', 4, 90),
+  ('79297224-06a3-bae0-eb93-d9dd5bb29383', 5, 90),
   ('79297224-06a3-bae0-eb93-d9dd5bb29383', 6, 165),
   ('79297224-06a3-bae0-eb93-d9dd5bb29383', 11, 240);
 
@@ -13299,7 +13298,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('b2e8d344-03a8-e989-c420-35766e577f5d', '46508f25-3def-c901-ed8e-41492ee211aa', 'Long Fangs [Legends]', 'infantry', '6"', 4, '3+', 2, 6, 1, '{"Infantry", "Imperium", "Long Fangs"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('b2e8d344-03a8-e989-c420-35766e577f5d', 4, 120),
+  ('b2e8d344-03a8-e989-c420-35766e577f5d', 5, 120),
   ('b2e8d344-03a8-e989-c420-35766e577f5d', 6, 145);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -13426,7 +13425,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('0c384245-40b0-ad37-799a-0aa73d9476b6', '46508f25-3def-c901-ed8e-41492ee211aa', 'Wolf Guard Pack Leader in Terminator Armour [Legends]', 'character', '5"', 5, '2+', 3, 6, 1, '{"Infantry", "Character", "Imperium", "Terminator", "Pack Leader", "Wolf Guard Pack Leader in Terminator Armour"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('0c384245-40b0-ad37-799a-0aa73d9476b6', 2, 40);
+  ('0c384245-40b0-ad37-799a-0aa73d9476b6', 1, 40);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('0c384245-40b0-ad37-799a-0aa73d9476b6', '➤ Cyclone missile launcher - frag', 'ranged', '36"', '2D6', '3+', 4, 0, '1', '{"Blast"}'),
@@ -13515,7 +13514,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('7370b955-d939-5dda-3b4f-ba9779c19f17', '46508f25-3def-c901-ed8e-41492ee211aa', 'Wolf Scouts [Legends]', 'infantry', '6"', 4, '4+', 2, 6, 1, '{"Infantry", "Smoke", "Imperium", "Scout Squad", "Wolf Scouts"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('7370b955-d939-5dda-3b4f-ba9779c19f17', 4, 80),
+  ('7370b955-d939-5dda-3b4f-ba9779c19f17', 5, 80),
   ('7370b955-d939-5dda-3b4f-ba9779c19f17', 6, 160);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -13988,7 +13987,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('f8ad285c-7cd6-ac4e-f523-d053e63c2aa4', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Fabius Bile', 'epic_hero', '6"', 4, '3+', 5, 6, 1, '{"Epic Hero"}', 1);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('f8ad285c-7cd6-ac4e-f523-d053e63c2aa4', 1, 100);
+  ('f8ad285c-7cd6-ac4e-f523-d053e63c2aa4', 2, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('f8ad285c-7cd6-ac4e-f523-d053e63c2aa4', 'Xyclos needler', 'ranged', '18"', '3', '2+', 2, -1, '2', '{"Anti-INFANTRY 2+", "Pistol"}'),
@@ -14256,7 +14255,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('20b09fcc-53ec-cec4-3434-1bce2d55cea2', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Dark Apostle', 'character', '6"', 4, '3+', 4, 5, 1, '{"Character", "Infantry", "Chaos"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('20b09fcc-53ec-cec4-3434-1bce2d55cea2', 1, 65);
+  ('20b09fcc-53ec-cec4-3434-1bce2d55cea2', 3, 65);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('20b09fcc-53ec-cec4-3434-1bce2d55cea2', 'Accursed crozius', 'melee', NULL, '5', '2+', 6, -1, '2', '{}'),
@@ -14300,7 +14299,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('1c926959-6bb2-0694-212a-b6880fb49db4', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Legionaries', 'battleline', '6"', 4, '3+', 2, 6, 2, '{"Infantry", "Battleline", "Chaos", "Legionaries"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('1c926959-6bb2-0694-212a-b6880fb49db4', 4, 90),
+  ('1c926959-6bb2-0694-212a-b6880fb49db4', 5, 90),
   ('1c926959-6bb2-0694-212a-b6880fb49db4', 6, 170);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -14324,7 +14323,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('60210570-299e-328c-cbb4-eea504b8dc1c', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Cultist Mob', 'battleline', '6"', 3, '6+', 1, 7, 1, '{"Infantry", "Battleline", "Chaos", "Cultist Mob", "Damned"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('60210570-299e-328c-cbb4-eea504b8dc1c', 1, 50),
+  ('60210570-299e-328c-cbb4-eea504b8dc1c', 10, 50),
   ('60210570-299e-328c-cbb4-eea504b8dc1c', 11, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -14339,7 +14338,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('7ca31257-9491-1792-4a53-62c3aacec288', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Accursed Cultists', 'infantry', '6"', 4, '6+', 3, 7, 1, '{"Infantry", "Chaos", "Accursed Cultists", "Damned"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('7ca31257-9491-1792-4a53-62c3aacec288', 1, 90),
+  ('7ca31257-9491-1792-4a53-62c3aacec288', 8, 90),
   ('7ca31257-9491-1792-4a53-62c3aacec288', 9, 195);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -14428,7 +14427,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('2b965fa1-3332-16a6-bcb3-b85cd92b3a51', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Noise Marines', 'infantry', '6"', 5, '3+', 2, 6, 1, '{"Infantry", "Chaos", "Slaanesh", "Noise Marines", "Cults of the Dark Gods"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('2b965fa1-3332-16a6-bcb3-b85cd92b3a51', 5, 145);
+  ('2b965fa1-3332-16a6-bcb3-b85cd92b3a51', 6, 145);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('2b965fa1-3332-16a6-bcb3-b85cd92b3a51', 'Power sword', 'melee', NULL, '4', '3+', 5, -2, '1', '{}'),
@@ -14466,7 +14465,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('e5bddbbd-1ad3-5e1a-07c0-e7a6fa0bc869', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Chaos Bikers', 'mounted', '12"', 5, '3+', 3, 6, 2, '{"Mounted", "Chaos", "Chaos Bikers"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('e5bddbbd-1ad3-5e1a-07c0-e7a6fa0bc869', 2, 70),
+  ('e5bddbbd-1ad3-5e1a-07c0-e7a6fa0bc869', 3, 70),
   ('e5bddbbd-1ad3-5e1a-07c0-e7a6fa0bc869', 4, 130);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -14484,7 +14483,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('e1420e86-7501-371d-151a-5ab9c6fb7c6e', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Raptors', 'infantry', '12"', 4, '3+', 2, 6, 1, '{"Infantry", "Fly", "Jump Pack", "Chaos", "Raptors"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('e1420e86-7501-371d-151a-5ab9c6fb7c6e', 4, 110),
+  ('e1420e86-7501-371d-151a-5ab9c6fb7c6e', 5, 110),
   ('e1420e86-7501-371d-151a-5ab9c6fb7c6e', 6, 210);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -14517,7 +14516,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('a152a999-491c-3d36-89cd-a2a091e95970', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Havocs', 'infantry', '5"', 5, '3+', 2, 6, 1, '{"Infantry", "Chaos", "Havocs"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('a152a999-491c-3d36-89cd-a2a091e95970', 4, 125);
+  ('a152a999-491c-3d36-89cd-a2a091e95970', 5, 125);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('a152a999-491c-3d36-89cd-a2a091e95970', 'Power fist', 'melee', NULL, '3', '3+', 8, -2, '2', '{}'),
@@ -14538,7 +14537,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('6b2da25f-6692-943a-4269-13694c74ddfa', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Obliterators', 'infantry', '4"', 7, '2+', 5, 6, 2, '{"Infantry", "Chaos", "Daemon", "Obliterators"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('6b2da25f-6692-943a-4269-13694c74ddfa', 1, 160),
+  ('6b2da25f-6692-943a-4269-13694c74ddfa', 2, 160),
   ('6b2da25f-6692-943a-4269-13694c74ddfa', 3, 360);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -14586,7 +14585,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('0eca66f1-e32e-12f9-e761-d57fa9c78887', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Traitor Guardsmen Squad', 'infantry', '6"', 3, '5+', 1, 7, 2, '{"Infantry", "Chaos", "Traitor Guardsmen Squad", "Damned"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('0eca66f1-e32e-12f9-e761-d57fa9c78887', 9, 70);
+  ('0eca66f1-e32e-12f9-e761-d57fa9c78887', 10, 70);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('0eca66f1-e32e-12f9-e761-d57fa9c78887', 'Chainsword', 'melee', NULL, '3', '4+', 3, 0, '1', '{}'),
@@ -14611,7 +14610,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('ab7ec099-5c4e-59f3-1cf9-fc81fc541f10', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Fellgor Beastmen', 'infantry', '6"', 4, '5+', 1, 7, 1, '{"Infantry", "Chaos", "Fellgor Beastmen", "Damned"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('ab7ec099-5c4e-59f3-1cf9-fc81fc541f10', 9, 70);
+  ('ab7ec099-5c4e-59f3-1cf9-fc81fc541f10', 10, 70);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('ab7ec099-5c4e-59f3-1cf9-fc81fc541f10', 'Chainsword', 'melee', NULL, '3', '4+', 4, 0, '1', '{}'),
@@ -14632,7 +14631,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('48152a74-fe26-063d-a3ca-fd084dd6e1e1', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Traitor Enforcer', 'character', '6"', 3, '5+', 3, 6, 1, '{"Character", "Damned"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('48152a74-fe26-063d-a3ca-fd084dd6e1e1', 1, 55);
+  ('48152a74-fe26-063d-a3ca-fd084dd6e1e1', 2, 55);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('48152a74-fe26-063d-a3ca-fd084dd6e1e1', 'Power fist', 'melee', NULL, '3', '3+', 6, -2, '2', '{}'),
@@ -14931,7 +14930,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('fa6b388d-c392-d36d-4192-da64b3682e0f', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Chaos Spawn', 'beast', '8"', 5, '4+', 4, 7, 1, '{"Beast", "Chaos", "Chaos Spawn"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('fa6b388d-c392-d36d-4192-da64b3682e0f', 1, 70);
+  ('fa6b388d-c392-d36d-4192-da64b3682e0f', 2, 70);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('fa6b388d-c392-d36d-4192-da64b3682e0f', 'Hideous Mutations', 'melee', NULL, 'D6+2', '4+', 5, -1, '2', '{}'),
@@ -14944,7 +14943,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('1b9a98c6-c363-3e23-a927-379ceba93ee9', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Khorne Berzerkers', 'battleline', '8"', 4, '3+', 2, 6, 2, '{"Infantry", "Battleline", "Chaos", "Khorne", "Berzerkers"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('1b9a98c6-c363-3e23-a927-379ceba93ee9', 9, 180);
+  ('1b9a98c6-c363-3e23-a927-379ceba93ee9', 10, 180);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('1b9a98c6-c363-3e23-a927-379ceba93ee9', 'Chainblade', 'melee', NULL, '4', '3+', 4, -1, '1', '{}'),
@@ -14958,7 +14957,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('e121df64-8b3b-6d1f-d56b-9b8ca83f3680', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Rubric Marines', 'battleline', '6"', 4, '3+', 2, 7, 2, '{"Infantry", "Battleline", "Chaos", "Tzeentch", "Rubric Marines", "Rubricae"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('e121df64-8b3b-6d1f-d56b-9b8ca83f3680', 4, 100);
+  ('e121df64-8b3b-6d1f-d56b-9b8ca83f3680', 5, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('e121df64-8b3b-6d1f-d56b-9b8ca83f3680', 'Force weapon', 'melee', NULL, '3', '3+', 6, -1, 'D3', '{"Psychic"}'),
@@ -14979,7 +14978,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('63658230-1a4d-d333-f29d-12a8ec8b9e78', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Plague Marines', 'battleline', '5"', 6, '3+', 2, 6, 2, '{"Infantry", "Battleline", "Chaos", "Nurgle", "Plague Marines"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('63658230-1a4d-d333-f29d-12a8ec8b9e78', 4, 95),
+  ('63658230-1a4d-d333-f29d-12a8ec8b9e78', 5, 95),
   ('63658230-1a4d-d333-f29d-12a8ec8b9e78', 6, 130),
   ('63658230-1a4d-d333-f29d-12a8ec8b9e78', 8, 190);
 
@@ -15397,7 +15396,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('e3163d52-e810-2d09-4f1f-dc4c1ff71bba', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Renegade Heavy Weapons Squad [Legends]', 'infantry', '6"', 3, '5+', 2, 7, 2, '{"Infantry", "Chaos", "Renegade Heavy Weapons Squad", "Damned"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('e3163d52-e810-2d09-4f1f-dc4c1ff71bba', 1, 75);
+  ('e3163d52-e810-2d09-4f1f-dc4c1ff71bba', 3, 75);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('e3163d52-e810-2d09-4f1f-dc4c1ff71bba', 'Renegade firearm', 'ranged', '24"', '1', '4+', 3, 0, '1', '{"Rapid Fire 1"}'),
@@ -15418,7 +15417,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('8c94ac3b-5d6e-7d6a-a66c-da8cbd9842c1', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Renegade Plague Ogryns [Legends]', 'infantry', '5"', 7, '5+', 3, 7, 1, '{"Infantry", "Chaos", "Nurgle", "Renegade Plague Ogryns", "Damned"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('8c94ac3b-5d6e-7d6a-a66c-da8cbd9842c1', 1, 95);
+  ('8c94ac3b-5d6e-7d6a-a66c-da8cbd9842c1', 3, 95);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('8c94ac3b-5d6e-7d6a-a66c-da8cbd9842c1', 'Ogryn plague claws', 'melee', NULL, '3', '3+', 6, -1, '2', '{"Lethal Hits"}'),
@@ -15431,7 +15430,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('9ba9398a-e34b-d947-acf8-139cd73aad2a', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Mutilators [Legends]', 'infantry', '4"', 7, '2+', 4, 6, 2, '{"Infantry", "Chaos", "Daemon", "Mutilators"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('9ba9398a-e34b-d947-acf8-139cd73aad2a', 1, 185);
+  ('9ba9398a-e34b-d947-acf8-139cd73aad2a', 3, 185);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('9ba9398a-e34b-d947-acf8-139cd73aad2a', '➤ Fleshmetal weapons - strike', 'melee', NULL, '4', '3+', 6, -2, '2', '{}'),
@@ -15446,7 +15445,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('49c8cbda-acc4-e97b-19ca-1a56c2ae6a12', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Mutoid Vermin [Legends]', 'infantry', '8"', 2, '7+', 1, 8, 1, '{"Swarm", "Chaos", "Nurgle", "Mutoid Vermin", "Damned"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('49c8cbda-acc4-e97b-19ca-1a56c2ae6a12', 1, 85);
+  ('49c8cbda-acc4-e97b-19ca-1a56c2ae6a12', 16, 85);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('49c8cbda-acc4-e97b-19ca-1a56c2ae6a12', 'Diseased claws and fangs', 'melee', NULL, '2', '4+', 2, 0, '1', '{"Lethal Hits"}');
@@ -15458,7 +15457,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('5575d96d-8804-107d-8da6-9f540db93ee9', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Gellerpox Infected [Legends]', 'infantry', '5"', 5, '6+', 1, 7, 1, '{"Infantry", "Chaos", "Nurgle", "Gellerpox Infected", "Damned"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('5575d96d-8804-107d-8da6-9f540db93ee9', 1, 125);
+  ('5575d96d-8804-107d-8da6-9f540db93ee9', 7, 125);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('5575d96d-8804-107d-8da6-9f540db93ee9', 'Brutal weapons', 'melee', NULL, '2', '4+', 4, 0, '1', '{}'),
@@ -15514,7 +15513,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('c35077e0-a6a3-64a2-4f30-76371cdfd91a', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Negavolt Cultists [Legends]', 'infantry', '6"', 3, '7+', 1, 7, 1, '{"Infantry", "Chaos", "Negavolt Cultists", "Damned"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('c35077e0-a6a3-64a2-4f30-76371cdfd91a', 1, 55);
+  ('c35077e0-a6a3-64a2-4f30-76371cdfd91a', 4, 55);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('c35077e0-a6a3-64a2-4f30-76371cdfd91a', 'Electro-goads', 'melee', NULL, '3', '3+', 4, 0, '1', '{"Sustained Hits 2"}'),
@@ -15568,7 +15567,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('d3fb4542-c631-732a-df78-362ac7a4c402', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Renegade Ogryn Beast Handler [Legends]', 'beast', '6"', 6, '5+', 4, 7, 1, '{"Beast", "Chaos", "Renegade Ogryn Beast Handler", "Damned"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('d3fb4542-c631-732a-df78-362ac7a4c402', 1, 40);
+  ('d3fb4542-c631-732a-df78-362ac7a4c402', 4, 40);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('d3fb4542-c631-732a-df78-362ac7a4c402', 'Mauler goad and ripper claw', 'melee', NULL, '4', '3+', 6, -1, '2', '{}'),
@@ -15708,7 +15707,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('6b36b77e-a098-3939-556f-68b4a00598f7', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Cultist Mob with Firearms [Legends]', 'battleline', '6"', 3, '6+', 1, 7, 1, '{"Infantry", "Battleline", "Chaos", "Damned", "Cultist Mob with Firearms"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('6b36b77e-a098-3939-556f-68b4a00598f7', 9, 50),
+  ('6b36b77e-a098-3939-556f-68b4a00598f7', 10, 50),
   ('6b36b77e-a098-3939-556f-68b4a00598f7', 11, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -15727,7 +15726,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('13c930f7-9448-9504-0b1f-efb5352e229d', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Nemesis Claw', 'infantry', '6"', 4, '3+', 2, 6, 1, '{"Infantry", "Psyker", "Nemesis Claw", "Chaos"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('13c930f7-9448-9504-0b1f-efb5352e229d', 4, 110),
+  ('13c930f7-9448-9504-0b1f-efb5352e229d', 5, 110),
   ('13c930f7-9448-9504-0b1f-efb5352e229d', 6, 190);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -15751,7 +15750,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('d908ead6-a027-4332-23a3-02c502e6927f', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Masters of the Maelstrom', 'epic_hero', '6"', 4, '3+', 4, 6, 1, '{"Epic Hero", "Infantry", "Chaos", "Chaos Undivided", "Masters of the Maelstrom"}', 1);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('d908ead6-a027-4332-23a3-02c502e6927f', 1, 115);
+  ('d908ead6-a027-4332-23a3-02c502e6927f', 5, 115);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('d908ead6-a027-4332-23a3-02c502e6927f', 'Absolver bolt pistol', 'ranged', '18"', '1', '3+', 5, -1, '2', '{"Pistol"}'),
@@ -15777,7 +15776,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('8e1886e8-2423-e4df-0315-120b4b6b0c4e', 'a1505a26-9220-e483-9bed-7c24e3940bbb', 'Red Corsairs Raiders', 'infantry', '6"', 4, '3+', 3, 6, 2, '{"Infantry", "Red Corsairs Raiders", "Chaos"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('8e1886e8-2423-e4df-0315-120b4b6b0c4e', 4, 110),
+  ('8e1886e8-2423-e4df-0315-120b4b6b0c4e', 5, 110),
   ('8e1886e8-2423-e4df-0315-120b4b6b0c4e', 6, 220);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -16174,7 +16173,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('33bb6099-f3d1-667e-3895-c2fe40b6b7bb', '7681fa27-38bd-e56b-fa36-6a2bb17edb46', 'Plague Marines', 'battleline', '5"', 6, '3+', 2, 6, 2, '{"Infantry", "Chaos", "Nurgle", "Battleline", "Plague Marines"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('33bb6099-f3d1-667e-3895-c2fe40b6b7bb', 4, 95),
+  ('33bb6099-f3d1-667e-3895-c2fe40b6b7bb', 5, 95),
   ('33bb6099-f3d1-667e-3895-c2fe40b6b7bb', 6, 130),
   ('33bb6099-f3d1-667e-3895-c2fe40b6b7bb', 8, 190);
 
@@ -16201,7 +16200,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('0d4359e9-e08b-172d-ce2b-9c513f653635', '7681fa27-38bd-e56b-fa36-6a2bb17edb46', 'Death Guard Cultists [Legends]', 'infantry', '6"', 3, '6+', 1, 7, 1, '{"Infantry", "Chaos", "Nurgle", "Cultists"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('0d4359e9-e08b-172d-ce2b-9c513f653635', 9, 50),
+  ('0d4359e9-e08b-172d-ce2b-9c513f653635', 10, 50),
   ('0d4359e9-e08b-172d-ce2b-9c513f653635', 11, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -16331,7 +16330,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('c094b119-26bf-e905-ce3b-42a0d528ecb6', '7681fa27-38bd-e56b-fa36-6a2bb17edb46', 'Deathshroud Terminators', 'infantry', '5"', 7, '2+', 4, 6, 1, '{"Infantry", "Chaos", "Nurgle", "Deathshroud Terminators", "Terminator"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('c094b119-26bf-e905-ce3b-42a0d528ecb6', 2, 160),
+  ('c094b119-26bf-e905-ce3b-42a0d528ecb6', 3, 160),
   ('c094b119-26bf-e905-ce3b-42a0d528ecb6', 4, 320);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -16392,7 +16391,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('b5aee18f-2903-22c6-4ef2-a7d3595bc9f8', '7681fa27-38bd-e56b-fa36-6a2bb17edb46', 'Blightlord Terminators', 'infantry', '5"', 7, '2+', 3, 6, 1, '{"Infantry", "Chaos", "Nurgle", "Blightlord Terminators", "Terminator"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('b5aee18f-2903-22c6-4ef2-a7d3595bc9f8', 2, 115),
+  ('b5aee18f-2903-22c6-4ef2-a7d3595bc9f8', 3, 115),
   ('b5aee18f-2903-22c6-4ef2-a7d3595bc9f8', 4, 185),
   ('b5aee18f-2903-22c6-4ef2-a7d3595bc9f8', 6, 370);
 
@@ -16414,7 +16413,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('7c934abd-67e3-a2f5-8a0c-264937d997e3', '7681fa27-38bd-e56b-fa36-6a2bb17edb46', 'Chaos Spawn', 'beast', '8"', 7, '4+', 4, 7, 1, '{"Beast", "Chaos", "Nurgle", "Spawn"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('7c934abd-67e3-a2f5-8a0c-264937d997e3', 1, 80);
+  ('7c934abd-67e3-a2f5-8a0c-264937d997e3', 2, 80);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('7c934abd-67e3-a2f5-8a0c-264937d997e3', 'Hideous Mutations', 'melee', NULL, 'D6+2', '4+', 5, -1, '2', '{}');
@@ -16711,7 +16710,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('2fbb90a3-1565-6e8c-6c23-4f8626b9f5f2', '7681fa27-38bd-e56b-fa36-6a2bb17edb46', 'Gellerpox Infected [Legends]', 'infantry', '5"', 5, '6+', 1, 7, 1, '{"Infantry", "Chaos", "Nurgle", "Gellerpox Infected"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('2fbb90a3-1565-6e8c-6c23-4f8626b9f5f2', 1, 125);
+  ('2fbb90a3-1565-6e8c-6c23-4f8626b9f5f2', 7, 125);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('2fbb90a3-1565-6e8c-6c23-4f8626b9f5f2', 'Brutal weapons', 'melee', NULL, '2', '4+', 4, 0, '1', '{}'),
@@ -16768,7 +16767,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('ca7cc575-1af6-8677-6e5f-6353c23c65d4', '7681fa27-38bd-e56b-fa36-6a2bb17edb46', 'Mutoid Vermin [Legends]', 'infantry', '8"', 2, '7+', 1, 8, 1, '{"Swarm", "Chaos", "Nurgle", "Mutoid Vermin"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('ca7cc575-1af6-8677-6e5f-6353c23c65d4', 1, 85);
+  ('ca7cc575-1af6-8677-6e5f-6353c23c65d4', 16, 85);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('ca7cc575-1af6-8677-6e5f-6353c23c65d4', 'Diseased claws and fangs', 'melee', NULL, '2', '4+', 2, 0, '1', '{"Lethal Hits"}');
@@ -16877,7 +16876,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('443c5ff2-3f86-4d77-7553-e78e4902c6e2', '7681fa27-38bd-e56b-fa36-6a2bb17edb46', 'Plaguebearers', 'battleline', '5"', 5, '7+', 2, 7, 2, '{"Infantry", "Battleline", "Chaos", "Daemon", "Nurgle", "Plaguebearers", "Summoned"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('443c5ff2-3f86-4d77-7553-e78e4902c6e2', 1, 110);
+  ('443c5ff2-3f86-4d77-7553-e78e4902c6e2', 10, 110);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('443c5ff2-3f86-4d77-7553-e78e4902c6e2', 'Plaguesword', 'melee', NULL, '2', '3+', 4, -1, '1', '{"Lethal Hits"}');
@@ -16890,7 +16889,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('2c418d84-3d07-ed8f-669f-2c0108ed1ab7', '7681fa27-38bd-e56b-fa36-6a2bb17edb46', 'Plague Drones', 'mounted', '10"', 8, '6+', 5, 7, 2, '{"Mounted", "Fly", "Chaos", "Daemon", "Nurgle", "Summoned", "Plague Drones"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('2c418d84-3d07-ed8f-669f-2c0108ed1ab7', 1, 115),
+  ('2c418d84-3d07-ed8f-669f-2c0108ed1ab7', 3, 115),
   ('2c418d84-3d07-ed8f-669f-2c0108ed1ab7', 4, 230);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -16923,7 +16922,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('242b82ef-9471-1aa8-dad6-9a139bdf448a', '7681fa27-38bd-e56b-fa36-6a2bb17edb46', 'Nurglings', 'infantry', '5"', 3, '7+', 4, 8, 1, '{"Swarm", "Chaos", "Daemon", "Nurgle", "Summoned", "Nurglings"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('242b82ef-9471-1aa8-dad6-9a139bdf448a', 1, 40),
+  ('242b82ef-9471-1aa8-dad6-9a139bdf448a', 3, 40),
   ('242b82ef-9471-1aa8-dad6-9a139bdf448a', 4, 70);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -17186,7 +17185,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('0bebe529-db33-e66f-0043-581b158e1a5e', 'c7aaf3ae-906a-f9ef-bf24-03f6a82dfb44', 'Chaos Spawn', 'beast', '8"', 5, '4+', 4, 7, 1, '{"Beast", "Chaos", "Tzeentch", "Spawn", "Mutant"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('0bebe529-db33-e66f-0043-581b158e1a5e', 1, 65);
+  ('0bebe529-db33-e66f-0043-581b158e1a5e', 2, 65);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('0bebe529-db33-e66f-0043-581b158e1a5e', 'Hideous Mutations', 'melee', NULL, 'D6+2', '4+', 5, -1, '2', '{}');
@@ -17479,7 +17478,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('e39b8daa-4b8f-04da-acf3-932665a75ef1', 'c7aaf3ae-906a-f9ef-bf24-03f6a82dfb44', 'Rubric Marines', 'battleline', '6"', 4, '3+', 2, 7, 2, '{"Infantry", "Battleline", "Chaos", "Tzeentch", "Rubric Marines", "Rubricae"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('e39b8daa-4b8f-04da-acf3-932665a75ef1', 4, 100);
+  ('e39b8daa-4b8f-04da-acf3-932665a75ef1', 5, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('e39b8daa-4b8f-04da-acf3-932665a75ef1', 'Force weapon', 'melee', NULL, '3', '3+', 6, -1, 'D3', '{"Psychic"}'),
@@ -17499,7 +17498,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('436da648-b9d9-742a-ebd0-76c9b598aac0', 'c7aaf3ae-906a-f9ef-bf24-03f6a82dfb44', 'Scarab Occult Terminators', 'infantry', '5"', 5, '2+', 3, 7, 1, '{"Infantry", "Chaos", "Tzeentch", "Scarab Occult", "Rubricae", "Terminator"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('436da648-b9d9-742a-ebd0-76c9b598aac0', 4, 180);
+  ('436da648-b9d9-742a-ebd0-76c9b598aac0', 5, 180);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('436da648-b9d9-742a-ebd0-76c9b598aac0', 'Force weapon', 'melee', NULL, '4', '3+', 6, -1, 'D3', '{"Psychic"}'),
@@ -17617,7 +17616,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('07523b44-fc08-670a-441d-8c7f30e72ece', 'c7aaf3ae-906a-f9ef-bf24-03f6a82dfb44', 'Tzaangor Enlightened', 'mounted', '10"', 4, '5+', 2, 7, 2, '{"Mounted", "Fly", "Chaos", "Tzeentch", "Tzaangor Enlightened", "Mutant"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('07523b44-fc08-670a-441d-8c7f30e72ece', 2, 45);
+  ('07523b44-fc08-670a-441d-8c7f30e72ece', 3, 45);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('07523b44-fc08-670a-441d-8c7f30e72ece', 'Autopistol', 'ranged', '12"', '1', '4+', 3, 0, '1', '{"Pistol"}'),
@@ -17653,7 +17652,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('b8608b81-e4cf-35cc-8750-e466874a3a36', 'c7aaf3ae-906a-f9ef-bf24-03f6a82dfb44', 'Tzaangors', 'infantry', '6"', 4, '6+', 1, 7, 1, '{"Infantry", "Chaos", "Tzeentch", "Tzaangors", "Mutant"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('b8608b81-e4cf-35cc-8750-e466874a3a36', 9, 70);
+  ('b8608b81-e4cf-35cc-8750-e466874a3a36', 10, 70);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('b8608b81-e4cf-35cc-8750-e466874a3a36', 'Chainsword', 'melee', NULL, '3', '4+', 4, 0, '1', '{}'),
@@ -17814,7 +17813,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('d1e1e9c9-7000-df7e-218a-60278bcfe1d3', 'c7aaf3ae-906a-f9ef-bf24-03f6a82dfb44', 'Tzaangor Enlightened with Fatecaster greatbows', 'mounted', '10"', 4, '5+', 2, 7, 2, '{"Mounted", "Fly", "Chaos", "Tzeentch", "Tzaangor Enlightened", "Mutant", "Tzaangor Enlightened with Fatecaster greatbows"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('d1e1e9c9-7000-df7e-218a-60278bcfe1d3', 1, 55);
+  ('d1e1e9c9-7000-df7e-218a-60278bcfe1d3', 3, 55);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('d1e1e9c9-7000-df7e-218a-60278bcfe1d3', 'Fatecaster greatbow', 'ranged', '30"', '2', '4+', 5, -2, '2', '{"Ignores Cover", "Lethal Hits", "Precision"}'),
@@ -17852,7 +17851,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('72e4c442-5b2d-e370-5f9d-de57827be91d', 'c7aaf3ae-906a-f9ef-bf24-03f6a82dfb44', 'Flamers', 'infantry', '9"', 4, '7+', 3, 7, 1, '{"Infantry", "Fly", "Chaos", "Daemon", "Tzeentch", "Summoned", "Flamers"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('72e4c442-5b2d-e370-5f9d-de57827be91d', 1, 65),
+  ('72e4c442-5b2d-e370-5f9d-de57827be91d', 3, 65),
   ('72e4c442-5b2d-e370-5f9d-de57827be91d', 4, 130);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -17867,7 +17866,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('c8cf796e-b2bc-6bc0-5261-1eb86d76acc5', 'c7aaf3ae-906a-f9ef-bf24-03f6a82dfb44', 'Screamers', 'beast', '14"', 4, '6+', 3, 7, 1, '{"Beast", "Fly", "Chaos", "Daemon", "Tzeentch", "Summoned", "Screamers"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('c8cf796e-b2bc-6bc0-5261-1eb86d76acc5', 1, 80),
+  ('c8cf796e-b2bc-6bc0-5261-1eb86d76acc5', 3, 80),
   ('c8cf796e-b2bc-6bc0-5261-1eb86d76acc5', 4, 160);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -17881,7 +17880,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('5c1c2245-c31d-965c-149e-754c3fc2068a', 'c7aaf3ae-906a-f9ef-bf24-03f6a82dfb44', 'Pink Horrors', 'battleline', '6"', 3, '7+', 1, 8, 1, '{"Infantry", "Battleline", "Chaos", "Daemon", "Tzeentch", "Summoned", "Horrors"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('5c1c2245-c31d-965c-149e-754c3fc2068a', 1, 115);
+  ('5c1c2245-c31d-965c-149e-754c3fc2068a', 10, 115);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('5c1c2245-c31d-965c-149e-754c3fc2068a', 'Blue claws (ref. only)', 'melee', NULL, '1', '5+', 3, 0, '1', '{}'),
@@ -17919,7 +17918,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('70f41575-0ae2-9998-b7df-f948186f712b', 'c7aaf3ae-906a-f9ef-bf24-03f6a82dfb44', 'Blue Horrors', 'battleline', '6"', 3, '7+', 1, 8, 1, '{"Infantry", "Battleline", "Chaos", "Daemon", "Tzeentch", "Summoned", "Horrors"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('70f41575-0ae2-9998-b7df-f948186f712b', 1, 90);
+  ('70f41575-0ae2-9998-b7df-f948186f712b', 10, 90);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('70f41575-0ae2-9998-b7df-f948186f712b', 'Coruscating Yellow flames (ref. only)', 'ranged', '18"', '2', '5+', 2, -1, '1', '{"Pistol", "Psychic"}'),
@@ -18212,7 +18211,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('8bd1c82f-7055-09fa-f8ce-ec84c4551f82', 'dd2936a0-6cc2-791b-ad34-8323b51b6e9d', 'Khorne Berzerkers', 'battleline', '8"', 4, '3+', 2, 6, 2, '{"Infantry", "Battleline", "Chaos", "Khorne", "Berzerkers"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('8bd1c82f-7055-09fa-f8ce-ec84c4551f82', 9, 180);
+  ('8bd1c82f-7055-09fa-f8ce-ec84c4551f82', 10, 180);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('8bd1c82f-7055-09fa-f8ce-ec84c4551f82', 'Bolt pistol', 'ranged', '12"', '1', '4+', 4, 0, '1', '{"Pistol"}'),
@@ -18226,7 +18225,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('c7beacd1-8115-157e-e3bb-a59e99c97d2a', 'dd2936a0-6cc2-791b-ad34-8323b51b6e9d', 'Chaos Terminators', 'infantry', '7"', 5, '2+', 3, 6, 1, '{"Infantry", "Chaos", "Khorne", "Terminator", "Terminator Squad"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('c7beacd1-8115-157e-e3bb-a59e99c97d2a', 4, 175);
+  ('c7beacd1-8115-157e-e3bb-a59e99c97d2a', 5, 175);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('c7beacd1-8115-157e-e3bb-a59e99c97d2a', 'Combi-weapon', 'ranged', '24"', '1', '4+', 4, 0, '1', '{"Anti-Infantry 4+", "Devastating Wounds", "Rapid Fire 1"}'),
@@ -18246,7 +18245,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('35c90c93-3116-fcbd-426b-6d7236d90d0d', 'dd2936a0-6cc2-791b-ad34-8323b51b6e9d', 'Jakhals', 'infantry', '7"', 4, '6+', 1, 7, 1, '{"Infantry", "Chaos", "Khorne", "Jakhals"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('35c90c93-3116-fcbd-426b-6d7236d90d0d', 1, 65);
+  ('35c90c93-3116-fcbd-426b-6d7236d90d0d', 2, 65);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('35c90c93-3116-fcbd-426b-6d7236d90d0d', 'Autopistol', 'ranged', '12"', '1', '4+', 3, 0, '1', '{"Pistol"}'),
@@ -18262,7 +18261,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('41eaa997-1b46-c748-bb52-532feff84799', 'dd2936a0-6cc2-791b-ad34-8323b51b6e9d', 'Eightbound', 'infantry', '10"', 6, '3+', 3, 6, 1, '{"Infantry", "Chaos", "Khorne", "Daemon", "Eightbound", "Possessed"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('41eaa997-1b46-c748-bb52-532feff84799', 1, 135);
+  ('41eaa997-1b46-c748-bb52-532feff84799', 3, 135);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('41eaa997-1b46-c748-bb52-532feff84799', 'Chainblades', 'melee', NULL, '5', '3+', 8, -2, '2', '{}');
@@ -18275,7 +18274,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('278b00c9-5f10-6f1a-776e-62f7e65d541a', 'dd2936a0-6cc2-791b-ad34-8323b51b6e9d', 'Exalted Eightbound', 'infantry', '10"', 6, '3+', 3, 6, 1, '{"Infantry", "Chaos", "Khorne", "Daemon", "Exalted Eightbound", "Possessed"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('278b00c9-5f10-6f1a-776e-62f7e65d541a', 1, 140);
+  ('278b00c9-5f10-6f1a-776e-62f7e65d541a', 3, 140);
 
 INSERT INTO public.abilities (unit_id, name, type, description) VALUES
   ('278b00c9-5f10-6f1a-776e-62f7e65d541a', 'Rend and Tear', 'unique', 'Each time a model in this unit makes a melee attack that targets a ^^**Monster^^** or ^^**Vehicle^^** unit, until the end of the phase, improve the Damage characteristic of that attack by 1.'),
@@ -18534,7 +18533,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('d444df83-cbb9-3734-73fb-1ae6b2009c7d', 'dd2936a0-6cc2-791b-ad34-8323b51b6e9d', 'Chaos Spawn', 'beast', '10"', 5, '4+', 4, 7, 1, '{"Beast", "Chaos", "Khorne", "Spawn"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('d444df83-cbb9-3734-73fb-1ae6b2009c7d', 1, 90);
+  ('d444df83-cbb9-3734-73fb-1ae6b2009c7d', 2, 90);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('d444df83-cbb9-3734-73fb-1ae6b2009c7d', 'Hideous Mutations', 'melee', NULL, 'D6+4', '4+', 5, -1, '2', '{}');
@@ -18618,7 +18617,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('62897c34-a09e-b20e-7675-8aaebe55db1a', 'dd2936a0-6cc2-791b-ad34-8323b51b6e9d', 'Goremongers', 'infantry', '9"', 4, '6+', 1, 7, 1, '{"Infantry", "Chaos", "Khorne", "Goremongers"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('62897c34-a09e-b20e-7675-8aaebe55db1a', 7, 75);
+  ('62897c34-a09e-b20e-7675-8aaebe55db1a', 8, 75);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('62897c34-a09e-b20e-7675-8aaebe55db1a', 'Autopistol', 'ranged', '12"', '1', '4+', 3, 0, '1', '{"Pistol"}'),
@@ -18696,7 +18695,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('c3214e94-02e4-87e2-2bde-1f50291e7bff', 'dd2936a0-6cc2-791b-ad34-8323b51b6e9d', 'Bloodletters', 'battleline', '8"', 4, '7+', 1, 7, 1, '{"Infantry", "Battleline", "Chaos", "Daemon", "Khorne", "Summoned"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('c3214e94-02e4-87e2-2bde-1f50291e7bff', 1, 90);
+  ('c3214e94-02e4-87e2-2bde-1f50291e7bff', 10, 90);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('c3214e94-02e4-87e2-2bde-1f50291e7bff', 'Hellblade', 'melee', NULL, '2', '3+', 5, -2, '2', '{}');
@@ -18709,7 +18708,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('1a63c4e3-3827-9447-81e2-c697175b85f3', 'dd2936a0-6cc2-791b-ad34-8323b51b6e9d', 'Bloodcrushers', 'mounted', '10"', 7, '3+', 4, 7, 2, '{"Mounted", "Chaos", "Daemon", "Khorne", "Summoned", "Bloodcrushers"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('1a63c4e3-3827-9447-81e2-c697175b85f3', 1, 110),
+  ('1a63c4e3-3827-9447-81e2-c697175b85f3', 3, 110),
   ('1a63c4e3-3827-9447-81e2-c697175b85f3', 4, 220);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -19495,7 +19494,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('a63f753e-b89f-e4ef-1cb6-6310e82b1d6c', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Bloodcrushers', 'mounted', '10"', 7, '3+', 4, 7, 2, '{"Mounted", "Chaos", "Daemon", "Khorne", "Bloodcrushers", "Khorne non-Battleline", "Shadow Legion"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('a63f753e-b89f-e4ef-1cb6-6310e82b1d6c', 1, 110),
+  ('a63f753e-b89f-e4ef-1cb6-6310e82b1d6c', 3, 110),
   ('a63f753e-b89f-e4ef-1cb6-6310e82b1d6c', 4, 220);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -19510,7 +19509,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('1c6dfb74-d15a-5d14-d119-1d5e3dc11ab3', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Bloodletters', 'battleline', '8"', 4, '7+', 1, 7, 2, '{"Infantry", "Battleline", "Chaos", "Daemon", "Khorne", "Bloodletters", "Khorne Battleline", "Shadow Legion"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('1c6dfb74-d15a-5d14-d119-1d5e3dc11ab3', 1, 110);
+  ('1c6dfb74-d15a-5d14-d119-1d5e3dc11ab3', 10, 110);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('1c6dfb74-d15a-5d14-d119-1d5e3dc11ab3', 'Hellblade', 'melee', NULL, '2', '3+', 5, -2, '2', '{}');
@@ -19568,7 +19567,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('9ea7eb78-143d-19df-65e0-9e20a238a4f2', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Blue Horrors', 'battleline', '6"', 3, '7+', 1, 8, 1, '{"Infantry", "Battleline", "Chaos", "Daemon", "Tzeentch", "Tzeentch Battleline", "Shadow Legion"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('9ea7eb78-143d-19df-65e0-9e20a238a4f2', 1, 125);
+  ('9ea7eb78-143d-19df-65e0-9e20a238a4f2', 10, 125);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('9ea7eb78-143d-19df-65e0-9e20a238a4f2', 'Coruscating Yellow flames (ref. only)', 'ranged', '18"', '2', '5+', 2, -1, '1', '{"Pistol", "Psychic"}'),
@@ -19717,7 +19716,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('b211ec74-939e-4527-eb6d-35c11ebecc05', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Daemonettes', 'battleline', '9"', 3, '7+', 1, 7, 2, '{"Infantry", "Battleline", "Chaos", "Daemon", "Slaanesh", "Daemonettes", "Slaanesh Battleline", "Shadow Legion"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('b211ec74-939e-4527-eb6d-35c11ebecc05', 1, 100);
+  ('b211ec74-939e-4527-eb6d-35c11ebecc05', 10, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('b211ec74-939e-4527-eb6d-35c11ebecc05', 'Slashing claws', 'melee', NULL, '3', '3+', 4, -1, '1', '{"Devastating Wounds"}');
@@ -19826,7 +19825,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('10c31dc2-cb33-2521-e38c-1732174fe6a1', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Fiends', 'beast', '12"', 5, '7+', 4, 7, 2, '{"Beast", "Chaos", "Daemon", "Slaanesh", "Fiends", "Slaanesh non-Battleline", "Shadow Legion"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('10c31dc2-cb33-2521-e38c-1732174fe6a1', 1, 95),
+  ('10c31dc2-cb33-2521-e38c-1732174fe6a1', 3, 95),
   ('10c31dc2-cb33-2521-e38c-1732174fe6a1', 4, 190);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -19840,7 +19839,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('fb2d68ae-f824-e78a-fe7f-6a0ee83cda43', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Flamers', 'infantry', '9"', 4, '7+', 3, 7, 1, '{"Infantry", "Fly", "Chaos", "Daemon", "Tzeentch", "Flamers", "Tzeentch non-Battleline", "Shadow Legion"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('fb2d68ae-f824-e78a-fe7f-6a0ee83cda43', 1, 65),
+  ('fb2d68ae-f824-e78a-fe7f-6a0ee83cda43', 3, 65),
   ('fb2d68ae-f824-e78a-fe7f-6a0ee83cda43', 4, 130);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -19894,7 +19893,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('262de936-6990-ade7-0d6e-68c9afbe1dfe', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Furies [Legends]', 'infantry', '12"', 3, '7+', 1, 8, 1, '{"Infantry", "Chaos", "Daemon", "Fly", "Furies", "Shadow Legion"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('262de936-6990-ade7-0d6e-68c9afbe1dfe', 1, 40),
+  ('262de936-6990-ade7-0d6e-68c9afbe1dfe', 5, 40),
   ('262de936-6990-ade7-0d6e-68c9afbe1dfe', 6, 80);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -20101,7 +20100,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('c5ccc15a-2d30-4bd7-5640-d0249321dbe6', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Nurglings', 'battleline', '5"', 3, '7+', 4, 8, 1, '{"Swarm", "Battleline", "Chaos", "Daemon", "Nurgle", "Nurglings", "Nurgle Battleline", "Shadow Legion"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('c5ccc15a-2d30-4bd7-5640-d0249321dbe6', 1, 40),
+  ('c5ccc15a-2d30-4bd7-5640-d0249321dbe6', 3, 40),
   ('c5ccc15a-2d30-4bd7-5640-d0249321dbe6', 4, 70);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -20115,7 +20114,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('2a53002b-be43-85ab-a944-d525f0f8ebda', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Pink Horrors', 'battleline', '6"', 3, '7+', 1, 8, 1, '{"Infantry", "Battleline", "Chaos", "Daemon", "Tzeentch", "Tzeentch Battleline", "Shadow Legion"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('2a53002b-be43-85ab-a944-d525f0f8ebda', 1, 140);
+  ('2a53002b-be43-85ab-a944-d525f0f8ebda', 10, 140);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('2a53002b-be43-85ab-a944-d525f0f8ebda', 'Coruscating Yellow flames (ref. only)', 'ranged', '18"', '2', '5+', 2, -1, '1', '{"Pistol", "Psychic"}'),
@@ -20137,7 +20136,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('25359bb2-1a06-c3be-70b2-4531ee9dd175', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Plague Drones', 'mounted', '10"', 8, '6+', 5, 7, 2, '{"Mounted", "Fly", "Chaos", "Daemon", "Nurgle", "Plague Drones", "Nurgle non-Battleline", "Shadow Legion"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('25359bb2-1a06-c3be-70b2-4531ee9dd175', 1, 110),
+  ('25359bb2-1a06-c3be-70b2-4531ee9dd175', 3, 110),
   ('25359bb2-1a06-c3be-70b2-4531ee9dd175', 4, 220);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -20153,7 +20152,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('53e123a3-eae2-0a2d-9ffd-4d1b097eb397', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Plague Toads [Legends]', 'beast', '7"', 8, '6+', 4, 7, 2, '{"Beast", "Chaos", "Daemon", "Nurgle", "Plague Toads", "Nurgle non-Battleline", "Shadow Legion"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('53e123a3-eae2-0a2d-9ffd-4d1b097eb397', 1, 120);
+  ('53e123a3-eae2-0a2d-9ffd-4d1b097eb397', 3, 120);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('53e123a3-eae2-0a2d-9ffd-4d1b097eb397', 'Grasping tongue', 'ranged', '9"', 'D3', '4+', 5, 0, '1', '{"Lethal Hits"}'),
@@ -20168,7 +20167,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('34647e92-085d-b465-90bb-5f87144e8b93', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Plaguebearers', 'battleline', '5"', 5, '7+', 2, 7, 2, '{"Infantry", "Battleline", "Chaos", "Daemon", "Nurgle", "Plaguebearers", "Nurgle Battleline", "Shadow Legion"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('34647e92-085d-b465-90bb-5f87144e8b93', 1, 110);
+  ('34647e92-085d-b465-90bb-5f87144e8b93', 10, 110);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('34647e92-085d-b465-90bb-5f87144e8b93', 'Plaguesword', 'melee', NULL, '2', '3+', 4, -1, '1', '{"Lethal Hits"}');
@@ -20181,7 +20180,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('09d7f097-a5cf-e317-07aa-fd700447546a', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Pox Riders [Legends]', 'mounted', '7"', 8, '6+', 5, 7, 2, '{"Mounted", "Chaos", "Daemon", "Nurgle", "Pox Riders", "Nurgle non-Battleline", "Shadow Legion"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('09d7f097-a5cf-e317-07aa-fd700447546a', 1, 160);
+  ('09d7f097-a5cf-e317-07aa-fd700447546a', 3, 160);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('09d7f097-a5cf-e317-07aa-fd700447546a', 'Grasping tongue', 'ranged', '9"', 'D3', '4+', 5, 0, '1', '{"Lethal Hits"}'),
@@ -20269,7 +20268,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('e752c890-fc33-632f-6d19-fd25f97bb628', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Screamers', 'beast', '14"', 4, '6+', 3, 7, 1, '{"Beast", "Fly", "Chaos", "Daemon", "Tzeentch", "Screamers", "Tzeentch non-Battleline", "Shadow Legion"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('e752c890-fc33-632f-6d19-fd25f97bb628', 1, 80),
+  ('e752c890-fc33-632f-6d19-fd25f97bb628', 3, 80),
   ('e752c890-fc33-632f-6d19-fd25f97bb628', 4, 160);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -20283,7 +20282,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('5f41c773-052f-4ed6-fc8a-693e1ce17353', 'fea5bff7-4681-a1f2-1092-b98cf7500776', 'Seekers', 'mounted', '14"', 4, '7+', 2, 7, 1, '{"Mounted", "Chaos", "Daemon", "Slaanesh", "Seekers", "Slaanesh non-Battleline", "Shadow Legion"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('5f41c773-052f-4ed6-fc8a-693e1ce17353', 1, 80),
+  ('5f41c773-052f-4ed6-fc8a-693e1ce17353', 5, 80),
   ('5f41c773-052f-4ed6-fc8a-693e1ce17353', 6, 160);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -21397,7 +21396,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('d2b768e7-8a3c-3759-d86b-7aad27937aa5', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Guardian Defenders', 'battleline', '7"', 3, '4+', 1, 7, 2, '{"Guardian Defenders", "Battleline", "Infantry", "Guardians", "Aeldari", "Ynnari"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('d2b768e7-8a3c-3759-d86b-7aad27937aa5', 1, 100);
+  ('d2b768e7-8a3c-3759-d86b-7aad27937aa5', 11, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('d2b768e7-8a3c-3759-d86b-7aad27937aa5', 'Close Combat Weapon', 'melee', NULL, '1', '3+', 3, 0, '1', '{}'),
@@ -21567,7 +21566,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('e222bd0f-e9d8-81b9-5bf2-4280fded5c53', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Rangers', 'infantry', '7"', 3, '5+', 1, 7, 1, '{"Rangers", "Infantry", "Aeldari", "Ynnari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('e222bd0f-e9d8-81b9-5bf2-4280fded5c53', 1, 55);
+  ('e222bd0f-e9d8-81b9-5bf2-4280fded5c53', 5, 55);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('e222bd0f-e9d8-81b9-5bf2-4280fded5c53', 'Long rifle', 'ranged', '36"', '1', '3+', 4, -1, '2', '{"Heavy", "Precision"}'),
@@ -21625,7 +21624,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('a3c61cfd-748b-83d3-ad9e-4dc252cf0eaa', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Shroud Runners', 'mounted', '14"', 4, '5+', 3, 7, 2, '{"Shroud Runners", "Fly", "Mounted", "Aeldari", "Ynnari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('a3c61cfd-748b-83d3-ad9e-4dc252cf0eaa', 1, 80);
+  ('a3c61cfd-748b-83d3-ad9e-4dc252cf0eaa', 3, 80);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('a3c61cfd-748b-83d3-ad9e-4dc252cf0eaa', 'Long rifle', 'ranged', '36"', '1', '2+', 4, -1, '2', '{"Precision"}'),
@@ -21641,7 +21640,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('027f0154-1ae9-6f82-ff52-4505eb756e00', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Skyweavers', 'mounted', '14"', 4, '4+', 3, 6, 2, '{"Skyweavers", "Fly", "Mounted", "Smoke", "Harlequin Allies", "Aeldari", "Corsairs and Travelling Players"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('027f0154-1ae9-6f82-ff52-4505eb756e00', 1, 95);
+  ('027f0154-1ae9-6f82-ff52-4505eb756e00', 2, 95);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('027f0154-1ae9-6f82-ff52-4505eb756e00', 'Close Combat Weapon', 'melee', NULL, '4', '3+', 3, 0, '1', '{}'),
@@ -21710,7 +21709,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('4d5e43a4-e4c7-1fab-4e3e-2fcb5a89bbed', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Storm Guardians', 'battleline', '7"', 3, '4+', 2, 7, 1, '{"Storm Guardians", "Battleline", "Infantry", "Guardians", "Aeldari", "Ynnari"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('4d5e43a4-e4c7-1fab-4e3e-2fcb5a89bbed', 10, 110);
+  ('4d5e43a4-e4c7-1fab-4e3e-2fcb5a89bbed', 11, 110);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('4d5e43a4-e4c7-1fab-4e3e-2fcb5a89bbed', 'Close Combat Weapon', 'melee', NULL, '2', '3+', 3, 0, '1', '{}'),
@@ -22058,7 +22057,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('74d87231-d97d-08fc-4a7f-aa1b0e6a3dca', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Wraithguard', 'infantry', '6"', 6, '2+', 3, 8, 1, '{"Infantry", "Wraithguard", "Wraith Construct", "Aeldari", "Ynnari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('74d87231-d97d-08fc-4a7f-aa1b0e6a3dca', 1, 170);
+  ('74d87231-d97d-08fc-4a7f-aa1b0e6a3dca', 5, 170);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('74d87231-d97d-08fc-4a7f-aa1b0e6a3dca', 'Close Combat Weapon', 'melee', NULL, '3', '4+', 5, 0, '1', '{}'),
@@ -22097,7 +22096,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('b1ca229b-ea4d-3bc8-0ca0-88f6c1a46743', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Wraithblades', 'infantry', '6"', 6, '2+', 3, 8, 1, '{"Wraithblades", "Infantry", "Wraith Construct", "Aeldari", "Ynnari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('b1ca229b-ea4d-3bc8-0ca0-88f6c1a46743', 1, 160);
+  ('b1ca229b-ea4d-3bc8-0ca0-88f6c1a46743', 5, 160);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('b1ca229b-ea4d-3bc8-0ca0-88f6c1a46743', 'Ghostswords', 'melee', NULL, '5', '4+', 5, -2, '2', '{}'),
@@ -22162,7 +22161,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('36259d09-34e2-898b-7c67-b3b693cda7a3', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Court of the Archon [Legends]', 'infantry', '7"', 3, '5+', 2, 7, 1, '{"Court of the Archon", "Aeldari", "Kabal", "Infantry"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('36259d09-34e2-898b-7c67-b3b693cda7a3', 1, 95);
+  ('36259d09-34e2-898b-7c67-b3b693cda7a3', 4, 95);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('36259d09-34e2-898b-7c67-b3b693cda7a3', 'Shaimeshi Blade', 'melee', NULL, '4', '3+', 4, -2, '1', '{"Anti-Infantry 2+"}'),
@@ -22679,7 +22678,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('ee393f0a-2b9f-c064-faa0-417e40ba4436', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Hornet [Legends]', 'vehicle', '14"', 7, '3+', 8, 6, 2, '{"Vehicle", "Fly", "Hornet", "Aeldari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('ee393f0a-2b9f-c064-faa0-417e40ba4436', 2, 100);
+  ('ee393f0a-2b9f-c064-faa0-417e40ba4436', 1, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('ee393f0a-2b9f-c064-faa0-417e40ba4436', 'Wraithbone Hull', 'melee', NULL, '3', '4+', 6, 0, '1', '{}'),
@@ -22804,7 +22803,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('f6137a43-be87-9b70-a6b5-c70979192408', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Shadow Spectres [Legends]', 'infantry', '12"', 3, '3+', 2, 6, 1, '{"Infantry", "Fly", "Shadow Spectres", "Jump Pack", "Aeldari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('f6137a43-be87-9b70-a6b5-c70979192408', 5, 115);
+  ('f6137a43-be87-9b70-a6b5-c70979192408', 6, 115);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('f6137a43-be87-9b70-a6b5-c70979192408', '➤ Prism Rifle - dispersed', 'ranged', '18"', 'D6', '3+', 4, -1, '1', '{"Blast"}'),
@@ -23002,7 +23001,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('8dc4d214-705c-1fd0-9ca5-719ca48183f5', 'fb49b6f3-185d-e4ad-f234-abf2142cf2a2', 'Corsair Cloud Dancer Band [Legends]', 'mounted', '14"', 4, '3+', 2, 6, 2, '{"Mounted", "Anhrathe", "Corsair Cloud Dancer Band", "Corsairs and Travelling Players", "Aeldari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('8dc4d214-705c-1fd0-9ca5-719ca48183f5', 3, 105);
+  ('8dc4d214-705c-1fd0-9ca5-719ca48183f5', 4, 105);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('8dc4d214-705c-1fd0-9ca5-719ca48183f5', 'Close combat weapon', 'melee', NULL, '2', '3+', 3, 0, '1', '{}'),
@@ -24315,7 +24314,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('e680dcc2-1eb3-94eb-7d7c-6d4df3416dca', '485f89b8-3530-2805-7fbb-d258f261802b', 'Guardian Defenders', 'battleline', '7"', 3, '4+', 1, 7, 2, '{"Guardian Defenders", "Battleline", "Infantry", "Guardians", "Aeldari", "Ynnari"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('e680dcc2-1eb3-94eb-7d7c-6d4df3416dca', 1, 100);
+  ('e680dcc2-1eb3-94eb-7d7c-6d4df3416dca', 11, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('e680dcc2-1eb3-94eb-7d7c-6d4df3416dca', 'Close Combat Weapon', 'melee', NULL, '1', '3+', 3, 0, '1', '{}'),
@@ -24485,7 +24484,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('f1a97894-cbff-203e-d766-59db823d9d3e', '485f89b8-3530-2805-7fbb-d258f261802b', 'Rangers', 'infantry', '7"', 3, '5+', 1, 7, 1, '{"Rangers", "Infantry", "Aeldari", "Ynnari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('f1a97894-cbff-203e-d766-59db823d9d3e', 1, 55);
+  ('f1a97894-cbff-203e-d766-59db823d9d3e', 5, 55);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('f1a97894-cbff-203e-d766-59db823d9d3e', 'Long rifle', 'ranged', '36"', '1', '3+', 4, -1, '2', '{"Heavy", "Precision"}'),
@@ -24543,7 +24542,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('7215c367-69de-7fa0-ed0e-3ceb34016317', '485f89b8-3530-2805-7fbb-d258f261802b', 'Shroud Runners', 'mounted', '14"', 4, '5+', 3, 7, 2, '{"Shroud Runners", "Fly", "Mounted", "Aeldari", "Ynnari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('7215c367-69de-7fa0-ed0e-3ceb34016317', 1, 80);
+  ('7215c367-69de-7fa0-ed0e-3ceb34016317', 3, 80);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('7215c367-69de-7fa0-ed0e-3ceb34016317', 'Long rifle', 'ranged', '36"', '1', '2+', 4, -1, '2', '{"Precision"}'),
@@ -24559,7 +24558,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('eeba53d6-208b-0269-b68c-6f84f7a359e8', '485f89b8-3530-2805-7fbb-d258f261802b', 'Skyweavers', 'mounted', '14"', 4, '4+', 3, 6, 2, '{"Skyweavers", "Fly", "Mounted", "Smoke", "Harlequin Allies", "Aeldari", "Corsairs and Travelling Players"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('eeba53d6-208b-0269-b68c-6f84f7a359e8', 1, 95);
+  ('eeba53d6-208b-0269-b68c-6f84f7a359e8', 2, 95);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('eeba53d6-208b-0269-b68c-6f84f7a359e8', 'Close Combat Weapon', 'melee', NULL, '4', '3+', 3, 0, '1', '{}'),
@@ -24628,7 +24627,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('38b1e1bf-00c3-912f-ab67-d3a527865585', '485f89b8-3530-2805-7fbb-d258f261802b', 'Storm Guardians', 'battleline', '7"', 3, '4+', 2, 7, 1, '{"Storm Guardians", "Battleline", "Infantry", "Guardians", "Aeldari", "Ynnari"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('38b1e1bf-00c3-912f-ab67-d3a527865585', 10, 110);
+  ('38b1e1bf-00c3-912f-ab67-d3a527865585', 11, 110);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('38b1e1bf-00c3-912f-ab67-d3a527865585', 'Close Combat Weapon', 'melee', NULL, '2', '3+', 3, 0, '1', '{}'),
@@ -24976,7 +24975,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('3b5ccbf1-3201-7f06-109c-af7b54bbea8e', '485f89b8-3530-2805-7fbb-d258f261802b', 'Wraithguard', 'infantry', '6"', 6, '2+', 3, 8, 1, '{"Infantry", "Wraithguard", "Wraith Construct", "Aeldari", "Ynnari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('3b5ccbf1-3201-7f06-109c-af7b54bbea8e', 1, 170);
+  ('3b5ccbf1-3201-7f06-109c-af7b54bbea8e', 5, 170);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('3b5ccbf1-3201-7f06-109c-af7b54bbea8e', 'Close Combat Weapon', 'melee', NULL, '3', '4+', 5, 0, '1', '{}'),
@@ -25015,7 +25014,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('151c458e-b584-6d9f-d201-58f4d03dc50c', '485f89b8-3530-2805-7fbb-d258f261802b', 'Wraithblades', 'infantry', '6"', 6, '2+', 3, 8, 1, '{"Wraithblades", "Infantry", "Wraith Construct", "Aeldari", "Ynnari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('151c458e-b584-6d9f-d201-58f4d03dc50c', 1, 160);
+  ('151c458e-b584-6d9f-d201-58f4d03dc50c', 5, 160);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('151c458e-b584-6d9f-d201-58f4d03dc50c', 'Ghostswords', 'melee', NULL, '5', '4+', 5, -2, '2', '{}'),
@@ -25080,7 +25079,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('0b523132-2f75-3c69-d093-17ff98da32f3', '485f89b8-3530-2805-7fbb-d258f261802b', 'Court of the Archon [Legends]', 'infantry', '7"', 3, '5+', 2, 7, 1, '{"Court of the Archon", "Aeldari", "Kabal", "Infantry"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('0b523132-2f75-3c69-d093-17ff98da32f3', 1, 95);
+  ('0b523132-2f75-3c69-d093-17ff98da32f3', 4, 95);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('0b523132-2f75-3c69-d093-17ff98da32f3', 'Shaimeshi Blade', 'melee', NULL, '4', '3+', 4, -2, '1', '{"Anti-Infantry 2+"}'),
@@ -25597,7 +25596,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('e18c5475-58c5-6bbe-b459-3bc597b975b4', '485f89b8-3530-2805-7fbb-d258f261802b', 'Hornet [Legends]', 'vehicle', '14"', 7, '3+', 8, 6, 2, '{"Vehicle", "Fly", "Hornet", "Aeldari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('e18c5475-58c5-6bbe-b459-3bc597b975b4', 2, 100);
+  ('e18c5475-58c5-6bbe-b459-3bc597b975b4', 1, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('e18c5475-58c5-6bbe-b459-3bc597b975b4', 'Wraithbone Hull', 'melee', NULL, '3', '4+', 6, 0, '1', '{}'),
@@ -25722,7 +25721,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('cd2e9ad4-e969-4de3-8546-4c3db1a811c4', '485f89b8-3530-2805-7fbb-d258f261802b', 'Shadow Spectres [Legends]', 'infantry', '12"', 3, '3+', 2, 6, 1, '{"Infantry", "Fly", "Shadow Spectres", "Jump Pack", "Aeldari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('cd2e9ad4-e969-4de3-8546-4c3db1a811c4', 5, 115);
+  ('cd2e9ad4-e969-4de3-8546-4c3db1a811c4', 6, 115);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('cd2e9ad4-e969-4de3-8546-4c3db1a811c4', '➤ Prism Rifle - dispersed', 'ranged', '18"', 'D6', '3+', 4, -1, '1', '{"Blast"}'),
@@ -25920,7 +25919,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('82006422-7727-fcc7-9237-282d0486fabd', '485f89b8-3530-2805-7fbb-d258f261802b', 'Corsair Cloud Dancer Band [Legends]', 'mounted', '14"', 4, '3+', 2, 6, 2, '{"Mounted", "Anhrathe", "Corsair Cloud Dancer Band", "Corsairs and Travelling Players", "Aeldari"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('82006422-7727-fcc7-9237-282d0486fabd', 3, 105);
+  ('82006422-7727-fcc7-9237-282d0486fabd', 4, 105);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('82006422-7727-fcc7-9237-282d0486fabd', 'Close combat weapon', 'melee', NULL, '2', '3+', 3, 0, '1', '{}'),
@@ -26528,7 +26527,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('04da6cbd-907c-bb28-ca28-aab35c70c34a', 'bdfb2412-05ad-2eea-a05a-45693e822400', 'Hearthkyn Warriors', 'battleline', '5"', 5, '4+', 1, 7, 2, '{"Infantry", "Battleline", "Hearthkyn Warriors"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('04da6cbd-907c-bb28-ca28-aab35c70c34a', 9, 100);
+  ('04da6cbd-907c-bb28-ca28-aab35c70c34a', 10, 100);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('04da6cbd-907c-bb28-ca28-aab35c70c34a', 'Close combat weapon', 'melee', NULL, '1', '4+', 4, 0, '1', '{}'),
@@ -26623,7 +26622,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('4cdb7053-2402-70ed-d996-d74adff7920a', 'bdfb2412-05ad-2eea-a05a-45693e822400', 'Grimnyr', 'character', '5"', 5, '4+', 4, 6, 1, '{"Infantry", "Character"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('4cdb7053-2402-70ed-d996-d74adff7920a', 1, 65);
+  ('4cdb7053-2402-70ed-d996-d74adff7920a', 3, 65);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('4cdb7053-2402-70ed-d996-d74adff7920a', 'Ancestral ward stave', 'melee', NULL, '2', '3+', 7, -1, 'D3', '{"Psychic"}'),
@@ -26668,7 +26667,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('1c2365bb-960f-9338-d9af-7c11234136ea', 'bdfb2412-05ad-2eea-a05a-45693e822400', 'Einhyr Hearthguard', 'infantry', '5"', 5, '2+', 2, 7, 1, '{"Infantry", "Exoarmour", "Einhyr Hearthguard"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('1c2365bb-960f-9338-d9af-7c11234136ea', 4, 135);
+  ('1c2365bb-960f-9338-d9af-7c11234136ea', 5, 135);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('1c2365bb-960f-9338-d9af-7c11234136ea', 'Exo-armour grenade launcher', 'ranged', '24"', 'D3', '3+', 3, 0, '1', '{"Blast"}'),
@@ -26739,7 +26738,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('51b2991a-2dc9-5389-41a0-07da99d2fec5', 'bdfb2412-05ad-2eea-a05a-45693e822400', 'Brôkhyr Thunderkyn', 'infantry', '5"', 6, '3+', 2, 7, 1, '{"Infantry", "Exoframe", "Thunderkyn", "Brôkhyr"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('51b2991a-2dc9-5389-41a0-07da99d2fec5', 1, 80);
+  ('51b2991a-2dc9-5389-41a0-07da99d2fec5', 3, 80);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('51b2991a-2dc9-5389-41a0-07da99d2fec5', 'Close combat weapon', 'melee', NULL, '2', '4+', 4, 0, '1', '{}'),
@@ -26897,7 +26896,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('b43f36f2-f5bf-13f7-aed9-5f846e2f42be', 'bdfb2412-05ad-2eea-a05a-45693e822400', 'Ironkin Steeljacks with Melee Weapons', 'infantry', '5"', 6, '2+', 3, 7, 1, '{"Infantry", "Ironkin Steeljacks", "Ironkin Steeljacks with Melee Weapons"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('b43f36f2-f5bf-13f7-aed9-5f846e2f42be', 2, 85),
+  ('b43f36f2-f5bf-13f7-aed9-5f846e2f42be', 3, 85),
   ('b43f36f2-f5bf-13f7-aed9-5f846e2f42be', 4, 170);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
@@ -26912,7 +26911,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('d27e98c7-f6cd-84db-1d34-de93ced74db7', 'bdfb2412-05ad-2eea-a05a-45693e822400', 'Cthonian Earthshakers', 'infantry', '4"', 6, '4+', 6, 7, 2, '{"Infantry", "Artillery", "Cthonian", "Earthshakers"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('d27e98c7-f6cd-84db-1d34-de93ced74db7', 1, 110);
+  ('d27e98c7-f6cd-84db-1d34-de93ced74db7', 2, 110);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('d27e98c7-f6cd-84db-1d34-de93ced74db7', 'Plasma picks', 'melee', NULL, '4', '3+', 5, -2, '1', '{}'),
@@ -27574,7 +27573,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('3283a00d-367b-6c21-9a22-70152907eafc', '1a0a76be-49ed-bffd-d138-967d8780a12f', 'Gargoyles', 'battleline', '12"', 3, '6+', 1, 8, 2, '{"Battleline", "Infantry", "Fly", "Gargoyles", "Great Devourer", "Endless Multitude", "Vanguard Invader"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('3283a00d-367b-6c21-9a22-70152907eafc', 1, 85);
+  ('3283a00d-367b-6c21-9a22-70152907eafc', 10, 85);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('3283a00d-367b-6c21-9a22-70152907eafc', 'Blinding venom', 'melee', NULL, '1', '4+', 3, 0, '1', '{}'),
@@ -28329,7 +28328,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('aa17fc66-116f-352c-8a56-76fff1574a5f', '78cd7e8b-c84c-7d52-ddb1-ad8b25a215c7', 'Cryptothralls', 'infantry', '5"', 4, '3+', 3, 8, 1, '{"Infantry", "Cryptothralls"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('aa17fc66-116f-352c-8a56-76fff1574a5f', 1, 60);
+  ('aa17fc66-116f-352c-8a56-76fff1574a5f', 2, 60);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('aa17fc66-116f-352c-8a56-76fff1574a5f', 'Scouring eye', 'ranged', '6"', '2', '4+', 5, -1, '1', '{}'),
@@ -28732,7 +28731,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('381a1b1f-967e-6651-86b5-713753dc7de2', '78cd7e8b-c84c-7d52-ddb1-ad8b25a215c7', 'The Silent King', 'epic_hero', '8"', 10, '2+', 16, 6, 6, '{"Vehicle", "Epic Hero", "Triarch"}', 1);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('381a1b1f-967e-6651-86b5-713753dc7de2', 1, 400);
+  ('381a1b1f-967e-6651-86b5-713753dc7de2', 3, 400);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('381a1b1f-967e-6651-86b5-713753dc7de2', 'Sceptre of Eternal Glory', 'ranged', '24"', '2', '2+', 10, -3, '3', '{"Devastating Wounds"}'),
@@ -29463,7 +29462,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('cc82b94c-4d0a-8710-19f4-e82f5d12ef63', 'b686c03c-f50a-5d2b-a411-5e63ca847dc5', 'Ghazghkull Thraka', 'epic_hero', '5"', 6, '2+', 10, 6, 4, '{"Infantry", "Epic Hero", "Character"}', 1);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('cc82b94c-4d0a-8710-19f4-e82f5d12ef63', 1, 235);
+  ('cc82b94c-4d0a-8710-19f4-e82f5d12ef63', 2, 235);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('cc82b94c-4d0a-8710-19f4-e82f5d12ef63', 'Mork’s Roar', 'ranged', '36"', '12', '5+', 5, 0, '1', '{"Rapid Fire 4"}'),
@@ -30305,7 +30304,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('0f80f9e5-570e-b198-14e7-8f1a6e83e951', 'b686c03c-f50a-5d2b-a411-5e63ca847dc5', 'Nobz on Warbikes [Legends]', 'mounted', '12"', 6, '4+', 4, 7, 2, '{"Mounted", "Speed Freeks", "Nobz on Warbikes"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('0f80f9e5-570e-b198-14e7-8f1a6e83e951', 1, 125);
+  ('0f80f9e5-570e-b198-14e7-8f1a6e83e951', 3, 125);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('0f80f9e5-570e-b198-14e7-8f1a6e83e951', 'Twin dakkagun', 'ranged', '18"', '3', '5+', 5, 0, '1', '{"Assault", "Rapid Fire 2", "Twin-linked"}'),
@@ -30405,7 +30404,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('996c3fdc-8120-a2b1-fa8c-0a0a96b61d47', 'b686c03c-f50a-5d2b-a411-5e63ca847dc5', 'Deffkoptas with Big Shootas [Legends]', 'vehicle', '12"', 6, '4+', 4, 7, 2, '{"Vehicle", "Deffkoptas with Big Shootas", "Fly"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('996c3fdc-8120-a2b1-fa8c-0a0a96b61d47', 1, 130);
+  ('996c3fdc-8120-a2b1-fa8c-0a0a96b61d47', 3, 130);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('996c3fdc-8120-a2b1-fa8c-0a0a96b61d47', 'Killsaw', 'melee', NULL, '3', '4+', 12, -3, '2', '{}'),
@@ -31161,7 +31160,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('f055abd0-ac79-5b7c-f212-6c6e4c664a15', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Aun''va [Legends]', 'epic_hero', '6"', 3, '5+', 5, 7, 1, '{"Epic Hero", "Non-Kroot"}', 1);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('f055abd0-ac79-5b7c-f212-6c6e4c664a15', 1, 65);
+  ('f055abd0-ac79-5b7c-f212-6c6e4c664a15', 3, 65);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('f055abd0-ac79-5b7c-f212-6c6e4c664a15', 'Close combat weapon', 'melee', NULL, '1', '6+', 2, 0, '1', '{}'),
@@ -31244,7 +31243,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('d6587f62-bb67-95ed-0fab-cb3978221a21', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Breacher Team', 'battleline', '6"', 3, '4+', 1, 7, 2, '{"Infantry", "Battleline", "Markerlight", "Fire Warrior", "Breacher Team", "Non-Kroot"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('d6587f62-bb67-95ed-0fab-cb3978221a21', 1, 90);
+  ('d6587f62-bb67-95ed-0fab-cb3978221a21', 9, 90);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('d6587f62-bb67-95ed-0fab-cb3978221a21', 'Pulse pistol', 'ranged', '12"', '1', '4+', 5, 0, '1', '{"Pistol"}'),
@@ -31300,7 +31299,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('53287f55-daa9-e40a-6ee1-b8e8996d3401', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Crisis Battlesuits [Legends]', 'vehicle', '10"', 5, '3+', 4, 7, 2, '{"Vehicle", "Walker", "Fly", "Battlesuit", "Crisis", "Non-Kroot"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('53287f55-daa9-e40a-6ee1-b8e8996d3401', 1, 200);
+  ('53287f55-daa9-e40a-6ee1-b8e8996d3401', 2, 200);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('53287f55-daa9-e40a-6ee1-b8e8996d3401', 'T''au flamer', 'ranged', '12"', 'D6', 'N/A', 4, 0, '1', '{"Ignores Cover", "Torrent"}'),
@@ -31689,7 +31688,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('820a2b48-e150-af0d-2fac-97d430b10462', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Tactical Drones [Legends]', 'infantry', '8"', 3, '4+', 1, 7, 1, '{"Drone", "Fly", "Tactical Drones", "Non-Kroot"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('820a2b48-e150-af0d-2fac-97d430b10462', 1, 70);
+  ('820a2b48-e150-af0d-2fac-97d430b10462', 4, 70);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('820a2b48-e150-af0d-2fac-97d430b10462', 'Close combat weapon', 'melee', NULL, '1', '6+', 3, 0, '1', '{}'),
@@ -31700,7 +31699,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('6fe992f2-ea89-ea26-ff00-d637fef6a685', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Kroot Farstalkers', 'infantry', '7"', 3, '6+', 1, 7, 1, '{"Infantry", "Kroot", "Farstalkers"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('6fe992f2-ea89-ea26-ff00-d637fef6a685', 9, 85);
+  ('6fe992f2-ea89-ea26-ff00-d637fef6a685', 11, 85);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('6fe992f2-ea89-ea26-ff00-d637fef6a685', 'Ripping fangs', 'melee', NULL, '3', '3+', 3, 0, '1', '{}'),
@@ -31778,7 +31777,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('744d89f0-0232-1646-1a13-da245c05524a', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Remora Stealth Drones [Legends]', 'vehicle', '16"', 6, '3+', 5, 7, 1, '{"Vehicle", "Fly", "Markerlight", "Remora Stealth Drones", "Non-Kroot"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('744d89f0-0232-1646-1a13-da245c05524a', 1, 160);
+  ('744d89f0-0232-1646-1a13-da245c05524a', 2, 160);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('744d89f0-0232-1646-1a13-da245c05524a', 'Close combat weapon', 'melee', NULL, '1', '5+', 4, 0, '1', '{}'),
@@ -32038,7 +32037,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('58e48839-6195-b46b-8022-2ed97341a5a6', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Knarloc Riders [Legends]', 'mounted', '7"', 5, '5+', 4, 7, 2, '{"Mounted", "Kroot", "Knarloc Riders"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('58e48839-6195-b46b-8022-2ed97341a5a6', 1, 110);
+  ('58e48839-6195-b46b-8022-2ed97341a5a6', 3, 110);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('58e48839-6195-b46b-8022-2ed97341a5a6', 'Knarloc beak and talons', 'melee', NULL, '4', '3+', 6, -1, '1', '{"Extra Attacks"}'),
@@ -32091,7 +32090,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('a6f00b72-8880-2f2c-f12b-de41bf454593', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Crisis Sunforge Battlesuits', 'vehicle', '10"', 5, '3+', 4, 7, 2, '{"Vehicle", "Walker", "Fly", "Battlesuit", "Crisis", "Sunforge", "Non-Kroot"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('a6f00b72-8880-2f2c-f12b-de41bf454593', 1, 140);
+  ('a6f00b72-8880-2f2c-f12b-de41bf454593', 2, 140);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('a6f00b72-8880-2f2c-f12b-de41bf454593', 'Twin pulse carbine', 'ranged', '20"', '2', '5+', 5, 0, '1', '{"Assault", "Twin-linked"}'),
@@ -32108,7 +32107,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('7691d748-2fda-153a-8f08-95809afca1db', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Crisis Fireknife Battlesuits', 'vehicle', '10"', 5, '3+', 4, 7, 2, '{"Vehicle", "Walker", "Fly", "Battlesuit", "Crisis", "Fireknife", "Non-Kroot"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('7691d748-2fda-153a-8f08-95809afca1db', 1, 120);
+  ('7691d748-2fda-153a-8f08-95809afca1db', 2, 120);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('7691d748-2fda-153a-8f08-95809afca1db', 'Plasma rifle', 'ranged', '18"', '1', '4+', 8, -3, '3', '{}'),
@@ -32125,7 +32124,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('bd81704c-e431-c2bb-01d7-b16d2fbea865', '0b4ac29e-5aac-4964-4573-4dfffac861c1', 'Crisis Starscythe Battlesuits', 'vehicle', '10"', 5, '3+', 4, 7, 2, '{"Vehicle", "Walker", "Fly", "Battlesuit", "Crisis", "Starscythe", "Non-Kroot"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('bd81704c-e431-c2bb-01d7-b16d2fbea865', 1, 110);
+  ('bd81704c-e431-c2bb-01d7-b16d2fbea865', 2, 110);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('bd81704c-e431-c2bb-01d7-b16d2fbea865', 'Burst cannon', 'ranged', '18"', '4', '4+', 5, 0, '1', '{}'),
@@ -32675,7 +32674,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('22d82d4e-e420-6398-7abc-8fe7478e763e', '29048f43-09c7-cf02-c71b-6ef2dc3070b3', 'Spore Mines', 'beast', '4"', 1, '7+', 1, 8, 1, '{"Spore Mines", "Beast", "Fly", "Great Devourer"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('22d82d4e-e420-6398-7abc-8fe7478e763e', 1, 55);
+  ('22d82d4e-e420-6398-7abc-8fe7478e763e', 3, 55);
 
 INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES
   ('5dbefca4-b12f-1743-49f2-94392d8fbc05', '29048f43-09c7-cf02-c71b-6ef2dc3070b3', 'Exocrine', 'monster', '8"', 10, '3+', 14, 8, 4, '{"Monster", "Great Devourer", "Exocrine"}', 3);
@@ -32842,7 +32841,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('131b2a1d-fce7-f99d-db8b-1c7892bcde5d', '29048f43-09c7-cf02-c71b-6ef2dc3070b3', 'Barbgaunts', 'infantry', '6"', 4, '4+', 2, 8, 1, '{"Barbgaunts", "Infantry", "Great Devourer"}', 3);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('131b2a1d-fce7-f99d-db8b-1c7892bcde5d', 1, 55);
+  ('131b2a1d-fce7-f99d-db8b-1c7892bcde5d', 5, 55);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('131b2a1d-fce7-f99d-db8b-1c7892bcde5d', 'Barblauncher', 'ranged', '24"', 'D6', '4+', 5, 0, '1', '{"Blast", "Heavy"}'),
@@ -33088,7 +33087,7 @@ INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save,
   ('d78ebe4c-291c-4942-0a6f-2d68eab62bda', '29048f43-09c7-cf02-c71b-6ef2dc3070b3', 'Gargoyles', 'battleline', '12"', 3, '6+', 1, 8, 2, '{"Battleline", "Infantry", "Fly", "Gargoyles", "Great Devourer", "Endless Multitude", "Vanguard Invader"}', 6);
 
 INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES
-  ('d78ebe4c-291c-4942-0a6f-2d68eab62bda', 1, 85);
+  ('d78ebe4c-291c-4942-0a6f-2d68eab62bda', 10, 85);
 
 INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES
   ('d78ebe4c-291c-4942-0a6f-2d68eab62bda', 'Blinding venom', 'melee', NULL, '1', '4+', 3, 0, '1', '{}'),

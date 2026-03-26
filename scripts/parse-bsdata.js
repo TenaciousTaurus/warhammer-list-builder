@@ -282,8 +282,60 @@ function extractStats(node) {
 }
 
 /**
+ * Count the minimum number of models in a unit by summing min constraints
+ * from all type="model" child selectionEntries and selectionEntryGroups.
+ *
+ * BSData units typically have a structure like:
+ *   Unit (type="unit")
+ *     ├── Sergeant (type="model", min=1, max=1)
+ *     └── Group (selectionEntryGroup, min=4, max=9)
+ *         ├── Marine variant A (type="model")
+ *         └── Marine variant B (type="model")
+ *
+ * The modifier conditions (atLeast) count ALL models including the Sergeant
+ * (via includeChildSelections="true"), so our base tier model_count must
+ * also count all models — not just the group min.
+ */
+function countMinModels(node) {
+  let total = 0;
+
+  // Count direct model-type child entries with min constraints
+  for (const child of ensureArray(node?.selectionEntries?.selectionEntry)) {
+    if (child['@_type'] === 'model') {
+      let childMin = 0;
+      for (const c of ensureArray(child?.constraints?.constraint)) {
+        if (c['@_type'] === 'min' && c['@_field'] === 'selections') {
+          childMin = Math.max(childMin, parseInt(c['@_value']) || 0);
+        }
+      }
+      total += Math.max(childMin, 1); // at least 1 if it's a model entry
+    }
+  }
+
+  // Count models from selectionEntryGroups (the variable-size model groups)
+  for (const group of ensureArray(node?.selectionEntryGroups?.selectionEntryGroup)) {
+    // Check if this group contains model-type entries
+    const hasModels = ensureArray(group?.selectionEntries?.selectionEntry)
+      .some(e => e['@_type'] === 'model');
+    if (!hasModels) continue;
+
+    for (const c of ensureArray(group?.constraints?.constraint)) {
+      if (c['@_type'] === 'min' && c['@_field'] === 'selections') {
+        total += parseInt(c['@_value']) || 0;
+      }
+    }
+  }
+
+  return total;
+}
+
+/**
  * Extract points cost and model count tiers from a unit entry.
  * BattleScribe uses a base cost + modifiers that change cost at different model counts.
+ *
+ * The modifier conditions use includeChildSelections="true" which means they
+ * count ALL models in the unit (including fixed models like Sergeants/Champions).
+ * So the model_count in our tiers must also reflect the total unit size.
  */
 function extractPointsTiers(node) {
   const tiers = [];
@@ -296,28 +348,16 @@ function extractPointsTiers(node) {
     }
   }
 
-  // Get min/max model count from the unit's group constraints
-  let minModels = 1;
-  let maxModels = 1;
-
-  for (const group of ensureArray(node?.selectionEntryGroups?.selectionEntryGroup)) {
-    for (const constraint of ensureArray(group?.constraints?.constraint)) {
-      if (constraint['@_type'] === 'min' && constraint['@_field'] === 'selections') {
-        minModels = parseInt(constraint['@_value']) || 1;
-      }
-      if (constraint['@_type'] === 'max' && constraint['@_field'] === 'selections') {
-        const val = parseInt(constraint['@_value']);
-        if (val > 0) maxModels = val;
-      }
-    }
-  }
+  // Count total minimum models in the unit (all model entries + group minimums)
+  const baseModelCount = countMinModels(node) || 1;
 
   // Add base tier
   if (basePoints > 0) {
-    tiers.push({ model_count: minModels || 1, points: basePoints });
+    tiers.push({ model_count: baseModelCount, points: basePoints });
   }
 
   // Check modifiers for additional tiers (points changes at different model counts)
+  // The condition values already represent total model count (includeChildSelections=true)
   for (const mod of ensureArray(node?.modifiers?.modifier)) {
     if (mod['@_field'] === '51b2-306e-1021-d207') { // pts field ID
       const newPts = parseInt(mod['@_value']) || 0;
@@ -338,7 +378,17 @@ function extractPointsTiers(node) {
     tiers.push({ model_count: 1, points: basePoints });
   }
 
-  return tiers;
+  // Deduplicate tiers by model_count (keep the one with higher points if duplicated,
+  // since the modifier overrides the base cost at that threshold)
+  const tierMap = new Map();
+  for (const tier of tiers) {
+    const existing = tierMap.get(tier.model_count);
+    if (!existing || tier.points > existing.points) {
+      tierMap.set(tier.model_count, tier);
+    }
+  }
+
+  return [...tierMap.values()].sort((a, b) => a.model_count - b.model_count);
 }
 
 /**
