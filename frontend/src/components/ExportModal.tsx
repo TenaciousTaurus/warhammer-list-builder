@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import type { ArmyList, Unit, UnitPointsTier, ArmyListUnit, Enhancement, Detachment, Ability } from '../types/database';
+import { useEffect, useRef, useState } from 'react';
+import { QRCodeSVG } from 'qrcode.react';
+import type { ArmyList, Unit, UnitPointsTier, ArmyListUnit, Enhancement, Detachment, Ability, WargearOption } from '../types/database';
 import { supabase } from '../lib/supabase';
 
 type UnitWithRelations = Unit & { unit_points_tiers: UnitPointsTier[]; abilities: Ability[] };
@@ -14,27 +15,36 @@ export interface ParsedUnit {
   enhancementName: string | null;
 }
 
+// ============================================================
+// Parsers
+// ============================================================
+
 function parseImportText(text: string): ParsedUnit[] {
+  // Try BattleScribe-style first, then fall back to native format
+  const bsUnits = parseBattleScribeText(text);
+  if (bsUnits.length > 0) return bsUnits;
+  return parseNativeText(text);
+}
+
+/** Parse our native export format */
+function parseNativeText(text: string): ParsedUnit[] {
   const units: ParsedUnit[] = [];
   const lines = text.split('\n');
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
-
-    // Match unit lines:  "  Unit Name - 100 pts" or "  Unit Name (5 models) - 100 pts"
     const unitMatch = line.match(/^\s{2}(.+?)(?:\s+\((\d+)\s+models?\))?\s+-\s+\d+\s+pts\s*$/);
     if (!unitMatch) continue;
 
     const name = unitMatch[1].trim();
     const modelCount = unitMatch[2] ? parseInt(unitMatch[2], 10) : 1;
 
-    // Check if next line has an enhancement
     let enhancementName: string | null = null;
     if (i + 1 < lines.length) {
       const enhMatch = lines[i + 1].match(/^\s{4}Enhancement:\s+(.+?)\s+\(\+\d+\s+pts\)\s*$/);
       if (enhMatch) {
         enhancementName = enhMatch[1].trim();
-        i++; // skip the enhancement line
+        i++;
       }
     }
 
@@ -44,58 +54,116 @@ function parseImportText(text: string): ParsedUnit[] {
   return units;
 }
 
-interface ExportModalProps {
+/**
+ * Parse BattleScribe plain-text export format.
+ * Typical format:
+ *   Unit Name [X pts]: Enhancement Name
+ *   . Model count x Model Name
+ *   . Weapon Name
+ *
+ * We extract unit name, model count (from header brackets or model lines), and enhancement.
+ */
+function parseBattleScribeText(text: string): ParsedUnit[] {
+  const units: ParsedUnit[] = [];
+  const lines = text.split('\n');
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
+    // BattleScribe unit header: "Unit Name [Xpts]" or "Unit Name [X pts]"
+    // Can also have selections after colon
+    const bsMatch = line.match(/^([A-Z][A-Za-z0-9' \-]+?)\s*\[(\d+)\s*pts?\]/);
+    if (!bsMatch) continue;
+
+    const name = bsMatch[1].trim();
+    let modelCount = 1;
+    let enhancementName: string | null = null;
+
+    // Check for enhancement on same line (after colon): "Unit Name [pts]: Enhancement, ..."
+    const colonPart = line.split(']:')[1];
+    if (colonPart) {
+      // Enhancement is usually the first selection that doesn't look like a weapon
+      const selections = colonPart.split(',').map(s => s.trim()).filter(Boolean);
+      for (const sel of selections) {
+        // Skip weapon-like entries and model count entries
+        if (!sel.match(/^\d+x /)) {
+          enhancementName = sel;
+          break;
+        }
+      }
+    }
+
+    // Look at following lines for model count (". 5x Intercessor" pattern)
+    for (let j = i + 1; j < lines.length && j < i + 15; j++) {
+      const modelLine = lines[j];
+      if (!modelLine.match(/^\s*[.•]/)) break;
+
+      const countMatch = modelLine.match(/(\d+)x\s/);
+      if (countMatch) {
+        modelCount = Math.max(modelCount, parseInt(countMatch[1], 10));
+      }
+    }
+
+    units.push({ name, modelCount, enhancementName });
+  }
+
+  return units;
+}
+
+// ============================================================
+// Export generators
+// ============================================================
+
+const ROLE_ORDER = ['epic_hero', 'character', 'battleline', 'infantry', 'mounted', 'beast', 'vehicle', 'monster', 'fortification', 'dedicated_transport', 'allied'];
+const ROLE_LABELS: Record<string, string> = {
+  epic_hero: 'Epic Heroes', character: 'Characters', battleline: 'Battleline',
+  infantry: 'Infantry', mounted: 'Mounted', beast: 'Beasts',
+  vehicle: 'Vehicles', monster: 'Monsters', fortification: 'Fortifications',
+  dedicated_transport: 'Dedicated Transports', allied: 'Allied Units',
+};
+
+const BATTLE_SIZE_LABELS: Record<string, string> = {
+  combat_patrol: 'Combat Patrol', incursion: 'Incursion',
+  strike_force: 'Strike Force', onslaught: 'Onslaught',
+};
+
+interface ExportData {
   list: ArmyList & { detachments: Detachment };
   listUnits: ArmyListUnitWithDetails[];
   enhancements: Enhancement[];
   listEnhancements: { id: string; enhancement_id: string; army_list_unit_id: string }[];
   totalPoints: number;
   getUnitPoints: (unit: Unit & { unit_points_tiers: UnitPointsTier[] }, modelCount: number) => number;
-  onClose: () => void;
-  onImport?: (parsed: ParsedUnit[]) => Promise<{ success: boolean; matched: number; unmatched: string[] }>;
+  wargearOptions: WargearOption[];
+  unitWargearSelections: Map<string, Map<string, string>>;
 }
 
-function generateExportText(
-  list: ArmyList & { detachments: Detachment },
-  listUnits: ArmyListUnitWithDetails[],
-  enhancements: Enhancement[],
-  listEnhancements: { id: string; enhancement_id: string; army_list_unit_id: string }[],
-  totalPoints: number,
-  getUnitPoints: (unit: Unit & { unit_points_tiers: UnitPointsTier[] }, modelCount: number) => number,
-): string {
-  const lines: string[] = [];
-
-  lines.push(`++ ${list.name} [${totalPoints}/${list.points_limit} pts] ++`);
-  lines.push(`Detachment: ${list.detachments?.name ?? 'Unknown'}`);
-  lines.push('');
-
-  const roleOrder = ['epic_hero', 'character', 'battleline', 'infantry', 'mounted', 'beast', 'vehicle', 'monster', 'fortification', 'dedicated_transport', 'allied'];
-  const roleLabels: Record<string, string> = {
-    epic_hero: 'Epic Heroes',
-    character: 'Characters',
-    battleline: 'Battleline',
-    infantry: 'Infantry',
-    mounted: 'Mounted',
-    beast: 'Beasts',
-    vehicle: 'Vehicles',
-    monster: 'Monsters',
-    fortification: 'Fortifications',
-    dedicated_transport: 'Dedicated Transports',
-    allied: 'Allied Units',
-  };
-
+function groupByRole(listUnits: ArmyListUnitWithDetails[]) {
   const grouped = new Map<string, ArmyListUnitWithDetails[]>();
   for (const lu of listUnits) {
     const role = lu.units.role;
     if (!grouped.has(role)) grouped.set(role, []);
     grouped.get(role)!.push(lu);
   }
+  return grouped;
+}
 
-  for (const role of roleOrder) {
+function generateStandardExport(data: ExportData): string {
+  const { list, listUnits, enhancements, listEnhancements, totalPoints, getUnitPoints, wargearOptions, unitWargearSelections } = data;
+  const lines: string[] = [];
+
+  lines.push(`++ ${list.name} [${totalPoints}/${list.points_limit} pts] ++`);
+  lines.push(`Detachment: ${list.detachments?.name ?? 'Unknown'}`);
+  if (list.battle_size) lines.push(`Battle Size: ${BATTLE_SIZE_LABELS[list.battle_size] ?? list.battle_size}`);
+  lines.push('');
+
+  const grouped = groupByRole(listUnits);
+
+  for (const role of ROLE_ORDER) {
     const units = grouped.get(role);
     if (!units || units.length === 0) continue;
 
-    lines.push(`= ${roleLabels[role] ?? role} =`);
+    lines.push(`= ${ROLE_LABELS[role] ?? role} =`);
     for (const lu of units) {
       const pts = getUnitPoints(lu.units, lu.model_count);
       const enhAssignment = listEnhancements.find(le => le.army_list_unit_id === lu.id);
@@ -109,12 +177,67 @@ function generateExportText(
       if (enh) {
         lines.push(`    Enhancement: ${enh.name} (+${enh.points} pts)`);
       }
+
+      // Wargear selections
+      const wargear = unitWargearSelections.get(lu.id);
+      if (wargear && wargear.size > 0) {
+        for (const [, optionId] of wargear) {
+          const opt = wargearOptions.find(w => w.id === optionId);
+          if (opt && !opt.is_default) {
+            lines.push(`    Wargear: ${opt.name}${opt.points > 0 ? ` (+${opt.points} pts)` : ''}`);
+          }
+        }
+      }
     }
     lines.push('');
   }
 
   lines.push(`Total: ${totalPoints} / ${list.points_limit} pts`);
   return lines.join('\n');
+}
+
+function generateTournamentExport(data: ExportData): string {
+  const { list, listUnits, enhancements, listEnhancements, totalPoints, getUnitPoints } = data;
+  const lines: string[] = [];
+
+  // GW/ITC-style compact tournament format
+  lines.push(`${list.name}`);
+  lines.push(`${list.detachments?.name ?? 'Unknown Detachment'}`);
+  lines.push(`${totalPoints}/${list.points_limit} pts`);
+  lines.push('---');
+
+  const grouped = groupByRole(listUnits);
+
+  for (const role of ROLE_ORDER) {
+    const units = grouped.get(role);
+    if (!units || units.length === 0) continue;
+
+    for (const lu of units) {
+      const pts = getUnitPoints(lu.units, lu.model_count);
+      const enhAssignment = listEnhancements.find(le => le.army_list_unit_id === lu.id);
+      const enh = enhAssignment ? enhancements.find(e => e.id === enhAssignment.enhancement_id) : null;
+      const totalPts = pts + (enh?.points ?? 0);
+
+      let line = lu.units.name;
+      if (lu.model_count > 1) line += ` (${lu.model_count})`;
+      if (enh) line += ` w/ ${enh.name}`;
+      line += ` [${totalPts}]`;
+      lines.push(line);
+    }
+  }
+
+  lines.push('---');
+  lines.push(`Total: ${totalPoints} pts`);
+  return lines.join('\n');
+}
+
+// ============================================================
+// Component
+// ============================================================
+
+interface ExportModalProps extends ExportData {
+  onClose: () => void;
+  onImport?: (parsed: ParsedUnit[]) => Promise<{ success: boolean; matched: number; unmatched: string[] }>;
 }
 
 function generateShareCode(): string {
@@ -124,9 +247,11 @@ function generateShareCode(): string {
   return code;
 }
 
-export function ExportModal({ list, listUnits, enhancements, listEnhancements, totalPoints, getUnitPoints, onClose, onImport }: ExportModalProps) {
+export function ExportModal(props: ExportModalProps) {
+  const { list, onClose, onImport } = props;
   const [copied, setCopied] = useState(false);
   const [tab, setTab] = useState<'export' | 'import' | 'share'>('export');
+  const [exportFormat, setExportFormat] = useState<'standard' | 'tournament'>('standard');
   const [importText, setImportText] = useState('');
   const [importing, setImporting] = useState(false);
   const [importResult, setImportResult] = useState<{ success: boolean; matched: number; unmatched: string[] } | null>(null);
@@ -134,7 +259,9 @@ export function ExportModal({ list, listUnits, enhancements, listEnhancements, t
   const [shareCopied, setShareCopied] = useState(false);
   const [sharing, setSharing] = useState(false);
 
-  const exportText = generateExportText(list, listUnits, enhancements, listEnhancements, totalPoints, getUnitPoints);
+  const exportText = exportFormat === 'tournament'
+    ? generateTournamentExport(props)
+    : generateStandardExport(props);
 
   function handleCopy() {
     navigator.clipboard.writeText(exportText).then(() => {
@@ -170,27 +297,33 @@ export function ExportModal({ list, listUnits, enhancements, listEnhancements, t
     window.print();
   }
 
-  const textareaStyles = {
-    width: '100%',
-    minHeight: '300px',
-    padding: 'var(--space-md)',
-    backgroundColor: 'rgba(10, 10, 15, 0.6)',
-    border: '1px solid var(--glass-border)',
-    borderRadius: 'var(--radius-md)',
-    color: 'var(--color-text-primary)',
-    fontFamily: 'monospace',
-    fontSize: 'var(--text-sm)',
-    resize: 'vertical' as const,
-    flex: 1,
-  };
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose();
+    }
+    document.addEventListener('keydown', handleKeyDown);
+    dialogRef.current?.focus();
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
+  const shareUrl = shareCode ? `${window.location.origin}/shared/${shareCode}` : null;
+
+  const tabLabels: Record<string, string> = { export: 'Export', share: 'Share', import: 'Import' };
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div
-        className="modal-panel modal-panel--md"
-        style={{ maxHeight: '80vh', display: 'flex', flexDirection: 'column' }}
+        ref={dialogRef}
+        className="modal-panel modal-panel--md export-modal__panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="export-modal-title"
+        tabIndex={-1}
         onClick={(e) => e.stopPropagation()}
       >
+        <h3 id="export-modal-title" className="sr-only">{tabLabels[tab]}</h3>
         <div className="export-modal__tabs">
           <button className={`export-modal__tab${tab === 'export' ? ' export-modal__tab--active' : ''}`} onClick={() => setTab('export')}>Export</button>
           <button className={`export-modal__tab${tab === 'share' ? ' export-modal__tab--active' : ''}`} onClick={() => setTab('share')}>Share</button>
@@ -199,10 +332,24 @@ export function ExportModal({ list, listUnits, enhancements, listEnhancements, t
 
         {tab === 'export' && (
           <>
+            <div className="export-modal__format-toggle">
+              <button
+                className={`export-modal__format-btn${exportFormat === 'standard' ? ' export-modal__format-btn--active' : ''}`}
+                onClick={() => setExportFormat('standard')}
+              >
+                Standard
+              </button>
+              <button
+                className={`export-modal__format-btn${exportFormat === 'tournament' ? ' export-modal__format-btn--active' : ''}`}
+                onClick={() => setExportFormat('tournament')}
+              >
+                Tournament
+              </button>
+            </div>
             <textarea
               readOnly
               value={exportText}
-              style={textareaStyles}
+              className="export-modal__textarea"
             />
             <div className="modal-panel__actions">
               <button className="btn" onClick={handlePrint}>Print / PDF</button>
@@ -216,24 +363,23 @@ export function ExportModal({ list, listUnits, enhancements, listEnhancements, t
 
         {tab === 'share' && (
           <>
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: 'var(--space-lg)', padding: 'var(--space-xl)' }}>
-              {shareCode ? (
+            <div className="export-modal__share-body">
+              {shareCode && shareUrl ? (
                 <>
-                  <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)', textAlign: 'center' }}>
-                    Share this link with anyone to view your list:
+                  <div className="export-modal__qr">
+                    <QRCodeSVG
+                      value={shareUrl}
+                      size={180}
+                      bgColor="transparent"
+                      fgColor="#c9a84c"
+                      level="M"
+                    />
+                  </div>
+                  <p className="export-modal__help-text">
+                    Scan the QR code or share the link below:
                   </p>
-                  <div style={{
-                    padding: 'var(--space-md)',
-                    background: 'rgba(10, 10, 15, 0.6)',
-                    border: '1px solid var(--glass-border)',
-                    borderRadius: 'var(--radius-md)',
-                    fontFamily: 'monospace',
-                    fontSize: 'var(--text-sm)',
-                    color: 'var(--color-gold)',
-                    wordBreak: 'break-all',
-                    textAlign: 'center',
-                  }}>
-                    {window.location.origin}/shared/{shareCode}
+                  <div className="export-modal__share-url">
+                    {shareUrl}
                   </div>
                   <button className="btn btn--primary" onClick={handleCopyShareLink}>
                     {shareCopied ? 'Link Copied!' : 'Copy Share Link'}
@@ -241,8 +387,8 @@ export function ExportModal({ list, listUnits, enhancements, listEnhancements, t
                 </>
               ) : (
                 <>
-                  <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)', textAlign: 'center' }}>
-                    Generate a shareable link for this list. Anyone with the link can view it (read-only).
+                  <p className="export-modal__help-text">
+                    Generate a shareable link and QR code for this list. Anyone with the link can view it (read-only).
                   </p>
                   <button className="btn btn--primary" onClick={handleGenerateShareLink} disabled={sharing}>
                     {sharing ? 'Generating...' : 'Generate Share Link'}
@@ -258,25 +404,24 @@ export function ExportModal({ list, listUnits, enhancements, listEnhancements, t
 
         {tab === 'import' && (
           <>
-            <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-secondary)', marginBottom: 'var(--space-md)' }}>
-              Paste an exported list below. Units are matched by name against the current faction.
+            <p className="export-modal__help-text export-modal__help-text--spaced">
+              Paste an exported list below. Supports our native format and BattleScribe plain-text output. Units are matched by name against the current faction.
             </p>
             <textarea
               value={importText}
               onChange={(e) => setImportText(e.target.value)}
               placeholder="Paste exported list text here..."
-              style={textareaStyles}
+              className="export-modal__textarea"
             />
             {importResult && (
               <div
-                className={`validation-banner ${importResult.success ? 'validation-banner--warning' : 'validation-banner--error'}`}
-                style={{ marginTop: 'var(--space-sm)' }}
+                className={`validation-banner validation-banner--spaced ${importResult.success ? 'validation-banner--warning' : 'validation-banner--error'}`}
               >
                 {importResult.success ? (
                   <>
                     <div>Imported {importResult.matched} unit{importResult.matched !== 1 ? 's' : ''} successfully.</div>
                     {importResult.unmatched.length > 0 && (
-                      <div style={{ marginTop: 'var(--space-xs)', fontSize: 'var(--text-xs)' }}>
+                      <div className="validation-banner__detail">
                         Could not match: {importResult.unmatched.join(', ')}
                       </div>
                     )}

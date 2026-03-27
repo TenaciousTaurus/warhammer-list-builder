@@ -54,6 +54,9 @@ export type Database = {
           objective_control: number;
           keywords: string[];
           max_per_list: number;
+          transport_capacity: number | null;
+          transport_keywords_allowed: string[] | null;
+          transport_keywords_excluded: string[] | null;
           created_at: string;
         };
         Insert: {
@@ -69,6 +72,9 @@ export type Database = {
           objective_control: number;
           keywords?: string[];
           max_per_list?: number;
+          transport_capacity?: number | null;
+          transport_keywords_allowed?: string[] | null;
+          transport_keywords_excluded?: string[] | null;
         };
         Update: {
           id?: string;
@@ -83,6 +89,9 @@ export type Database = {
           objective_control?: number;
           keywords?: string[];
           max_per_list?: number;
+          transport_capacity?: number | null;
+          transport_keywords_allowed?: string[] | null;
+          transport_keywords_excluded?: string[] | null;
         };
       };
       unit_points_tiers: {
@@ -192,6 +201,29 @@ export type Database = {
           description?: string;
         };
       };
+      battle_sizes: {
+        Row: {
+          id: string;
+          name: string;
+          min_points: number;
+          max_points: number;
+          sort_order: number;
+        };
+        Insert: {
+          id: string;
+          name: string;
+          min_points: number;
+          max_points: number;
+          sort_order?: number;
+        };
+        Update: {
+          id?: string;
+          name?: string;
+          min_points?: number;
+          max_points?: number;
+          sort_order?: number;
+        };
+      };
       army_lists: {
         Row: {
           id: string;
@@ -200,6 +232,7 @@ export type Database = {
           faction_id: string;
           detachment_id: string;
           points_limit: number;
+          battle_size: string;
           share_code: string | null;
           created_at: string;
           updated_at: string;
@@ -211,6 +244,7 @@ export type Database = {
           faction_id: string;
           detachment_id: string;
           points_limit?: number;
+          battle_size?: string;
           share_code?: string | null;
         };
         Update: {
@@ -220,6 +254,7 @@ export type Database = {
           faction_id?: string;
           detachment_id?: string;
           points_limit?: number;
+          battle_size?: string;
           share_code?: string | null;
         };
       };
@@ -361,6 +396,7 @@ export type Database = {
 };
 
 // Convenience types
+export type BattleSize = Database['public']['Tables']['battle_sizes']['Row'];
 export type Faction = Database['public']['Tables']['factions']['Row'];
 export type Detachment = Database['public']['Tables']['detachments']['Row'];
 export type Unit = Database['public']['Tables']['units']['Row'];

@@ -2,7 +2,12 @@ import { useState, useRef, useEffect } from 'react';
 import type { ArmyList, Detachment, ValidateArmyListResult } from '../types/database';
 import { PointsBar } from './PointsBar';
 
-const STANDARD_POINTS = [500, 1000, 1500, 2000, 2500, 3000];
+const BATTLE_SIZE_PRESETS = [
+  { id: 'combat_patrol', name: 'Combat Patrol', points: 500 },
+  { id: 'incursion', name: 'Incursion', points: 1000 },
+  { id: 'strike_force', name: 'Strike Force', points: 2000 },
+  { id: 'onslaught', name: 'Onslaught', points: 3000 },
+];
 
 interface ListSummaryProps {
   list: ArmyList & { detachments: Detachment };
@@ -10,6 +15,8 @@ interface ListSummaryProps {
   overLimit: boolean;
   unitLimitWarnings: string[];
   enhancementWarnings: string[];
+  battleSizeWarnings: string[];
+  transportWarnings: string[];
   pointsMismatch: boolean;
   serverValidation: ValidateArmyListResult | null;
   serverValidationError: boolean;
@@ -18,12 +25,14 @@ interface ListSummaryProps {
   onPlay: () => void;
   onUpdateName?: (name: string) => void;
   onUpdatePointsLimit?: (limit: number) => void;
+  onUpdateBattleSize?: (battleSize: string, points: number) => void;
 }
 
 export function ListSummary({
   list, totalPoints, overLimit, unitLimitWarnings, enhancementWarnings,
+  battleSizeWarnings, transportWarnings,
   pointsMismatch, serverValidation, serverValidationError, onBack, onExport, onPlay,
-  onUpdateName, onUpdatePointsLimit,
+  onUpdateName, onUpdatePointsLimit, onUpdateBattleSize,
 }: ListSummaryProps) {
   const [showDetachmentRules, setShowDetachmentRules] = useState(false);
   const [editingName, setEditingName] = useState(false);
@@ -64,8 +73,11 @@ export function ListSummary({
     setEditingPoints(false);
   }
 
+  const currentBattleSize = BATTLE_SIZE_PRESETS.find(bs => bs.id === list.battle_size);
+
   const hasValidationIssues = overLimit || unitLimitWarnings.length > 0
-    || enhancementWarnings.length > 0 || pointsMismatch || serverValidationError
+    || enhancementWarnings.length > 0 || battleSizeWarnings.length > 0
+    || transportWarnings.length > 0 || pointsMismatch || serverValidationError
     || (serverValidation && !serverValidation.is_valid && !overLimit);
 
   return (
@@ -93,7 +105,12 @@ export function ListSummary({
               {list.name}
             </h2>
           )}
-          <span className="list-editor__detachment">{list.detachments?.name}</span>
+          <span className="list-editor__detachment">
+            {list.detachments?.name}
+            {currentBattleSize && (
+              <span className="list-editor__battle-size"> &middot; {currentBattleSize.name}</span>
+            )}
+          </span>
         </div>
         <div className="list-editor__summary-actions">
           <button className="btn" onClick={onBack}>
@@ -150,20 +167,24 @@ export function ListSummary({
         )}
       </div>
 
-      {/* Quick points presets */}
+      {/* Battle size presets */}
       {editingPoints && (
         <div className="list-editor__points-presets">
-          {STANDARD_POINTS.map(pts => (
+          {BATTLE_SIZE_PRESETS.map(bs => (
             <button
-              key={pts}
-              className={`list-editor__points-preset${pts === list.points_limit ? ' list-editor__points-preset--active' : ''}`}
+              key={bs.id}
+              className={`list-editor__points-preset${bs.id === list.battle_size ? ' list-editor__points-preset--active' : ''}`}
               onClick={() => {
-                if (onUpdatePointsLimit) onUpdatePointsLimit(pts);
-                setPointsValue(String(pts));
+                if (onUpdateBattleSize) {
+                  onUpdateBattleSize(bs.id, bs.points);
+                } else if (onUpdatePointsLimit) {
+                  onUpdatePointsLimit(bs.points);
+                }
+                setPointsValue(String(bs.points));
                 setEditingPoints(false);
               }}
             >
-              {pts}
+              {bs.name} ({bs.points})
             </button>
           ))}
         </div>
@@ -205,6 +226,16 @@ export function ListSummary({
           {enhancementWarnings.length > 0 && (
             <div className="validation-banner validation-banner--warning">
               {enhancementWarnings.map((w, i) => <div key={i}>{w}</div>)}
+            </div>
+          )}
+          {battleSizeWarnings.length > 0 && (
+            <div className="validation-banner validation-banner--warning">
+              {battleSizeWarnings.map((w, i) => <div key={i}>{w}</div>)}
+            </div>
+          )}
+          {transportWarnings.length > 0 && (
+            <div className="validation-banner validation-banner--info">
+              {transportWarnings.map((w, i) => <div key={i}>{w}</div>)}
             </div>
           )}
           {pointsMismatch && (

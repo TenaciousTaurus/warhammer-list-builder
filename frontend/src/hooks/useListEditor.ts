@@ -280,6 +280,52 @@ export function useListEditor(id: string | undefined) {
     return map;
   }, [listEnhancements]);
 
+  // Battle size warnings
+  const battleSizeWarnings = useMemo(() => {
+    if (!list?.battle_size) return [];
+    const warnings: string[] = [];
+    const BATTLE_SIZES: Record<string, { name: string; max: number }> = {
+      combat_patrol: { name: 'Combat Patrol', max: 500 },
+      incursion: { name: 'Incursion', max: 1000 },
+      strike_force: { name: 'Strike Force', max: 2000 },
+      onslaught: { name: 'Onslaught', max: 3000 },
+    };
+    const bs = BATTLE_SIZES[list.battle_size];
+    if (bs && list.points_limit !== bs.max) {
+      warnings.push(`Points limit (${list.points_limit}) doesn't match ${bs.name} (${bs.max} pts)`);
+    }
+    return warnings;
+  }, [list]);
+
+  // Transport warnings (informational)
+  const transportWarnings = useMemo(() => {
+    const warnings: string[] = [];
+    const transports = listUnits.filter(lu => lu.units.transport_capacity != null);
+    for (const transport of transports) {
+      const cap = transport.units.transport_capacity!;
+      const allowed = transport.units.transport_keywords_allowed ?? [];
+      const excluded = transport.units.transport_keywords_excluded ?? [];
+
+      // Check which non-transport units could embark
+      const eligible = listUnits.filter(lu => {
+        if (lu.id === transport.id) return false;
+        if (lu.units.role === 'dedicated_transport') return false;
+        const kw = lu.units.keywords ?? [];
+        const hasAll = allowed.every(a => kw.includes(a));
+        const hasExcluded = excluded.some(e => kw.includes(e));
+        return hasAll && !hasExcluded;
+      });
+
+      const totalModels = eligible.reduce((sum, lu) => sum + lu.model_count, 0);
+      if (totalModels > cap) {
+        warnings.push(
+          `${transport.units.name} can carry ${cap} models — ${totalModels} eligible models in your list`
+        );
+      }
+    }
+    return warnings;
+  }, [listUnits]);
+
   // ============================================================
   // Filtering & Role grouping
   // ============================================================
@@ -395,6 +441,13 @@ export function useListEditor(id: string | undefined) {
     if (!id) return;
     await supabase.from('army_lists').update({ points_limit: limit }).eq('id', id);
     setList(prev => prev ? { ...prev, points_limit: limit } : prev);
+    fetchServerValidation();
+  }
+
+  async function updateBattleSize(battleSize: string, points: number) {
+    if (!id) return;
+    await supabase.from('army_lists').update({ battle_size: battleSize, points_limit: points }).eq('id', id);
+    setList(prev => prev ? { ...prev, battle_size: battleSize, points_limit: points } : prev);
     fetchServerValidation();
   }
 
@@ -663,6 +716,8 @@ export function useListEditor(id: string | undefined) {
     overLimit,
     unitLimitWarnings,
     enhancementWarnings,
+    battleSizeWarnings,
+    transportWarnings,
     pointsMismatch,
     unitCountsInList,
     assignedEnhancementIds,
@@ -678,6 +733,7 @@ export function useListEditor(id: string | undefined) {
     removeUnit,
     updateListName,
     updatePointsLimit,
+    updateBattleSize,
     updateModelCount,
     assignEnhancement,
     selectWargear,

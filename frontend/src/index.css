@@ -18,6 +18,12 @@
   --color-green: #40a040;
   --color-green-bright: #50c050;
   --color-blue: #4080c0;
+  --color-blue-bright: #8bc4ff;
+  --color-purple-bright: #c4a0ff;
+  --color-red-ui: #ef4444;
+
+  /* Focus */
+  --focus-ring: 0 0 0 2px rgba(201, 168, 76, 0.4);
 
   /* Role colors */
   --color-role-battleline: #50c050;
