@@ -238,7 +238,6 @@ export function ListEditorPage() {
           enhancements={editor.enhancements}
           listEnhancements={editor.listEnhancements}
           totalPoints={editor.totalPoints}
-          getUnitPoints={getUnitPoints}
           wargearOptions={editor.wargearOptions}
           unitWargearSelections={editor.unitWargearSelections}
           onClose={() => editor.setShowExport(false)}

@@ -1,13 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
-import type { ArmyList, Unit, UnitPointsTier, ArmyListUnit, Enhancement, Detachment, Ability, WargearOption } from '../types/database';
+import type { ArmyList, Enhancement, Detachment, WargearOption } from '../types/database';
 import { supabase } from '../lib/supabase';
-
-type UnitWithRelations = Unit & { unit_points_tiers: UnitPointsTier[]; abilities: Ability[] };
-
-type ArmyListUnitWithDetails = ArmyListUnit & {
-  units: UnitWithRelations;
-};
+import { ROLE_ORDER, getUnitPoints, type ArmyListUnitWithDetails } from '../hooks/useListEditor';
 
 export interface ParsedUnit {
   name: string;
@@ -114,8 +109,7 @@ function parseBattleScribeText(text: string): ParsedUnit[] {
 // Export generators
 // ============================================================
 
-const ROLE_ORDER = ['epic_hero', 'character', 'battleline', 'infantry', 'mounted', 'beast', 'vehicle', 'monster', 'fortification', 'dedicated_transport', 'allied'];
-const ROLE_LABELS: Record<string, string> = {
+const ROLE_LABELS_PLURAL: Record<string, string> = {
   epic_hero: 'Epic Heroes', character: 'Characters', battleline: 'Battleline',
   infantry: 'Infantry', mounted: 'Mounted', beast: 'Beasts',
   vehicle: 'Vehicles', monster: 'Monsters', fortification: 'Fortifications',
@@ -133,7 +127,6 @@ interface ExportData {
   enhancements: Enhancement[];
   listEnhancements: { id: string; enhancement_id: string; army_list_unit_id: string }[];
   totalPoints: number;
-  getUnitPoints: (unit: Unit & { unit_points_tiers: UnitPointsTier[] }, modelCount: number) => number;
   wargearOptions: WargearOption[];
   unitWargearSelections: Map<string, Map<string, string>>;
 }
@@ -149,7 +142,7 @@ function groupByRole(listUnits: ArmyListUnitWithDetails[]) {
 }
 
 function generateStandardExport(data: ExportData): string {
-  const { list, listUnits, enhancements, listEnhancements, totalPoints, getUnitPoints, wargearOptions, unitWargearSelections } = data;
+  const { list, listUnits, enhancements, listEnhancements, totalPoints, wargearOptions, unitWargearSelections } = data;
   const lines: string[] = [];
 
   lines.push(`++ ${list.name} [${totalPoints}/${list.points_limit} pts] ++`);
@@ -163,7 +156,7 @@ function generateStandardExport(data: ExportData): string {
     const units = grouped.get(role);
     if (!units || units.length === 0) continue;
 
-    lines.push(`= ${ROLE_LABELS[role] ?? role} =`);
+    lines.push(`= ${ROLE_LABELS_PLURAL[role] ?? role} =`);
     for (const lu of units) {
       const pts = getUnitPoints(lu.units, lu.model_count);
       const enhAssignment = listEnhancements.find(le => le.army_list_unit_id === lu.id);
@@ -197,7 +190,7 @@ function generateStandardExport(data: ExportData): string {
 }
 
 function generateTournamentExport(data: ExportData): string {
-  const { list, listUnits, enhancements, listEnhancements, totalPoints, getUnitPoints } = data;
+  const { list, listUnits, enhancements, listEnhancements, totalPoints } = data;
   const lines: string[] = [];
 
   // GW/ITC-style compact tournament format

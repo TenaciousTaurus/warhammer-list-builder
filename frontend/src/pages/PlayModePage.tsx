@@ -1,19 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import type { ArmyList, Unit, UnitPointsTier, ArmyListUnit, Enhancement, Detachment, Ability, Weapon } from '../types/database';
+import type { ArmyList, Enhancement, Detachment } from '../types/database';
 import { DatasheetView } from '../components/DatasheetView';
 import { CasualtyTracker } from '../components/CasualtyTracker';
 import { GameTracker } from '../components/GameTracker';
 import { SecondaryObjectives } from '../components/SecondaryObjectives';
 import { StratagemReference } from '../components/StratagemReference';
 import { BattleReport } from '../components/BattleReport';
-import { getUnitPoints, ROLE_ORDER, ROLE_LABELS } from '../hooks/useListEditor';
+import { getUnitPoints, ROLE_ORDER, ROLE_LABELS, type ArmyListUnitWithDetails } from '../hooks/useListEditor';
 
 type PlayTab = 'army' | 'secondaries' | 'stratagems' | 'history';
-
-type UnitWithRelations = Unit & { unit_points_tiers: UnitPointsTier[]; abilities: Ability[]; weapons: Weapon[] };
-type ArmyListUnitWithDetails = ArmyListUnit & { units: UnitWithRelations };
 
 export function PlayModePage() {
   const { id } = useParams<{ id: string }>();

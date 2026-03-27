@@ -63,10 +63,6 @@
   margin-bottom: var(--space-sm);
 }
 
-.skeleton--text-short {
-  width: 35%;
-}
-
 .skeleton--card {
   height: 120px;
   width: 100%;
@@ -708,11 +704,11 @@
 }
 
 .datasheet__section-label {
-  font-family: var(--font-display);
-  font-size: var(--text-xs);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   color: var(--color-gold-dim);
   margin-bottom: var(--space-xs);
 }
@@ -1999,138 +1995,6 @@
   gap: var(--space-xs);
 }
 
-.composition__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--space-xs);
-}
-
-.composition__title {
-  font-size: var(--text-xs);
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-  letter-spacing: 0.06em;
-  font-weight: 600;
-}
-
-.composition__total {
-  font-size: var(--text-xs);
-  color: var(--color-gold);
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-}
-
-.composition__group {
-  margin-top: var(--space-xs);
-}
-
-.composition__group-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 2px 0;
-  margin-bottom: 2px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-}
-
-.composition__group-name {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--color-text-muted);
-  font-weight: 600;
-}
-
-.composition__group-count {
-  font-size: 10px;
-  color: var(--color-text-muted);
-  font-variant-numeric: tabular-nums;
-}
-
-.composition__row {
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  padding: 3px 0;
-}
-
-.composition__row-left {
-  flex-shrink: 0;
-  width: 80px;
-}
-
-.composition__row-right {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-xs);
-  min-width: 0;
-}
-
-.composition__controls {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-}
-
-.composition__btn {
-  width: 22px;
-  height: 22px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--glass-border);
-  border-radius: var(--radius-sm);
-  background: var(--glass-bg-light);
-  color: var(--color-text-primary);
-  cursor: pointer;
-  font-size: 12px;
-  transition: background var(--transition-fast);
-}
-
-.composition__btn:hover:not(:disabled) {
-  background: rgba(201, 168, 76, 0.15);
-  border-color: var(--color-gold-dim);
-}
-
-.composition__btn:disabled {
-  opacity: 0.25;
-  cursor: default;
-}
-
-.composition__count {
-  min-width: 20px;
-  text-align: center;
-  font-weight: 700;
-  font-size: var(--text-sm);
-  font-variant-numeric: tabular-nums;
-}
-
-.composition__fixed-count {
-  font-size: var(--text-sm);
-  font-weight: 700;
-  color: var(--color-text-muted);
-  width: 80px;
-  text-align: center;
-}
-
-.composition__variant-name {
-  font-size: var(--text-xs);
-  color: var(--color-text-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.composition__constraint {
-  font-size: 9px;
-  color: var(--color-text-muted);
-  flex-shrink: 0;
-  font-variant-numeric: tabular-nums;
-}
-
 /* ============================================================
    Unit Detail Section Cards (new section-based layout)
    ============================================================ */
@@ -3242,21 +3106,37 @@
   font-size: var(--text-sm);
   border-collapse: separate;
   border-spacing: 0;
+  table-layout: fixed;
 }
 
 .weapons-table thead th {
   padding: var(--space-sm);
   color: var(--color-text-muted);
-  text-align: left;
+  text-align: center;
   font-size: var(--text-xs);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   border-bottom: 1px solid var(--glass-border);
 }
 
+/* Weapon name column gets remaining space, stat columns get fixed widths */
+.weapons-table thead th:first-child {
+  text-align: left;
+  width: auto;
+}
+
+.weapons-table thead th:not(:first-child) {
+  width: 70px;
+}
+
 .weapons-table tbody td {
   padding: var(--space-sm);
   border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  text-align: center;
+}
+
+.weapons-table tbody td:first-child {
+  text-align: left;
 }
 
 .weapons-table tbody tr:hover td {

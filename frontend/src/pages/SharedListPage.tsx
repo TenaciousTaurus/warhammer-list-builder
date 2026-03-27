@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import type { ArmyList, Unit, UnitPointsTier, ArmyListUnit, Enhancement, Detachment, Ability, Weapon } from '../types/database';
+import type { ArmyList, Enhancement, Detachment } from '../types/database';
 import { DatasheetView } from '../components/DatasheetView';
 import { PointsBar } from '../components/PointsBar';
-import { getUnitPoints, ROLE_ORDER, ROLE_LABELS } from '../hooks/useListEditor';
-
-type UnitWithRelations = Unit & { unit_points_tiers: UnitPointsTier[]; abilities: Ability[]; weapons: Weapon[] };
-type ArmyListUnitWithDetails = ArmyListUnit & { units: UnitWithRelations };
+import { getUnitPoints, ROLE_ORDER, ROLE_LABELS, type ArmyListUnitWithDetails } from '../hooks/useListEditor';
 
 export function SharedListPage() {
   const { code } = useParams<{ code: string }>();
