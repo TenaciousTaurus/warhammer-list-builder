@@ -1,9 +1,10 @@
 -- ============================================================
 -- Phase 5: Tournament System
+-- Tables created first, then RLS policies added after.
 -- ============================================================
 
 -- ============================================================
--- Tournaments
+-- CREATE TABLES
 -- ============================================================
 
 CREATE TABLE public.tournaments (
@@ -24,9 +25,56 @@ CREATE TABLE public.tournaments (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-ALTER TABLE public.tournaments ENABLE ROW LEVEL SECURITY;
+CREATE TABLE public.tournament_participants (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  tournament_id uuid NOT NULL REFERENCES public.tournaments(id) ON DELETE CASCADE,
+  user_id uuid NOT NULL,
+  army_list_id uuid REFERENCES public.army_lists(id),
+  display_name text NOT NULL,
+  seed integer,
+  dropped boolean NOT NULL DEFAULT false,
+  registered_at timestamptz NOT NULL DEFAULT now(),
+  UNIQUE(tournament_id, user_id)
+);
 
--- Organizer full CRUD
+CREATE TABLE public.tournament_rounds (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  tournament_id uuid NOT NULL REFERENCES public.tournaments(id) ON DELETE CASCADE,
+  round_number integer NOT NULL,
+  status text NOT NULL CHECK (status IN ('pending', 'active', 'completed')) DEFAULT 'pending',
+  created_at timestamptz NOT NULL DEFAULT now(),
+  UNIQUE(tournament_id, round_number)
+);
+
+CREATE TABLE public.tournament_pairings (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  round_id uuid NOT NULL REFERENCES public.tournament_rounds(id) ON DELETE CASCADE,
+  player1_id uuid NOT NULL REFERENCES public.tournament_participants(id),
+  player2_id uuid REFERENCES public.tournament_participants(id),
+  game_session_id uuid REFERENCES public.game_sessions(id),
+  player1_vp integer,
+  player2_vp integer,
+  winner_id uuid REFERENCES public.tournament_participants(id),
+  is_draw boolean NOT NULL DEFAULT false,
+  is_bye boolean NOT NULL DEFAULT false,
+  table_number integer,
+  completed_at timestamptz,
+  created_at timestamptz NOT NULL DEFAULT now()
+);
+
+-- ============================================================
+-- ENABLE RLS
+-- ============================================================
+
+ALTER TABLE public.tournaments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.tournament_participants ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.tournament_rounds ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.tournament_pairings ENABLE ROW LEVEL SECURITY;
+
+-- ============================================================
+-- RLS POLICIES: tournaments
+-- ============================================================
+
 CREATE POLICY "Organizer select own tournaments"
   ON public.tournaments FOR SELECT
   USING (auth.uid() = organizer_id);
@@ -44,7 +92,6 @@ CREATE POLICY "Organizer delete tournaments"
   ON public.tournaments FOR DELETE
   USING (auth.uid() = organizer_id);
 
--- Participants can SELECT tournaments they're in
 CREATE POLICY "Participants select tournaments"
   ON public.tournaments FOR SELECT
   USING (
@@ -55,38 +102,14 @@ CREATE POLICY "Participants select tournaments"
     )
   );
 
--- Anyone can SELECT by share_code (for joining)
-CREATE POLICY "Public select by share code"
+CREATE POLICY "Public select tournaments by share code"
   ON public.tournaments FOR SELECT
   USING (share_code IS NOT NULL);
 
-CREATE INDEX idx_tournaments_organizer ON public.tournaments (organizer_id);
-CREATE INDEX idx_tournaments_share_code ON public.tournaments (share_code);
-CREATE INDEX idx_tournaments_status ON public.tournaments (status) WHERE status IN ('registration', 'active');
-
-CREATE TRIGGER tournaments_updated_at
-  BEFORE UPDATE ON public.tournaments
-  FOR EACH ROW EXECUTE FUNCTION public.update_updated_at();
-
 -- ============================================================
--- Tournament Participants
+-- RLS POLICIES: tournament_participants
 -- ============================================================
 
-CREATE TABLE public.tournament_participants (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-  tournament_id uuid NOT NULL REFERENCES public.tournaments(id) ON DELETE CASCADE,
-  user_id uuid NOT NULL,
-  army_list_id uuid REFERENCES public.army_lists(id),
-  display_name text NOT NULL,
-  seed integer,
-  dropped boolean NOT NULL DEFAULT false,
-  registered_at timestamptz NOT NULL DEFAULT now(),
-  UNIQUE(tournament_id, user_id)
-);
-
-ALTER TABLE public.tournament_participants ENABLE ROW LEVEL SECURITY;
-
--- Tournament members can see all participants
 CREATE POLICY "Participants select tournament participants"
   ON public.tournament_participants FOR SELECT
   USING (
@@ -97,7 +120,6 @@ CREATE POLICY "Participants select tournament participants"
     )
   );
 
--- Organizer can see all participants
 CREATE POLICY "Organizer select participants"
   ON public.tournament_participants FOR SELECT
   USING (
@@ -108,18 +130,15 @@ CREATE POLICY "Organizer select participants"
     )
   );
 
--- Users can register themselves
 CREATE POLICY "Users register for tournaments"
   ON public.tournament_participants FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
--- Users can update own registration (army list, drop)
 CREATE POLICY "Users update own registration"
   ON public.tournament_participants FOR UPDATE
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
--- Organizer can update any participant (seeding, drops)
 CREATE POLICY "Organizer update participants"
   ON public.tournament_participants FOR UPDATE
   USING (
@@ -130,7 +149,6 @@ CREATE POLICY "Organizer update participants"
     )
   );
 
--- Users can withdraw, organizer can remove
 CREATE POLICY "Users withdraw from tournaments"
   ON public.tournament_participants FOR DELETE
   USING (auth.uid() = user_id);
@@ -145,25 +163,10 @@ CREATE POLICY "Organizer remove participants"
     )
   );
 
-CREATE INDEX idx_tournament_participants_tournament ON public.tournament_participants (tournament_id);
-CREATE INDEX idx_tournament_participants_user ON public.tournament_participants (user_id);
-
 -- ============================================================
--- Tournament Rounds
+-- RLS POLICIES: tournament_rounds
 -- ============================================================
 
-CREATE TABLE public.tournament_rounds (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-  tournament_id uuid NOT NULL REFERENCES public.tournaments(id) ON DELETE CASCADE,
-  round_number integer NOT NULL,
-  status text NOT NULL CHECK (status IN ('pending', 'active', 'completed')) DEFAULT 'pending',
-  created_at timestamptz NOT NULL DEFAULT now(),
-  UNIQUE(tournament_id, round_number)
-);
-
-ALTER TABLE public.tournament_rounds ENABLE ROW LEVEL SECURITY;
-
--- Tournament members can see rounds
 CREATE POLICY "Members select tournament rounds"
   ON public.tournament_rounds FOR SELECT
   USING (
@@ -174,7 +177,6 @@ CREATE POLICY "Members select tournament rounds"
     )
   );
 
--- Organizer can see rounds
 CREATE POLICY "Organizer select rounds"
   ON public.tournament_rounds FOR SELECT
   USING (
@@ -185,7 +187,6 @@ CREATE POLICY "Organizer select rounds"
     )
   );
 
--- Only organizer can create/update/delete rounds
 CREATE POLICY "Organizer insert rounds"
   ON public.tournament_rounds FOR INSERT
   WITH CHECK (
@@ -216,31 +217,10 @@ CREATE POLICY "Organizer delete rounds"
     )
   );
 
-CREATE INDEX idx_tournament_rounds_tournament ON public.tournament_rounds (tournament_id);
-
 -- ============================================================
--- Tournament Pairings (matchups per round)
+-- RLS POLICIES: tournament_pairings
 -- ============================================================
 
-CREATE TABLE public.tournament_pairings (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-  round_id uuid NOT NULL REFERENCES public.tournament_rounds(id) ON DELETE CASCADE,
-  player1_id uuid NOT NULL REFERENCES public.tournament_participants(id),
-  player2_id uuid REFERENCES public.tournament_participants(id),
-  game_session_id uuid REFERENCES public.game_sessions(id),
-  player1_vp integer,
-  player2_vp integer,
-  winner_id uuid REFERENCES public.tournament_participants(id),
-  is_draw boolean NOT NULL DEFAULT false,
-  is_bye boolean NOT NULL DEFAULT false,
-  table_number integer,
-  completed_at timestamptz,
-  created_at timestamptz NOT NULL DEFAULT now()
-);
-
-ALTER TABLE public.tournament_pairings ENABLE ROW LEVEL SECURITY;
-
--- Tournament members can see pairings
 CREATE POLICY "Members select pairings"
   ON public.tournament_pairings FOR SELECT
   USING (
@@ -252,7 +232,6 @@ CREATE POLICY "Members select pairings"
     )
   );
 
--- Organizer can see pairings
 CREATE POLICY "Organizer select pairings"
   ON public.tournament_pairings FOR SELECT
   USING (
@@ -264,7 +243,6 @@ CREATE POLICY "Organizer select pairings"
     )
   );
 
--- Organizer creates pairings
 CREATE POLICY "Organizer insert pairings"
   ON public.tournament_pairings FOR INSERT
   WITH CHECK (
@@ -276,7 +254,6 @@ CREATE POLICY "Organizer insert pairings"
     )
   );
 
--- Organizer or paired players can update (submit results)
 CREATE POLICY "Organizer update pairings"
   ON public.tournament_pairings FOR UPDATE
   USING (
@@ -298,7 +275,6 @@ CREATE POLICY "Players update own pairings"
     )
   );
 
--- Organizer can delete pairings
 CREATE POLICY "Organizer delete pairings"
   ON public.tournament_pairings FOR DELETE
   USING (
@@ -310,6 +286,27 @@ CREATE POLICY "Organizer delete pairings"
     )
   );
 
+-- ============================================================
+-- INDEXES
+-- ============================================================
+
+CREATE INDEX idx_tournaments_organizer ON public.tournaments (organizer_id);
+CREATE INDEX idx_tournaments_share_code ON public.tournaments (share_code);
+CREATE INDEX idx_tournaments_status ON public.tournaments (status) WHERE status IN ('registration', 'active');
+
+CREATE INDEX idx_tournament_participants_tournament ON public.tournament_participants (tournament_id);
+CREATE INDEX idx_tournament_participants_user ON public.tournament_participants (user_id);
+
+CREATE INDEX idx_tournament_rounds_tournament ON public.tournament_rounds (tournament_id);
+
 CREATE INDEX idx_tournament_pairings_round ON public.tournament_pairings (round_id);
 CREATE INDEX idx_tournament_pairings_player1 ON public.tournament_pairings (player1_id);
 CREATE INDEX idx_tournament_pairings_player2 ON public.tournament_pairings (player2_id);
+
+-- ============================================================
+-- TRIGGERS
+-- ============================================================
+
+CREATE TRIGGER tournaments_updated_at
+  BEFORE UPDATE ON public.tournaments
+  FOR EACH ROW EXECUTE FUNCTION public.update_updated_at();
