@@ -924,6 +924,465 @@ export type Database = {
         };
         Relationships: [];
       };
+      // Phase 4: Crusade & Campaign
+      campaigns: {
+        Row: {
+          id: string;
+          owner_id: string;
+          name: string;
+          description: string | null;
+          share_code: string;
+          max_players: number;
+          points_limit: number;
+          status: 'recruiting' | 'active' | 'completed' | 'archived';
+          settings: Record<string, unknown>;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          owner_id: string;
+          name: string;
+          description?: string | null;
+          share_code?: string;
+          max_players?: number;
+          points_limit?: number;
+          status?: 'recruiting' | 'active' | 'completed' | 'archived';
+          settings?: Record<string, unknown>;
+        };
+        Update: {
+          id?: string;
+          owner_id?: string;
+          name?: string;
+          description?: string | null;
+          max_players?: number;
+          points_limit?: number;
+          status?: 'recruiting' | 'active' | 'completed' | 'archived';
+          settings?: Record<string, unknown>;
+        };
+        Relationships: [];
+      };
+      campaign_members: {
+        Row: {
+          id: string;
+          campaign_id: string;
+          user_id: string;
+          role: 'owner' | 'player';
+          display_name: string;
+          requisition_points: number;
+          supply_limit: number;
+          joined_at: string;
+        };
+        Insert: {
+          id?: string;
+          campaign_id: string;
+          user_id: string;
+          role?: 'owner' | 'player';
+          display_name: string;
+          requisition_points?: number;
+          supply_limit?: number;
+        };
+        Update: {
+          id?: string;
+          campaign_id?: string;
+          user_id?: string;
+          role?: 'owner' | 'player';
+          display_name?: string;
+          requisition_points?: number;
+          supply_limit?: number;
+        };
+        Relationships: [];
+      };
+      crusade_rosters: {
+        Row: {
+          id: string;
+          campaign_member_id: string;
+          faction_id: string;
+          name: string;
+          notes: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          campaign_member_id: string;
+          faction_id: string;
+          name: string;
+          notes?: string | null;
+        };
+        Update: {
+          id?: string;
+          campaign_member_id?: string;
+          faction_id?: string;
+          name?: string;
+          notes?: string | null;
+        };
+        Relationships: [];
+      };
+      crusade_units: {
+        Row: {
+          id: string;
+          crusade_roster_id: string;
+          unit_id: string;
+          custom_name: string | null;
+          model_count: number;
+          points_cost: number;
+          xp: number;
+          rank: 'battle_ready' | 'blooded' | 'battle_hardened' | 'heroic' | 'legendary';
+          battles_played: number;
+          battles_survived: number;
+          kills: number;
+          honours: BattleHonour[];
+          scars: BattleScar[];
+          is_destroyed: boolean;
+          destroyed_in_battle_id: string | null;
+          notes: string | null;
+          sort_order: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          crusade_roster_id: string;
+          unit_id: string;
+          custom_name?: string | null;
+          model_count?: number;
+          points_cost?: number;
+          xp?: number;
+          rank?: 'battle_ready' | 'blooded' | 'battle_hardened' | 'heroic' | 'legendary';
+          battles_played?: number;
+          battles_survived?: number;
+          kills?: number;
+          honours?: BattleHonour[];
+          scars?: BattleScar[];
+          is_destroyed?: boolean;
+          destroyed_in_battle_id?: string | null;
+          notes?: string | null;
+          sort_order?: number;
+        };
+        Update: {
+          id?: string;
+          crusade_roster_id?: string;
+          unit_id?: string;
+          custom_name?: string | null;
+          model_count?: number;
+          points_cost?: number;
+          xp?: number;
+          rank?: 'battle_ready' | 'blooded' | 'battle_hardened' | 'heroic' | 'legendary';
+          battles_played?: number;
+          battles_survived?: number;
+          kills?: number;
+          honours?: BattleHonour[];
+          scars?: BattleScar[];
+          is_destroyed?: boolean;
+          destroyed_in_battle_id?: string | null;
+          notes?: string | null;
+          sort_order?: number;
+        };
+        Relationships: [];
+      };
+      crusade_battles: {
+        Row: {
+          id: string;
+          campaign_id: string;
+          mission_id: string | null;
+          game_session_id: string | null;
+          player1_member_id: string;
+          player2_member_id: string;
+          player1_vp: number;
+          player2_vp: number;
+          winner_member_id: string | null;
+          is_draw: boolean;
+          round_number: number | null;
+          notes: string | null;
+          played_at: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          campaign_id: string;
+          mission_id?: string | null;
+          game_session_id?: string | null;
+          player1_member_id: string;
+          player2_member_id: string;
+          player1_vp?: number;
+          player2_vp?: number;
+          winner_member_id?: string | null;
+          is_draw?: boolean;
+          round_number?: number | null;
+          notes?: string | null;
+          played_at?: string;
+        };
+        Update: {
+          id?: string;
+          campaign_id?: string;
+          mission_id?: string | null;
+          game_session_id?: string | null;
+          player1_member_id?: string;
+          player2_member_id?: string;
+          player1_vp?: number;
+          player2_vp?: number;
+          winner_member_id?: string | null;
+          is_draw?: boolean;
+          round_number?: number | null;
+          notes?: string | null;
+          played_at?: string;
+        };
+        Relationships: [];
+      };
+      crusade_battle_participants: {
+        Row: {
+          id: string;
+          crusade_battle_id: string;
+          crusade_unit_id: string;
+          xp_earned: number;
+          kills_this_battle: number;
+          survived: boolean;
+        };
+        Insert: {
+          id?: string;
+          crusade_battle_id: string;
+          crusade_unit_id: string;
+          xp_earned?: number;
+          kills_this_battle?: number;
+          survived?: boolean;
+        };
+        Update: {
+          id?: string;
+          crusade_battle_id?: string;
+          crusade_unit_id?: string;
+          xp_earned?: number;
+          kills_this_battle?: number;
+          survived?: boolean;
+        };
+        Relationships: [];
+      };
+      requisition_log: {
+        Row: {
+          id: string;
+          campaign_member_id: string;
+          type: 'increase_supply' | 'add_unit' | 'remove_scar' | 'refit' | 'fresh_recruits' | 'battle_earned' | 'other';
+          rp_change: number;
+          description: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          campaign_member_id: string;
+          type: 'increase_supply' | 'add_unit' | 'remove_scar' | 'refit' | 'fresh_recruits' | 'battle_earned' | 'other';
+          rp_change: number;
+          description: string;
+        };
+        Update: {
+          id?: string;
+          campaign_member_id?: string;
+          type?: 'increase_supply' | 'add_unit' | 'remove_scar' | 'refit' | 'fresh_recruits' | 'battle_earned' | 'other';
+          rp_change?: number;
+          description?: string;
+        };
+        Relationships: [];
+      };
+      // Phase 5: Social, Stats & Tournaments
+      user_profiles: {
+        Row: {
+          id: string;
+          display_name: string;
+          avatar_url: string | null;
+          preferred_factions: string[];
+          bio: string | null;
+          is_public: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id: string;
+          display_name?: string;
+          avatar_url?: string | null;
+          preferred_factions?: string[];
+          bio?: string | null;
+          is_public?: boolean;
+        };
+        Update: {
+          id?: string;
+          display_name?: string;
+          avatar_url?: string | null;
+          preferred_factions?: string[];
+          bio?: string | null;
+          is_public?: boolean;
+        };
+        Relationships: [];
+      };
+      friendships: {
+        Row: {
+          id: string;
+          requester_id: string;
+          addressee_id: string;
+          status: 'pending' | 'accepted' | 'declined' | 'blocked';
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          requester_id: string;
+          addressee_id: string;
+          status?: 'pending' | 'accepted' | 'declined' | 'blocked';
+        };
+        Update: {
+          id?: string;
+          requester_id?: string;
+          addressee_id?: string;
+          status?: 'pending' | 'accepted' | 'declined' | 'blocked';
+        };
+        Relationships: [];
+      };
+      tournaments: {
+        Row: {
+          id: string;
+          organizer_id: string;
+          name: string;
+          description: string | null;
+          format: 'swiss' | 'single_elimination' | 'round_robin';
+          max_players: number;
+          points_limit: number;
+          num_rounds: number;
+          status: 'registration' | 'active' | 'completed' | 'cancelled';
+          share_code: string;
+          settings: Record<string, unknown>;
+          started_at: string | null;
+          completed_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          organizer_id: string;
+          name: string;
+          description?: string | null;
+          format?: 'swiss' | 'single_elimination' | 'round_robin';
+          max_players?: number;
+          points_limit?: number;
+          num_rounds?: number;
+          status?: 'registration' | 'active' | 'completed' | 'cancelled';
+          share_code?: string;
+          settings?: Record<string, unknown>;
+          started_at?: string | null;
+          completed_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          organizer_id?: string;
+          name?: string;
+          description?: string | null;
+          format?: 'swiss' | 'single_elimination' | 'round_robin';
+          max_players?: number;
+          points_limit?: number;
+          num_rounds?: number;
+          status?: 'registration' | 'active' | 'completed' | 'cancelled';
+          settings?: Record<string, unknown>;
+          started_at?: string | null;
+          completed_at?: string | null;
+        };
+        Relationships: [];
+      };
+      tournament_participants: {
+        Row: {
+          id: string;
+          tournament_id: string;
+          user_id: string;
+          army_list_id: string | null;
+          display_name: string;
+          seed: number | null;
+          dropped: boolean;
+          registered_at: string;
+        };
+        Insert: {
+          id?: string;
+          tournament_id: string;
+          user_id: string;
+          army_list_id?: string | null;
+          display_name: string;
+          seed?: number | null;
+          dropped?: boolean;
+        };
+        Update: {
+          id?: string;
+          tournament_id?: string;
+          user_id?: string;
+          army_list_id?: string | null;
+          display_name?: string;
+          seed?: number | null;
+          dropped?: boolean;
+        };
+        Relationships: [];
+      };
+      tournament_rounds: {
+        Row: {
+          id: string;
+          tournament_id: string;
+          round_number: number;
+          status: 'pending' | 'active' | 'completed';
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          tournament_id: string;
+          round_number: number;
+          status?: 'pending' | 'active' | 'completed';
+        };
+        Update: {
+          id?: string;
+          tournament_id?: string;
+          round_number?: number;
+          status?: 'pending' | 'active' | 'completed';
+        };
+        Relationships: [];
+      };
+      tournament_pairings: {
+        Row: {
+          id: string;
+          round_id: string;
+          player1_id: string;
+          player2_id: string | null;
+          game_session_id: string | null;
+          player1_vp: number | null;
+          player2_vp: number | null;
+          winner_id: string | null;
+          is_draw: boolean;
+          is_bye: boolean;
+          table_number: number | null;
+          completed_at: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          round_id: string;
+          player1_id: string;
+          player2_id?: string | null;
+          game_session_id?: string | null;
+          player1_vp?: number | null;
+          player2_vp?: number | null;
+          winner_id?: string | null;
+          is_draw?: boolean;
+          is_bye?: boolean;
+          table_number?: number | null;
+          completed_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          round_id?: string;
+          player1_id?: string;
+          player2_id?: string | null;
+          game_session_id?: string | null;
+          player1_vp?: number | null;
+          player2_vp?: number | null;
+          winner_id?: string | null;
+          is_draw?: boolean;
+          is_bye?: boolean;
+          table_number?: number | null;
+          completed_at?: string | null;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {
@@ -960,11 +1419,46 @@ export type Database = {
         Args: { source_list_id: string };
         Returns: string;
       };
+      get_player_stats: {
+        Args: { target_user_id: string };
+        Returns: PlayerStats;
+      };
+      get_head_to_head: {
+        Args: { user1_id: string; user2_id: string };
+        Returns: HeadToHeadStats;
+      };
+      get_tournament_standings: {
+        Args: { p_tournament_id: string };
+        Returns: TournamentStanding[];
+      };
+      generate_swiss_pairings: {
+        Args: { p_tournament_id: string; p_round_number: number };
+        Returns: string;
+      };
+      award_crusade_xp: {
+        Args: { p_battle_id: string };
+        Returns: void;
+      };
     };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;
   };
 };
+
+// JSONB sub-types for Crusade
+export interface BattleHonour {
+  name: string;
+  description: string;
+  type: 'battle_honour';
+  acquired_battle_id?: string;
+}
+
+export interface BattleScar {
+  name: string;
+  description: string;
+  type: 'battle_scar';
+  acquired_battle_id?: string;
+}
 
 // Convenience types
 export type BattleSize = Database['public']['Tables']['battle_sizes']['Row'];
@@ -998,6 +1492,66 @@ export type PaintRecipe = Database['public']['Tables']['paint_recipes']['Row'];
 export type PaintRecipeStep = Database['public']['Tables']['paint_recipe_steps']['Row'];
 export type UserPaintInventory = Database['public']['Tables']['user_paint_inventory']['Row'];
 
+// Phase 4: Crusade & Campaign
+export type Campaign = Database['public']['Tables']['campaigns']['Row'];
+export type CampaignMember = Database['public']['Tables']['campaign_members']['Row'];
+export type CrusadeRoster = Database['public']['Tables']['crusade_rosters']['Row'];
+export type CrusadeUnit = Database['public']['Tables']['crusade_units']['Row'];
+export type CrusadeBattle = Database['public']['Tables']['crusade_battles']['Row'];
+export type CrusadeBattleParticipant = Database['public']['Tables']['crusade_battle_participants']['Row'];
+export type RequisitionLogEntry = Database['public']['Tables']['requisition_log']['Row'];
+
+// Phase 5: Social, Stats & Tournaments
+export type UserProfile = Database['public']['Tables']['user_profiles']['Row'];
+export type Friendship = Database['public']['Tables']['friendships']['Row'];
+export type Tournament = Database['public']['Tables']['tournaments']['Row'];
+export type TournamentParticipant = Database['public']['Tables']['tournament_participants']['Row'];
+export type TournamentRound = Database['public']['Tables']['tournament_rounds']['Row'];
+export type TournamentPairing = Database['public']['Tables']['tournament_pairings']['Row'];
+
 // RPC response types
 export type CalculateListPointsResult = Database['public']['Functions']['calculate_list_points']['Returns'];
 export type ValidateArmyListResult = Database['public']['Functions']['validate_army_list']['Returns'];
+
+export interface PlayerStats {
+  total_games: number;
+  wins: number;
+  losses: number;
+  draws: number;
+  win_rate: number;
+  avg_vp: number;
+  avg_opponent_vp: number;
+  games_by_faction: {
+    faction_name: string;
+    faction_id: string;
+    games: number;
+    wins: number;
+  }[];
+}
+
+export interface HeadToHeadStats {
+  total_games: number;
+  user1_wins: number;
+  user2_wins: number;
+  draws: number;
+  recent_battles: {
+    played_at: string;
+    player1_vp: number;
+    player2_vp: number;
+    winner: 'user1' | 'user2' | 'draw';
+  }[];
+}
+
+export interface TournamentStanding {
+  participant_id: string;
+  display_name: string;
+  wins: number;
+  losses: number;
+  draws: number;
+  byes: number;
+  vp_for: number;
+  vp_against: number;
+  vp_diff: number;
+  points: number;
+  dropped: boolean;
+}

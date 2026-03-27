@@ -1,0 +1,56 @@
+import { useEffect } from 'react';
+import { useAuth } from '../../../shared/hooks/useAuth';
+import { useSocialStore } from '../stores/socialStore';
+import { StatsDashboard } from '../components/StatsDashboard';
+import '../social.css';
+
+export function StatsPage() {
+  const { user, loading: authLoading } = useAuth();
+  const { stats, loading, error, loadStats } = useSocialStore();
+
+  useEffect(() => {
+    if (user?.id) {
+      loadStats(user.id);
+    }
+  }, [user?.id, loadStats]);
+
+  if (authLoading || loading) {
+    return (
+      <div className="stats-page">
+        <div className="stats-page__skeleton">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div key={i} className="stats-page__skeleton-card" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="stats-page">
+        <div className="stats-page__error">{error}</div>
+      </div>
+    );
+  }
+
+  if (!stats) {
+    return (
+      <div className="stats-page">
+        <div className="stats-page__empty">
+          <h2 className="stats-page__empty-title">No Stats Yet</h2>
+          <p className="stats-page__empty-text">
+            Play some games to start tracking your performance.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="stats-page">
+      <h1 className="stats-page__title">My Stats</h1>
+      <StatsDashboard stats={stats} />
+    </div>
+  );
+}
