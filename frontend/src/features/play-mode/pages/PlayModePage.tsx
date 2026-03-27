@@ -1,20 +1,34 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
-import type { ArmyList, Enhancement, Detachment } from '../types/database';
-import { DatasheetView } from '../components/DatasheetView';
+import { supabase } from '../../../shared/lib/supabase';
+import { useAuth } from '../../../shared/hooks/useAuth';
+import type { ArmyList, Enhancement, Detachment } from '../../../shared/types/database';
+import { DatasheetView } from '../../../shared/components/DatasheetView';
 import { CasualtyTracker } from '../components/CasualtyTracker';
-import { GameTracker } from '../components/GameTracker';
+import { PhaseTracker } from '../components/PhaseTracker';
+import { ScoreBoard } from '../components/ScoreBoard';
+import { ChessTimerDisplay } from '../components/ChessTimerDisplay';
+import { DiceRollerPanel } from '../components/DiceRollerPanel';
+import { EventLog } from '../components/EventLog';
+import { StratagemPanel } from '../components/StratagemPanel';
+import { GameSetup } from '../components/GameSetup';
 import { SecondaryObjectives } from '../components/SecondaryObjectives';
-import { StratagemReference } from '../components/StratagemReference';
 import { BattleReport } from '../components/BattleReport';
-import { getUnitPoints, ROLE_ORDER, ROLE_LABELS, type ArmyListUnitWithDetails } from '../hooks/useListEditor';
+import { useGameSessionStore } from '../stores/gameSessionStore';
+import { useGameRealtime } from '../hooks/useGameRealtime';
+import { getUnitPoints, ROLE_ORDER, ROLE_LABELS, type ArmyListUnitWithDetails } from '../../list-builder/hooks/useListEditor';
 
-type PlayTab = 'army' | 'secondaries' | 'stratagems' | 'history';
+type PlayTab = 'army' | 'score' | 'stratagems' | 'tools' | 'log';
 
 export function PlayModePage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const gameStore = useGameSessionStore();
+
+  // Subscribe to realtime updates for multi-device sync
+  useGameRealtime(gameStore.session?.id ?? null);
+
   const [list, setList] = useState<(ArmyList & { detachments: Detachment }) | null>(null);
   const [listUnits, setListUnits] = useState<ArmyListUnitWithDetails[]>([]);
   const [enhancements, setEnhancements] = useState<Enhancement[]>([]);
@@ -22,7 +36,11 @@ export function PlayModePage() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<PlayTab>('army');
   const [expandedUnits, setExpandedUnits] = useState<Set<string>>(new Set());
+  const [showEndGame, setShowEndGame] = useState(false);
+  const [endGameResult, setEndGameResult] = useState<'win' | 'loss' | 'draw'>('win');
+  const [endGameNotes, setEndGameNotes] = useState('');
 
+  // Load army list data
   useEffect(() => {
     if (!id) return;
     (async () => {
@@ -32,7 +50,7 @@ export function PlayModePage() {
         .eq('id', id)
         .single();
 
-      if (!listData) { navigate('/'); return; }
+      if (!listData) { navigate('/lists'); return; }
       setList(listData as ArmyList & { detachments: Detachment });
 
       const { data: unitData } = await supabase
@@ -55,6 +73,10 @@ export function PlayModePage() {
         .eq('army_list_id', id);
       if (listEnhData) setListEnhancements(listEnhData);
 
+      // Load stratagems and secondary objectives
+      gameStore.loadStratagems(listData.faction_id, listData.detachment_id);
+      gameStore.loadSecondaryObjectives();
+
       setLoading(false);
     })();
   }, [id, navigate]);
@@ -75,6 +97,41 @@ export function PlayModePage() {
       return sum + (enh?.points ?? 0);
     }, 0);
 
+  // If no active game session, show setup
+  const hasActiveSession = gameStore.session && ['active', 'paused'].includes(gameStore.session.status);
+
+  if (!hasActiveSession) {
+    return (
+      <div className="play-mode">
+        <div className="play-mode__header">
+          <div>
+            <h2 className="play-mode__title">{list.name}</h2>
+            <span className="play-mode__subtitle">
+              {list.detachments?.name} &middot; {totalPoints}/{list.points_limit} pts
+            </span>
+          </div>
+          <button className="btn" onClick={() => navigate(`/list/${id}`)}>
+            Back to Editor
+          </button>
+        </div>
+
+        <GameSetup
+          armyListId={id}
+          userId={user?.id ?? ''}
+          onGameCreated={() => {
+            // Session is now in the store, component will re-render
+          }}
+        />
+
+        {/* Show battle history below setup */}
+        <div className="play-mode__history-section">
+          <BattleReport listId={id} listName={list.name} />
+        </div>
+      </div>
+    );
+  }
+
+  // Active game session
   const rosterByRole: Record<string, ArmyListUnitWithDetails[]> = {};
   for (const lu of listUnits) {
     if (!rosterByRole[lu.units.role]) rosterByRole[lu.units.role] = [];
@@ -90,6 +147,11 @@ export function PlayModePage() {
     });
   }
 
+  async function handleEndGame() {
+    await gameStore.completeGame(endGameResult, endGameNotes);
+    setShowEndGame(false);
+  }
+
   return (
     <div className="play-mode">
       {/* Header */}
@@ -97,34 +159,38 @@ export function PlayModePage() {
         <div>
           <h2 className="play-mode__title">{list.name}</h2>
           <span className="play-mode__subtitle">
-            {list.detachments?.name} &middot; {totalPoints}/{list.points_limit} pts
+            {gameStore.session?.opponent_name
+              ? `vs ${gameStore.session.opponent_name}${gameStore.session.opponent_faction ? ` (${gameStore.session.opponent_faction})` : ''}`
+              : list.detachments?.name
+            }
+            {' '}&middot; {totalPoints}/{list.points_limit} pts
           </span>
         </div>
         <div className="play-mode__header-actions">
-          <span className="play-mode__lock-badge">&#128274; Play Mode</span>
-          <button className="btn" onClick={() => navigate(`/list/${id}`)}>
-            Edit List
+          <span className="play-mode__lock-badge">&#9876; In Game</span>
+          <button className="btn btn--sm" onClick={() => gameStore.pauseGame().then(() => navigate(`/list/${id}`))}>
+            Pause
+          </button>
+          <button className="btn btn--danger btn--sm" onClick={() => setShowEndGame(true)}>
+            End Game
           </button>
         </div>
       </div>
 
-      {/* Game Tracker */}
-      <GameTracker listId={id} />
+      {/* Phase Tracker */}
+      <PhaseTracker />
 
-      {/* Play Mode Tabs */}
+      {/* Tabs */}
       <div className="play-mode__tabs">
-        <button className={`play-mode__tab${activeTab === 'army' ? ' play-mode__tab--active' : ''}`} onClick={() => setActiveTab('army')}>
-          Army
-        </button>
-        <button className={`play-mode__tab${activeTab === 'secondaries' ? ' play-mode__tab--active' : ''}`} onClick={() => setActiveTab('secondaries')}>
-          Secondaries
-        </button>
-        <button className={`play-mode__tab${activeTab === 'stratagems' ? ' play-mode__tab--active' : ''}`} onClick={() => setActiveTab('stratagems')}>
-          Stratagems
-        </button>
-        <button className={`play-mode__tab${activeTab === 'history' ? ' play-mode__tab--active' : ''}`} onClick={() => setActiveTab('history')}>
-          History
-        </button>
+        {(['army', 'score', 'stratagems', 'tools', 'log'] as PlayTab[]).map(tab => (
+          <button
+            key={tab}
+            className={`play-mode__tab${activeTab === tab ? ' play-mode__tab--active' : ''}`}
+            onClick={() => setActiveTab(tab)}
+          >
+            {tab === 'army' ? 'Army' : tab === 'score' ? 'Score' : tab === 'stratagems' ? 'Stratagems' : tab === 'tools' ? 'Tools' : 'Log'}
+          </button>
+        ))}
       </div>
 
       {/* Tab Content */}
@@ -160,7 +226,6 @@ export function PlayModePage() {
                         </div>
                       </div>
 
-                      {/* Casualty tracker always visible */}
                       <CasualtyTracker
                         armyListUnitId={lu.id}
                         listId={id}
@@ -169,7 +234,6 @@ export function PlayModePage() {
                         isMultiWound={isMultiWound}
                       />
 
-                      {/* Expandable datasheet */}
                       {isExpanded && (
                         <div className="play-mode__datasheet">
                           <DatasheetView unit={lu.units} weapons={lu.units.weapons ?? []} />
@@ -184,16 +248,71 @@ export function PlayModePage() {
         </div>
       )}
 
-      {activeTab === 'secondaries' && (
-        <SecondaryObjectives listId={id} />
+      {activeTab === 'score' && (
+        <div className="play-mode__score-tab">
+          <ScoreBoard
+            myVP={gameStore.session?.my_vp ?? 0}
+            opponentVP={gameStore.session?.opponent_vp ?? 0}
+            scores={gameStore.scores}
+            currentRound={gameStore.session?.current_round ?? 1}
+          />
+          <SecondaryObjectives listId={id} />
+        </div>
       )}
 
       {activeTab === 'stratagems' && (
-        <StratagemReference />
+        <StratagemPanel />
       )}
 
-      {activeTab === 'history' && (
-        <BattleReport listId={id} listName={list.name} />
+      {activeTab === 'tools' && (
+        <div className="play-mode__tools-tab">
+          <ChessTimerDisplay />
+          <DiceRollerPanel />
+        </div>
+      )}
+
+      {activeTab === 'log' && (
+        <div className="play-mode__log-tab">
+          <EventLog events={gameStore.events} />
+          <div className="play-mode__history-section">
+            <BattleReport listId={id} listName={list.name} />
+          </div>
+        </div>
+      )}
+
+      {/* End Game Modal */}
+      {showEndGame && (
+        <div className="modal-backdrop" onClick={() => setShowEndGame(false)}>
+          <div className="modal-panel modal-panel--sm" onClick={e => e.stopPropagation()}>
+            <h3 className="modal-panel__title">End Game</h3>
+            <div className="game-setup__field">
+              <label className="game-setup__label">Result</label>
+              <select
+                className="form-select"
+                value={endGameResult}
+                onChange={e => setEndGameResult(e.target.value as 'win' | 'loss' | 'draw')}
+              >
+                <option value="win">Victory</option>
+                <option value="loss">Defeat</option>
+                <option value="draw">Draw</option>
+              </select>
+            </div>
+            <div className="game-setup__field">
+              <label className="game-setup__label">Notes</label>
+              <textarea
+                className="form-input"
+                rows={3}
+                placeholder="Key moments, lessons learned..."
+                value={endGameNotes}
+                onChange={e => setEndGameNotes(e.target.value)}
+              />
+            </div>
+            <div className="modal-panel__actions">
+              <button className="btn" onClick={() => setShowEndGame(false)}>Cancel</button>
+              <button className="btn btn--primary" onClick={handleEndGame}>Complete Game</button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
