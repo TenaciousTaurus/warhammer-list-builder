@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import type { ArmyList, Unit, UnitPointsTier, ArmyListUnit, Enhancement, Detachment, Ability, Weapon, ValidateArmyListResult, WargearOption, ModelVariant, ArmyListUnitComposition } from '../types/database';
+import type { ArmyList, Unit, UnitPointsTier, ArmyListUnit, Enhancement, Detachment, Ability, Weapon, ValidateArmyListResult, WargearOption, ModelVariant, ArmyListUnitComposition, LeaderTarget, LeaderAttachment } from '../types/database';
 import type { ParsedUnit } from '../components/ExportModal';
 
 export type UnitWithRelations = Unit & { unit_points_tiers: UnitPointsTier[]; abilities: Ability[]; weapons: Weapon[] };
@@ -56,6 +56,8 @@ export function useListEditor(id: string | undefined) {
   const [collapsedPickerRoles, setCollapsedPickerRoles] = useState<Set<string>>(new Set());
   const [modelVariants, setModelVariants] = useState<ModelVariant[]>([]);
   const [unitCompositions, setUnitCompositions] = useState<Map<string, Map<string, number>>>(new Map()); // armyListUnitId -> (variantId -> count)
+  const [leaderTargets, setLeaderTargets] = useState<LeaderTarget[]>([]);
+  const [leaderAttachments, setLeaderAttachments] = useState<LeaderAttachment[]>([]);
 
   // ============================================================
   // Data fetching
@@ -135,6 +137,23 @@ export function useListEditor(id: string | undefined) {
       .order('sort_order');
 
     if (variantData) setModelVariants(variantData as ModelVariant[]);
+
+    // Fetch leader targets for all available units
+    const unitIds = (available || []).map(u => u.id);
+    const { data: leaderTargetData } = await supabase
+      .from('unit_leader_targets')
+      .select('*')
+      .or(`leader_unit_id.in.(${unitIds.join(',')}),target_unit_id.in.(${unitIds.join(',')})`);
+
+    if (leaderTargetData) setLeaderTargets(leaderTargetData as LeaderTarget[]);
+
+    // Fetch leader attachments for this list
+    const { data: attachmentData } = await supabase
+      .from('army_list_leader_attachments')
+      .select('*')
+      .eq('army_list_id', id);
+
+    if (attachmentData) setLeaderAttachments(attachmentData as LeaderAttachment[]);
 
     if (unitData && unitData.length > 0) {
       const { data: wargearSelData } = await supabase
@@ -544,6 +563,46 @@ export function useListEditor(id: string | undefined) {
     return parts.join(', ');
   }
 
+  async function attachLeader(leaderArmyListUnitId: string, targetArmyListUnitId: string) {
+    if (!id) return;
+    // Remove existing attachment for this leader
+    await supabase.from('army_list_leader_attachments')
+      .delete()
+      .eq('leader_army_list_unit_id', leaderArmyListUnitId);
+    // Create new attachment
+    await supabase.from('army_list_leader_attachments').insert({
+      army_list_id: id,
+      leader_army_list_unit_id: leaderArmyListUnitId,
+      target_army_list_unit_id: targetArmyListUnitId,
+    });
+    fetchList();
+  }
+
+  async function detachLeader(leaderArmyListUnitId: string) {
+    await supabase.from('army_list_leader_attachments')
+      .delete()
+      .eq('leader_army_list_unit_id', leaderArmyListUnitId);
+    fetchList();
+  }
+
+  function getEligibleLeaders(unitId: string): string[] {
+    // Find all leader unit IDs that can lead this unit
+    return leaderTargets
+      .filter(lt => lt.target_unit_id === unitId)
+      .map(lt => lt.leader_unit_id);
+  }
+
+  function getAttachmentForTarget(targetArmyListUnitId: string): LeaderAttachment | undefined {
+    return leaderAttachments.find(la => la.target_army_list_unit_id === targetArmyListUnitId);
+  }
+
+  function isLeaderAttachedElsewhere(leaderArmyListUnitId: string, targetArmyListUnitId: string): boolean {
+    return leaderAttachments.some(
+      la => la.leader_army_list_unit_id === leaderArmyListUnitId
+        && la.target_army_list_unit_id !== targetArmyListUnitId
+    );
+  }
+
   async function reorderUnits(fromIndex: number, toIndex: number) {
     if (fromIndex === toIndex) return;
     const reordered = [...listUnits];
@@ -637,5 +696,14 @@ export function useListEditor(id: string | undefined) {
     getModelVariantsForUnit,
     getCompositionForUnit,
     getCompositionSummary,
+
+    // Leader attachment
+    leaderTargets,
+    leaderAttachments,
+    attachLeader,
+    detachLeader,
+    getEligibleLeaders,
+    getAttachmentForTarget,
+    isLeaderAttachedElsewhere,
   };
 }

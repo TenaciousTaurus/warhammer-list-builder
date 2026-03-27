@@ -467,9 +467,23 @@ function extractMaxPerList(node) {
 /**
  * Extract wargear options from a "Wargear" selectionEntryGroup.
  * Handles direct entries, links, and subgroups.
+ * Returns options with optional pool_group/pool_max from group constraints.
  */
 function extractWargearFromGroup(group, entryIndex) {
   const options = [];
+
+  // Check for pool constraints on the group itself (e.g. "Special weapons" max=2)
+  let groupPoolGroup = null;
+  let groupPoolMax = null;
+  for (const c of ensureArray(group?.constraints?.constraint)) {
+    if (c['@_type'] === 'max' && c['@_field'] === 'selections') {
+      const maxVal = parseInt(c['@_value']);
+      if (maxVal > 0 && maxVal < 20) {
+        groupPoolGroup = group['@_name'] || 'Wargear';
+        groupPoolMax = maxVal;
+      }
+    }
+  }
 
   // Direct entries (simple wargear options)
   const directEntries = ensureArray(group?.selectionEntries?.selectionEntry)
@@ -486,6 +500,8 @@ function extractWargearFromGroup(group, entryIndex) {
         name: e['@_name'],
         is_default: idx === 0,
         points: pts,
+        pool_group: groupPoolGroup,
+        pool_max: groupPoolMax,
       });
     });
   }
@@ -503,6 +519,8 @@ function extractWargearFromGroup(group, entryIndex) {
       name: linkName,
       is_default: options.filter(o => o.group_name === 'Wargear').length === 0,
       points: pts,
+      pool_group: groupPoolGroup,
+      pool_max: groupPoolMax,
     });
   }
 
@@ -510,6 +528,19 @@ function extractWargearFromGroup(group, entryIndex) {
   for (const subgroup of ensureArray(group?.selectionEntryGroups?.selectionEntryGroup)) {
     const sgName = subgroup['@_name'] || 'Wargear';
     let sgIdx = 0;
+
+    // Check for pool constraints on subgroups too
+    let sgPoolGroup = null;
+    let sgPoolMax = null;
+    for (const c of ensureArray(subgroup?.constraints?.constraint)) {
+      if (c['@_type'] === 'max' && c['@_field'] === 'selections') {
+        const maxVal = parseInt(c['@_value']);
+        if (maxVal > 0 && maxVal < 20) {
+          sgPoolGroup = sgName;
+          sgPoolMax = maxVal;
+        }
+      }
+    }
 
     for (const e of ensureArray(subgroup?.selectionEntries?.selectionEntry)) {
       if (e['@_type'] !== 'upgrade') continue;
@@ -522,6 +553,8 @@ function extractWargearFromGroup(group, entryIndex) {
         name: e['@_name'],
         is_default: sgIdx === 0,
         points: pts,
+        pool_group: sgPoolGroup || groupPoolGroup,
+        pool_max: sgPoolMax || groupPoolMax,
       });
       sgIdx++;
     }
@@ -541,6 +574,8 @@ function extractWargearFromGroup(group, entryIndex) {
         name: targetName,
         is_default: options.filter(o => o.group_name === sgName).length === 0,
         points: pts,
+        pool_group: sgPoolGroup || groupPoolGroup,
+        pool_max: sgPoolMax || groupPoolMax,
       });
       sgIdx++;
     }
@@ -592,8 +627,10 @@ function extractWargearOptions(node, entryIndex) {
       if (group['@_name'] === 'Wargear') {
         const modelOpts = extractWargearFromGroup(group, entryIndex);
         // Prefix group names with model name to avoid collisions between models
+        // and tag with model_variant_name for DB linking
         addOptions(modelOpts.map(o => ({
           ...o,
+          model_variant_name: modelName,
           group_name: modelOpts.length > 1 && o.group_name === 'Wargear'
             ? `${modelName} wargear`
             : o.group_name !== 'Wargear'
@@ -611,6 +648,7 @@ function extractWargearOptions(node, entryIndex) {
       const modelOpts = extractWargearFromGroup(target, entryIndex);
       addOptions(modelOpts.map(o => ({
         ...o,
+        model_variant_name: modelName,
         group_name: modelOpts.length > 1 && o.group_name === 'Wargear'
           ? `${modelName} wargear`
           : o.group_name !== 'Wargear'
@@ -734,6 +772,36 @@ function extractModelVariants(node) {
   }
 
   return variants;
+}
+
+/**
+ * Extract leader target unit names from a unit's "Leader" ability.
+ * In 10th Edition, the "Leader" ability description lists which units
+ * a character can be attached to. We parse that text to find matches.
+ */
+function extractLeaderTargets(unit, allUnitNames) {
+  const targets = [];
+
+  // Find the "Leader" ability
+  const leaderAbility = unit.abilities.find(a =>
+    a.name.toLowerCase() === 'leader' && a.type === 'core'
+  );
+  if (!leaderAbility || !leaderAbility.description) return targets;
+
+  const desc = leaderAbility.description;
+
+  // Match unit names from the description
+  // The description typically says "This model can be attached to the following units: Unit A, Unit B"
+  // or lists units with bullet points
+  for (const unitName of allUnitNames) {
+    if (unitName === unit.name) continue; // can't lead yourself
+    // Check if the unit name appears in the ability description (case-insensitive)
+    if (desc.toLowerCase().includes(unitName.toLowerCase())) {
+      targets.push(unitName);
+    }
+  }
+
+  return targets;
 }
 
 /**
@@ -1020,11 +1088,25 @@ function parseCatalog(filePath) {
     findUnits(shared);
   }
 
+  // After all units are collected, extract leader targets
+  const allUnitNames = units.map(u => u.name);
+  const leaderTargets = [];
+  for (const unit of units) {
+    const targets = extractLeaderTargets(unit, allUnitNames);
+    for (const targetName of targets) {
+      leaderTargets.push({
+        leader_unit_name: unit.name,
+        target_unit_name: targetName,
+      });
+    }
+  }
+
   return {
     factionName,
     factionId,
     detachments,
     units,
+    leaderTargets,
   };
 }
 
@@ -1104,17 +1186,7 @@ function generateSQL(faction) {
       lines.push('');
     }
 
-    // Wargear options
-    if (unit.wargear_options && unit.wargear_options.length > 0) {
-      lines.push(`INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points) VALUES`);
-      lines.push(unit.wargear_options.map(wo => {
-        const woId = uuidFromSeed(`wargear:${factionName}:${unit.name}:${wo.group_name}:${wo.name}`);
-        return `  (${esc(woId)}, ${esc(unit.id)}, ${esc(wo.group_name)}, ${esc(wo.name)}, ${wo.is_default}, ${wo.points})`;
-      }).join(',\n') + '\nON CONFLICT (unit_id, group_name, name) DO NOTHING;');
-      lines.push('');
-    }
-
-    // Model variants
+    // Model variants (must come before wargear_options due to FK)
     if (unit.model_variants && unit.model_variants.length > 0) {
       lines.push(`INSERT INTO public.unit_model_variants (id, unit_id, name, min_count, max_count, default_count, is_leader, sort_order, group_name) VALUES`);
       lines.push(unit.model_variants.map(mv => {
@@ -1123,6 +1195,40 @@ function generateSQL(faction) {
       }).join(',\n') + '\nON CONFLICT (unit_id, name) DO UPDATE SET min_count = EXCLUDED.min_count, max_count = EXCLUDED.max_count, default_count = EXCLUDED.default_count, is_leader = EXCLUDED.is_leader, sort_order = EXCLUDED.sort_order, group_name = EXCLUDED.group_name;');
       lines.push('');
     }
+
+    // Wargear options (with model_variant_id, pool_group, pool_max)
+    if (unit.wargear_options && unit.wargear_options.length > 0) {
+      lines.push(`INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points, model_variant_id, pool_group, pool_max) VALUES`);
+      lines.push(unit.wargear_options.map(wo => {
+        const woId = uuidFromSeed(`wargear:${factionName}:${unit.name}:${wo.group_name}:${wo.name}`);
+        // Resolve model_variant_id if we have a model_variant_name
+        let mvIdSql = 'NULL';
+        if (wo.model_variant_name && unit.model_variants) {
+          const mv = unit.model_variants.find(v => v.name === wo.model_variant_name);
+          if (mv) {
+            mvIdSql = esc(uuidFromSeed(`model_variant:${factionName}:${unit.name}:${mv.name}`));
+          }
+        }
+        const poolGroupSql = wo.pool_group ? esc(wo.pool_group) : 'NULL';
+        const poolMaxSql = wo.pool_max != null ? wo.pool_max : 'NULL';
+        return `  (${esc(woId)}, ${esc(unit.id)}, ${esc(wo.group_name)}, ${esc(wo.name)}, ${wo.is_default}, ${wo.points}, ${mvIdSql}, ${poolGroupSql}, ${poolMaxSql})`;
+      }).join(',\n') + '\nON CONFLICT (unit_id, group_name, name) DO UPDATE SET model_variant_id = EXCLUDED.model_variant_id, pool_group = EXCLUDED.pool_group, pool_max = EXCLUDED.pool_max;');
+      lines.push('');
+    }
+  }
+
+  // Leader targets
+  if (faction.leaderTargets && faction.leaderTargets.length > 0) {
+    lines.push(`-- Leader targets`);
+    for (const lt of faction.leaderTargets) {
+      const leaderId = uuidFromSeed(`unit:${factionName}:${lt.leader_unit_name}`);
+      const targetId = uuidFromSeed(`unit:${factionName}:${lt.target_unit_name}`);
+      const ltId = uuidFromSeed(`leader_target:${factionName}:${lt.leader_unit_name}:${lt.target_unit_name}`);
+      lines.push(`INSERT INTO public.unit_leader_targets (id, leader_unit_id, target_unit_id) VALUES`);
+      lines.push(`  (${esc(ltId)}, ${esc(leaderId)}, ${esc(targetId)})`);
+      lines.push(`ON CONFLICT (leader_unit_id, target_unit_id) DO NOTHING;`);
+    }
+    lines.push('');
   }
 
   return lines.join('\n');
@@ -1182,7 +1288,9 @@ for (const catalogDef of CATALOGS) {
   // Parse all files for this faction and merge results
   let mergedUnits = [];
   let mergedDetachments = [];
+  let mergedLeaderTargets = [];
   const seenUnitNames = new Set();
+  const seenLeaderTargets = new Set();
 
   for (const catFile of catalogDef.files) {
     const filePath = path.join(DATA_DIR, catFile);
@@ -1210,6 +1318,15 @@ for (const catalogDef of CATALOGS) {
         mergedDetachments.push(det);
       }
     }
+
+    // Merge leader targets
+    for (const lt of (faction.leaderTargets || [])) {
+      const key = `${lt.leader_unit_name}:${lt.target_unit_name}`;
+      if (!seenLeaderTargets.has(key)) {
+        seenLeaderTargets.add(key);
+        mergedLeaderTargets.push(lt);
+      }
+    }
   }
 
   if (mergedUnits.length === 0) {
@@ -1230,11 +1347,27 @@ for (const catalogDef of CATALOGS) {
     });
   }
 
+  // Re-extract leader targets using merged unit names for better matching
+  const allMergedNames = mergedUnits.map(u => u.name);
+  const reExtractedLeaderTargets = [];
+  const reSeenLT = new Set();
+  for (const unit of mergedUnits) {
+    const targets = extractLeaderTargets(unit, allMergedNames);
+    for (const targetName of targets) {
+      const key = `${unit.name}:${targetName}`;
+      if (!reSeenLT.has(key)) {
+        reSeenLT.add(key);
+        reExtractedLeaderTargets.push({ leader_unit_name: unit.name, target_unit_name: targetName });
+      }
+    }
+  }
+
   const sql = generateSQL({
     factionName,
     factionId,
     detachments: mergedDetachments,
     units: mergedUnits,
+    leaderTargets: reExtractedLeaderTargets,
   });
   allSQL.push(sql);
 }
@@ -1250,6 +1383,12 @@ const header = `-- ============================================================
 
 -- Clean existing seed data (preserve schema)
 DO $$ BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'army_list_leader_attachments') THEN
+    TRUNCATE public.army_list_leader_attachments CASCADE;
+  END IF;
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'unit_leader_targets') THEN
+    TRUNCATE public.unit_leader_targets CASCADE;
+  END IF;
   IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'army_list_unit_wargear') THEN
     TRUNCATE public.army_list_unit_wargear CASCADE;
   END IF;
@@ -1308,6 +1447,48 @@ DO $$ BEGIN
   END IF;
   IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'army_list_unit_composition' AND policyname = 'army_list_unit_composition_all') THEN
     CREATE POLICY "army_list_unit_composition_all" ON public.army_list_unit_composition USING (true) WITH CHECK (true);
+  END IF;
+END $$;
+
+-- Ensure leader targets table exists
+CREATE TABLE IF NOT EXISTS public.unit_leader_targets (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  leader_unit_id uuid NOT NULL REFERENCES public.units(id) ON DELETE CASCADE,
+  target_unit_id uuid NOT NULL REFERENCES public.units(id) ON DELETE CASCADE,
+  UNIQUE(leader_unit_id, target_unit_id)
+);
+CREATE INDEX IF NOT EXISTS idx_unit_leader_targets_leader ON public.unit_leader_targets(leader_unit_id);
+CREATE INDEX IF NOT EXISTS idx_unit_leader_targets_target ON public.unit_leader_targets(target_unit_id);
+
+-- Ensure leader attachments table exists
+CREATE TABLE IF NOT EXISTS public.army_list_leader_attachments (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  army_list_id uuid NOT NULL REFERENCES public.army_lists(id) ON DELETE CASCADE,
+  leader_army_list_unit_id uuid NOT NULL REFERENCES public.army_list_units(id) ON DELETE CASCADE,
+  target_army_list_unit_id uuid NOT NULL REFERENCES public.army_list_units(id) ON DELETE CASCADE,
+  UNIQUE(leader_army_list_unit_id)
+);
+CREATE INDEX IF NOT EXISTS idx_army_list_leader_attachments_list ON public.army_list_leader_attachments(army_list_id);
+CREATE INDEX IF NOT EXISTS idx_army_list_leader_attachments_target ON public.army_list_leader_attachments(target_army_list_unit_id);
+
+-- Extend wargear_options with model_variant_id, pool_group, pool_max
+ALTER TABLE public.wargear_options ADD COLUMN IF NOT EXISTS model_variant_id uuid REFERENCES public.unit_model_variants(id) ON DELETE SET NULL;
+ALTER TABLE public.wargear_options ADD COLUMN IF NOT EXISTS pool_group text;
+ALTER TABLE public.wargear_options ADD COLUMN IF NOT EXISTS pool_max integer;
+
+-- Extend army_list_unit_wargear with model_variant_id, quantity
+ALTER TABLE public.army_list_unit_wargear ADD COLUMN IF NOT EXISTS model_variant_id uuid REFERENCES public.unit_model_variants(id) ON DELETE SET NULL;
+ALTER TABLE public.army_list_unit_wargear ADD COLUMN IF NOT EXISTS quantity integer NOT NULL DEFAULT 1;
+
+-- RLS for new tables
+ALTER TABLE public.unit_leader_targets ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.army_list_leader_attachments ENABLE ROW LEVEL SECURITY;
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'unit_leader_targets' AND policyname = 'Public read leader targets') THEN
+    CREATE POLICY "Public read leader targets" ON public.unit_leader_targets FOR SELECT USING (true);
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'army_list_leader_attachments' AND policyname = 'Allow all leader attachments') THEN
+    CREATE POLICY "Allow all leader attachments" ON public.army_list_leader_attachments FOR ALL USING (true) WITH CHECK (true);
   END IF;
 END $$;
 

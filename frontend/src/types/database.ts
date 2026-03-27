@@ -274,6 +274,9 @@ export type Database = {
           name: string;
           is_default: boolean;
           points: number;
+          model_variant_id: string | null;
+          pool_group: string | null;
+          pool_max: number | null;
         };
         Insert: {
           id?: string;
@@ -282,6 +285,9 @@ export type Database = {
           name: string;
           is_default?: boolean;
           points?: number;
+          model_variant_id?: string | null;
+          pool_group?: string | null;
+          pool_max?: number | null;
         };
         Update: {
           id?: string;
@@ -290,6 +296,9 @@ export type Database = {
           name?: string;
           is_default?: boolean;
           points?: number;
+          model_variant_id?: string | null;
+          pool_group?: string | null;
+          pool_max?: number | null;
         };
       };
       army_list_unit_wargear: {
@@ -297,16 +306,22 @@ export type Database = {
           id: string;
           army_list_unit_id: string;
           wargear_option_id: string;
+          model_variant_id: string | null;
+          quantity: number;
         };
         Insert: {
           id?: string;
           army_list_unit_id: string;
           wargear_option_id: string;
+          model_variant_id?: string | null;
+          quantity?: number;
         };
         Update: {
           id?: string;
           army_list_unit_id?: string;
           wargear_option_id?: string;
+          model_variant_id?: string | null;
+          quantity?: number;
         };
       };
     };
@@ -377,6 +392,21 @@ export interface ArmyListUnitComposition {
   army_list_unit_id: string;
   model_variant_id: string;
   count: number;
+}
+
+// Leader targets (which character can lead which unit)
+export interface LeaderTarget {
+  id: string;
+  leader_unit_id: string;
+  target_unit_id: string;
+}
+
+// Leader attachments in a list (which character is attached to which unit)
+export interface LeaderAttachment {
+  id: string;
+  army_list_id: string;
+  leader_army_list_unit_id: string;
+  target_army_list_unit_id: string;
 }
 
 // RPC response types
