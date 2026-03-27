@@ -83,6 +83,15 @@
   --z-modal-backdrop: 90;
   --z-modal: 100;
 
+  /* Crusade rank colors */
+  --color-rank-battle-ready: var(--color-text-secondary);
+  --color-rank-blooded: var(--color-green);
+  --color-rank-battle-hardened: var(--color-blue);
+  --color-rank-heroic: var(--color-purple-bright);
+  --color-rank-legendary: var(--color-gold);
+  --color-honour: var(--color-blue-bright);
+  --color-scar: var(--color-red-bright);
+
   /* Fonts */
   --font-display: 'Orbitron', sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
