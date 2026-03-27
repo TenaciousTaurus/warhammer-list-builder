@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { supabase } from '../lib/supabase';
-import type { Faction, Detachment } from '../types/database';
+import { useAuth } from '../hooks/useAuth';
+import type { Faction, Detachment, BattleSize } from '../types/database';
 
 interface CreateListModalProps {
   onClose: () => void;
@@ -8,12 +9,14 @@ interface CreateListModalProps {
 }
 
 export function CreateListModal({ onClose, onCreated }: CreateListModalProps) {
+  const { user } = useAuth();
   const [factions, setFactions] = useState<Faction[]>([]);
   const [detachments, setDetachments] = useState<Detachment[]>([]);
+  const [battleSizes, setBattleSizes] = useState<BattleSize[]>([]);
   const [name, setName] = useState('');
   const [factionId, setFactionId] = useState('');
   const [detachmentId, setDetachmentId] = useState('');
-  const [pointsLimit, setPointsLimit] = useState(2000);
+  const [battleSizeId, setBattleSizeId] = useState('strike_force');
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -26,6 +29,14 @@ export function CreateListModal({ onClose, onCreated }: CreateListModalProps) {
           setFactions(data);
           setFactionId(data[0].id);
         }
+      });
+
+    supabase
+      .from('battle_sizes')
+      .select('*')
+      .order('sort_order')
+      .then(({ data }) => {
+        if (data) setBattleSizes(data);
       });
   }, []);
 
@@ -47,6 +58,8 @@ export function CreateListModal({ onClose, onCreated }: CreateListModalProps) {
       });
   }, [factionId]);
 
+  const selectedBattleSize = battleSizes.find(bs => bs.id === battleSizeId);
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!name || !factionId || !detachmentId) return;
@@ -56,8 +69,9 @@ export function CreateListModal({ onClose, onCreated }: CreateListModalProps) {
       name,
       faction_id: factionId,
       detachment_id: detachmentId,
-      points_limit: pointsLimit,
-      user_id: '00000000-0000-0000-0000-000000000000',
+      points_limit: selectedBattleSize?.max_points ?? 2000,
+      battle_size: battleSizeId,
+      user_id: user!.id,
     });
 
     if (!error) {
@@ -66,14 +80,30 @@ export function CreateListModal({ onClose, onCreated }: CreateListModalProps) {
     setSaving(false);
   }
 
+  const dialogRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') onClose();
+    }
+    document.addEventListener('keydown', handleKeyDown);
+    dialogRef.current?.focus();
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div
+        ref={dialogRef}
         className="modal-panel modal-panel--sm"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="create-list-title"
+        tabIndex={-1}
         onClick={(e) => e.stopPropagation()}
       >
-        <h2 className="modal-panel__title">New Army List</h2>
-        <form onSubmit={handleSubmit} style={{ display: 'grid', gap: 'var(--space-md)' }}>
+        <h2 id="create-list-title" className="modal-panel__title">New Army List</h2>
+        <form onSubmit={handleSubmit} className="create-list-form">
           <div className="form-group">
             <label>List Name</label>
             <input
@@ -113,17 +143,20 @@ export function CreateListModal({ onClose, onCreated }: CreateListModalProps) {
           </div>
 
           <div className="form-group">
-            <label>Points Limit</label>
-            <select
-              className="form-select"
-              value={pointsLimit}
-              onChange={(e) => setPointsLimit(Number(e.target.value))}
-            >
-              <option value={500}>500 (Combat Patrol)</option>
-              <option value={1000}>1000 (Incursion)</option>
-              <option value={2000}>2000 (Strike Force)</option>
-              <option value={3000}>3000 (Onslaught)</option>
-            </select>
+            <label>Battle Size</label>
+            <div className="battle-size-picker">
+              {battleSizes.map((bs) => (
+                <button
+                  key={bs.id}
+                  type="button"
+                  className={`battle-size-picker__option${bs.id === battleSizeId ? ' battle-size-picker__option--active' : ''}`}
+                  onClick={() => setBattleSizeId(bs.id)}
+                >
+                  <span className="battle-size-picker__name">{bs.name}</span>
+                  <span className="battle-size-picker__points">{bs.max_points} pts</span>
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="modal-panel__actions">

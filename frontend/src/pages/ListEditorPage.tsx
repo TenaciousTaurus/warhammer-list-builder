@@ -78,7 +78,18 @@ export function ListEditorPage() {
   }, [handleKeyDown]);
 
   if (editor.loading || !editor.list) {
-    return <div className="empty-state"><p>Loading...</p></div>;
+    return (
+      <div className="list-editor" style={{ gap: 'var(--space-md)', padding: 'var(--space-md)' }}>
+        <div className="skeleton" style={{ width: '260px', height: '400px' }} />
+        <div className="skeleton-list" style={{ flex: 1 }}>
+          <div className="skeleton skeleton--header" />
+          <div className="skeleton skeleton--bar" />
+          {[1, 2, 3].map(i => (
+            <div key={i} className="skeleton" style={{ height: '48px', width: '100%' }} />
+          ))}
+        </div>
+      </div>
+    );
   }
 
   const selectedLu = editor.selectedLu;
@@ -107,6 +118,8 @@ export function ListEditorPage() {
           overLimit={editor.overLimit}
           unitLimitWarnings={editor.unitLimitWarnings}
           enhancementWarnings={editor.enhancementWarnings}
+          battleSizeWarnings={editor.battleSizeWarnings}
+          transportWarnings={editor.transportWarnings}
           pointsMismatch={editor.pointsMismatch}
           serverValidation={editor.serverValidation}
           serverValidationError={editor.serverValidationError}
@@ -115,6 +128,7 @@ export function ListEditorPage() {
           onPlay={() => navigate(`/play/${id}`)}
           onUpdateName={editor.updateListName}
           onUpdatePointsLimit={editor.updatePointsLimit}
+          onUpdateBattleSize={editor.updateBattleSize}
         />
 
         <div className="list-editor__roster-list">
@@ -225,6 +239,8 @@ export function ListEditorPage() {
           listEnhancements={editor.listEnhancements}
           totalPoints={editor.totalPoints}
           getUnitPoints={getUnitPoints}
+          wargearOptions={editor.wargearOptions}
+          unitWargearSelections={editor.unitWargearSelections}
           onClose={() => editor.setShowExport(false)}
           onImport={editor.handleImport}
         />

@@ -1,6 +1,7 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
+import { useAuth } from '../hooks/useAuth';
 import type { ArmyList, Faction } from '../types/database';
 import { CreateListModal } from '../components/CreateListModal';
 import { ConfirmDialog } from '../components/ConfirmDialog';
@@ -25,6 +26,7 @@ function relativeTime(dateStr: string): string {
 type SortOption = 'updated' | 'name' | 'created';
 
 export function ListsPage() {
+  const { user } = useAuth();
   const [lists, setLists] = useState<(ArmyList & { factions: Faction })[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreate, setShowCreate] = useState(false);
@@ -33,19 +35,21 @@ export function ListsPage() {
   const [groupByFaction, setGroupByFaction] = useState(true);
   const [confirmDelete, setConfirmDelete] = useState<{ id: string; name: string } | null>(null);
 
-  async function fetchLists() {
+  const fetchLists = useCallback(async () => {
+    if (!user) return;
     setLoading(true);
     const { data } = await supabase
       .from('army_lists')
       .select('*, factions(*)')
+      .eq('user_id', user.id)
       .order('updated_at', { ascending: false });
     if (data) setLists(data as (ArmyList & { factions: Faction })[]);
     setLoading(false);
-  }
+  }, [user]);
 
   useEffect(() => {
     fetchLists();
-  }, []);
+  }, [fetchLists]);
 
   async function handleDelete(id: string) {
     await supabase.from('army_lists').delete().eq('id', id);
@@ -84,7 +88,13 @@ export function ListsPage() {
   }, [filteredAndSorted, groupByFaction]);
 
   if (loading) {
-    return <div className="empty-state"><p>Loading...</p></div>;
+    return (
+      <div className="lists-page__grid" style={{ padding: 'var(--space-lg)' }}>
+        {[1, 2, 3].map(i => (
+          <div key={i} className="skeleton skeleton--card" />
+        ))}
+      </div>
+    );
   }
 
   function renderListCard(list: ArmyList & { factions: Faction }) {

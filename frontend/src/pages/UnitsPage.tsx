@@ -195,11 +195,20 @@ export function UnitsPage() {
       </div>
 
       {loading ? (
-        <p style={{ color: 'var(--color-text-muted)' }}>Loading units...</p>
+        <div className="skeleton-list" style={{ padding: 'var(--space-md)' }}>
+          {[1, 2, 3, 4].map(i => (
+            <div key={i} className="skeleton" style={{ height: '64px', width: '100%' }} />
+          ))}
+        </div>
       ) : filteredAndSorted.length === 0 ? (
         <div className="empty-state card">
+          <div className="empty-state__icon">&#128269;</div>
           <div className="empty-state__title">No units found</div>
-          <p>{filter || keywordFilter ? 'No units match your filters.' : 'No units available for this faction yet.'}</p>
+          <p className="empty-state__description">
+            {filter || keywordFilter
+              ? 'No units match your current filters. Try adjusting your search or clearing filters.'
+              : 'No units available for this faction yet.'}
+          </p>
         </div>
       ) : (
         <div className="units-page__list">

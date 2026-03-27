@@ -62,7 +62,15 @@ export function PlayModePage() {
     })();
   }, [id, navigate]);
 
-  if (loading || !list || !id) return <div className="empty-state"><p>Loading...</p></div>;
+  if (loading || !list || !id) return (
+    <div className="skeleton-list" style={{ padding: 'var(--space-lg)', maxWidth: '900px', margin: '0 auto' }}>
+      <div className="skeleton skeleton--header" />
+      <div className="skeleton skeleton--bar" />
+      {[1, 2, 3, 4].map(i => (
+        <div key={i} className="skeleton" style={{ height: '56px', width: '100%' }} />
+      ))}
+    </div>
+  );
 
   const totalPoints = listUnits.reduce((sum, lu) => sum + getUnitPoints(lu.units, lu.model_count), 0)
     + listEnhancements.reduce((sum, le) => {

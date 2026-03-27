@@ -62,13 +62,23 @@ export function SharedListPage() {
     })();
   }, [code]);
 
-  if (loading) return <div className="empty-state"><p>Loading shared list...</p></div>;
+  if (loading) return (
+    <div className="shared-list">
+      <div className="skeleton-list">
+        <div className="skeleton skeleton--header" />
+        <div className="skeleton skeleton--bar" />
+        {[1, 2, 3].map(i => (
+          <div key={i} className="skeleton" style={{ height: '48px', width: '100%' }} />
+        ))}
+      </div>
+    </div>
+  );
   if (notFound || !list) {
     return (
       <div className="empty-state card">
         <div className="empty-state__title">List Not Found</div>
         <p>This shared list link is invalid or has been removed.</p>
-        <Link to="/" className="btn btn--primary" style={{ marginTop: 'var(--space-md)' }}>Go Home</Link>
+        <Link to="/" className="btn btn--primary shared-list__home-link">Go Home</Link>
       </div>
     );
   }
@@ -96,7 +106,7 @@ export function SharedListPage() {
   }
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+    <div className="shared-list">
       <div className="shared-list__header">
         <div>
           <h2 className="list-editor__army-name">{list.name}</h2>
@@ -112,7 +122,7 @@ export function SharedListPage() {
 
       <PointsBar current={totalPoints} limit={list.points_limit} />
 
-      <div style={{ marginTop: 'var(--space-lg)' }}>
+      <div className="shared-list__roster">
         {ROLE_ORDER.map(role => {
           const roleUnits = rosterByRole[role];
           if (!roleUnits || roleUnits.length === 0) return null;
@@ -134,7 +144,7 @@ export function SharedListPage() {
                     key={lu.id}
                     className={`roster-item${isExpanded ? ' roster-item--expanded' : ''}`}
                     onClick={() => toggleExpand(lu.id)}
-                    style={{ cursor: 'pointer' }}
+                    role="button"
                   >
                     <div className="roster-item__row1">
                       <span className="roster-item__name">{displayName}</span>
@@ -165,7 +175,7 @@ export function SharedListPage() {
         })}
       </div>
 
-      <div style={{ textAlign: 'center', marginTop: 'var(--space-xl)', paddingBottom: 'var(--space-xl)' }}>
+      <div className="shared-list__footer">
         <Link to="/" className="btn">Build Your Own List</Link>
       </div>
     </div>

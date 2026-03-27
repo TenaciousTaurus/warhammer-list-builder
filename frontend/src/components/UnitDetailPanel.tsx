@@ -137,7 +137,6 @@ export function UnitDetailPanel({
               className="form-select"
               value={modelCount}
               onChange={(e) => onModelCountChange(Number(e.target.value))}
-              style={{ width: '100%' }}
             >
               {sortedTiers.map((tier) => (
                 <option key={tier.id} value={tier.model_count}>
@@ -215,7 +214,6 @@ export function UnitDetailPanel({
               value={enhancement.assigned?.id ?? ''}
               onChange={(e) => enhancement.onAssign(e.target.value)}
               disabled={enhancement.limitReached}
-              style={{ width: '100%' }}
             >
               <option value="">{enhancement.limitReached ? 'Max 3 enhancements reached' : 'None'}</option>
               {enhancement.available.map(e => (
@@ -258,6 +256,35 @@ export function UnitDetailPanel({
         </div>
       )}
 
+      {/* Transport Info */}
+      {unit.transport_capacity != null && (
+        <div className="detail-panel__section">
+          <div className="detail-panel__section-label">Transport Capacity</div>
+          <div className="transport-info">
+            <div className="transport-info__capacity">
+              <span className="transport-info__number">{unit.transport_capacity}</span>
+              <span className="transport-info__label">models</span>
+            </div>
+            {unit.transport_keywords_allowed && unit.transport_keywords_allowed.length > 0 && (
+              <div className="transport-info__rule">
+                <span className="transport-info__rule-label">Allowed:</span>
+                {unit.transport_keywords_allowed.map((kw, i) => (
+                  <span key={i} className="transport-info__keyword transport-info__keyword--allowed">{kw}</span>
+                ))}
+              </div>
+            )}
+            {unit.transport_keywords_excluded && unit.transport_keywords_excluded.length > 0 && (
+              <div className="transport-info__rule">
+                <span className="transport-info__rule-label">Excluded:</span>
+                {unit.transport_keywords_excluded.map((kw, i) => (
+                  <span key={i} className="transport-info__keyword transport-info__keyword--excluded">{kw}</span>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Keywords */}
       {unit.keywords.length > 0 && (
         <div className="detail-panel__section">
@@ -271,11 +298,10 @@ export function UnitDetailPanel({
       )}
 
       {/* Remove Button */}
-      <div className="detail-panel__section" style={{ borderTop: 'none', paddingTop: 'var(--space-sm)' }}>
+      <div className="detail-panel__section detail-panel__section--footer">
         <button
           className="btn btn--danger"
           onClick={onRemove}
-          style={{ width: '100%' }}
         >
           Remove Unit
         </button>

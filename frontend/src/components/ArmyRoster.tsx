@@ -24,7 +24,7 @@ export function ArmyRoster({
 
   if (listUnits.length === 0) {
     return (
-      <div className="empty-state card" style={{ margin: 'var(--space-md)' }}>
+      <div className="empty-state card roster__empty-state">
         <div className="empty-state__icon">&#9876;</div>
         <div className="empty-state__title">No Units Added</div>
         <p>Select units from the left panel to build your army.</p>
