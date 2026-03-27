@@ -274,6 +274,9 @@ export type Database = {
           name: string;
           is_default: boolean;
           points: number;
+          model_variant_id: string | null;
+          pool_group: string | null;
+          pool_max: number | null;
         };
         Insert: {
           id?: string;
@@ -282,6 +285,9 @@ export type Database = {
           name: string;
           is_default?: boolean;
           points?: number;
+          model_variant_id?: string | null;
+          pool_group?: string | null;
+          pool_max?: number | null;
         };
         Update: {
           id?: string;
@@ -290,6 +296,9 @@ export type Database = {
           name?: string;
           is_default?: boolean;
           points?: number;
+          model_variant_id?: string | null;
+          pool_group?: string | null;
+          pool_max?: number | null;
         };
       };
       army_list_unit_wargear: {
@@ -297,16 +306,22 @@ export type Database = {
           id: string;
           army_list_unit_id: string;
           wargear_option_id: string;
+          model_variant_id: string | null;
+          quantity: number;
         };
         Insert: {
           id?: string;
           army_list_unit_id: string;
           wargear_option_id: string;
+          model_variant_id?: string | null;
+          quantity?: number;
         };
         Update: {
           id?: string;
           army_list_unit_id?: string;
           wargear_option_id?: string;
+          model_variant_id?: string | null;
+          quantity?: number;
         };
       };
     };
@@ -358,6 +373,41 @@ export type ArmyListUnit = Database['public']['Tables']['army_list_units']['Row'
 export type ArmyListEnhancement = Database['public']['Tables']['army_list_enhancements']['Row'];
 export type WargearOption = Database['public']['Tables']['wargear_options']['Row'];
 export type ArmyListUnitWargear = Database['public']['Tables']['army_list_unit_wargear']['Row'];
+
+// Model variants (not in Database type since table was added later)
+export interface ModelVariant {
+  id: string;
+  unit_id: string;
+  name: string;
+  min_count: number;
+  max_count: number;
+  default_count: number;
+  is_leader: boolean;
+  sort_order: number;
+  group_name: string | null;
+}
+
+export interface ArmyListUnitComposition {
+  id: string;
+  army_list_unit_id: string;
+  model_variant_id: string;
+  count: number;
+}
+
+// Leader targets (which character can lead which unit)
+export interface LeaderTarget {
+  id: string;
+  leader_unit_id: string;
+  target_unit_id: string;
+}
+
+// Leader attachments in a list (which character is attached to which unit)
+export interface LeaderAttachment {
+  id: string;
+  army_list_id: string;
+  leader_army_list_unit_id: string;
+  target_army_list_unit_id: string;
+}
 
 // RPC response types
 export type CalculateListPointsResult = Database['public']['Functions']['calculate_list_points']['Returns'];

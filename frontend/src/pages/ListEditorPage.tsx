@@ -170,6 +170,40 @@ export function ListEditorPage() {
                 selected: editor.unitWargearSelections.get(selectedLu.id) ?? new Map(),
                 onSelect: (groupName: string, optionId: string) => editor.selectWargear(selectedLu.id, groupName, optionId),
               } : undefined}
+              composition={(() => {
+                const variants = editor.getModelVariantsForUnit(selectedLu.unit_id);
+                if (variants.length === 0) return undefined;
+                return {
+                  variants,
+                  counts: editor.getCompositionForUnit(selectedLu.id),
+                  onUpdateCount: (variantId: string, count: number) => editor.updateComposition(selectedLu.id, variantId, count),
+                };
+              })()}
+              leaderAttachment={(() => {
+                // Find eligible leaders in the list for this unit
+                const eligibleLeaderUnitIds = editor.getEligibleLeaders(selectedLu.unit_id);
+                if (eligibleLeaderUnitIds.length === 0) return undefined;
+
+                const eligibleLeaders = editor.listUnits
+                  .filter(lu => eligibleLeaderUnitIds.includes(lu.unit_id))
+                  .map(lu => ({
+                    armyListUnitId: lu.id,
+                    unit: lu.units,
+                    points: getUnitPoints(lu.units, lu.model_count),
+                    isAttachedHere: editor.leaderAttachments.some(
+                      la => la.leader_army_list_unit_id === lu.id && la.target_army_list_unit_id === selectedLu.id
+                    ),
+                    isAttachedElsewhere: editor.isLeaderAttachedElsewhere(lu.id, selectedLu.id),
+                  }));
+
+                if (eligibleLeaders.length === 0) return undefined;
+
+                return {
+                  eligibleLeaders,
+                  onAttach: (leaderALUId: string) => editor.attachLeader(leaderALUId, selectedLu.id),
+                  onDetach: (leaderALUId: string) => editor.detachLeader(leaderALUId),
+                };
+              })()}
             />
           );
         })() : (

@@ -1,5 +1,19 @@
-import type { Unit, UnitPointsTier, Ability, Enhancement, Weapon, WargearOption } from '../types/database';
+import type { Unit, UnitPointsTier, Ability, Enhancement, Weapon, WargearOption, ModelVariant } from '../types/database';
 import { StatLine } from './StatLine';
+import { WargearToggle } from './unit-detail/WargearToggle';
+import { LeaderWargearSection } from './unit-detail/LeaderWargearSection';
+import { ModelCompositionSection } from './unit-detail/ModelCompositionSection';
+import { VariantWargearSection } from './unit-detail/VariantWargearSection';
+import { LeaderAttachmentSection } from './unit-detail/LeaderAttachmentSection';
+import { LoadoutDatasheet } from './unit-detail/LoadoutDatasheet';
+
+interface EligibleLeader {
+  armyListUnitId: string;
+  unit: Unit & { unit_points_tiers: UnitPointsTier[] };
+  points: number;
+  isAttachedHere: boolean;
+  isAttachedElsewhere: boolean;
+}
 
 interface UnitDetailPanelProps {
   unit: Unit & { abilities: Ability[] };
@@ -21,12 +35,22 @@ interface UnitDetailPanelProps {
     selected: Map<string, string>;
     onSelect: (groupName: string, optionId: string) => void;
   };
+  composition?: {
+    variants: ModelVariant[];
+    counts: Map<string, number>;
+    onUpdateCount: (variantId: string, count: number) => void;
+  };
+  leaderAttachment?: {
+    eligibleLeaders: EligibleLeader[];
+    onAttach: (leaderArmyListUnitId: string) => void;
+    onDetach: (leaderArmyListUnitId: string) => void;
+  };
 }
 
 export function UnitDetailPanel({
   unit, weapons, modelCount, points, availableTiers,
   onModelCountChange, onRemove, onClose,
-  enhancement, wargear,
+  enhancement, wargear, composition, leaderAttachment,
 }: UnitDetailPanelProps) {
   const sortedTiers = [...availableTiers].sort((a, b) => a.model_count - b.model_count);
   const enhancementPoints = enhancement?.assigned?.points ?? 0;
@@ -44,80 +68,14 @@ export function UnitDetailPanel({
     || groupedAbilities.unique.length > 0
     || groupedAbilities.invulnerable.length > 0;
 
-  // Weapon groups
-  const rangedWeapons = weapons.filter(w => w.type === 'ranged');
-  const meleeWeapons = weapons.filter(w => w.type === 'melee');
+  // Identify leader variant for leader-specific wargear section
+  const leaderVariant = composition?.variants.find(v => v.is_leader) ?? null;
 
-  // Wargear groups
-  const wargearGroups = (() => {
-    if (!wargear || wargear.options.length === 0) return [];
-    const groups = new Map<string, WargearOption[]>();
-    for (const opt of wargear.options) {
-      if (!groups.has(opt.group_name)) groups.set(opt.group_name, []);
-      groups.get(opt.group_name)!.push(opt);
-    }
-    return [...groups.entries()].filter(([, opts]) => opts.length > 1);
-  })();
-
-  // Render a single ability with full description
-  function renderAbility(ability: Ability) {
-    return (
-      <div key={ability.id} className="detail-panel__ability-item">
-        <div className="detail-panel__ability-header">
-          <span className={`ability-tag ability-tag--${ability.type === 'invulnerable' ? 'invuln' : ability.type}`}>
-            {ability.type === 'invulnerable' ? 'Invuln' : ability.type}
-          </span>
-          <span className="detail-panel__ability-name">{ability.name}</span>
-        </div>
-        {ability.description && (
-          <div className="detail-panel__ability-desc">{ability.description}</div>
-        )}
-      </div>
-    );
-  }
-
-  // Render a weapon table
-  function renderWeaponTable(weaponList: Weapon[], label: string) {
-    if (weaponList.length === 0) return null;
-    return (
-      <div className="detail-panel__weapons-group">
-        <div className="detail-panel__weapons-group-label">{label}</div>
-        <table className="weapons-table weapons-table--compact">
-          <thead>
-            <tr>
-              <th>Weapon</th>
-              {label === 'Ranged' && <th>Range</th>}
-              <th>A</th>
-              <th>{label === 'Ranged' ? 'BS' : 'WS'}</th>
-              <th>S</th>
-              <th>AP</th>
-              <th>D</th>
-            </tr>
-          </thead>
-          <tbody>
-            {weaponList.map(w => (
-              <tr key={w.id}>
-                <td>
-                  <span className="detail-panel__weapon-name">{w.name}</span>
-                  {w.keywords.length > 0 && (
-                    <div className="detail-panel__weapon-keywords">
-                      {w.keywords.join(', ')}
-                    </div>
-                  )}
-                </td>
-                {label === 'Ranged' && <td>{w.range ?? '-'}</td>}
-                <td>{w.attacks}</td>
-                <td>{w.skill}</td>
-                <td>{w.strength}</td>
-                <td>{w.ap}</td>
-                <td>{w.damage}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  }
+  // Compute loadout weapons with counts
+  const loadoutWeapons = weapons.map(w => ({
+    ...w,
+    count: modelCount, // default: all models have each weapon
+  }));
 
   return (
     <div className="detail-panel">
@@ -147,25 +105,156 @@ export function UnitDetailPanel({
         <StatLine unit={unit} />
       </div>
 
-      {/* Abilities — full descriptions */}
-      {hasAbilities && (
-        <div className="detail-panel__section">
-          <div className="detail-panel__section-label">Abilities</div>
-          <div className="detail-panel__ability-list">
-            {groupedAbilities.invulnerable.map(renderAbility)}
-            {groupedAbilities.core.map(renderAbility)}
-            {groupedAbilities.faction.map(renderAbility)}
-            {groupedAbilities.unique.map(renderAbility)}
+      {/* Leader/Champion Wargear Section */}
+      {leaderVariant && wargear && (
+        <LeaderWargearSection
+          leaderVariant={leaderVariant}
+          wargearOptions={wargear.options}
+          selected={wargear.selected}
+          onSelect={wargear.onSelect}
+        />
+      )}
+
+      {/* Model Composition */}
+      {composition && composition.variants.length > 0 && (
+        <ModelCompositionSection
+          variants={composition.variants}
+          composition={composition.counts}
+          totalModels={modelCount}
+          onUpdateCount={composition.onUpdateCount}
+        />
+      )}
+
+      {/* Model Count (for units without composition but with tiers) */}
+      {sortedTiers.length > 1 && (!composition || composition.variants.length === 0) && (
+        <div className="detail-section detail-section--models">
+          <div className="detail-section__header">
+            <span className="detail-section__icon">&#9881;</span>
+            <span className="detail-section__title">Models</span>
+          </div>
+          <div className="detail-section__content">
+            <select
+              className="form-select"
+              value={modelCount}
+              onChange={(e) => onModelCountChange(Number(e.target.value))}
+              style={{ width: '100%' }}
+            >
+              {sortedTiers.map((tier) => (
+                <option key={tier.id} value={tier.model_count}>
+                  {tier.model_count} models ({tier.points} pts)
+                </option>
+              ))}
+            </select>
           </div>
         </div>
       )}
 
-      {/* Weapons */}
-      {(rangedWeapons.length > 0 || meleeWeapons.length > 0) && (
-        <div className="detail-panel__section">
-          <div className="detail-panel__section-label">Weapons</div>
-          {renderWeaponTable(rangedWeapons, 'Ranged')}
-          {renderWeaponTable(meleeWeapons, 'Melee')}
+      {/* Variant Wargear (non-leader) */}
+      {wargear && composition && (
+        <VariantWargearSection
+          variants={composition.variants}
+          wargearOptions={wargear.options}
+          selected={wargear.selected}
+          onSelect={wargear.onSelect}
+          composition={composition.counts}
+        />
+      )}
+
+      {/* Unit-level Wargear (for units without composition/variants) */}
+      {wargear && (!composition || composition.variants.length === 0) && (() => {
+        const wargearGroups: [string, WargearOption[]][] = [];
+        const groups = new Map<string, WargearOption[]>();
+        for (const opt of wargear.options) {
+          if (!groups.has(opt.group_name)) groups.set(opt.group_name, []);
+          groups.get(opt.group_name)!.push(opt);
+        }
+        for (const [name, opts] of groups) {
+          if (opts.length > 1) wargearGroups.push([name, opts]);
+        }
+        if (wargearGroups.length === 0) return null;
+        return (
+          <div className="detail-section detail-section--wargear">
+            <div className="detail-section__header">
+              <span className="detail-section__icon">&#128296;</span>
+              <span className="detail-section__title">Wargear</span>
+            </div>
+            <div className="detail-section__content">
+              {wargearGroups.map(([groupName, opts]) => (
+                <WargearToggle
+                  key={groupName}
+                  groupName={groupName}
+                  options={opts}
+                  selectedId={wargear.selected.get(groupName) ?? opts.find(o => o.is_default)?.id ?? ''}
+                  onSelect={(optionId) => wargear.onSelect(groupName, optionId)}
+                />
+              ))}
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* Leader Attachment */}
+      {leaderAttachment && leaderAttachment.eligibleLeaders.length > 0 && (
+        <LeaderAttachmentSection
+          eligibleLeaders={leaderAttachment.eligibleLeaders}
+          onAttach={leaderAttachment.onAttach}
+          onDetach={leaderAttachment.onDetach}
+        />
+      )}
+
+      {/* Enhancement */}
+      {enhancement && (
+        <div className="detail-section detail-section--enhancement">
+          <div className="detail-section__header">
+            <span className="detail-section__icon">&#10022;</span>
+            <span className="detail-section__title">Enhancement</span>
+          </div>
+          <div className="detail-section__content">
+            <select
+              className="form-select"
+              value={enhancement.assigned?.id ?? ''}
+              onChange={(e) => enhancement.onAssign(e.target.value)}
+              disabled={enhancement.limitReached}
+              style={{ width: '100%' }}
+            >
+              <option value="">{enhancement.limitReached ? 'Max 3 enhancements reached' : 'None'}</option>
+              {enhancement.available.map(e => (
+                <option key={e.id} value={e.id}>{e.name} (+{e.points} pts)</option>
+              ))}
+            </select>
+            {enhancement.assigned && (
+              <div className="detail-panel__enhancement-detail">
+                <div className="detail-panel__enhancement-name">
+                  <span>{enhancement.assigned.name}</span>
+                  <span>+{enhancement.assigned.points} pts</span>
+                </div>
+                <div className="detail-panel__enhancement-desc">
+                  {enhancement.assigned.description}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Loadout Datasheet */}
+      <LoadoutDatasheet weapons={loadoutWeapons} />
+
+      {/* Abilities */}
+      {hasAbilities && (
+        <div className="detail-section detail-section--abilities">
+          <div className="detail-section__header">
+            <span className="detail-section__icon">&#9733;</span>
+            <span className="detail-section__title">Abilities</span>
+          </div>
+          <div className="detail-section__content">
+            <div className="detail-panel__ability-list">
+              {groupedAbilities.invulnerable.map(a => renderAbility(a))}
+              {groupedAbilities.core.map(a => renderAbility(a))}
+              {groupedAbilities.faction.map(a => renderAbility(a))}
+              {groupedAbilities.unique.map(a => renderAbility(a))}
+            </div>
+          </div>
         </div>
       )}
 
@@ -181,83 +270,6 @@ export function UnitDetailPanel({
         </div>
       )}
 
-      {/* Model Count Selector */}
-      {sortedTiers.length > 1 && (
-        <div className="detail-panel__section">
-          <div className="detail-panel__section-label">Models</div>
-          <select
-            className="form-select"
-            value={modelCount}
-            onChange={(e) => onModelCountChange(Number(e.target.value))}
-            style={{ width: '100%' }}
-          >
-            {sortedTiers.map((tier) => (
-              <option key={tier.id} value={tier.model_count}>
-                {tier.model_count} models ({tier.points} pts)
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
-
-      {/* Wargear Options */}
-      {wargearGroups.length > 0 && wargear && (
-        <div className="detail-panel__section">
-          <div className="detail-panel__section-label">Wargear</div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
-            {wargearGroups.map(([groupName, opts]) => (
-              <div key={groupName}>
-                <label style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)', marginBottom: '2px', display: 'block' }}>
-                  {groupName}
-                </label>
-                <select
-                  className="form-select"
-                  value={wargear.selected.get(groupName) ?? opts.find(o => o.is_default)?.id ?? ''}
-                  onChange={(e) => wargear.onSelect(groupName, e.target.value)}
-                  style={{ width: '100%' }}
-                >
-                  {opts.map(opt => (
-                    <option key={opt.id} value={opt.id}>
-                      {opt.name}{opt.points > 0 ? ` (+${opt.points} pts)` : ''}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Enhancement */}
-      {enhancement && (
-        <div className="detail-panel__section">
-          <div className="detail-panel__section-label">Enhancement</div>
-          <select
-            className="form-select"
-            value={enhancement.assigned?.id ?? ''}
-            onChange={(e) => enhancement.onAssign(e.target.value)}
-            disabled={enhancement.limitReached}
-            style={{ width: '100%' }}
-          >
-            <option value="">{enhancement.limitReached ? 'Max 3 enhancements reached' : 'None'}</option>
-            {enhancement.available.map(e => (
-              <option key={e.id} value={e.id}>{e.name} (+{e.points} pts)</option>
-            ))}
-          </select>
-          {enhancement.assigned && (
-            <div className="detail-panel__enhancement-detail">
-              <div className="detail-panel__enhancement-name">
-                <span>{enhancement.assigned.name}</span>
-                <span>+{enhancement.assigned.points} pts</span>
-              </div>
-              <div className="detail-panel__enhancement-desc">
-                {enhancement.assigned.description}
-              </div>
-            </div>
-          )}
-        </div>
-      )}
-
       {/* Remove Button */}
       <div className="detail-panel__section" style={{ borderTop: 'none', paddingTop: 'var(--space-sm)' }}>
         <button
@@ -268,6 +280,22 @@ export function UnitDetailPanel({
           Remove Unit
         </button>
       </div>
+    </div>
+  );
+}
+
+function renderAbility(ability: { id: string; name: string; type: string; description: string }) {
+  return (
+    <div key={ability.id} className="detail-panel__ability-item">
+      <div className="detail-panel__ability-header">
+        <span className={`ability-tag ability-tag--${ability.type === 'invulnerable' ? 'invuln' : ability.type}`}>
+          {ability.type === 'invulnerable' ? 'Invuln' : ability.type}
+        </span>
+        <span className="detail-panel__ability-name">{ability.name}</span>
+      </div>
+      {ability.description && (
+        <div className="detail-panel__ability-desc">{ability.description}</div>
+      )}
     </div>
   );
 }
