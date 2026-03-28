@@ -27,12 +27,14 @@ export function CollectionPage() {
     wishlist,
     factions,
     loading,
+    error,
     loadCollection,
     addEntry,
     updateEntry,
     updatePaintingStatus,
     addWishlistItem,
     removeWishlistItem,
+    clearError,
   } = useCollectionStore();
 
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
@@ -163,6 +165,14 @@ export function CollectionPage() {
           </div>
         )}
       </div>
+
+      {/* Error Banner */}
+      {error && (
+        <div className="error-banner" style={{ color: 'var(--color-red-bright)', background: 'rgba(192,64,64,0.1)', padding: 'var(--space-md)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(192,64,64,0.3)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-md)' }}>
+          <span>{error}</span>
+          <button onClick={clearError} style={{ background: 'none', border: 'none', color: 'var(--color-text-muted)', cursor: 'pointer', fontSize: 'var(--text-lg)' }}>&#10005;</button>
+        </div>
+      )}
 
       {/* Filter Bar */}
       <div className="collection-page__filters">

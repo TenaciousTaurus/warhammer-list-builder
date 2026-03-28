@@ -23,6 +23,7 @@ interface CollectionState {
   wishlist: WishlistItem[];
   factions: Faction[];
   loading: boolean;
+  error: string | null;
 
   loadCollection: (userId: string) => Promise<void>;
   addEntry: (entry: Partial<CollectionEntry> & { user_id: string }) => Promise<void>;
@@ -31,6 +32,7 @@ interface CollectionState {
   updatePaintingStatus: (id: string, status: string) => Promise<void>;
   addWishlistItem: (item: Partial<WishlistItem> & { user_id: string; name: string }) => Promise<void>;
   removeWishlistItem: (id: string) => Promise<void>;
+  clearError: () => void;
 }
 
 export const useCollectionStore = create<CollectionState>()((set, get) => ({
@@ -38,9 +40,12 @@ export const useCollectionStore = create<CollectionState>()((set, get) => ({
   wishlist: [],
   factions: [],
   loading: false,
+  error: null,
+
+  clearError: () => set({ error: null }),
 
   loadCollection: async (userId: string) => {
-    set({ loading: true });
+    set({ loading: true, error: null });
     try {
       const [entriesRes, wishlistRes, factionsRes] = await Promise.all([
         supabase
@@ -59,6 +64,22 @@ export const useCollectionStore = create<CollectionState>()((set, get) => ({
           .order('name', { ascending: true }),
       ]);
 
+      if (entriesRes.error) {
+        console.error('Failed to load collection entries:', entriesRes.error);
+        set({ loading: false, error: entriesRes.error.message });
+        return;
+      }
+      if (wishlistRes.error) {
+        console.error('Failed to load wishlist:', wishlistRes.error);
+        set({ loading: false, error: wishlistRes.error.message });
+        return;
+      }
+      if (factionsRes.error) {
+        console.error('Failed to load factions:', factionsRes.error);
+        set({ loading: false, error: factionsRes.error.message });
+        return;
+      }
+
       set({
         entries: (entriesRes.data as CollectionEntry[]) ?? [],
         wishlist: (wishlistRes.data as WishlistItem[]) ?? [],
@@ -66,7 +87,7 @@ export const useCollectionStore = create<CollectionState>()((set, get) => ({
         loading: false,
       });
     } catch {
-      set({ loading: false });
+      set({ loading: false, error: 'Failed to load collection' });
     }
   },
 
@@ -110,8 +131,10 @@ export const useCollectionStore = create<CollectionState>()((set, get) => ({
       .single();
 
     if (error || !data) {
+      console.error('Failed to add collection entry:', error);
       set((state) => ({
         entries: state.entries.filter((e) => e.id !== optimisticId),
+        error: error?.message ?? 'Failed to add entry',
       }));
       return;
     }
@@ -139,8 +162,10 @@ export const useCollectionStore = create<CollectionState>()((set, get) => ({
       .eq('id', id);
 
     if (error) {
+      console.error('Failed to update collection entry:', error);
       set((state) => ({
         entries: state.entries.map((e) => (e.id === id ? prev : e)),
+        error: error.message,
       }));
     }
   },
@@ -157,7 +182,8 @@ export const useCollectionStore = create<CollectionState>()((set, get) => ({
       .eq('id', id);
 
     if (error) {
-      set({ entries: prev });
+      console.error('Failed to remove collection entry:', error);
+      set({ entries: prev, error: error.message });
     }
   },
 
@@ -200,8 +226,10 @@ export const useCollectionStore = create<CollectionState>()((set, get) => ({
       .single();
 
     if (error || !data) {
+      console.error('Failed to add wishlist item:', error);
       set((state) => ({
         wishlist: state.wishlist.filter((w) => w.id !== optimisticId),
+        error: error?.message ?? 'Failed to add wishlist item',
       }));
       return;
     }
@@ -225,7 +253,8 @@ export const useCollectionStore = create<CollectionState>()((set, get) => ({
       .eq('id', id);
 
     if (error) {
-      set({ wishlist: prev });
+      console.error('Failed to remove wishlist item:', error);
+      set({ wishlist: prev, error: error.message });
     }
   },
 }));

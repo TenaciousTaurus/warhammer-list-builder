@@ -600,3 +600,12 @@
   }
 }
 
+/* Tablet grid adjustments */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .collection-grid,
+  .campaign-grid,
+  .tournament-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+

@@ -27,13 +27,14 @@ export function PlayModePage() {
   const gameStore = useGameSessionStore();
 
   // Subscribe to realtime updates for multi-device sync
-  useGameRealtime(gameStore.session?.id ?? null);
+  const { realtimeStatus } = useGameRealtime(gameStore.session?.id ?? null);
 
   const [list, setList] = useState<(ArmyList & { detachments: Detachment }) | null>(null);
   const [listUnits, setListUnits] = useState<ArmyListUnitWithDetails[]>([]);
   const [enhancements, setEnhancements] = useState<Enhancement[]>([]);
   const [listEnhancements, setListEnhancements] = useState<{ id: string; enhancement_id: string; army_list_unit_id: string }[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<PlayTab>('army');
   const [expandedUnits, setExpandedUnits] = useState<Set<string>>(new Set());
   const [showEndGame, setShowEndGame] = useState(false);
@@ -44,33 +45,51 @@ export function PlayModePage() {
   useEffect(() => {
     if (!id) return;
     (async () => {
-      const { data: listData } = await supabase
+      const { data: listData, error: listError } = await supabase
         .from('army_lists')
         .select('*, detachments(*)')
         .eq('id', id)
         .single();
 
+      if (listError) {
+        console.error('Failed to load army list:', listError);
+        setLoadError(listError.message);
+        setLoading(false);
+        return;
+      }
       if (!listData) { navigate('/lists'); return; }
       setList(listData as ArmyList & { detachments: Detachment });
 
-      const { data: unitData } = await supabase
+      const { data: unitData, error: unitError } = await supabase
         .from('army_list_units')
         .select('*, units(*, unit_points_tiers(*), abilities(*), weapons(*))')
         .eq('army_list_id', id)
         .order('sort_order');
 
+      if (unitError) {
+        console.error('Failed to load units:', unitError);
+        setLoadError(unitError.message);
+        setLoading(false);
+        return;
+      }
       if (unitData) setListUnits(unitData as ArmyListUnitWithDetails[]);
 
-      const { data: enhData } = await supabase
+      const { data: enhData, error: enhError } = await supabase
         .from('enhancements')
         .select('*')
         .eq('detachment_id', listData.detachment_id);
+      if (enhError) {
+        console.error('Failed to load enhancements:', enhError);
+      }
       if (enhData) setEnhancements(enhData);
 
-      const { data: listEnhData } = await supabase
+      const { data: listEnhData, error: listEnhError } = await supabase
         .from('army_list_enhancements')
         .select('*')
         .eq('army_list_id', id);
+      if (listEnhError) {
+        console.error('Failed to load list enhancements:', listEnhError);
+      }
       if (listEnhData) setListEnhancements(listEnhData);
 
       // Load stratagems and secondary objectives
@@ -80,6 +99,16 @@ export function PlayModePage() {
       setLoading(false);
     })();
   }, [id, navigate]);
+
+  if (loadError) return (
+    <div style={{ padding: 'var(--space-lg)', maxWidth: '900px', margin: '0 auto' }}>
+      <div style={{ color: 'var(--color-red-bright)', background: 'rgba(192,64,64,0.1)', padding: 'var(--space-md)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(192,64,64,0.3)', textAlign: 'center' }}>
+        <p style={{ marginBottom: 'var(--space-sm)' }}>Failed to load army list data.</p>
+        <p style={{ fontSize: 'var(--text-sm)', color: 'var(--color-text-muted)' }}>{loadError}</p>
+        <button className="btn" onClick={() => navigate('/lists')} style={{ marginTop: 'var(--space-md)' }}>Back to Lists</button>
+      </div>
+    </div>
+  );
 
   if (loading || !list || !id) return (
     <div className="skeleton-list" style={{ padding: 'var(--space-lg)', maxWidth: '900px', margin: '0 auto' }}>
@@ -167,6 +196,13 @@ export function PlayModePage() {
           </span>
         </div>
         <div className="play-mode__header-actions">
+          <span
+            className={`play-mode__sync-status play-mode__sync-status--${realtimeStatus}`}
+            title={`Realtime sync: ${realtimeStatus}`}
+          >
+            <span className="play-mode__sync-dot" />
+            {realtimeStatus === 'connected' ? 'Synced' : realtimeStatus === 'connecting' ? 'Syncing...' : 'Offline'}
+          </span>
           <span className="play-mode__lock-badge">&#9876; In Game</span>
           <button className="btn btn--sm" onClick={() => gameStore.pauseGame().then(() => navigate(`/list/${id}`))}>
             Pause

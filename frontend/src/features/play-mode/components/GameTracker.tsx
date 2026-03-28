@@ -1,3 +1,5 @@
+/** @deprecated Use gameSessionStore instead. Kept for backward compatibility with non-authenticated sessions. */
+
 import { useState, useEffect } from 'react';
 
 interface GameTrackerProps {

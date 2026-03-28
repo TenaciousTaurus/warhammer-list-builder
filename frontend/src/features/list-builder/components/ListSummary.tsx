@@ -120,6 +120,9 @@ export function ListSummary({
           <button className="btn" onClick={onExport}>
             Export
           </button>
+          <button className="btn" onClick={() => window.print()}>
+            Print
+          </button>
           <button className="btn btn--primary" onClick={onPlay}>
             Play
           </button>

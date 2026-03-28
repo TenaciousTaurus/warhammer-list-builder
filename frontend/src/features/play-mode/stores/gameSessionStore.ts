@@ -176,6 +176,12 @@ export const useGameSessionStore = create<GameSessionState>()(
         });
 
         get().logEvent('phase_change', `${PHASES[newPhase]} phase, Round ${newRound}`);
+
+        // Auto-grant +1 CP at the start of each Command Phase (standard 40K rule)
+        if (PHASES[newPhase] === 'Command') {
+          get().adjustCP(1);
+        }
+
         get()._syncSession();
       },
 
@@ -442,15 +448,23 @@ export const useGameSessionStore = create<GameSessionState>()(
           query = query.eq('type', 'core');
         }
 
-        const { data } = await query.order('name');
+        const { data, error } = await query.order('name');
+        if (error) {
+          console.error('Failed to load stratagems:', error);
+          return;
+        }
         if (data) set({ stratagems: data as Stratagem[] });
       },
 
       loadSecondaryObjectives: async () => {
-        const { data } = await supabase
+        const { data, error } = await supabase
           .from('secondary_objectives')
           .select('*')
           .order('name');
+        if (error) {
+          console.error('Failed to load secondary objectives:', error);
+          return;
+        }
         if (data) set({ secondaryObjectives: data as SecondaryObjective[] });
       },
 
