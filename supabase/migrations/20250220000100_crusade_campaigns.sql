@@ -1,9 +1,11 @@
 -- ============================================================
 -- Phase 4: Crusade & Campaign Mode — Core Tables
 -- ============================================================
+-- Tables are created first, then RLS policies are added after
+-- all tables exist (to avoid forward-reference errors).
 
 -- ============================================================
--- USER DATA: Campaigns (multiplayer crusade containers)
+-- CREATE TABLES
 -- ============================================================
 
 CREATE TABLE public.campaigns (
@@ -20,9 +22,65 @@ CREATE TABLE public.campaigns (
   updated_at timestamptz NOT NULL DEFAULT now()
 );
 
-ALTER TABLE public.campaigns ENABLE ROW LEVEL SECURITY;
+CREATE TABLE public.campaign_members (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  campaign_id uuid NOT NULL REFERENCES public.campaigns(id) ON DELETE CASCADE,
+  user_id uuid NOT NULL,
+  role text NOT NULL CHECK (role IN ('owner', 'player')) DEFAULT 'player',
+  display_name text NOT NULL,
+  requisition_points integer NOT NULL DEFAULT 5,
+  supply_limit integer NOT NULL DEFAULT 1000,
+  joined_at timestamptz NOT NULL DEFAULT now(),
+  UNIQUE(campaign_id, user_id)
+);
 
--- Owner full CRUD
+CREATE TABLE public.crusade_rosters (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  campaign_member_id uuid NOT NULL UNIQUE REFERENCES public.campaign_members(id) ON DELETE CASCADE,
+  faction_id uuid NOT NULL REFERENCES public.factions(id),
+  name text NOT NULL,
+  notes text,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+CREATE TABLE public.crusade_units (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  crusade_roster_id uuid NOT NULL REFERENCES public.crusade_rosters(id) ON DELETE CASCADE,
+  unit_id uuid NOT NULL REFERENCES public.units(id),
+  custom_name text,
+  model_count integer NOT NULL DEFAULT 1,
+  points_cost integer NOT NULL DEFAULT 0,
+  xp integer NOT NULL DEFAULT 0,
+  rank text NOT NULL CHECK (rank IN (
+    'battle_ready', 'blooded', 'battle_hardened', 'heroic', 'legendary'
+  )) DEFAULT 'battle_ready',
+  battles_played integer NOT NULL DEFAULT 0,
+  battles_survived integer NOT NULL DEFAULT 0,
+  kills integer NOT NULL DEFAULT 0,
+  honours jsonb NOT NULL DEFAULT '[]',
+  scars jsonb NOT NULL DEFAULT '[]',
+  is_destroyed boolean NOT NULL DEFAULT false,
+  destroyed_in_battle_id uuid,
+  notes text,
+  sort_order integer NOT NULL DEFAULT 0,
+  created_at timestamptz NOT NULL DEFAULT now(),
+  updated_at timestamptz NOT NULL DEFAULT now()
+);
+
+-- ============================================================
+-- ENABLE RLS
+-- ============================================================
+
+ALTER TABLE public.campaigns ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.campaign_members ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.crusade_rosters ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.crusade_units ENABLE ROW LEVEL SECURITY;
+
+-- ============================================================
+-- RLS POLICIES: campaigns
+-- ============================================================
+
 CREATE POLICY "Owner select own campaigns"
   ON public.campaigns FOR SELECT
   USING (auth.uid() = owner_id);
@@ -40,7 +98,6 @@ CREATE POLICY "Owner delete campaigns"
   ON public.campaigns FOR DELETE
   USING (auth.uid() = owner_id);
 
--- Members can SELECT campaigns they belong to
 CREATE POLICY "Members select campaigns"
   ON public.campaigns FOR SELECT
   USING (
@@ -51,38 +108,14 @@ CREATE POLICY "Members select campaigns"
     )
   );
 
--- Anyone can SELECT by share_code (for joining)
 CREATE POLICY "Public select by share code"
   ON public.campaigns FOR SELECT
   USING (share_code IS NOT NULL);
 
-CREATE INDEX idx_campaigns_owner ON public.campaigns (owner_id);
-CREATE INDEX idx_campaigns_share_code ON public.campaigns (share_code);
-CREATE INDEX idx_campaigns_status ON public.campaigns (status) WHERE status IN ('recruiting', 'active');
-
-CREATE TRIGGER campaigns_updated_at
-  BEFORE UPDATE ON public.campaigns
-  FOR EACH ROW EXECUTE FUNCTION public.update_updated_at();
-
 -- ============================================================
--- Campaign Members (players in a campaign)
+-- RLS POLICIES: campaign_members
 -- ============================================================
 
-CREATE TABLE public.campaign_members (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-  campaign_id uuid NOT NULL REFERENCES public.campaigns(id) ON DELETE CASCADE,
-  user_id uuid NOT NULL,
-  role text NOT NULL CHECK (role IN ('owner', 'player')) DEFAULT 'player',
-  display_name text NOT NULL,
-  requisition_points integer NOT NULL DEFAULT 5,
-  supply_limit integer NOT NULL DEFAULT 1000,
-  joined_at timestamptz NOT NULL DEFAULT now(),
-  UNIQUE(campaign_id, user_id)
-);
-
-ALTER TABLE public.campaign_members ENABLE ROW LEVEL SECURITY;
-
--- Members can see all members of their campaigns
 CREATE POLICY "Members select campaign members"
   ON public.campaign_members FOR SELECT
   USING (
@@ -93,12 +126,10 @@ CREATE POLICY "Members select campaign members"
     )
   );
 
--- Authenticated users can join (insert themselves)
 CREATE POLICY "Users join campaigns"
   ON public.campaign_members FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
--- Members can update own row (display_name), owner can update any
 CREATE POLICY "Members update own membership"
   ON public.campaign_members FOR UPDATE
   USING (auth.uid() = user_id)
@@ -114,7 +145,6 @@ CREATE POLICY "Owner update campaign members"
     )
   );
 
--- Owner or self can delete membership
 CREATE POLICY "Members leave campaigns"
   ON public.campaign_members FOR DELETE
   USING (auth.uid() = user_id);
@@ -129,26 +159,10 @@ CREATE POLICY "Owner remove campaign members"
     )
   );
 
-CREATE INDEX idx_campaign_members_campaign ON public.campaign_members (campaign_id);
-CREATE INDEX idx_campaign_members_user ON public.campaign_members (user_id);
-
 -- ============================================================
--- Crusade Rosters (one per member per campaign)
+-- RLS POLICIES: crusade_rosters
 -- ============================================================
 
-CREATE TABLE public.crusade_rosters (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-  campaign_member_id uuid NOT NULL UNIQUE REFERENCES public.campaign_members(id) ON DELETE CASCADE,
-  faction_id uuid NOT NULL REFERENCES public.factions(id),
-  name text NOT NULL,
-  notes text,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now()
-);
-
-ALTER TABLE public.crusade_rosters ENABLE ROW LEVEL SECURITY;
-
--- Owner CRUD own roster
 CREATE POLICY "Owner select own roster"
   ON public.crusade_rosters FOR SELECT
   USING (
@@ -159,7 +173,6 @@ CREATE POLICY "Owner select own roster"
     )
   );
 
--- Campaign members can view all rosters in their campaign
 CREATE POLICY "Members select campaign rosters"
   ON public.crusade_rosters FOR SELECT
   USING (
@@ -208,43 +221,10 @@ CREATE POLICY "Owner delete roster"
     )
   );
 
-CREATE INDEX idx_crusade_rosters_member ON public.crusade_rosters (campaign_member_id);
-
-CREATE TRIGGER crusade_rosters_updated_at
-  BEFORE UPDATE ON public.crusade_rosters
-  FOR EACH ROW EXECUTE FUNCTION public.update_updated_at();
-
 -- ============================================================
--- Crusade Units (units with persistent progression)
+-- RLS POLICIES: crusade_units
 -- ============================================================
 
-CREATE TABLE public.crusade_units (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-  crusade_roster_id uuid NOT NULL REFERENCES public.crusade_rosters(id) ON DELETE CASCADE,
-  unit_id uuid NOT NULL REFERENCES public.units(id),
-  custom_name text,
-  model_count integer NOT NULL DEFAULT 1,
-  points_cost integer NOT NULL DEFAULT 0,
-  xp integer NOT NULL DEFAULT 0,
-  rank text NOT NULL CHECK (rank IN (
-    'battle_ready', 'blooded', 'battle_hardened', 'heroic', 'legendary'
-  )) DEFAULT 'battle_ready',
-  battles_played integer NOT NULL DEFAULT 0,
-  battles_survived integer NOT NULL DEFAULT 0,
-  kills integer NOT NULL DEFAULT 0,
-  honours jsonb NOT NULL DEFAULT '[]',
-  scars jsonb NOT NULL DEFAULT '[]',
-  is_destroyed boolean NOT NULL DEFAULT false,
-  destroyed_in_battle_id uuid,
-  notes text,
-  sort_order integer NOT NULL DEFAULT 0,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now()
-);
-
-ALTER TABLE public.crusade_units ENABLE ROW LEVEL SECURITY;
-
--- Owner CRUD via roster ownership
 CREATE POLICY "Owner select own units"
   ON public.crusade_units FOR SELECT
   USING (
@@ -256,7 +236,6 @@ CREATE POLICY "Owner select own units"
     )
   );
 
--- Campaign members can view all units in their campaign
 CREATE POLICY "Members select campaign units"
   ON public.crusade_units FOR SELECT
   USING (
@@ -310,8 +289,33 @@ CREATE POLICY "Owner delete units"
     )
   );
 
+-- ============================================================
+-- INDEXES
+-- ============================================================
+
+CREATE INDEX idx_campaigns_owner ON public.campaigns (owner_id);
+CREATE INDEX idx_campaigns_share_code ON public.campaigns (share_code);
+CREATE INDEX idx_campaigns_status ON public.campaigns (status) WHERE status IN ('recruiting', 'active');
+
+CREATE INDEX idx_campaign_members_campaign ON public.campaign_members (campaign_id);
+CREATE INDEX idx_campaign_members_user ON public.campaign_members (user_id);
+
+CREATE INDEX idx_crusade_rosters_member ON public.crusade_rosters (campaign_member_id);
+
 CREATE INDEX idx_crusade_units_roster ON public.crusade_units (crusade_roster_id);
 CREATE INDEX idx_crusade_units_unit ON public.crusade_units (unit_id);
+
+-- ============================================================
+-- TRIGGERS
+-- ============================================================
+
+CREATE TRIGGER campaigns_updated_at
+  BEFORE UPDATE ON public.campaigns
+  FOR EACH ROW EXECUTE FUNCTION public.update_updated_at();
+
+CREATE TRIGGER crusade_rosters_updated_at
+  BEFORE UPDATE ON public.crusade_rosters
+  FOR EACH ROW EXECUTE FUNCTION public.update_updated_at();
 
 CREATE TRIGGER crusade_units_updated_at
   BEFORE UPDATE ON public.crusade_units

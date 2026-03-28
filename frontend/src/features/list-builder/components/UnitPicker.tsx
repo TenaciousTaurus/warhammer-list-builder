@@ -4,6 +4,7 @@ interface UnitPickerProps {
   listName: string;
   totalPoints: number;
   filteredUnits: UnitWithRelations[];
+  filteredAlliedUnits: UnitWithRelations[];
   unitsByRole: Record<string, UnitWithRelations[]>;
   unitCountsInList: Map<string, number>;
   collapsedPickerRoles: Set<string>;
@@ -16,7 +17,7 @@ interface UnitPickerProps {
 }
 
 export function UnitPicker({
-  listName, totalPoints, filteredUnits, unitsByRole, unitCountsInList,
+  listName, totalPoints, filteredUnits, filteredAlliedUnits, unitsByRole, unitCountsInList,
   collapsedPickerRoles, unitPickerFilter, showLegends, onFilterChange,
   onAddUnit, onToggleRole, onToggleLegends,
 }: UnitPickerProps) {
@@ -59,25 +60,44 @@ export function UnitPicker({
 
       <div className="list-editor__picker-list">
         {isSearching ? (
-          filteredUnits.map(renderUnitItem)
+          <>
+            {filteredUnits.map(renderUnitItem)}
+            {filteredAlliedUnits.map(renderUnitItem)}
+          </>
         ) : (
-          ROLE_ORDER.map((role) => {
-            const roleUnits = unitsByRole[role];
-            if (!roleUnits || roleUnits.length === 0) return null;
-            const isCollapsed = collapsedPickerRoles.has(role);
-            return (
-              <div key={role} className="picker-section">
-                <div
-                  className={`picker-section__header picker-section__header--${role}`}
-                  onClick={() => onToggleRole(role)}
-                >
-                  <span className="picker-section__arrow">{isCollapsed ? '\u25B6' : '\u25BC'}</span>
-                  <span className="picker-section__label">{ROLE_LABELS[role]}</span>
+          <>
+            {ROLE_ORDER.map((role) => {
+              const roleUnits = unitsByRole[role];
+              if (!roleUnits || roleUnits.length === 0) return null;
+              const isCollapsed = collapsedPickerRoles.has(role);
+              return (
+                <div key={role} className="picker-section">
+                  <div
+                    className={`picker-section__header picker-section__header--${role}`}
+                    onClick={() => onToggleRole(role)}
+                  >
+                    <span className="picker-section__arrow">{isCollapsed ? '\u25B6' : '\u25BC'}</span>
+                    <span className="picker-section__label">{ROLE_LABELS[role]}</span>
+                  </div>
+                  {!isCollapsed && roleUnits.map(renderUnitItem)}
                 </div>
-                {!isCollapsed && roleUnits.map(renderUnitItem)}
+              );
+            })}
+            {filteredAlliedUnits.length > 0 && (
+              <div className="picker-section">
+                <div
+                  className="picker-section__header picker-section__header--allied"
+                  onClick={() => onToggleRole('allied')}
+                >
+                  <span className="picker-section__arrow">
+                    {collapsedPickerRoles.has('allied') ? '\u25B6' : '\u25BC'}
+                  </span>
+                  <span className="picker-section__label">Allied Units</span>
+                </div>
+                {!collapsedPickerRoles.has('allied') && filteredAlliedUnits.map(renderUnitItem)}
               </div>
-            );
-          })
+            )}
+          </>
         )}
       </div>
 

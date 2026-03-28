@@ -1,5 +1,6 @@
 import type { Unit, UnitPointsTier, Ability, Enhancement, Weapon, WargearOption, ModelVariant } from '../../../shared/types/database';
 import { StatLine } from '../../../shared/components/StatLine';
+import { cleanGameText } from '../../../shared/lib/cleanGameText';
 import { WargearToggle } from './unit-detail/WargearToggle';
 import { LeaderWargearSection } from './unit-detail/LeaderWargearSection';
 import { ModelCompositionSection } from './unit-detail/ModelCompositionSection';
@@ -227,7 +228,7 @@ export function UnitDetailPanel({
                   <span>+{enhancement.assigned.points} pts</span>
                 </div>
                 <div className="detail-panel__enhancement-desc">
-                  {enhancement.assigned.description}
+                  {cleanGameText(enhancement.assigned.description)}
                 </div>
               </div>
             )}
@@ -320,7 +321,7 @@ function renderAbility(ability: { id: string; name: string; type: string; descri
         <span className="detail-panel__ability-name">{ability.name}</span>
       </div>
       {ability.description && (
-        <div className="detail-panel__ability-desc">{ability.description}</div>
+        <div className="detail-panel__ability-desc">{cleanGameText(ability.description)}</div>
       )}
     </div>
   );

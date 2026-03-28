@@ -1,23 +1,8 @@
-import { useEffect } from 'react';
 import { useAuthStore } from '../stores/authStore';
 
+// Auth is initialized once in main.tsx before React renders.
+// This hook just reads from the store — no side effects.
 export function useAuth() {
-  const store = useAuthStore();
-
-  // Initialize auth listener on first use
-  useEffect(() => {
-    if (!store.initialized) {
-      const unsubscribe = store.init();
-      return unsubscribe;
-    }
-  }, [store.initialized, store.init]);
-
-  return {
-    user: store.user,
-    session: store.session,
-    loading: store.loading,
-    signIn: store.signIn,
-    signUp: store.signUp,
-    signOut: store.signOut,
-  };
+  const { user, session, loading, signIn, signUp, signOut } = useAuthStore();
+  return { user, session, loading, signIn, signUp, signOut };
 }

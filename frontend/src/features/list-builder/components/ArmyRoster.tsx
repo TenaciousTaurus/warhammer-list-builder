@@ -6,7 +6,9 @@ import { RosterItem } from './RosterItem';
 interface ArmyRosterProps {
   listUnits: ArmyListUnitWithDetails[];
   rosterByRole: Record<string, ArmyListUnitWithDetails[]>;
+  rosterAlliedUnits: ArmyListUnitWithDetails[];
   rosterSectionPoints: Record<string, number>;
+  rosterAlliedPoints: number;
   selectedArmyListUnitId: string | null;
   getEnhancementForUnit: (armyListUnitId: string) => Enhancement | null;
   getWargearSummary: (armyListUnitId: string, unitId: string) => string;
@@ -16,8 +18,9 @@ interface ArmyRosterProps {
 }
 
 export function ArmyRoster({
-  listUnits, rosterByRole, rosterSectionPoints, selectedArmyListUnitId,
-  getEnhancementForUnit, getWargearSummary, onSelectUnit, onRemoveUnit, onReorder,
+  listUnits, rosterByRole, rosterAlliedUnits, rosterSectionPoints, rosterAlliedPoints,
+  selectedArmyListUnitId, getEnhancementForUnit, getWargearSummary, onSelectUnit,
+  onRemoveUnit, onReorder,
 }: ArmyRosterProps) {
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const dragIndexRef = useRef<number | null>(null);
@@ -120,6 +123,49 @@ export function ArmyRoster({
           </div>
         );
       })}
+      {rosterAlliedUnits.length > 0 && (
+        <div className="roster-section">
+          <div className="roster-section__header roster-section__header--allied">
+            <span>Allied Units</span>
+            <span className="roster-section__points">{rosterAlliedPoints} pts</span>
+          </div>
+          {rosterAlliedUnits.map((lu) => {
+            const unitPts = getUnitPoints(lu.units, lu.model_count);
+            const enh = getEnhancementForUnit(lu.id);
+            const wargearSummary = getWargearSummary(lu.id, lu.unit_id);
+            const globalIdx = getGlobalIndex(lu.id);
+            const isDragOver = dragOverIndex === globalIdx;
+
+            return (
+              <div
+                key={lu.id}
+                draggable
+                onDragStart={() => handleDragStart(lu.id)}
+                onDragOver={(e) => handleDragOver(e, lu.id)}
+                onDrop={() => handleDrop(lu.id)}
+                onDragEnd={handleDragEnd}
+                className={isDragOver ? 'roster-item__drag-over' : ''}
+              >
+                <RosterItem
+                  unitName={lu.units.name}
+                  modelCount={lu.model_count}
+                  points={unitPts}
+                  enhancementName={enh?.name}
+                  enhancementPoints={enh?.points}
+                  wargearSummary={wargearSummary}
+                  isSelected={lu.id === selectedArmyListUnitId}
+                  onClick={() => onSelectUnit(lu.id)}
+                  onRemove={() => onRemoveUnit(lu.id)}
+                  onMoveUp={globalIdx > 0 ? () => handleMoveUp(lu.id) : undefined}
+                  onMoveDown={globalIdx < listUnits.length - 1 ? () => handleMoveDown(lu.id) : undefined}
+                  unit={lu.units}
+                  weapons={lu.units.weapons ?? []}
+                />
+              </div>
+            );
+          })}
+        </div>
+      )}
     </>
   );
 }
