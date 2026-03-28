@@ -1,12 +1,16 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useGameSessionStore, PHASES } from '../stores/gameSessionStore';
 import type { Stratagem } from '../../../shared/types/database';
 
 export function StratagemPanel() {
   const stratagems = useGameSessionStore((s) => s.stratagems);
   const currentPhase = useGameSessionStore((s) => s.session?.current_phase ?? 0);
+  const currentCP = useGameSessionStore((s) => s.session?.cp ?? 0);
+  const adjustCP = useGameSessionStore((s) => s.adjustCP);
+  const logEvent = useGameSessionStore((s) => s.logEvent);
   const [search, setSearch] = useState('');
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [usedStratagemId, setUsedStratagemId] = useState<string | null>(null);
 
   const currentPhaseName = PHASES[currentPhase] ?? PHASES[0];
 
@@ -36,6 +40,24 @@ export function StratagemPanel() {
     setExpandedId((prev) => (prev === id ? null : id));
   };
 
+  const handleUseStratagem = useCallback((stratagem: Stratagem) => {
+    if (currentCP < stratagem.cp_cost) return;
+
+    // Deduct CP
+    adjustCP(-stratagem.cp_cost);
+
+    // Log the event
+    logEvent('stratagem_used', `Used ${stratagem.name} (-${stratagem.cp_cost} CP)`, {
+      stratagem_id: stratagem.id,
+      stratagem_name: stratagem.name,
+      cp_cost: stratagem.cp_cost,
+    });
+
+    // Brief highlight animation
+    setUsedStratagemId(stratagem.id);
+    setTimeout(() => setUsedStratagemId(null), 800);
+  }, [currentCP, adjustCP, logEvent]);
+
   return (
     <div className="stratagem-panel">
       <div className="stratagem-panel__search">
@@ -55,11 +77,17 @@ export function StratagemPanel() {
         {filtered.map((stratagem) => {
           const relevant = isPhaseRelevant(stratagem, currentPhaseName);
           const expanded = expandedId === stratagem.id;
+          const canAfford = currentCP >= stratagem.cp_cost;
+          const justUsed = usedStratagemId === stratagem.id;
 
           return (
             <div
               key={stratagem.id}
-              className={`stratagem-card ${relevant ? 'stratagem-card--relevant' : ''}`}
+              className={
+                `stratagem-card` +
+                `${relevant ? ' stratagem-card--relevant' : ''}` +
+                `${justUsed ? ' stratagem-card--used' : ''}`
+              }
             >
               <button
                 className="stratagem-card__header"
@@ -88,6 +116,20 @@ export function StratagemPanel() {
                       <span className="stratagem-card__section-text">{stratagem.restrictions}</span>
                     </div>
                   )}
+                  <button
+                    className={
+                      `stratagem-card__use-btn` +
+                      `${!canAfford ? ' stratagem-card__use-btn--disabled' : ''}`
+                    }
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleUseStratagem(stratagem);
+                    }}
+                    disabled={!canAfford}
+                    title={canAfford ? `Use ${stratagem.name} for ${stratagem.cp_cost} CP` : 'Not enough CP'}
+                  >
+                    {canAfford ? `Use Stratagem (${stratagem.cp_cost} CP)` : `Not Enough CP`}
+                  </button>
                 </div>
               )}
             </div>

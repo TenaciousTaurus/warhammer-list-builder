@@ -29,6 +29,7 @@ export function ListsPage() {
   const { user } = useAuth();
   const [lists, setLists] = useState<(ArmyList & { factions: Faction })[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [showCreate, setShowCreate] = useState(false);
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState<SortOption>('updated');
@@ -38,12 +39,18 @@ export function ListsPage() {
   const fetchLists = useCallback(async () => {
     if (!user) return;
     setLoading(true);
-    const { data } = await supabase
+    setError(null);
+    const { data, error: fetchError } = await supabase
       .from('army_lists')
       .select('*, factions(*)')
       .eq('user_id', user.id)
       .order('updated_at', { ascending: false });
-    if (data) setLists(data as (ArmyList & { factions: Faction })[]);
+    if (fetchError) {
+      console.error('Failed to load army lists:', fetchError);
+      setError(fetchError.message);
+    } else if (data) {
+      setLists(data as (ArmyList & { factions: Faction })[]);
+    }
     setLoading(false);
   }, [user]);
 
@@ -52,14 +59,24 @@ export function ListsPage() {
   }, [fetchLists]);
 
   async function handleDelete(id: string) {
-    await supabase.from('army_lists').delete().eq('id', id);
+    const { error: deleteError } = await supabase.from('army_lists').delete().eq('id', id);
     setConfirmDelete(null);
+    if (deleteError) {
+      console.error('Failed to delete army list:', deleteError);
+      setError(deleteError.message);
+      return;
+    }
     fetchLists();
   }
 
   async function handleDuplicate(id: string) {
-    const { error } = await supabase.rpc('duplicate_army_list', { source_list_id: id });
-    if (!error) fetchLists();
+    const { error: dupError } = await supabase.rpc('duplicate_army_list', { source_list_id: id });
+    if (dupError) {
+      console.error('Failed to duplicate army list:', dupError);
+      setError(dupError.message);
+      return;
+    }
+    fetchLists();
   }
 
   const filteredAndSorted = useMemo(() => {
@@ -137,6 +154,13 @@ export function ListsPage() {
           + New List
         </button>
       </div>
+
+      {error && (
+        <div className="error-banner" style={{ color: 'var(--color-red-bright)', background: 'rgba(192,64,64,0.1)', padding: 'var(--space-md)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(192,64,64,0.3)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-md)' }}>
+          <span>{error}</span>
+          <button onClick={() => setError(null)} style={{ background: 'none', border: 'none', color: 'var(--color-text-muted)', cursor: 'pointer', fontSize: 'var(--text-lg)' }}>&#10005;</button>
+        </div>
+      )}
 
       {lists.length > 0 && (
         <div className="lists-page__controls">

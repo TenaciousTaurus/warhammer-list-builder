@@ -28,12 +28,15 @@ export function CrusadeRosterPage() {
     setShowUnitPicker(true);
     setLoadingUnits(true);
 
-    const { data } = await supabase
+    const { data, error: fetchError } = await supabase
       .from('units')
       .select('*')
       .eq('faction_id', roster.faction_id)
       .order('name', { ascending: true });
 
+    if (fetchError) {
+      console.error('Failed to load available units:', fetchError);
+    }
     setAvailableUnits((data as Unit[]) ?? []);
     setLoadingUnits(false);
   }, [roster]);

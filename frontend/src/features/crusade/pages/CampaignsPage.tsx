@@ -34,10 +34,15 @@ export function CampaignsPage() {
 
     const loadCounts = async () => {
       const ids = campaigns.map((c) => c.id);
-      const { data } = await supabase
+      const { data, error: countError } = await supabase
         .from('campaign_members')
         .select('campaign_id')
         .in('campaign_id', ids);
+
+      if (countError) {
+        console.error('Failed to load member counts:', countError);
+        return;
+      }
 
       if (data) {
         const counts = new Map<string, number>();

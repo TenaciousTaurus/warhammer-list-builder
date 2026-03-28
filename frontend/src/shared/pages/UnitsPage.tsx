@@ -22,6 +22,7 @@ export function UnitsPage() {
   const [roleFilter, setRoleFilter] = useState<string>('all');
   const [sort, setSort] = useState<SortOption>('name');
   const [keywordFilter, setKeywordFilter] = useState('');
+  const [showLegends, setShowLegends] = useState(false);
 
   useEffect(() => {
     supabase
@@ -68,6 +69,11 @@ export function UnitsPage() {
   const filteredAndSorted = useMemo(() => {
     let result = units;
 
+    // Legends filter
+    if (!showLegends) {
+      result = result.filter(u => !u.is_legends);
+    }
+
     // Name filter
     if (filter) {
       const q = filter.toLowerCase();
@@ -101,7 +107,7 @@ export function UnitsPage() {
     });
 
     return result;
-  }, [units, filter, roleFilter, keywordFilter, sort]);
+  }, [units, filter, roleFilter, keywordFilter, sort, showLegends]);
 
   // Stats summary
   const statsSummary = useMemo(() => {
@@ -181,6 +187,14 @@ export function UnitsPage() {
             </button>
           ))}
         </div>
+        <label className="picker__legends-toggle">
+          <input
+            type="checkbox"
+            checked={showLegends}
+            onChange={() => setShowLegends(prev => !prev)}
+          />
+          <span>Legends</span>
+        </label>
         <select
           className="form-select units-page__sort"
           value={sort}

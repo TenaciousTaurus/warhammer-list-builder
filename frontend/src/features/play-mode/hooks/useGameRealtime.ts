@@ -1,18 +1,27 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from '../../../shared/lib/supabase';
 import { useGameSessionStore } from '../stores/gameSessionStore';
-import type { GameSession } from '../../../shared/types/database';
+import type { GameSession, GameSessionEvent, GameSessionScore } from '../../../shared/types/database';
+
+export type RealtimeStatus = 'connecting' | 'connected' | 'disconnected';
 
 /**
  * Subscribes to Supabase Realtime for the current game session.
- * When another device updates the game_sessions row, this merges
- * the changes into the local Zustand store.
+ * Syncs game_sessions, game_session_events, game_session_scores,
+ * and game_session_unit_states across devices.
+ *
+ * Returns the current connection status.
  */
 export function useGameRealtime(sessionId: string | null) {
-  const store = useGameSessionStore();
+  const [realtimeStatus, setRealtimeStatus] = useState<RealtimeStatus>('disconnected');
 
   useEffect(() => {
-    if (!sessionId) return;
+    if (!sessionId) {
+      setRealtimeStatus('disconnected');
+      return;
+    }
+
+    setRealtimeStatus('connecting');
 
     const channel = supabase
       .channel(`game:${sessionId}`)
@@ -26,7 +35,7 @@ export function useGameRealtime(sessionId: string | null) {
         },
         (payload) => {
           const updated = payload.new as GameSession;
-          const current = store.session;
+          const current = useGameSessionStore.getState().session;
           if (!current) return;
 
           // Only merge if the remote update is newer than local
@@ -48,14 +57,80 @@ export function useGameRealtime(sessionId: string | null) {
         (payload) => {
           if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
             const row = payload.new as { army_list_unit_id: string; model_states: number[] };
-            store.updateUnitState(row.army_list_unit_id, row.model_states);
+            useGameSessionStore.getState().updateUnitState(row.army_list_unit_id, row.model_states);
           }
         }
       )
-      .subscribe();
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'game_session_events',
+          filter: `game_session_id=eq.${sessionId}`,
+        },
+        (payload) => {
+          const newEvent = payload.new as GameSessionEvent;
+          const currentEvents = useGameSessionStore.getState().events;
+
+          // Avoid duplicates (we optimistically add events locally)
+          if (currentEvents.some((e) => e.id === newEvent.id)) return;
+
+          useGameSessionStore.setState({
+            events: [...currentEvents, newEvent],
+          });
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'game_session_scores',
+          filter: `game_session_id=eq.${sessionId}`,
+        },
+        (payload) => {
+          const currentScores = useGameSessionStore.getState().scores;
+
+          if (payload.eventType === 'INSERT') {
+            const newScore = payload.new as GameSessionScore;
+            // Avoid duplicates
+            if (currentScores.some((s) => s.id === newScore.id)) return;
+            useGameSessionStore.setState({
+              scores: [...currentScores, newScore],
+            });
+          } else if (payload.eventType === 'UPDATE') {
+            const updated = payload.new as GameSessionScore;
+            useGameSessionStore.setState({
+              scores: currentScores.map((s) =>
+                s.id === updated.id ? { ...s, ...updated } : s
+              ),
+            });
+          } else if (payload.eventType === 'DELETE') {
+            const deleted = payload.old as { id?: string; objective_name?: string };
+            if (deleted.id) {
+              useGameSessionStore.setState({
+                scores: currentScores.filter((s) => s.id !== deleted.id),
+              });
+            }
+          }
+        }
+      )
+      .subscribe((status) => {
+        if (status === 'SUBSCRIBED') {
+          setRealtimeStatus('connected');
+        } else if (status === 'CLOSED' || status === 'CHANNEL_ERROR') {
+          setRealtimeStatus('disconnected');
+        } else if (status === 'TIMED_OUT') {
+          setRealtimeStatus('disconnected');
+        }
+      });
 
     return () => {
       supabase.removeChannel(channel);
+      setRealtimeStatus('disconnected');
     };
   }, [sessionId]);
+
+  return { realtimeStatus };
 }

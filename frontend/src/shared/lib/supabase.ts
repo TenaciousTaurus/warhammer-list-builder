@@ -1,10 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
+// Import generated types when available (run `npm run gen:types` after schema changes)
+// import type { Database } from '../types/supabase-generated';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-// TODO: Type the client with `createClient<Database>(...)` after generating
-// complete types via `npx supabase gen types typescript --local` (requires
-// Supabase running). The generated types include Relationships needed for
-// typed join queries like `.select('*, detachments(*)')`.
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
