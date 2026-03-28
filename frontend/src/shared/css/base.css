@@ -228,11 +228,12 @@
   animation: fadeInUp 400ms ease;
 }
 
-/* Full-width override for list editor */
+/* Full-width override for list editor — remove vertical padding so inner
+   columns can scroll independently without the page itself overflowing */
 .app-main:has(.list-editor) {
   max-width: 100%;
-  padding-left: var(--space-md);
-  padding-right: var(--space-md);
+  padding: 0 var(--space-md);
+  overflow: hidden;
 }
 
 /* ========================================

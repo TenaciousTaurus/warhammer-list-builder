@@ -1,5 +1,6 @@
 import type { Unit, Ability, Weapon } from '../types/database';
 import { StatLine } from './StatLine';
+import { cleanGameText } from '../lib/cleanGameText';
 
 interface DatasheetViewProps {
   unit: Unit & { abilities: Ability[] };
@@ -103,7 +104,7 @@ export function DatasheetView({ unit, weapons, compact }: DatasheetViewProps) {
                   <span className="datasheet__ability-name">{a.name}</span>
                 </div>
                 {!compact && a.description && (
-                  <div className="datasheet__ability-desc">{a.description}</div>
+                  <div className="datasheet__ability-desc">{cleanGameText(a.description)}</div>
                 )}
               </div>
             ))}

@@ -62,9 +62,10 @@ const ROLE_CATEGORIES = {
 };
 
 // Priority order for role assignment (first match wins)
+// 'allied' is last — only wins if no other role applies
 const ROLE_PRIORITY = [
   'epic_hero', 'character', 'battleline', 'dedicated_transport',
-  'fortification', 'monster', 'vehicle', 'beast', 'mounted', 'infantry',
+  'fortification', 'monster', 'vehicle', 'beast', 'mounted', 'infantry', 'allied',
 ];
 
 // Characteristic type IDs from the game system
@@ -1000,6 +1001,10 @@ function parseCatalog(filePath) {
         const wargearOptions = extractWargearOptions(entry, entryIndex);
         const modelVariants = extractModelVariants(entry);
 
+        // Detect and strip [Legends] tag from name
+        const isLegends = /\[Legends\]/i.test(unitName);
+        const cleanName = unitName.replace(/\s*\[Legends\]\s*/i, '').trim();
+
         // Deduplicate weapons by name+type
         const weaponMap = new Map();
         for (const w of weapons) {
@@ -1009,7 +1014,8 @@ function parseCatalog(filePath) {
 
         units.push({
           id: uuidFromSeed(`unit:${factionName}:${unitName}`),
-          name: unitName,
+          name: cleanName,
+          is_legends: isLegends,
           role,
           movement: stats.M || '6"',
           toughness: parseInt(stats.T) || 4,
@@ -1051,6 +1057,9 @@ function parseCatalog(filePath) {
         const wargearOptions = extractWargearOptions(target, entryIndex);
         const modelVariants = extractModelVariants(target);
 
+        const isLegends = /\[Legends\]/i.test(unitName);
+        const cleanName = unitName.replace(/\s*\[Legends\]\s*/i, '').trim();
+
         const weaponMap = new Map();
         for (const w of weapons) {
           const key = `${w.name}|${w.type}`;
@@ -1059,7 +1068,8 @@ function parseCatalog(filePath) {
 
         units.push({
           id: uuidFromSeed(`unit:${factionName}:${unitName}`),
-          name: unitName,
+          name: cleanName,
+          is_legends: isLegends,
           role,
           movement: stats.M || '6"',
           toughness: parseInt(stats.T) || 4,
@@ -1115,7 +1125,7 @@ function parseCatalog(filePath) {
  */
 function generateSQL(faction) {
   const lines = [];
-  const { factionName, factionId, detachments, units } = faction;
+  const { factionName, factionId, alignment, detachments, units } = faction;
 
   lines.push(`-- ============================================================`);
   lines.push(`-- SEED DATA: ${factionName}`);
@@ -1124,9 +1134,9 @@ function generateSQL(faction) {
   lines.push('');
 
   // Faction
-  lines.push(`INSERT INTO public.factions (id, name) VALUES`);
-  lines.push(`  (${esc(factionId)}, ${esc(factionName)})`);
-  lines.push(`ON CONFLICT (name) DO UPDATE SET name = EXCLUDED.name;`);
+  lines.push(`INSERT INTO public.factions (id, name, alignment) VALUES`);
+  lines.push(`  (${esc(factionId)}, ${esc(factionName)}, ${esc(alignment || 'xenos')})`);
+  lines.push(`ON CONFLICT (name) DO UPDATE SET name = EXCLUDED.name, alignment = EXCLUDED.alignment;`);
   lines.push('');
 
   // Detachments
@@ -1154,8 +1164,8 @@ function generateSQL(faction) {
   for (const unit of units) {
     const kwArray = `'{${unit.keywords.map(k => `"${k.replace(/"/g, '\\"').replace(/'/g, "''")}"`).join(', ')}}'`;
 
-    lines.push(`INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list) VALUES`);
-    lines.push(`  (${esc(unit.id)}, ${esc(factionId)}, ${esc(unit.name)}, ${esc(unit.role)}, ${esc(unit.movement)}, ${unit.toughness}, ${esc(unit.save)}, ${unit.wounds}, ${unit.leadership}, ${unit.objective_control}, ${kwArray}, ${unit.max_per_list});`);
+    lines.push(`INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list, is_legends) VALUES`);
+    lines.push(`  (${esc(unit.id)}, ${esc(factionId)}, ${esc(unit.name)}, ${esc(unit.role)}, ${esc(unit.movement)}, ${unit.toughness}, ${esc(unit.save)}, ${unit.wounds}, ${unit.leadership}, ${unit.objective_control}, ${kwArray}, ${unit.max_per_list}, ${unit.is_legends || false});`);
     lines.push('');
 
     // Points tiers
@@ -1240,32 +1250,39 @@ function generateSQL(faction) {
 
 // Define which catalog files to parse, with optional library files and clean names
 const CATALOGS = [
-  { files: ['Imperium - Space Marines.cat'], name: 'Space Marines' },
-  { files: ['Imperium - Adepta Sororitas.cat'], name: 'Adepta Sororitas' },
-  { files: ['Imperium - Adeptus Custodes.cat'], name: 'Adeptus Custodes' },
-  { files: ['Imperium - Adeptus Mechanicus.cat'], name: 'Adeptus Mechanicus' },
-  { files: ['Imperium - Astra Militarum.cat', 'Imperium - Astra Militarum - Library.cat'], name: 'Astra Militarum' },
-  { files: ['Imperium - Grey Knights.cat'], name: 'Grey Knights' },
-  { files: ['Imperium - Imperial Knights.cat', 'Imperium - Imperial Knights - Library.cat'], name: 'Imperial Knights' },
-  { files: ['Imperium - Black Templars.cat'], name: 'Black Templars' },
-  { files: ['Imperium - Blood Angels.cat'], name: 'Blood Angels' },
-  { files: ['Imperium - Dark Angels.cat'], name: 'Dark Angels' },
-  { files: ['Imperium - Deathwatch.cat'], name: 'Deathwatch' },
-  { files: ['Imperium - Space Wolves.cat'], name: 'Space Wolves' },
-  { files: ['Chaos - Chaos Space Marines.cat'], name: 'Chaos Space Marines' },
-  { files: ['Chaos - Death Guard.cat'], name: 'Death Guard' },
-  { files: ['Chaos - Thousand Sons.cat'], name: 'Thousand Sons' },
-  { files: ['Chaos - World Eaters.cat'], name: 'World Eaters' },
-  { files: ['Chaos - Chaos Knights.cat', 'Chaos - Chaos Knights Library.cat'], name: 'Chaos Knights' },
-  { files: ['Chaos - Chaos Daemons.cat', 'Chaos - Chaos Daemons Library.cat'], name: 'Chaos Daemons' },
-  { files: ['Aeldari - Craftworlds.cat', 'Aeldari - Aeldari Library.cat'], name: 'Aeldari' },
-  { files: ['Aeldari - Drukhari.cat', 'Aeldari - Aeldari Library.cat'], name: 'Drukhari' },
-  { files: ['Leagues of Votann.cat'], name: 'Leagues of Votann' },
-  { files: ['Genestealer Cults.cat', 'Library - Tyranids.cat'], name: 'Genestealer Cults' },
-  { files: ['Necrons.cat'], name: 'Necrons' },
-  { files: ['Orks.cat'], name: 'Orks' },
-  { files: ['T\'au Empire.cat'], name: "T'au Empire" },
-  { files: ['Tyranids.cat', 'Library - Tyranids.cat'], name: 'Tyranids' },
+  // ── Imperium ──────────────────────────────────────────────────────
+  { files: ['Imperium - Space Marines.cat'], name: 'Space Marines', alignment: 'imperium' },
+  { files: ['Imperium - Adepta Sororitas.cat'], name: 'Adepta Sororitas', alignment: 'imperium' },
+  { files: ['Imperium - Adeptus Custodes.cat'], name: 'Adeptus Custodes', alignment: 'imperium' },
+  { files: ['Imperium - Adeptus Mechanicus.cat'], name: 'Adeptus Mechanicus', alignment: 'imperium' },
+  { files: ['Imperium - Astra Militarum.cat', 'Imperium - Astra Militarum - Library.cat'], name: 'Astra Militarum', alignment: 'imperium' },
+  { files: ['Imperium - Grey Knights.cat'], name: 'Grey Knights', alignment: 'imperium' },
+  { files: ['Imperium - Imperial Knights.cat', 'Imperium - Imperial Knights - Library.cat'], name: 'Imperial Knights', alignment: 'imperium' },
+  { files: ['Imperium - Black Templars.cat'], name: 'Black Templars', alignment: 'imperium' },
+  { files: ['Imperium - Blood Angels.cat'], name: 'Blood Angels', alignment: 'imperium' },
+  { files: ['Imperium - Dark Angels.cat'], name: 'Dark Angels', alignment: 'imperium' },
+  { files: ['Imperium - Deathwatch.cat'], name: 'Deathwatch', alignment: 'imperium' },
+  { files: ['Imperium - Space Wolves.cat'], name: 'Space Wolves', alignment: 'imperium' },
+  // Agents of the Imperium — allied units available to all Imperium armies
+  { files: ['Imperium - Agents of the Imperium.cat'], name: 'Agents of the Imperium', alignment: 'imperium' },
+  // ── Chaos ─────────────────────────────────────────────────────────
+  { files: ['Chaos - Chaos Space Marines.cat'], name: 'Chaos Space Marines', alignment: 'chaos' },
+  { files: ['Chaos - Death Guard.cat'], name: 'Death Guard', alignment: 'chaos' },
+  { files: ['Chaos - Thousand Sons.cat'], name: 'Thousand Sons', alignment: 'chaos' },
+  { files: ['Chaos - World Eaters.cat'], name: 'World Eaters', alignment: 'chaos' },
+  { files: ['Chaos - Chaos Knights.cat', 'Chaos - Chaos Knights Library.cat'], name: 'Chaos Knights', alignment: 'chaos' },
+  { files: ['Chaos - Chaos Daemons.cat', 'Chaos - Chaos Daemons Library.cat'], name: 'Chaos Daemons', alignment: 'chaos' },
+  // ── Xenos ─────────────────────────────────────────────────────────
+  { files: ['Aeldari - Craftworlds.cat', 'Aeldari - Aeldari Library.cat'], name: 'Aeldari', alignment: 'xenos' },
+  { files: ['Aeldari - Drukhari.cat', 'Aeldari - Aeldari Library.cat'], name: 'Drukhari', alignment: 'xenos' },
+  { files: ['Leagues of Votann.cat'], name: 'Leagues of Votann', alignment: 'xenos' },
+  { files: ['Genestealer Cults.cat', 'Library - Tyranids.cat'], name: 'Genestealer Cults', alignment: 'xenos' },
+  { files: ['Necrons.cat'], name: 'Necrons', alignment: 'xenos' },
+  { files: ['Orks.cat'], name: 'Orks', alignment: 'xenos' },
+  { files: ['T\'au Empire.cat'], name: "T'au Empire", alignment: 'xenos' },
+  { files: ['Tyranids.cat', 'Library - Tyranids.cat'], name: 'Tyranids', alignment: 'xenos' },
+  // ── Unaligned — available to ALL armies as mercenary allies ───────
+  { files: ['Unaligned Forces.cat'], name: 'Unaligned Forces', alignment: 'unaligned' },
 ];
 
 let totalUnits = 0;
@@ -1365,6 +1382,7 @@ for (const catalogDef of CATALOGS) {
   const sql = generateSQL({
     factionName,
     factionId,
+    alignment: catalogDef.alignment || 'xenos',
     detachments: mergedDetachments,
     units: mergedUnits,
     leaderTargets: reExtractedLeaderTargets,
@@ -1373,7 +1391,8 @@ for (const catalogDef of CATALOGS) {
 }
 
 // Write a single combined migration
-const migrationNum = '20250220000010';
+// NOTE: Must be > 000065 (faction alignment) and > all other migrations
+const migrationNum = '20250220000160';
 const migrationFile = `${migrationNum}_seed_all_factions.sql`;
 const header = `-- ============================================================
 -- AUTO-GENERATED from BSData/wh40k-10e
@@ -1438,15 +1457,13 @@ CREATE TABLE IF NOT EXISTS public.army_list_unit_composition (
 );
 CREATE INDEX IF NOT EXISTS idx_army_list_unit_composition_alu ON public.army_list_unit_composition(army_list_unit_id);
 
--- RLS
+-- RLS (tables already set up in 000007; ENABLE is idempotent)
 ALTER TABLE public.unit_model_variants ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.army_list_unit_composition ENABLE ROW LEVEL SECURITY;
+-- Note: policies for army_list_unit_composition are managed by 000007 + 000060
 DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'unit_model_variants' AND policyname = 'Public read model variants') THEN
     CREATE POLICY "Public read model variants" ON public.unit_model_variants FOR SELECT USING (true);
-  END IF;
-  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'army_list_unit_composition' AND policyname = 'army_list_unit_composition_all') THEN
-    CREATE POLICY "army_list_unit_composition_all" ON public.army_list_unit_composition USING (true) WITH CHECK (true);
   END IF;
 END $$;
 
@@ -1480,15 +1497,13 @@ ALTER TABLE public.wargear_options ADD COLUMN IF NOT EXISTS pool_max integer;
 ALTER TABLE public.army_list_unit_wargear ADD COLUMN IF NOT EXISTS model_variant_id uuid REFERENCES public.unit_model_variants(id) ON DELETE SET NULL;
 ALTER TABLE public.army_list_unit_wargear ADD COLUMN IF NOT EXISTS quantity integer NOT NULL DEFAULT 1;
 
--- RLS for new tables
+-- RLS for new tables (tables already set up in 000007; ENABLE is idempotent)
 ALTER TABLE public.unit_leader_targets ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.army_list_leader_attachments ENABLE ROW LEVEL SECURITY;
+-- Note: policies for army_list_leader_attachments are managed by 000007 + 000060
 DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'unit_leader_targets' AND policyname = 'Public read leader targets') THEN
     CREATE POLICY "Public read leader targets" ON public.unit_leader_targets FOR SELECT USING (true);
-  END IF;
-  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE tablename = 'army_list_leader_attachments' AND policyname = 'Allow all leader attachments') THEN
-    CREATE POLICY "Allow all leader attachments" ON public.army_list_leader_attachments FOR ALL USING (true) WITH CHECK (true);
   END IF;
 END $$;
 

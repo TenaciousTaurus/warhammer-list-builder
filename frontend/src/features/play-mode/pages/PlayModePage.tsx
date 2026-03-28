@@ -256,7 +256,7 @@ export function PlayModePage() {
             scores={gameStore.scores}
             currentRound={gameStore.session?.current_round ?? 1}
           />
-          <SecondaryObjectives listId={id} />
+          <SecondaryObjectives />
         </div>
       )}
 

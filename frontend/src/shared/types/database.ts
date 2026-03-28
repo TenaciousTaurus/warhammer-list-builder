@@ -6,12 +6,14 @@ export type Database = {
           id: string;
           name: string;
           icon_url: string | null;
+          alignment: 'imperium' | 'chaos' | 'xenos' | 'unaligned' | null;
           created_at: string;
         };
         Insert: {
           id?: string;
           name: string;
           icon_url?: string | null;
+          alignment?: 'imperium' | 'chaos' | 'xenos' | 'unaligned' | null;
         };
         Update: {
           id?: string;

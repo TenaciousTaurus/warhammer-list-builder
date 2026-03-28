@@ -49,6 +49,8 @@ interface GameSessionState {
 
   // Scoring
   updateScore: (round: number, objectiveName: string, vp: number) => void;
+  selectObjective: (name: string) => void;
+  deselectObjective: (name: string) => void;
 
   // Unit casualties
   updateUnitState: (armyListUnitId: string, modelStates: number[]) => void;
@@ -264,6 +266,53 @@ export const useGameSessionStore = create<GameSessionState>()(
           objective_name: objectiveName,
           vp_scored: vp,
         }, { onConflict: 'game_session_id,round,objective_name' });
+      },
+
+      selectObjective: (name) => {
+        const { session, scores } = get();
+        if (!session) return;
+
+        // Already selected?
+        if (scores.some(s => s.objective_name === name)) return;
+
+        // Create entries for rounds 1-5 with 0 VP
+        const newEntries: GameSessionScore[] = [];
+        for (let round = 1; round <= 5; round++) {
+          newEntries.push({
+            id: crypto.randomUUID(),
+            game_session_id: session.id,
+            round,
+            objective_name: name,
+            vp_scored: 0,
+          });
+        }
+
+        set({ scores: [...scores, ...newEntries] });
+
+        // Bulk insert to DB
+        supabase.from('game_session_scores').upsert(
+          newEntries.map(e => ({
+            game_session_id: session.id,
+            round: e.round,
+            objective_name: e.objective_name,
+            vp_scored: 0,
+          })),
+          { onConflict: 'game_session_id,round,objective_name' }
+        );
+      },
+
+      deselectObjective: (name) => {
+        const { session, scores } = get();
+        if (!session) return;
+
+        set({ scores: scores.filter(s => s.objective_name !== name) });
+
+        // Delete from DB
+        supabase.from('game_session_scores')
+          .delete()
+          .eq('game_session_id', session.id)
+          .eq('objective_name', name)
+          .then();
       },
 
       updateUnitState: (armyListUnitId, modelStates) => {

@@ -59,6 +59,7 @@ export function useListEditor(id: string | undefined) {
   const [unitCompositions, setUnitCompositions] = useState<Map<string, Map<string, number>>>(new Map()); // armyListUnitId -> (variantId -> count)
   const [leaderTargets, setLeaderTargets] = useState<LeaderTarget[]>([]);
   const [leaderAttachments, setLeaderAttachments] = useState<LeaderAttachment[]>([]);
+  const [alliedUnitIds, setAlliedUnitIds] = useState<Set<string>>(new Set());
 
   // ============================================================
   // Data fetching
@@ -98,13 +99,47 @@ export function useListEditor(id: string | undefined) {
 
     if (unitData) setListUnits(unitData as ArmyListUnitWithDetails[]);
 
-    const { data: available } = await supabase
+    // Fetch main faction units
+    const { data: mainUnits } = await supabase
       .from('units')
       .select('*, unit_points_tiers(*), abilities(*), weapons(*)')
       .eq('faction_id', listData.faction_id)
       .order('name');
 
-    if (available) setAvailableUnits(available as UnitWithRelations[]);
+    // Determine which allied factions apply for this army
+    const { data: factionMeta } = await supabase
+      .from('factions')
+      .select('alignment')
+      .eq('id', listData.faction_id)
+      .single();
+
+    const alliedFactionNames = ['Unaligned Forces'];
+    if (factionMeta?.alignment === 'imperium') {
+      alliedFactionNames.push('Agents of the Imperium', 'Imperial Knights');
+    } else if (factionMeta?.alignment === 'chaos') {
+      alliedFactionNames.push('Chaos Knights');
+    }
+
+    const { data: alliedFactionRows } = await supabase
+      .from('factions')
+      .select('id')
+      .in('name', alliedFactionNames);
+
+    const alliedFactionIds = (alliedFactionRows || []).map(f => f.id as string);
+
+    let alliedUnits: UnitWithRelations[] = [];
+    if (alliedFactionIds.length > 0) {
+      const { data: allied } = await supabase
+        .from('units')
+        .select('*, unit_points_tiers(*), abilities(*), weapons(*)')
+        .in('faction_id', alliedFactionIds)
+        .order('name');
+      if (allied) alliedUnits = allied as UnitWithRelations[];
+    }
+
+    const available = [...(mainUnits || []), ...alliedUnits];
+    if (available.length > 0) setAvailableUnits(available as UnitWithRelations[]);
+    setAlliedUnitIds(new Set(alliedUnits.map(u => u.id)));
 
     const { data: enhData } = await supabase
       .from('enhancements')
@@ -339,25 +374,36 @@ export function useListEditor(id: string | undefined) {
   const unitsByRole = useMemo(() => {
     const groups: Record<string, UnitWithRelations[]> = {};
     for (const unit of filteredUnits) {
+      if (alliedUnitIds.has(unit.id)) continue; // Allied units shown separately
       if (!groups[unit.role]) groups[unit.role] = [];
       groups[unit.role].push(unit);
     }
     return groups;
-  }, [filteredUnits]);
+  }, [filteredUnits, alliedUnitIds]);
+
+  const filteredAlliedUnits = useMemo(() => {
+    return filteredUnits.filter(u => alliedUnitIds.has(u.id));
+  }, [filteredUnits, alliedUnitIds]);
 
   const rosterByRole = useMemo(() => {
     const groups: Record<string, ArmyListUnitWithDetails[]> = {};
     for (const lu of listUnits) {
+      if (alliedUnitIds.has(lu.unit_id)) continue; // Allied units shown separately
       const role = lu.units.role;
       if (!groups[role]) groups[role] = [];
       groups[role].push(lu);
     }
     return groups;
-  }, [listUnits]);
+  }, [listUnits, alliedUnitIds]);
+
+  const rosterAlliedUnits = useMemo(() => {
+    return listUnits.filter(lu => alliedUnitIds.has(lu.unit_id));
+  }, [listUnits, alliedUnitIds]);
 
   const rosterSectionPoints = useMemo(() => {
     const points: Record<string, number> = {};
     for (const lu of listUnits) {
+      if (alliedUnitIds.has(lu.unit_id)) continue;
       const role = lu.units.role;
       const unitPts = getUnitPoints(lu.units, lu.model_count);
       const unitEnh = unitEnhancementMap.get(lu.id);
@@ -365,7 +411,17 @@ export function useListEditor(id: string | undefined) {
       points[role] = (points[role] ?? 0) + unitPts + enhPts;
     }
     return points;
-  }, [listUnits, unitEnhancementMap, enhancements]);
+  }, [listUnits, unitEnhancementMap, enhancements, alliedUnitIds]);
+
+  const rosterAlliedPoints = useMemo(() => {
+    let pts = 0;
+    for (const lu of rosterAlliedUnits) {
+      pts += getUnitPoints(lu.units, lu.model_count);
+      const unitEnh = unitEnhancementMap.get(lu.id);
+      if (unitEnh) pts += enhancements.find(e => e.id === unitEnh.enhancementId)?.points ?? 0;
+    }
+    return pts;
+  }, [rosterAlliedUnits, unitEnhancementMap, enhancements]);
 
   // ============================================================
   // Helpers
@@ -727,9 +783,13 @@ export function useListEditor(id: string | undefined) {
     enhancementLimitReached,
     unitEnhancementMap,
     filteredUnits,
+    filteredAlliedUnits,
     unitsByRole,
     rosterByRole,
+    rosterAlliedUnits,
     rosterSectionPoints,
+    rosterAlliedPoints,
+    alliedUnitIds,
 
     // Actions
     addUnit,

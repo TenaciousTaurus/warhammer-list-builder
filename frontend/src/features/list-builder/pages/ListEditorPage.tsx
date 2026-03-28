@@ -101,6 +101,7 @@ export function ListEditorPage() {
         listName={editor.list.name}
         totalPoints={editor.totalPoints}
         filteredUnits={editor.filteredUnits}
+        filteredAlliedUnits={editor.filteredAlliedUnits}
         unitsByRole={editor.unitsByRole}
         unitCountsInList={editor.unitCountsInList}
         collapsedPickerRoles={editor.collapsedPickerRoles}
@@ -137,7 +138,9 @@ export function ListEditorPage() {
           <ArmyRoster
             listUnits={editor.listUnits}
             rosterByRole={editor.rosterByRole}
+            rosterAlliedUnits={editor.rosterAlliedUnits}
             rosterSectionPoints={editor.rosterSectionPoints}
+            rosterAlliedPoints={editor.rosterAlliedPoints}
             selectedArmyListUnitId={editor.selectedArmyListUnitId}
             getEnhancementForUnit={editor.getEnhancementForUnit}
             getWargearSummary={editor.getWargearSummary}

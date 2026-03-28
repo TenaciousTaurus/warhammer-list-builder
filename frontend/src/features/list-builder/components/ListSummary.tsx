@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import type { ArmyList, Detachment, ValidateArmyListResult } from '../../../shared/types/database';
 import { PointsBar } from './PointsBar';
+import { cleanGameText } from '../../../shared/lib/cleanGameText';
 
 const BATTLE_SIZE_PRESETS = [
   { id: 'combat_patrol', name: 'Combat Patrol', points: 500 },
@@ -204,7 +205,7 @@ export function ListSummary({
           </button>
           {showDetachmentRules && (
             <div className="detachment-rules__content">
-              {list.detachments.rule_text}
+              {cleanGameText(list.detachments.rule_text)}
             </div>
           )}
         </div>
