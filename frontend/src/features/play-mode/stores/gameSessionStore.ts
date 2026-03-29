@@ -12,6 +12,8 @@ import type {
 export const PHASES = ['Command', 'Movement', 'Shooting', 'Charge', 'Fight'] as const;
 export type PhaseName = typeof PHASES[number];
 
+export type SyncStatus = 'synced' | 'syncing' | 'error';
+
 interface UnitCasualtyState {
   armyListUnitId: string;
   modelStates: number[];
@@ -31,6 +33,11 @@ interface GameSessionState {
   // UI state
   loading: boolean;
   error: string | null;
+
+  // Sync state (not persisted)
+  syncStatus: SyncStatus;
+  syncError: string | null;
+  _pendingSyncs: number;
 
   // Session lifecycle
   createSession: (armyListId: string, userId: string, opponentName?: string, opponentFaction?: string) => Promise<string | null>;
@@ -68,8 +75,59 @@ interface GameSessionState {
   loadStratagems: (factionId?: string, detachmentId?: string) => Promise<void>;
   loadSecondaryObjectives: () => Promise<void>;
 
-  // Persistence helper
-  _syncSession: () => Promise<void>;
+  // Sync helpers
+  clearSyncError: () => void;
+  _syncSession: () => void;
+  _syncSessionImmediate: () => Promise<void>;
+  _dbSync: (label: string, operation: () => PromiseLike<{ error: { message: string } | null }> | { error: { message: string } | null }) => void;
+}
+
+// ── Debounce helper for _syncSession ──────────────────────────────────────────
+let syncTimer: ReturnType<typeof setTimeout> | null = null;
+const SYNC_DEBOUNCE_MS = 300;
+const SYNC_RETRY_MS = 2000;
+
+/**
+ * Wraps a Supabase fire-and-forget call with sync status tracking and error handling.
+ * Runs async — callers don't await it (optimistic UI stays fast).
+ */
+function runDbSync(
+  get: () => GameSessionState,
+  set: (partial: Partial<GameSessionState>) => void,
+  label: string,
+  operation: () => PromiseLike<{ error: { message: string } | null }> | { error: { message: string } | null },
+) {
+  const pending = get()._pendingSyncs + 1;
+  set({ _pendingSyncs: pending, syncStatus: 'syncing' });
+
+  Promise.resolve(operation()).then((result) => {
+    const current = get()._pendingSyncs - 1;
+    const error = result?.error ?? null;
+    if (error) {
+      console.error(`[Sync] ${label} failed:`, error.message);
+      set({
+        _pendingSyncs: current,
+        syncStatus: 'error',
+        syncError: `${label}: ${error.message}`,
+      });
+    } else {
+      set({
+        _pendingSyncs: current,
+        // Only mark synced if no other operations are in flight
+        syncStatus: current > 0 ? 'syncing' : 'synced',
+        syncError: current > 0 ? get().syncError : null,
+      });
+    }
+  }).catch((err: unknown) => {
+    const current = get()._pendingSyncs - 1;
+    const message = err instanceof Error ? err.message : 'Network error';
+    console.error(`[Sync] ${label} threw:`, message);
+    set({
+      _pendingSyncs: current,
+      syncStatus: 'error',
+      syncError: `${label}: ${message}`,
+    });
+  });
 }
 
 export const useGameSessionStore = create<GameSessionState>()(
@@ -83,6 +141,13 @@ export const useGameSessionStore = create<GameSessionState>()(
       secondaryObjectives: [],
       loading: false,
       error: null,
+      syncStatus: 'synced' as SyncStatus,
+      syncError: null,
+      _pendingSyncs: 0,
+
+      clearSyncError: () => {
+        set({ syncStatus: 'synced', syncError: null });
+      },
 
       createSession: async (armyListId, userId, opponentName, opponentFaction) => {
         set({ loading: true, error: null });
@@ -110,6 +175,9 @@ export const useGameSessionStore = create<GameSessionState>()(
           scores: [],
           unitStates: [],
           loading: false,
+          syncStatus: 'synced',
+          syncError: null,
+          _pendingSyncs: 0,
         });
 
         // Log game start event
@@ -141,6 +209,9 @@ export const useGameSessionStore = create<GameSessionState>()(
             modelStates: us.model_states as number[],
           })),
           loading: false,
+          syncStatus: 'synced',
+          syncError: null,
+          _pendingSyncs: 0,
         });
       },
 
@@ -154,7 +225,11 @@ export const useGameSessionStore = create<GameSessionState>()(
           .limit(1)
           .single();
 
-        return (data as GameSession) ?? null;
+        if (!data) return null;
+
+        // Hydrate full session from DB (overrides any stale localStorage)
+        await get().loadSession(data.id);
+        return data as GameSession;
       },
 
       advancePhase: () => {
@@ -265,13 +340,15 @@ export const useGameSessionStore = create<GameSessionState>()(
 
         set({ scores: newScores });
 
-        // Upsert to DB
-        supabase.from('game_session_scores').upsert({
-          game_session_id: session.id,
-          round,
-          objective_name: objectiveName,
-          vp_scored: vp,
-        }, { onConflict: 'game_session_id,round,objective_name' });
+        // Upsert to DB with error handling
+        get()._dbSync('Score update', () =>
+          supabase.from('game_session_scores').upsert({
+            game_session_id: session.id,
+            round,
+            objective_name: objectiveName,
+            vp_scored: vp,
+          }, { onConflict: 'game_session_id,round,objective_name' })
+        );
       },
 
       selectObjective: (name) => {
@@ -295,15 +372,17 @@ export const useGameSessionStore = create<GameSessionState>()(
 
         set({ scores: [...scores, ...newEntries] });
 
-        // Bulk insert to DB
-        supabase.from('game_session_scores').upsert(
-          newEntries.map(e => ({
-            game_session_id: session.id,
-            round: e.round,
-            objective_name: e.objective_name,
-            vp_scored: 0,
-          })),
-          { onConflict: 'game_session_id,round,objective_name' }
+        // Bulk insert to DB with error handling
+        get()._dbSync('Select objective', () =>
+          supabase.from('game_session_scores').upsert(
+            newEntries.map(e => ({
+              game_session_id: session.id,
+              round: e.round,
+              objective_name: e.objective_name,
+              vp_scored: 0,
+            })),
+            { onConflict: 'game_session_id,round,objective_name' }
+          )
         );
       },
 
@@ -313,12 +392,13 @@ export const useGameSessionStore = create<GameSessionState>()(
 
         set({ scores: scores.filter(s => s.objective_name !== name) });
 
-        // Delete from DB
-        supabase.from('game_session_scores')
-          .delete()
-          .eq('game_session_id', session.id)
-          .eq('objective_name', name)
-          .then();
+        // Delete from DB with error handling
+        get()._dbSync('Deselect objective', () =>
+          supabase.from('game_session_scores')
+            .delete()
+            .eq('game_session_id', session.id)
+            .eq('objective_name', name)
+        );
       },
 
       updateUnitState: (armyListUnitId, modelStates) => {
@@ -337,12 +417,14 @@ export const useGameSessionStore = create<GameSessionState>()(
 
         set({ unitStates: newStates });
 
-        // Upsert to DB
-        supabase.from('game_session_unit_states').upsert({
-          game_session_id: session.id,
-          army_list_unit_id: armyListUnitId,
-          model_states: modelStates,
-        }, { onConflict: 'game_session_id,army_list_unit_id' });
+        // Upsert to DB with error handling
+        get()._dbSync('Unit state', () =>
+          supabase.from('game_session_unit_states').upsert({
+            game_session_id: session.id,
+            army_list_unit_id: armyListUnitId,
+            model_states: modelStates,
+          }, { onConflict: 'game_session_id,army_list_unit_id' })
+        );
       },
 
       logEvent: (eventType, description, data) => {
@@ -362,15 +444,17 @@ export const useGameSessionStore = create<GameSessionState>()(
 
         set({ events: [...events, event] });
 
-        // Fire-and-forget to DB
-        supabase.from('game_session_events').insert({
-          game_session_id: session.id,
-          round: session.current_round,
-          phase: session.current_phase,
-          event_type: eventType,
-          description,
-          data: data ?? null,
-        });
+        // Fire-and-forget to DB with error handling
+        get()._dbSync('Event log', () =>
+          supabase.from('game_session_events').insert({
+            game_session_id: session.id,
+            round: session.current_round,
+            phase: session.current_phase,
+            event_type: eventType,
+            description,
+            data: data ?? null,
+          })
+        );
       },
 
       completeGame: async (result, notes) => {
@@ -387,7 +471,7 @@ export const useGameSessionStore = create<GameSessionState>()(
 
         set({ session: updated });
 
-        await supabase
+        const { error } = await supabase
           .from('game_sessions')
           .update({
             status: 'completed',
@@ -399,6 +483,10 @@ export const useGameSessionStore = create<GameSessionState>()(
           })
           .eq('id', session.id);
 
+        if (error) {
+          set({ syncStatus: 'error', syncError: `Complete game: ${error.message}` });
+        }
+
         get().logEvent('game_end', `Game completed: ${result}`);
       },
 
@@ -407,10 +495,14 @@ export const useGameSessionStore = create<GameSessionState>()(
         if (!session) return;
 
         set({ session: { ...session, status: 'paused' } });
-        await supabase
+        const { error } = await supabase
           .from('game_sessions')
           .update({ status: 'paused' })
           .eq('id', session.id);
+
+        if (error) {
+          set({ syncStatus: 'error', syncError: `Pause game: ${error.message}` });
+        }
       },
 
       resumeGame: async () => {
@@ -418,19 +510,31 @@ export const useGameSessionStore = create<GameSessionState>()(
         if (!session) return;
 
         set({ session: { ...session, status: 'active' } });
-        await supabase
+        const { error } = await supabase
           .from('game_sessions')
           .update({ status: 'active' })
           .eq('id', session.id);
+
+        if (error) {
+          set({ syncStatus: 'error', syncError: `Resume game: ${error.message}` });
+        }
       },
 
       resetGame: () => {
+        // Clear any pending sync timer
+        if (syncTimer) {
+          clearTimeout(syncTimer);
+          syncTimer = null;
+        }
         set({
           session: null,
           events: [],
           scores: [],
           unitStates: [],
           error: null,
+          syncStatus: 'synced',
+          syncError: null,
+          _pendingSyncs: 0,
         });
       },
 
@@ -468,22 +572,69 @@ export const useGameSessionStore = create<GameSessionState>()(
         if (data) set({ secondaryObjectives: data as SecondaryObjective[] });
       },
 
-      _syncSession: async () => {
+      // Debounced sync — batches rapid state changes (phase/CP/VP)
+      _syncSession: () => {
+        if (syncTimer) clearTimeout(syncTimer);
+        syncTimer = setTimeout(() => {
+          syncTimer = null;
+          get()._syncSessionImmediate();
+        }, SYNC_DEBOUNCE_MS);
+      },
+
+      // Immediate sync with retry
+      _syncSessionImmediate: async () => {
         const { session } = get();
         if (!session) return;
 
-        await supabase
-          .from('game_sessions')
-          .update({
-            current_round: session.current_round,
-            current_phase: session.current_phase,
-            cp: session.cp,
-            my_vp: session.my_vp,
-            opponent_vp: session.opponent_vp,
-            timer_player_seconds: session.timer_player_seconds,
-            timer_opponent_seconds: session.timer_opponent_seconds,
-          })
-          .eq('id', session.id);
+        const doSync = async (): Promise<boolean> => {
+          const pending = get()._pendingSyncs + 1;
+          set({ _pendingSyncs: pending, syncStatus: 'syncing' });
+
+          const { error } = await supabase
+            .from('game_sessions')
+            .update({
+              current_round: session.current_round,
+              current_phase: session.current_phase,
+              cp: session.cp,
+              my_vp: session.my_vp,
+              opponent_vp: session.opponent_vp,
+              timer_player_seconds: session.timer_player_seconds,
+              timer_opponent_seconds: session.timer_opponent_seconds,
+            })
+            .eq('id', session.id);
+
+          const current = get()._pendingSyncs - 1;
+
+          if (error) {
+            set({ _pendingSyncs: current });
+            return false;
+          }
+
+          set({
+            _pendingSyncs: current,
+            syncStatus: current > 0 ? 'syncing' : 'synced',
+            syncError: current > 0 ? get().syncError : null,
+          });
+          return true;
+        };
+
+        const ok = await doSync();
+        if (!ok) {
+          // Retry once after delay
+          await new Promise(resolve => setTimeout(resolve, SYNC_RETRY_MS));
+          const retryOk = await doSync();
+          if (!retryOk) {
+            set({
+              syncStatus: 'error',
+              syncError: 'Failed to sync game state to server',
+            });
+          }
+        }
+      },
+
+      // Shared helper for fire-and-forget DB ops with status tracking
+      _dbSync: (label, operation) => {
+        runDbSync(get, set, label, operation);
       },
     }),
     {
