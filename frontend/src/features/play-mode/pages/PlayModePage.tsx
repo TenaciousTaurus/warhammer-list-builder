@@ -14,6 +14,7 @@ import { StratagemPanel } from '../components/StratagemPanel';
 import { GameSetup } from '../components/GameSetup';
 import { SecondaryObjectives } from '../components/SecondaryObjectives';
 import { BattleReport } from '../components/BattleReport';
+import { SyncStatusIndicator } from '../components/SyncStatusIndicator';
 import { useGameSessionStore } from '../stores/gameSessionStore';
 import { useGameRealtime } from '../hooks/useGameRealtime';
 import { getUnitPoints, ROLE_ORDER, ROLE_LABELS, type ArmyListUnitWithDetails } from '../../list-builder/hooks/useListEditor';
@@ -212,6 +213,9 @@ export function PlayModePage() {
           </button>
         </div>
       </div>
+
+      {/* Sync Status */}
+      <SyncStatusIndicator />
 
       {/* Phase Tracker */}
       <PhaseTracker />

@@ -13,6 +13,9 @@ beforeEach(() => {
     secondaryObjectives: [],
     loading: false,
     error: null,
+    syncStatus: 'synced',
+    syncError: null,
+    _pendingSyncs: 0,
   });
   vi.spyOn(crypto, 'randomUUID').mockReturnValue('00000000-0000-0000-0000-000000000001' as `${string}-${string}-${string}-${string}-${string}`);
 });
@@ -262,5 +265,57 @@ describe('resetGame', () => {
     expect(state.events).toEqual([]);
     expect(state.scores).toEqual([]);
     expect(state.unitStates).toEqual([]);
+  });
+
+  it('resets sync status', () => {
+    useGameSessionStore.setState({
+      session: createMockSession(),
+      syncStatus: 'error',
+      syncError: 'Some error',
+      _pendingSyncs: 3,
+    });
+
+    useGameSessionStore.getState().resetGame();
+
+    const state = useGameSessionStore.getState();
+    expect(state.syncStatus).toBe('synced');
+    expect(state.syncError).toBeNull();
+    expect(state._pendingSyncs).toBe(0);
+  });
+});
+
+describe('sync status', () => {
+  it('starts in synced state', () => {
+    const state = useGameSessionStore.getState();
+    expect(state.syncStatus).toBe('synced');
+    expect(state.syncError).toBeNull();
+    expect(state._pendingSyncs).toBe(0);
+  });
+
+  it('clearSyncError resets sync state', () => {
+    useGameSessionStore.setState({
+      syncStatus: 'error',
+      syncError: 'Failed to sync',
+    });
+
+    useGameSessionStore.getState().clearSyncError();
+
+    expect(useGameSessionStore.getState().syncStatus).toBe('synced');
+    expect(useGameSessionStore.getState().syncError).toBeNull();
+  });
+
+  it('_dbSync sets syncing status when called with a session', () => {
+    const session = createMockSession();
+    useGameSessionStore.setState({ session });
+
+    // Call _dbSync with a mock operation that never resolves (to test intermediate state)
+    useGameSessionStore.getState()._dbSync('Test op', () =>
+      new Promise(() => {
+        // never resolves — we just want to test the intermediate state
+      }) as Promise<{ error: { message: string } | null }>
+    );
+
+    expect(useGameSessionStore.getState().syncStatus).toBe('syncing');
+    expect(useGameSessionStore.getState()._pendingSyncs).toBe(1);
   });
 });
