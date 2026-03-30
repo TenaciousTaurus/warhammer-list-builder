@@ -7,7 +7,7 @@
 -- ============================================================
 
 CREATE TABLE public.crusade_battles (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   campaign_id uuid NOT NULL REFERENCES public.campaigns(id) ON DELETE CASCADE,
   mission_id uuid REFERENCES public.missions(id),
   game_session_id uuid REFERENCES public.game_sessions(id),
@@ -81,7 +81,7 @@ CREATE INDEX idx_crusade_battles_player2 ON public.crusade_battles (player2_memb
 -- ============================================================
 
 CREATE TABLE public.crusade_battle_participants (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   crusade_battle_id uuid NOT NULL REFERENCES public.crusade_battles(id) ON DELETE CASCADE,
   crusade_unit_id uuid NOT NULL REFERENCES public.crusade_units(id) ON DELETE CASCADE,
   xp_earned integer NOT NULL DEFAULT 0,
@@ -149,7 +149,7 @@ CREATE INDEX idx_battle_participants_unit ON public.crusade_battle_participants 
 -- ============================================================
 
 CREATE TABLE public.requisition_log (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   campaign_member_id uuid NOT NULL REFERENCES public.campaign_members(id) ON DELETE CASCADE,
   type text NOT NULL CHECK (type IN (
     'increase_supply', 'add_unit', 'remove_scar', 'refit',

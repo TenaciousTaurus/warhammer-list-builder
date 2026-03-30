@@ -6,7 +6,7 @@
 
 -- Unit model variants (e.g. "Plague Champion", "Plague Marine")
 CREATE TABLE IF NOT EXISTS public.unit_model_variants (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   unit_id uuid NOT NULL REFERENCES public.units(id) ON DELETE CASCADE,
   name text NOT NULL,
   min_count integer NOT NULL DEFAULT 0,
@@ -25,7 +25,7 @@ CREATE POLICY "Public read model variants"
 
 -- Army list unit composition (model counts per variant)
 CREATE TABLE IF NOT EXISTS public.army_list_unit_composition (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   army_list_unit_id uuid NOT NULL REFERENCES public.army_list_units(id) ON DELETE CASCADE,
   model_variant_id uuid NOT NULL REFERENCES public.unit_model_variants(id) ON DELETE CASCADE,
   count integer NOT NULL DEFAULT 0,
@@ -40,7 +40,7 @@ CREATE POLICY "army_list_unit_composition_all"
 
 -- Unit leader targets (which leaders can join which units)
 CREATE TABLE IF NOT EXISTS public.unit_leader_targets (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   leader_unit_id uuid NOT NULL REFERENCES public.units(id) ON DELETE CASCADE,
   target_unit_id uuid NOT NULL REFERENCES public.units(id) ON DELETE CASCADE,
   UNIQUE(leader_unit_id, target_unit_id)
@@ -54,7 +54,7 @@ CREATE POLICY "Public read leader targets"
 
 -- Army list leader attachments (leader-to-bodyguard unit pairings in a list)
 CREATE TABLE IF NOT EXISTS public.army_list_leader_attachments (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   army_list_id uuid NOT NULL REFERENCES public.army_lists(id) ON DELETE CASCADE,
   leader_army_list_unit_id uuid NOT NULL REFERENCES public.army_list_units(id) ON DELETE CASCADE,
   target_army_list_unit_id uuid NOT NULL REFERENCES public.army_list_units(id) ON DELETE CASCADE,

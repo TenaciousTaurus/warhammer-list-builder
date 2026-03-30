@@ -1,5 +1,4 @@
--- Enable UUID extension
-create extension if not exists "uuid-ossp";
+-- gen_random_uuid() is built-in to Postgres 14+, no extension needed
 
 -- ============================================================
 -- GAME DATA TABLES (public read)
@@ -7,7 +6,7 @@ create extension if not exists "uuid-ossp";
 
 -- Factions
 create table public.factions (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   name text not null unique,
   icon_url text,
   created_at timestamptz not null default now()
@@ -15,7 +14,7 @@ create table public.factions (
 
 -- Detachments
 create table public.detachments (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   faction_id uuid not null references public.factions(id) on delete cascade,
   name text not null,
   rule_text text,
@@ -25,7 +24,7 @@ create table public.detachments (
 
 -- Units (datasheets)
 create table public.units (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   faction_id uuid not null references public.factions(id) on delete cascade,
   name text not null,
   role text not null check (role in (
@@ -46,7 +45,7 @@ create table public.units (
 
 -- Unit points tiers
 create table public.unit_points_tiers (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   unit_id uuid not null references public.units(id) on delete cascade,
   model_count integer not null,
   points integer not null,
@@ -55,7 +54,7 @@ create table public.unit_points_tiers (
 
 -- Weapons
 create table public.weapons (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   unit_id uuid not null references public.units(id) on delete cascade,
   name text not null,
   type text not null check (type in ('ranged', 'melee')),
@@ -70,7 +69,7 @@ create table public.weapons (
 
 -- Abilities
 create table public.abilities (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   unit_id uuid not null references public.units(id) on delete cascade,
   name text not null,
   type text not null check (type in ('core', 'faction', 'unique', 'invulnerable')),
@@ -79,7 +78,7 @@ create table public.abilities (
 
 -- Enhancements (per detachment)
 create table public.enhancements (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   detachment_id uuid not null references public.detachments(id) on delete cascade,
   name text not null,
   points integer not null,
@@ -92,7 +91,7 @@ create table public.enhancements (
 
 -- Army lists
 create table public.army_lists (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   user_id uuid not null,
   name text not null,
   faction_id uuid not null references public.factions(id),
@@ -104,7 +103,7 @@ create table public.army_lists (
 
 -- Army list units
 create table public.army_list_units (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   army_list_id uuid not null references public.army_lists(id) on delete cascade,
   unit_id uuid not null references public.units(id),
   model_count integer not null default 1,
@@ -113,7 +112,7 @@ create table public.army_list_units (
 
 -- Army list enhancements
 create table public.army_list_enhancements (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   army_list_id uuid not null references public.army_lists(id) on delete cascade,
   enhancement_id uuid not null references public.enhancements(id),
   army_list_unit_id uuid not null references public.army_list_units(id) on delete cascade

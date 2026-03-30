@@ -7,7 +7,7 @@
 -- ============================================================
 
 CREATE TABLE public.paint_library (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   brand text NOT NULL,
   range_name text NOT NULL DEFAULT '',
   paint_name text NOT NULL,
@@ -32,7 +32,7 @@ CREATE INDEX idx_paint_library_type ON public.paint_library (paint_type);
 
 -- Collection entries — what minis you physically own
 CREATE TABLE public.collection_entries (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL,
   unit_id uuid REFERENCES public.units(id),
   faction_id uuid REFERENCES public.factions(id),
@@ -71,7 +71,7 @@ CREATE TRIGGER collection_entries_updated_at
 
 -- Wishlist items
 CREATE TABLE public.wishlist_items (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL,
   unit_id uuid REFERENCES public.units(id),
   faction_id uuid REFERENCES public.factions(id),
@@ -97,7 +97,7 @@ CREATE INDEX idx_wishlist_items_user ON public.wishlist_items (user_id);
 
 -- Paint recipes
 CREATE TABLE public.paint_recipes (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL,
   name text NOT NULL,
   description text,
@@ -129,7 +129,7 @@ CREATE TRIGGER paint_recipes_updated_at
 
 -- Paint recipe steps
 CREATE TABLE public.paint_recipe_steps (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   recipe_id uuid NOT NULL REFERENCES public.paint_recipes(id) ON DELETE CASCADE,
   step_order integer NOT NULL,
   paint_id uuid REFERENCES public.paint_library(id),
@@ -188,7 +188,7 @@ CREATE INDEX idx_paint_recipe_steps_recipe ON public.paint_recipe_steps (recipe_
 
 -- User paint inventory (what paints you own)
 CREATE TABLE public.user_paint_inventory (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL,
   paint_id uuid NOT NULL REFERENCES public.paint_library(id),
   in_stock boolean NOT NULL DEFAULT true,

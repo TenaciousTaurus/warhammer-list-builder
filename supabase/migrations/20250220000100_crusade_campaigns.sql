@@ -9,7 +9,7 @@
 -- ============================================================
 
 CREATE TABLE public.campaigns (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   owner_id uuid NOT NULL,
   name text NOT NULL,
   description text,
@@ -23,7 +23,7 @@ CREATE TABLE public.campaigns (
 );
 
 CREATE TABLE public.campaign_members (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   campaign_id uuid NOT NULL REFERENCES public.campaigns(id) ON DELETE CASCADE,
   user_id uuid NOT NULL,
   role text NOT NULL CHECK (role IN ('owner', 'player')) DEFAULT 'player',
@@ -35,7 +35,7 @@ CREATE TABLE public.campaign_members (
 );
 
 CREATE TABLE public.crusade_rosters (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   campaign_member_id uuid NOT NULL UNIQUE REFERENCES public.campaign_members(id) ON DELETE CASCADE,
   faction_id uuid NOT NULL REFERENCES public.factions(id),
   name text NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE public.crusade_rosters (
 );
 
 CREATE TABLE public.crusade_units (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   crusade_roster_id uuid NOT NULL REFERENCES public.crusade_rosters(id) ON DELETE CASCADE,
   unit_id uuid NOT NULL REFERENCES public.units(id),
   custom_name text,
