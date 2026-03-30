@@ -8,7 +8,7 @@
 -- ============================================================
 
 CREATE TABLE public.tournaments (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   organizer_id uuid NOT NULL,
   name text NOT NULL,
   description text,
@@ -26,7 +26,7 @@ CREATE TABLE public.tournaments (
 );
 
 CREATE TABLE public.tournament_participants (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tournament_id uuid NOT NULL REFERENCES public.tournaments(id) ON DELETE CASCADE,
   user_id uuid NOT NULL,
   army_list_id uuid REFERENCES public.army_lists(id),
@@ -38,7 +38,7 @@ CREATE TABLE public.tournament_participants (
 );
 
 CREATE TABLE public.tournament_rounds (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   tournament_id uuid NOT NULL REFERENCES public.tournaments(id) ON DELETE CASCADE,
   round_number integer NOT NULL,
   status text NOT NULL CHECK (status IN ('pending', 'active', 'completed')) DEFAULT 'pending',
@@ -47,7 +47,7 @@ CREATE TABLE public.tournament_rounds (
 );
 
 CREATE TABLE public.tournament_pairings (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   round_id uuid NOT NULL REFERENCES public.tournament_rounds(id) ON DELETE CASCADE,
   player1_id uuid NOT NULL REFERENCES public.tournament_participants(id),
   player2_id uuid REFERENCES public.tournament_participants(id),

@@ -3,7 +3,7 @@
 -- Within a group, users pick exactly one option (mutually exclusive).
 
 create table public.wargear_options (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   unit_id uuid not null references public.units(id) on delete cascade,
   group_name text not null,         -- e.g. "Wargear", "Weapon 1", "Sponson Weapons"
   name text not null,               -- e.g. "Storm Bolter", "Combi-weapon"
@@ -16,7 +16,7 @@ create unique index idx_wargear_options_unique on public.wargear_options(unit_id
 
 -- User's wargear selections per unit in an army list
 create table public.army_list_unit_wargear (
-  id uuid primary key default uuid_generate_v4(),
+  id uuid primary key default gen_random_uuid(),
   army_list_unit_id uuid not null references public.army_list_units(id) on delete cascade,
   wargear_option_id uuid not null references public.wargear_options(id) on delete cascade,
   unique(army_list_unit_id, wargear_option_id)

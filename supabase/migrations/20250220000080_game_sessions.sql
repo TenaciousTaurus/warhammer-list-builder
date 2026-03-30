@@ -8,7 +8,7 @@
 
 -- Missions
 CREATE TABLE public.missions (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   name text NOT NULL,
   type text NOT NULL CHECK (type IN ('matched', 'crusade', 'narrative', 'combat_patrol')),
   source text,
@@ -25,7 +25,7 @@ CREATE POLICY "Public read missions" ON public.missions FOR SELECT USING (true);
 
 -- Secondary objectives
 CREATE TABLE public.secondary_objectives (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   name text NOT NULL,
   category text NOT NULL DEFAULT 'tactical',
   description text NOT NULL DEFAULT '',
@@ -39,7 +39,7 @@ CREATE POLICY "Public read secondary objectives" ON public.secondary_objectives 
 
 -- Stratagems (core + faction/detachment specific)
 CREATE TABLE public.stratagems (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   name text NOT NULL,
   type text NOT NULL CHECK (type IN ('core', 'faction')) DEFAULT 'core',
   faction_id uuid REFERENCES public.factions(id) ON DELETE CASCADE,
@@ -65,7 +65,7 @@ CREATE INDEX idx_stratagems_type ON public.stratagems (type);
 
 -- Game sessions
 CREATE TABLE public.game_sessions (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id uuid NOT NULL,
   army_list_id uuid NOT NULL REFERENCES public.army_lists(id),
   mission_id uuid REFERENCES public.missions(id),
@@ -120,7 +120,7 @@ CREATE TRIGGER game_sessions_updated_at
 
 -- Game session events (timestamped log)
 CREATE TABLE public.game_session_events (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   game_session_id uuid NOT NULL REFERENCES public.game_sessions(id) ON DELETE CASCADE,
   round integer NOT NULL,
   phase integer NOT NULL,
@@ -166,7 +166,7 @@ CREATE INDEX idx_game_session_events_session ON public.game_session_events (game
 
 -- Game session scores (VP breakdown per round per objective)
 CREATE TABLE public.game_session_scores (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   game_session_id uuid NOT NULL REFERENCES public.game_sessions(id) ON DELETE CASCADE,
   round integer NOT NULL,
   objective_name text NOT NULL,
@@ -227,7 +227,7 @@ CREATE INDEX idx_game_session_scores_session ON public.game_session_scores (game
 
 -- Game session unit states (casualty/wound tracking)
 CREATE TABLE public.game_session_unit_states (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   game_session_id uuid NOT NULL REFERENCES public.game_sessions(id) ON DELETE CASCADE,
   army_list_unit_id uuid NOT NULL REFERENCES public.army_list_units(id),
   model_states jsonb NOT NULL DEFAULT '[]',

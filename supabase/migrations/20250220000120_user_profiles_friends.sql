@@ -72,7 +72,7 @@ CREATE TRIGGER on_auth_user_created
 -- ============================================================
 
 CREATE TABLE public.friendships (
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   requester_id uuid NOT NULL REFERENCES public.user_profiles(id) ON DELETE CASCADE,
   addressee_id uuid NOT NULL REFERENCES public.user_profiles(id) ON DELETE CASCADE,
   status text NOT NULL CHECK (status IN ('pending', 'accepted', 'declined', 'blocked')) DEFAULT 'pending',
