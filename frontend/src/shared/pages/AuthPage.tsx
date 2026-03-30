@@ -51,7 +51,7 @@ export function AuthPage() {
           <div className="auth-card__icon">&#9876;</div>
           <h2 className="auth-card__title">Account Created</h2>
           <p className="auth-card__subtitle">
-            Your account has been created. You can now sign in.
+            Your account has been created. Check your email to confirm your account before signing in.
           </p>
           <button
             className="btn btn--primary auth-card__submit"
@@ -81,7 +81,7 @@ export function AuthPage() {
             : 'Create an account to save and manage your army lists.'}
         </p>
 
-        <form onSubmit={handleSubmit} className="auth-form">
+        <form onSubmit={handleSubmit} method="post" action="#" className="auth-form">
           <div className="form-group">
             <label htmlFor="auth-email">Email</label>
             <input
@@ -104,9 +104,9 @@ export function AuthPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder={mode === 'signup' ? 'Min 6 characters' : ''}
+              placeholder={mode === 'signup' ? 'Min 8 characters' : ''}
               required
-              minLength={6}
+              minLength={8}
               autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
             />
           </div>
