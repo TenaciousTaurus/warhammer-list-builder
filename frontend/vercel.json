@@ -22,6 +22,14 @@
         {
           "key": "Permissions-Policy",
           "value": "camera=(), microphone=(), geolocation=(), payment=()"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://warforge.website"
         }
       ]
     }
@@ -29,6 +37,10 @@
   "rewrites": [
     {
       "source": "/_src",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ]
