@@ -1134,6 +1134,52 @@
 
 
 /* ========================================
+   FEEDBACK FORM
+   ======================================== */
+
+.feedback-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.feedback-form__textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.feedback-form__error {
+  font-size: var(--text-sm);
+  color: #c04040;
+  margin: 0;
+}
+
+.feedback-form__success {
+  font-size: var(--text-sm);
+  color: var(--color-gold);
+  text-align: center;
+  padding: var(--space-lg) 0;
+}
+
+.app-header__feedback {
+  font-size: var(--text-xs);
+  padding: 4px 12px;
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: color var(--transition-normal),
+              border-color var(--transition-normal);
+}
+
+.app-header__feedback:hover {
+  color: var(--color-gold);
+  border-color: var(--color-gold);
+}
+
+
+/* ========================================
    PRINT STYLES
    ======================================== */
 

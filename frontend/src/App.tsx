@@ -27,7 +27,8 @@ import { StatsPage } from './features/social/pages/StatsPage';
 import { TournamentsPage } from './features/social/pages/TournamentsPage';
 import { TournamentDetailPage } from './features/social/pages/TournamentDetailPage';
 import { TournamentRoundPage } from './features/social/pages/TournamentRoundPage';
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
+import { FeedbackModal } from './shared/components/FeedbackModal';
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
@@ -47,8 +48,10 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
 
 function AppHeader() {
   const { user, signOut } = useAuth();
+  const [showFeedback, setShowFeedback] = useState(false);
 
   return (
+    <>
     <header className="app-header">
       <NavLink to="/" className="app-header__title">WarForge</NavLink>
       <nav className="app-header__nav">
@@ -108,6 +111,12 @@ function AppHeader() {
         {user ? (
           <div className="app-header__user">
             <span className="app-header__email">{user.email}</span>
+            <button
+              className="app-header__feedback"
+              onClick={() => setShowFeedback(true)}
+            >
+              Feedback
+            </button>
             <button className="btn btn--sm app-header__signout" onClick={signOut}>
               Sign Out
             </button>
@@ -124,6 +133,8 @@ function AppHeader() {
         )}
       </nav>
     </header>
+    {showFeedback && <FeedbackModal onClose={() => setShowFeedback(false)} />}
+    </>
   );
 }
 
