@@ -14,7 +14,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const CLICKUP_API_TOKEN = Deno.env.get("CLICKUP_API_TOKEN")!;
 const CLICKUP_LIST_ID = Deno.env.get("CLICKUP_LIST_ID")!;
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
-const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
+const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
 const VALID_CATEGORIES = [
   "Bug Report",
@@ -60,21 +60,31 @@ Deno.serve(async (req) => {
   }
 
   // --- Auth check ---
+  // supabase.functions.invoke sends the user's JWT in the Authorization header
   const authHeader = req.headers.get("authorization");
-  if (!authHeader) {
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    console.error("No auth header found. Headers:", JSON.stringify(Object.fromEntries(req.headers.entries())));
     return jsonResponse({ error: "Missing authorization header" }, 401);
   }
 
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-    global: { headers: { Authorization: authHeader } },
-  });
+  const token = authHeader.replace("Bearer ", "");
+  let user: { email?: string } | null = null;
 
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
+  try {
+    // Use service role key to verify the user's JWT
+    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
+      auth: { autoRefreshToken: false, persistSession: false },
+    });
 
-  if (authError || !user) {
+    const { data, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !data.user) {
+      console.error("Auth verification failed:", authError?.message ?? "no user");
+      return jsonResponse({ error: "Unauthorized" }, 401);
+    }
+    user = data.user;
+  } catch (err) {
+    console.error("Auth exception:", err);
     return jsonResponse({ error: "Unauthorized" }, 401);
   }
 
