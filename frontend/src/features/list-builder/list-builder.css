@@ -57,7 +57,7 @@
 
 .unit-card__limit-tag {
   font-size: var(--text-xs);
-  background: rgba(192, 64, 64, 0.15);
+  background: rgba(var(--red-rgb), 0.15);
   color: var(--color-red-ui);
   padding: 1px 6px;
   border-radius: var(--radius-sm);
@@ -76,7 +76,7 @@
   font-weight: 700;
   color: var(--color-gold);
   font-family: var(--font-display);
-  text-shadow: 0 0 20px rgba(201, 168, 76, 0.15);
+  text-shadow: 0 0 20px rgba(var(--gold-rgb), 0.15);
 }
 
 .unit-card__points-detail {
@@ -114,7 +114,7 @@
   gap: var(--space-xs);
   padding: 4px 12px;
   background: var(--gradient-gold-subtle);
-  border: 1px solid rgba(201, 168, 76, 0.2);
+  border: 1px solid rgba(var(--gold-rgb), 0.2);
   border-radius: var(--radius-full);
   font-size: var(--text-xs);
   color: var(--color-gold-bright);
@@ -352,7 +352,7 @@
 }
 
 .unit-picker-item__add:hover:not(:disabled) {
-  background: rgba(201, 168, 76, 0.15);
+  background: rgba(var(--gold-rgb), 0.15);
   border-color: var(--color-gold);
   color: var(--color-gold);
 }
@@ -423,8 +423,8 @@
   color: #5eead4;
 }
 
-.roster-section__header--epic_hero { background: rgba(201, 168, 76, 0.15); color: var(--color-gold); }
-.roster-section__header--character { background: rgba(201, 168, 76, 0.12); color: #e8d48b; }
+.roster-section__header--epic_hero { background: rgba(var(--gold-rgb), 0.15); color: var(--color-gold); }
+.roster-section__header--character { background: rgba(var(--gold-rgb), 0.12); color: #e8d48b; }
 .roster-section__header--battleline { background: rgba(74, 222, 128, 0.12); color: #4ade80; }
 .roster-section__header--infantry { background: rgba(0, 180, 180, 0.12); color: #5eead4; }
 .roster-section__header--vehicle { background: rgba(239, 68, 68, 0.12); color: #f87171; }
@@ -454,7 +454,7 @@
 }
 
 .roster-item--selected {
-  background: rgba(201, 168, 76, 0.08);
+  background: rgba(var(--gold-rgb), 0.08);
   border-left-color: var(--color-gold);
 }
 
@@ -508,7 +508,7 @@
 }
 
 .roster-item__remove:hover {
-  background: rgba(192, 64, 64, 0.2);
+  background: rgba(var(--red-rgb), 0.2);
   color: var(--color-red-bright);
 }
 
@@ -599,7 +599,7 @@
 }
 
 .roster-item__expand:hover {
-  background: rgba(201, 168, 76, 0.15);
+  background: rgba(var(--gold-rgb), 0.15);
   color: var(--color-gold);
 }
 
@@ -846,8 +846,8 @@
 .detail-panel__enhancement-detail {
   margin-top: var(--space-sm);
   padding: var(--space-sm);
-  background: rgba(201, 168, 76, 0.06);
-  border: 1px solid rgba(201, 168, 76, 0.25);
+  background: rgba(var(--gold-rgb), 0.06);
+  border: 1px solid rgba(var(--gold-rgb), 0.25);
   border-radius: var(--radius-sm);
 }
 
@@ -979,7 +979,7 @@
 }
 
 .wargear-toggle__switch-btn--active {
-  background: rgba(201, 168, 76, 0.15);
+  background: rgba(var(--gold-rgb), 0.15);
   color: var(--color-gold);
   font-weight: 600;
   box-shadow: inset 0 0 0 1px var(--color-gold-dim);
@@ -1010,7 +1010,7 @@
 }
 
 .wargear-toggle__radio-card--active {
-  background: rgba(201, 168, 76, 0.12);
+  background: rgba(var(--gold-rgb), 0.12);
   border-color: var(--color-gold-dim);
 }
 
@@ -1206,7 +1206,7 @@
 }
 
 .comp__btn:hover:not(:disabled) {
-  background: rgba(201, 168, 76, 0.15);
+  background: rgba(var(--gold-rgb), 0.15);
   border-color: var(--color-gold-dim);
 }
 
@@ -1301,7 +1301,7 @@
 
 .leader-card--attached {
   border-color: var(--color-gold-dim);
-  background: rgba(201, 168, 76, 0.08);
+  background: rgba(var(--gold-rgb), 0.08);
 }
 
 .leader-card--disabled {
@@ -1360,7 +1360,7 @@
 }
 
 .leader-card__toggle:hover:not(:disabled) {
-  background: rgba(201, 168, 76, 0.15);
+  background: rgba(var(--gold-rgb), 0.15);
   border-color: var(--color-gold-dim);
   color: var(--color-gold);
 }
@@ -1406,7 +1406,7 @@
   font-size: 10px;
   color: var(--color-gold);
   font-weight: 700;
-  background: rgba(201, 168, 76, 0.12);
+  background: rgba(var(--gold-rgb), 0.12);
   padding: 0 4px;
   border-radius: var(--radius-sm);
 }
@@ -1494,7 +1494,7 @@
 
 .list-editor__name-input:focus {
   border-color: var(--color-gold);
-  box-shadow: 0 0 0 2px rgba(201, 168, 76, 0.15);
+  box-shadow: 0 0 0 2px rgba(var(--gold-rgb), 0.15);
 }
 
 .list-editor__points-limit--editable {
@@ -1551,8 +1551,8 @@
 }
 
 .list-editor__points-preset--active {
-  background: rgba(201, 168, 76, 0.15);
-  border-color: rgba(201, 168, 76, 0.4);
+  background: rgba(var(--gold-rgb), 0.15);
+  border-color: rgba(var(--gold-rgb), 0.4);
   color: var(--color-gold);
 }
 
@@ -1577,7 +1577,7 @@
 
 .list-editor__points-display--over {
   color: var(--color-red-bright);
-  text-shadow: 0 0 20px rgba(192, 64, 64, 0.3);
+  text-shadow: 0 0 20px rgba(var(--red-rgb), 0.3);
 }
 
 .list-editor__points-limit {
@@ -1793,7 +1793,7 @@
 
 .battle-size-picker__option--active {
   border-color: var(--color-gold);
-  background: rgba(201, 168, 76, 0.08);
+  background: rgba(var(--gold-rgb), 0.08);
   color: var(--color-gold);
   box-shadow: 0 0 0 1px var(--color-gold);
 }
@@ -1866,21 +1866,21 @@
 }
 
 .transport-info__keyword--allowed {
-  background: rgba(64, 160, 64, 0.12);
-  border: 1px solid rgba(64, 160, 64, 0.25);
+  background: rgba(var(--green-rgb), 0.12);
+  border: 1px solid rgba(var(--green-rgb), 0.25);
   color: var(--color-green-bright);
 }
 
 .transport-info__keyword--excluded {
-  background: rgba(192, 64, 64, 0.12);
-  border: 1px solid rgba(192, 64, 64, 0.25);
+  background: rgba(var(--red-rgb), 0.12);
+  border: 1px solid rgba(var(--red-rgb), 0.25);
   color: var(--color-red-bright);
 }
 
 /* Info-level validation banner */
 .validation-banner--info {
-  background: rgba(64, 128, 192, 0.08);
-  border: 1px solid rgba(64, 128, 192, 0.2);
+  background: rgba(var(--blue-rgb), 0.08);
+  border: 1px solid rgba(var(--blue-rgb), 0.2);
   color: var(--color-blue-bright);
 }
 

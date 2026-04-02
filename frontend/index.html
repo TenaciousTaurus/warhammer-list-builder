@@ -8,6 +8,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet" />
     <title>Warhammer 40K List Builder</title>
+    <script>
+      // Apply saved theme before first paint to prevent flash
+      try {
+        const stored = JSON.parse(localStorage.getItem('warforge-theme') || '{}');
+        const id = stored.state?.themeId;
+        if (id && id !== 'void-dark') document.documentElement.dataset.theme = id;
+      } catch (_) { /* ignore */ }
+    </script>
   </head>
   <body>
     <div id="root"></div>

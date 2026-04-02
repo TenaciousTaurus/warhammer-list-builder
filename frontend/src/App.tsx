@@ -29,6 +29,7 @@ import { TournamentDetailPage } from './features/social/pages/TournamentDetailPa
 import { TournamentRoundPage } from './features/social/pages/TournamentRoundPage';
 import { useState, type ReactNode } from 'react';
 import { FeedbackModal } from './shared/components/FeedbackModal';
+import { ThemePicker } from './shared/components/ThemePicker';
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
@@ -108,6 +109,7 @@ function AppHeader() {
         >
           Browse
         </NavLink>
+        <ThemePicker />
         {user ? (
           <div className="app-header__user">
             <span className="app-header__email">{user.email}</span>

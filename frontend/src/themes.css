@@ -1,0 +1,130 @@
+/* ============================================================
+   Theme Overrides
+   Each theme overrides the :root CSS custom properties.
+   Void Dark is the default (no override needed — it's :root).
+   ============================================================ */
+
+/* --- Crimson Forge ---
+   Warm dark backgrounds + crimson/red accent.
+   Evokes blood, war, the forge of battle.
+   ------------------------------------------------------------ */
+[data-theme="crimson-forge"] {
+  /* Backgrounds */
+  --color-bg-primary: #0f0a0a;
+  --color-bg-secondary: #1a1214;
+  --color-bg-tertiary: #261a1c;
+  --color-bg-card: #1f1316;
+  --color-bg-hover: #2c1e20;
+  --color-border: #3a2a2c;
+  --color-border-light: #4a3a3c;
+
+  /* Accent */
+  --color-gold: #c94c4c;
+  --color-gold-dim: #a03030;
+  --color-gold-bright: #e06060;
+  --gold-rgb: 201, 76, 76;
+
+  /* Text stays the same for readability */
+
+  /* Focus */
+  --focus-ring: 0 0 0 2px rgba(var(--gold-rgb), 0.4);
+
+  /* Glass */
+  --glass-bg: rgba(26, 18, 20, 0.6);
+  --glass-bg-heavy: rgba(26, 18, 20, 0.8);
+  --glass-bg-light: rgba(38, 26, 28, 0.4);
+  --glass-border-active: rgba(var(--gold-rgb), 0.3);
+
+  /* Shadows */
+  --shadow-glow-gold: 0 0 20px rgba(var(--gold-rgb), 0.15), 0 0 40px rgba(var(--gold-rgb), 0.05);
+
+  /* Gradients */
+  --gradient-card: linear-gradient(135deg, rgba(31, 19, 22, 0.8) 0%, rgba(23, 15, 17, 0.9) 100%);
+  --gradient-card-hover: linear-gradient(135deg, rgba(38, 26, 28, 0.85) 0%, rgba(28, 18, 20, 0.95) 100%);
+  --gradient-header: linear-gradient(180deg, rgba(26, 18, 20, 0.95) 0%, rgba(18, 12, 14, 0.9) 100%);
+  --gradient-sidebar: linear-gradient(180deg, rgba(22, 14, 16, 0.95) 0%, rgba(16, 10, 12, 0.98) 100%);
+  --gradient-gold: linear-gradient(135deg, #c94c4c 0%, #a03030 100%);
+  --gradient-gold-subtle: linear-gradient(135deg, rgba(var(--gold-rgb), 0.15) 0%, rgba(var(--gold-rgb), 0.05) 100%);
+}
+
+/* --- Warpstorm ---
+   Deep indigo backgrounds + teal/cyan accent.
+   Evokes psychic energy, the immaterium, warp lightning.
+   ------------------------------------------------------------ */
+[data-theme="warpstorm"] {
+  /* Backgrounds */
+  --color-bg-primary: #0a0a14;
+  --color-bg-secondary: #12121e;
+  --color-bg-tertiary: #1a1a2e;
+  --color-bg-card: #151524;
+  --color-bg-hover: #1e1e34;
+  --color-border: #2a2a44;
+  --color-border-light: #3a3a54;
+
+  /* Accent */
+  --color-gold: #4cb8b8;
+  --color-gold-dim: #308888;
+  --color-gold-bright: #60d8d8;
+  --gold-rgb: 76, 184, 184;
+
+  /* Focus */
+  --focus-ring: 0 0 0 2px rgba(var(--gold-rgb), 0.4);
+
+  /* Glass */
+  --glass-bg: rgba(18, 18, 30, 0.6);
+  --glass-bg-heavy: rgba(18, 18, 30, 0.8);
+  --glass-bg-light: rgba(26, 26, 46, 0.4);
+  --glass-border-active: rgba(var(--gold-rgb), 0.3);
+
+  /* Shadows */
+  --shadow-glow-gold: 0 0 20px rgba(var(--gold-rgb), 0.15), 0 0 40px rgba(var(--gold-rgb), 0.05);
+
+  /* Gradients */
+  --gradient-card: linear-gradient(135deg, rgba(21, 21, 36, 0.8) 0%, rgba(15, 15, 28, 0.9) 100%);
+  --gradient-card-hover: linear-gradient(135deg, rgba(26, 26, 46, 0.85) 0%, rgba(18, 18, 34, 0.95) 100%);
+  --gradient-header: linear-gradient(180deg, rgba(18, 18, 30, 0.95) 0%, rgba(12, 12, 22, 0.9) 100%);
+  --gradient-sidebar: linear-gradient(180deg, rgba(14, 14, 26, 0.95) 0%, rgba(10, 10, 20, 0.98) 100%);
+  --gradient-gold: linear-gradient(135deg, #4cb8b8 0%, #308888 100%);
+  --gradient-gold-subtle: linear-gradient(135deg, rgba(var(--gold-rgb), 0.15) 0%, rgba(var(--gold-rgb), 0.05) 100%);
+}
+
+/* --- Iron Citadel ---
+   Cool gunmetal backgrounds + steel blue accent.
+   Evokes industrial fortress, mechanized warfare.
+   ------------------------------------------------------------ */
+[data-theme="iron-citadel"] {
+  /* Backgrounds */
+  --color-bg-primary: #0c0c10;
+  --color-bg-secondary: #14141a;
+  --color-bg-tertiary: #1c1c24;
+  --color-bg-card: #171720;
+  --color-bg-hover: #22222c;
+  --color-border: #32323e;
+  --color-border-light: #42424e;
+
+  /* Accent */
+  --color-gold: #6090b8;
+  --color-gold-dim: #486888;
+  --color-gold-bright: #80b0d8;
+  --gold-rgb: 96, 144, 184;
+
+  /* Focus */
+  --focus-ring: 0 0 0 2px rgba(var(--gold-rgb), 0.4);
+
+  /* Glass */
+  --glass-bg: rgba(20, 20, 26, 0.6);
+  --glass-bg-heavy: rgba(20, 20, 26, 0.8);
+  --glass-bg-light: rgba(28, 28, 36, 0.4);
+  --glass-border-active: rgba(var(--gold-rgb), 0.3);
+
+  /* Shadows */
+  --shadow-glow-gold: 0 0 20px rgba(var(--gold-rgb), 0.15), 0 0 40px rgba(var(--gold-rgb), 0.05);
+
+  /* Gradients */
+  --gradient-card: linear-gradient(135deg, rgba(23, 23, 32, 0.8) 0%, rgba(17, 17, 24, 0.9) 100%);
+  --gradient-card-hover: linear-gradient(135deg, rgba(28, 28, 36, 0.85) 0%, rgba(20, 20, 28, 0.95) 100%);
+  --gradient-header: linear-gradient(180deg, rgba(20, 20, 26, 0.95) 0%, rgba(14, 14, 18, 0.9) 100%);
+  --gradient-sidebar: linear-gradient(180deg, rgba(16, 16, 22, 0.95) 0%, rgba(12, 12, 16, 0.98) 100%);
+  --gradient-gold: linear-gradient(135deg, #6090b8 0%, #486888 100%);
+  --gradient-gold-subtle: linear-gradient(135deg, rgba(var(--gold-rgb), 0.15) 0%, rgba(var(--gold-rgb), 0.05) 100%);
+}

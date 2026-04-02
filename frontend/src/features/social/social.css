@@ -125,7 +125,7 @@
 }
 
 .profile-page__faction-badge--primary {
-  background: rgba(201, 168, 76, 0.15);
+  background: rgba(var(--gold-rgb), 0.15);
   color: var(--color-gold);
   border-color: var(--color-gold-dim);
 }
@@ -319,7 +319,7 @@
 }
 
 .friends-page__tab--active {
-  background: rgba(201, 168, 76, 0.15);
+  background: rgba(var(--gold-rgb), 0.15);
   color: var(--color-gold);
 }
 
@@ -463,23 +463,23 @@
 }
 
 .friend-card__action-btn--accept {
-  background: rgba(64, 160, 64, 0.15);
+  background: rgba(var(--green-rgb), 0.15);
   color: var(--color-green-bright);
   border-color: var(--color-green);
 }
 
 .friend-card__action-btn--accept:hover {
-  background: rgba(64, 160, 64, 0.25);
+  background: rgba(var(--green-rgb), 0.25);
 }
 
 .friend-card__action-btn--decline {
-  background: rgba(192, 64, 64, 0.1);
+  background: rgba(var(--red-rgb), 0.1);
   color: var(--color-red-bright);
-  border-color: rgba(192, 64, 64, 0.3);
+  border-color: rgba(var(--red-rgb), 0.3);
 }
 
 .friend-card__action-btn--decline:hover {
-  background: rgba(192, 64, 64, 0.2);
+  background: rgba(var(--red-rgb), 0.2);
 }
 
 .friend-card__action-btn--danger {
@@ -488,8 +488,8 @@
 
 .friend-card__action-btn--danger:hover {
   color: var(--color-red-bright);
-  border-color: rgba(192, 64, 64, 0.3);
-  background: rgba(192, 64, 64, 0.1);
+  border-color: rgba(var(--red-rgb), 0.3);
+  background: rgba(var(--red-rgb), 0.1);
 }
 
 /* ========================================
@@ -592,7 +592,7 @@
 }
 
 .player-search__result-btn {
-  background: rgba(201, 168, 76, 0.15);
+  background: rgba(var(--gold-rgb), 0.15);
   color: var(--color-gold);
   border: 1px solid var(--color-gold-dim);
   border-radius: var(--radius-md);
@@ -604,7 +604,7 @@
 }
 
 .player-search__result-btn:hover {
-  background: rgba(201, 168, 76, 0.25);
+  background: rgba(var(--gold-rgb), 0.25);
 }
 
 .player-search__empty {
@@ -1116,7 +1116,7 @@
 }
 
 .tournament-card__format {
-  background: rgba(201, 168, 76, 0.15);
+  background: rgba(var(--gold-rgb), 0.15);
   color: var(--color-gold);
   font-size: var(--text-xs);
   font-weight: 700;
@@ -1154,12 +1154,12 @@
 }
 
 .tournament-card__status--registration {
-  background: rgba(64, 128, 192, 0.15);
+  background: rgba(var(--blue-rgb), 0.15);
   color: var(--color-blue-bright);
 }
 
 .tournament-card__status--active {
-  background: rgba(64, 160, 64, 0.15);
+  background: rgba(var(--green-rgb), 0.15);
   color: var(--color-green-bright);
 }
 
@@ -1255,7 +1255,7 @@
 }
 
 .tournament-detail__tab--active {
-  background: rgba(201, 168, 76, 0.15);
+  background: rgba(var(--gold-rgb), 0.15);
   color: var(--color-gold);
 }
 
@@ -1348,7 +1348,7 @@
 
 /* Leader row (#1) */
 .standings-table__row--leader td {
-  background: rgba(201, 168, 76, 0.05);
+  background: rgba(var(--gold-rgb), 0.05);
 }
 
 .standings-table__row--leader .standings-table__rank {
@@ -1431,7 +1431,7 @@
 .tournament-bracket__match-player--winner {
   color: var(--color-gold);
   font-weight: 700;
-  background: rgba(201, 168, 76, 0.05);
+  background: rgba(var(--gold-rgb), 0.05);
 }
 
 .tournament-bracket__match-score {
@@ -1536,12 +1536,12 @@
 
 .round-robin-grid__cell--win {
   color: var(--color-green-bright);
-  background: rgba(64, 160, 64, 0.08);
+  background: rgba(var(--green-rgb), 0.08);
 }
 
 .round-robin-grid__cell--loss {
   color: var(--color-red-bright);
-  background: rgba(192, 64, 64, 0.08);
+  background: rgba(var(--red-rgb), 0.08);
 }
 
 .round-robin-grid__cell--draw {
@@ -1782,7 +1782,7 @@
 }
 
 .tournament-round__status--active {
-  background: rgba(64, 160, 64, 0.15);
+  background: rgba(var(--green-rgb), 0.15);
   color: var(--color-green-bright);
 }
 
@@ -1792,7 +1792,7 @@
 }
 
 .tournament-round__status--upcoming {
-  background: rgba(64, 128, 192, 0.15);
+  background: rgba(var(--blue-rgb), 0.15);
   color: var(--color-blue-bright);
 }
 
@@ -1978,8 +1978,8 @@
 
 .social-btn--danger:hover {
   color: var(--color-red-bright);
-  border-color: rgba(192, 64, 64, 0.3);
-  background: rgba(192, 64, 64, 0.1);
+  border-color: rgba(var(--red-rgb), 0.3);
+  background: rgba(var(--red-rgb), 0.1);
 }
 
 .social-btn--small {

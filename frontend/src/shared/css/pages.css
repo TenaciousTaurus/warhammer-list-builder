@@ -68,14 +68,14 @@
 }
 
 .units-page__role-chip--active {
-  background: rgba(201, 168, 76, 0.15);
-  border-color: rgba(201, 168, 76, 0.4);
+  background: rgba(var(--gold-rgb), 0.15);
+  border-color: rgba(var(--gold-rgb), 0.4);
   color: var(--color-gold);
 }
 
 .units-page__role-chip--epic_hero.units-page__role-chip--active {
-  background: rgba(201, 168, 76, 0.15);
-  border-color: rgba(201, 168, 76, 0.4);
+  background: rgba(var(--gold-rgb), 0.15);
+  border-color: rgba(var(--gold-rgb), 0.4);
   color: var(--color-role-epic-hero);
 }
 
@@ -86,8 +86,8 @@
 }
 
 .units-page__role-chip--character.units-page__role-chip--active {
-  background: rgba(201, 168, 76, 0.12);
-  border-color: rgba(201, 168, 76, 0.35);
+  background: rgba(var(--gold-rgb), 0.12);
+  border-color: rgba(var(--gold-rgb), 0.35);
   color: var(--color-gold);
 }
 

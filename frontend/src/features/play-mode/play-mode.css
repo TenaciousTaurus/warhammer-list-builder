@@ -39,8 +39,8 @@
 .play-mode__lock-badge {
   font-size: var(--text-xs);
   padding: var(--space-xs) var(--space-sm);
-  background: rgba(201, 168, 76, 0.15);
-  border: 1px solid rgba(201, 168, 76, 0.3);
+  background: rgba(var(--gold-rgb), 0.15);
+  border: 1px solid rgba(var(--gold-rgb), 0.3);
   border-radius: var(--radius-full);
   color: var(--color-gold);
   font-weight: 600;
@@ -277,7 +277,7 @@
 }
 
 .secondary-objectives__score-btn:hover:not(:disabled) {
-  background: rgba(201, 168, 76, 0.15);
+  background: rgba(var(--gold-rgb), 0.15);
 }
 
 .secondary-objectives__score-btn:disabled {
@@ -338,8 +338,8 @@
 }
 
 .secondary-objectives__picker-item:hover {
-  background: rgba(201, 168, 76, 0.12);
-  border-color: rgba(201, 168, 76, 0.3);
+  background: rgba(var(--gold-rgb), 0.12);
+  border-color: rgba(var(--gold-rgb), 0.3);
   color: var(--color-gold);
 }
 
@@ -428,8 +428,8 @@
   font-weight: 900;
   font-size: var(--text-sm);
   color: var(--color-gold);
-  background: rgba(201, 168, 76, 0.1);
-  border: 1px solid rgba(201, 168, 76, 0.25);
+  background: rgba(var(--gold-rgb), 0.1);
+  border: 1px solid rgba(var(--gold-rgb), 0.25);
   border-radius: var(--radius-sm);
   padding: 1px 8px;
 }
@@ -601,9 +601,9 @@
 }
 
 .battle-report__result-badge--draw {
-  background: rgba(201, 168, 76, 0.15);
+  background: rgba(var(--gold-rgb), 0.15);
   color: var(--color-gold);
-  border: 1px solid rgba(201, 168, 76, 0.3);
+  border: 1px solid rgba(var(--gold-rgb), 0.3);
 }
 
 .battle-report__card-opponent {
@@ -700,7 +700,7 @@
 }
 
 .game-tracker__btn:hover:not(:disabled) {
-  background: rgba(201, 168, 76, 0.15);
+  background: rgba(var(--gold-rgb), 0.15);
   border-color: var(--color-gold-dim);
 }
 
@@ -730,7 +730,7 @@
   margin-left: auto;
   padding: var(--space-xs) var(--space-sm);
   background: transparent;
-  border: 1px solid rgba(192, 64, 64, 0.3);
+  border: 1px solid rgba(var(--red-rgb), 0.3);
   border-radius: var(--radius-sm);
   color: var(--color-red);
   font-size: var(--text-xs);
@@ -739,7 +739,7 @@
 }
 
 .game-tracker__reset:hover {
-  background: rgba(192, 64, 64, 0.15);
+  background: rgba(var(--red-rgb), 0.15);
 }
 
 /* ========================================
@@ -763,7 +763,7 @@
   height: 20px;
   border-radius: 50%;
   border: 2px solid var(--color-green);
-  background: rgba(64, 160, 64, 0.2);
+  background: rgba(var(--green-rgb), 0.2);
   cursor: pointer;
   transition: all var(--transition-fast);
 }
@@ -774,7 +774,7 @@
 
 .casualty-tracker__pip--dead {
   border-color: var(--color-red);
-  background: rgba(192, 64, 64, 0.4);
+  background: rgba(var(--red-rgb), 0.4);
   opacity: 0.5;
 }
 
@@ -824,7 +824,7 @@
 }
 
 .casualty-tracker__wound-btn:hover:not(:disabled) {
-  background: rgba(201, 168, 76, 0.15);
+  background: rgba(var(--gold-rgb), 0.15);
 }
 
 .casualty-tracker__wound-btn:disabled {
@@ -924,7 +924,7 @@
 
 .phase-tracker__btn:hover:not(:disabled) {
   border-color: var(--color-gold-dim);
-  background: rgba(201, 168, 76, 0.1);
+  background: rgba(var(--gold-rgb), 0.1);
 }
 
 .phase-tracker__btn:disabled {
@@ -1147,13 +1147,13 @@
 .dice-roller__die--six {
   border-color: var(--color-gold);
   color: var(--color-gold);
-  background: rgba(201, 168, 76, 0.1);
+  background: rgba(var(--gold-rgb), 0.1);
 }
 
 .dice-roller__die--one {
   border-color: var(--color-red);
   color: var(--color-red);
-  background: rgba(192, 64, 64, 0.1);
+  background: rgba(var(--red-rgb), 0.1);
 }
 
 .dice-roller__total {
@@ -1328,7 +1328,7 @@
 @keyframes stratagem-used-flash {
   0% {
     border-color: var(--color-gold);
-    box-shadow: 0 0 12px rgba(201, 168, 76, 0.5);
+    box-shadow: 0 0 12px rgba(var(--gold-rgb), 0.5);
   }
   100% {
     border-color: var(--glass-border);
@@ -1341,7 +1341,7 @@
   width: 100%;
   margin-top: var(--space-sm);
   padding: var(--space-sm) var(--space-md);
-  background: rgba(201, 168, 76, 0.2);
+  background: rgba(var(--gold-rgb), 0.2);
   border: 1px solid var(--color-gold-dim);
   border-radius: var(--radius-sm);
   color: var(--color-gold);
@@ -1355,7 +1355,7 @@
 }
 
 .stratagem-card__use-btn:hover:not(:disabled) {
-  background: rgba(201, 168, 76, 0.35);
+  background: rgba(var(--gold-rgb), 0.35);
   border-color: var(--color-gold);
 }
 
@@ -1403,8 +1403,8 @@
 
 .play-mode__sync-status--connecting {
   color: var(--color-gold);
-  border-color: rgba(201, 168, 76, 0.25);
-  background: rgba(201, 168, 76, 0.08);
+  border-color: rgba(var(--gold-rgb), 0.25);
+  background: rgba(var(--gold-rgb), 0.08);
 }
 
 .play-mode__sync-status--connecting .play-mode__sync-dot {
@@ -1554,8 +1554,8 @@
 
 .sync-status--syncing {
   padding: var(--space-xs) var(--space-sm);
-  background: rgba(201, 168, 76, 0.08);
-  border: 1px solid rgba(201, 168, 76, 0.15);
+  background: rgba(var(--gold-rgb), 0.08);
+  border: 1px solid rgba(var(--gold-rgb), 0.15);
 }
 
 .sync-status__syncing {

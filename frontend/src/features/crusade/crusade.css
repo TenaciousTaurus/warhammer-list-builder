@@ -166,9 +166,9 @@
 }
 
 .campaign-card__status--active {
-  background: rgba(201, 168, 76, 0.15);
+  background: rgba(var(--gold-rgb), 0.15);
   color: var(--color-gold);
-  border: 1px solid rgba(201, 168, 76, 0.3);
+  border: 1px solid rgba(var(--gold-rgb), 0.3);
 }
 
 .campaign-card__status--completed {
@@ -280,7 +280,7 @@
 
 .campaign-detail__share-code-copy:hover {
   color: var(--color-gold);
-  background: rgba(201, 168, 76, 0.1);
+  background: rgba(var(--gold-rgb), 0.1);
 }
 
 .campaign-detail__tabs {
@@ -376,7 +376,7 @@
 }
 
 .campaign-leaderboard__row--first {
-  border-color: rgba(201, 168, 76, 0.2);
+  border-color: rgba(var(--gold-rgb), 0.2);
   background: var(--gradient-gold-subtle);
 }
 
@@ -527,7 +527,7 @@
 
 .crusade-roster__add-unit:hover {
   border-color: var(--color-gold-dim);
-  background: rgba(201, 168, 76, 0.05);
+  background: rgba(var(--gold-rgb), 0.05);
 }
 
 .crusade-roster__add-unit-btn {
@@ -573,7 +573,7 @@
 
 .crusade-unit-card--destroyed {
   opacity: 0.5;
-  border-color: rgba(192, 64, 64, 0.3);
+  border-color: rgba(var(--red-rgb), 0.3);
 }
 
 .crusade-unit-card--destroyed::after {
@@ -584,8 +584,8 @@
     -45deg,
     transparent,
     transparent 10px,
-    rgba(192, 64, 64, 0.06) 10px,
-    rgba(192, 64, 64, 0.06) 20px
+    rgba(var(--red-rgb), 0.06) 10px,
+    rgba(var(--red-rgb), 0.06) 20px
   );
   border-radius: var(--radius-lg);
   pointer-events: none;
@@ -638,9 +638,9 @@
 }
 
 .crusade-unit-card__rank-badge--battle_hardened {
-  background: rgba(64, 128, 192, 0.15);
+  background: rgba(var(--blue-rgb), 0.15);
   color: var(--color-blue-bright);
-  border: 1px solid rgba(64, 128, 192, 0.3);
+  border: 1px solid rgba(var(--blue-rgb), 0.3);
 }
 
 .crusade-unit-card__rank-badge--heroic {
@@ -650,9 +650,9 @@
 }
 
 .crusade-unit-card__rank-badge--legendary {
-  background: rgba(201, 168, 76, 0.15);
+  background: rgba(var(--gold-rgb), 0.15);
   color: var(--color-gold);
-  border: 1px solid rgba(201, 168, 76, 0.3);
+  border: 1px solid rgba(var(--gold-rgb), 0.3);
   box-shadow: var(--shadow-glow-gold);
 }
 
@@ -785,9 +785,9 @@
   align-items: center;
   gap: var(--space-xs);
   padding: 2px var(--space-sm);
-  background: rgba(64, 128, 192, 0.15);
+  background: rgba(var(--blue-rgb), 0.15);
   color: var(--color-blue-bright);
-  border: 1px solid rgba(64, 128, 192, 0.25);
+  border: 1px solid rgba(var(--blue-rgb), 0.25);
   border-radius: var(--radius-full);
   font-size: var(--text-xs);
   font-weight: 600;
@@ -803,9 +803,9 @@
   align-items: center;
   gap: var(--space-xs);
   padding: 2px var(--space-sm);
-  background: rgba(192, 64, 64, 0.15);
+  background: rgba(var(--red-rgb), 0.15);
   color: var(--color-red-bright);
-  border: 1px solid rgba(192, 64, 64, 0.25);
+  border: 1px solid rgba(var(--red-rgb), 0.25);
   border-radius: var(--radius-full);
   font-size: var(--text-xs);
   font-weight: 600;
@@ -847,7 +847,7 @@
 .post-battle__step--active {
   background: var(--color-gold);
   border-color: var(--color-gold);
-  box-shadow: 0 0 8px rgba(201, 168, 76, 0.4);
+  box-shadow: 0 0 8px rgba(var(--gold-rgb), 0.4);
 }
 
 .post-battle__step--completed {
@@ -1103,7 +1103,7 @@
   gap: var(--space-xs);
   padding: var(--space-lg);
   background: var(--gradient-gold-subtle);
-  border: 1px solid rgba(201, 168, 76, 0.2);
+  border: 1px solid rgba(var(--gold-rgb), 0.2);
   border-radius: var(--radius-lg);
 }
 
@@ -1348,7 +1348,7 @@
 
 .battle-log__result-option--loss.battle-log__result-option--selected {
   border-color: var(--color-red);
-  background: rgba(192, 64, 64, 0.1);
+  background: rgba(var(--red-rgb), 0.1);
   color: var(--color-red-bright);
 }
 

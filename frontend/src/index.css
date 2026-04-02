@@ -22,8 +22,15 @@
   --color-purple-bright: #c4a0ff;
   --color-red-ui: #ef4444;
 
+  /* RGB channel tokens (for rgba() with theme support) */
+  --gold-rgb: 201, 168, 76;
+  --red-rgb: 192, 64, 64;
+  --green-rgb: 64, 160, 64;
+  --blue-rgb: 64, 128, 192;
+  --purple-rgb: 144, 96, 208;
+
   /* Focus */
-  --focus-ring: 0 0 0 2px rgba(201, 168, 76, 0.4);
+  --focus-ring: 0 0 0 2px rgba(var(--gold-rgb), 0.4);
 
   /* Role colors */
   --color-role-battleline: #50c050;
@@ -38,7 +45,7 @@
   --glass-bg-light: rgba(26, 26, 38, 0.4);
   --glass-border: rgba(255, 255, 255, 0.06);
   --glass-border-hover: rgba(255, 255, 255, 0.1);
-  --glass-border-active: rgba(201, 168, 76, 0.3);
+  --glass-border-active: rgba(var(--gold-rgb), 0.3);
   --glass-blur: 16px;
   --glass-blur-heavy: 24px;
   --glass-blur-light: 8px;
@@ -48,9 +55,9 @@
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.3), 0 2px 4px rgba(0, 0, 0, 0.2);
   --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.4), 0 6px 10px rgba(0, 0, 0, 0.25);
   --shadow-xl: 0 20px 50px rgba(0, 0, 0, 0.5), 0 10px 20px rgba(0, 0, 0, 0.3);
-  --shadow-glow-gold: 0 0 20px rgba(201, 168, 76, 0.15), 0 0 40px rgba(201, 168, 76, 0.05);
-  --shadow-glow-red: 0 0 20px rgba(192, 64, 64, 0.2);
-  --shadow-glow-green: 0 0 20px rgba(64, 160, 64, 0.15);
+  --shadow-glow-gold: 0 0 20px rgba(var(--gold-rgb), 0.15), 0 0 40px rgba(var(--gold-rgb), 0.05);
+  --shadow-glow-red: 0 0 20px rgba(var(--red-rgb), 0.2);
+  --shadow-glow-green: 0 0 20px rgba(var(--green-rgb), 0.15);
   --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.03);
 
   /* Gradients */
@@ -59,7 +66,7 @@
   --gradient-header: linear-gradient(180deg, rgba(18, 18, 26, 0.95) 0%, rgba(12, 12, 18, 0.9) 100%);
   --gradient-sidebar: linear-gradient(180deg, rgba(14, 14, 22, 0.95) 0%, rgba(10, 10, 16, 0.98) 100%);
   --gradient-gold: linear-gradient(135deg, #c9a84c 0%, #a08030 100%);
-  --gradient-gold-subtle: linear-gradient(135deg, rgba(201, 168, 76, 0.15) 0%, rgba(201, 168, 76, 0.05) 100%);
+  --gradient-gold-subtle: linear-gradient(135deg, rgba(var(--gold-rgb), 0.15) 0%, rgba(var(--gold-rgb), 0.05) 100%);
 
   /* Transitions */
   --transition-fast: 150ms ease;
@@ -135,8 +142,8 @@ body {
   min-height: 100vh;
   font-size: var(--text-base);
   background-image:
-    radial-gradient(ellipse at 20% 50%, rgba(201, 168, 76, 0.03) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 80%, rgba(144, 96, 208, 0.02) 0%, transparent 50%);
+    radial-gradient(ellipse at 20% 50%, rgba(var(--gold-rgb), 0.03) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(var(--purple-rgb), 0.02) 0%, transparent 50%);
   background-attachment: fixed;
 }
 
