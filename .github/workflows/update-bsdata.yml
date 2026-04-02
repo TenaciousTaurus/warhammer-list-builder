@@ -1,0 +1,99 @@
+name: Update BSData
+
+on:
+  schedule:
+    - cron: '17 3 * * 1' # Weekly Monday 3:17 AM UTC
+  workflow_dispatch:
+
+concurrency:
+  group: bsdata-update
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-bsdata:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Fetch latest BSData
+        run: |
+          git clone --depth 1 https://github.com/BSData/wh40k-10e.git /tmp/bsdata-source
+          cp /tmp/bsdata-source/*.cat data/bsdata/
+          cp /tmp/bsdata-source/*.gst data/bsdata/
+
+      - name: Run parser
+        run: node scripts/parse-bsdata.js
+
+      - name: Normalize timestamp
+        run: |
+          sed -i 's/^-- Generated: .*$/-- Generated: (auto-generated)/' \
+            supabase/migrations/20250220000160_seed_all_factions.sql
+
+      - name: Check for changes
+        id: changes
+        run: |
+          # Normalize the committed version for comparison
+          git show HEAD:supabase/migrations/20250220000160_seed_all_factions.sql \
+            | sed 's/^-- Generated: .*$/-- Generated: (auto-generated)/' > /tmp/old-migration.sql
+
+          cp supabase/migrations/20250220000160_seed_all_factions.sql /tmp/new-migration.sql
+
+          MIGRATION_CHANGED=false
+          if ! diff -q /tmp/old-migration.sql /tmp/new-migration.sql > /dev/null 2>&1; then
+            MIGRATION_CHANGED=true
+          fi
+
+          CAT_CHANGED=false
+          if ! git diff --quiet -- data/bsdata/; then
+            CAT_CHANGED=true
+          fi
+
+          if [ "$MIGRATION_CHANGED" = true ] || [ "$CAT_CHANGED" = true ]; then
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+            echo "No meaningful changes detected. Exiting."
+          fi
+
+      - name: Generate PR summary
+        if: steps.changes.outputs.has_changes == 'true'
+        run: bash scripts/summarize-bsdata-diff.sh > /tmp/pr-body.md
+
+      - name: Create or update PR
+        if: steps.changes.outputs.has_changes == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          BRANCH="auto/bsdata-update"
+          git checkout -B "$BRANCH"
+          git add data/bsdata/ supabase/migrations/20250220000160_seed_all_factions.sql
+          git commit -m "chore: update BSData game data"
+          git push --force origin "$BRANCH"
+
+          EXISTING_PR=$(gh pr list --head "$BRANCH" --state open --json number -q '.[0].number')
+          if [ -n "$EXISTING_PR" ]; then
+            gh pr edit "$EXISTING_PR" --body "$(cat /tmp/pr-body.md)"
+            echo "Updated existing PR #$EXISTING_PR"
+          else
+            gh pr create \
+              --title "chore: update BSData game data" \
+              --body-file /tmp/pr-body.md \
+              --base main \
+              --head "$BRANCH"
+          fi
