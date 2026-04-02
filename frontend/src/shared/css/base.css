@@ -1636,6 +1636,29 @@
 }
 
 /* ========================================
+   HEADER ICON LINKS
+   ======================================== */
+
+.app-header__icon-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  color: var(--color-text-secondary);
+  border-radius: var(--radius-md);
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.app-header__icon-link:hover {
+  color: var(--color-text-primary);
+  background: var(--color-bg-hover);
+}
+
+.app-header__icon-link--active {
+  color: var(--color-gold);
+}
+
+/* ========================================
    THEME PICKER
    ======================================== */
 

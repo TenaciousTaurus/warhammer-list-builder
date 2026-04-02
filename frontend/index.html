@@ -11,10 +11,30 @@
     <script>
       // Apply saved theme before first paint to prevent flash
       try {
-        const stored = JSON.parse(localStorage.getItem('warforge-theme') || '{}');
-        const id = stored.state?.themeId;
-        if (id && id !== 'void-dark') document.documentElement.dataset.theme = id;
-      } catch (_) { /* ignore */ }
+        var stored = JSON.parse(localStorage.getItem('warforge-theme') || '{}');
+        var s = stored.state;
+        if (s && s.themeId && s.themeId !== 'void-dark') {
+          document.documentElement.dataset.theme = s.themeId;
+          // Apply custom inline colors if custom theme
+          if (s.themeId === 'custom' && s.customTheme) {
+            var vars = {
+              accent: '--color-gold', accentDim: '--color-gold-dim',
+              accentBright: '--color-gold-bright', bgPrimary: '--color-bg-primary',
+              bgSecondary: '--color-bg-secondary', bgCard: '--color-bg-card',
+              textPrimary: '--color-text-primary', textSecondary: '--color-text-secondary',
+              border: '--color-border'
+            };
+            for (var k in s.customTheme) {
+              if (vars[k] && s.customTheme[k]) {
+                document.documentElement.style.setProperty(vars[k], s.customTheme[k]);
+              }
+            }
+          }
+        }
+        if (s && s.fontSize && s.fontSize !== 100) {
+          document.documentElement.style.setProperty('font-size', s.fontSize + '%');
+        }
+      } catch (e) { /* ignore */ }
     </script>
   </head>
   <body>

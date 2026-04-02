@@ -228,3 +228,21 @@ cd frontend && npx tsc --noEmit # Type check without emit (faster)
 
 Supabase Studio: `http://localhost:54323`
 Frontend Dev: `http://localhost:5173`
+
+---
+
+## Upcoming Work (Feature Expansion)
+
+Planned in order of priority. Full design in `.claude/plans/async-wandering-chipmunk.md`.
+
+### Phase 1: Collection Upgrades (frontend-heavy)
+- [ ] **Enhanced Collection Stats** — Extract `CollectionStats` component with per-status progress bars, per-faction breakdown, total invested, avg cost/model
+- [ ] **Automatic Unit Matching** — `UnitMatchPicker` autocomplete in `CollectionForm`, links entries to `units` via existing `unit_id` FK
+- [ ] **Photo Gallery** — Supabase Storage bucket (`collection-photos`), `PhotoUploader` + `PhotoGallery` components, migration needed
+- [ ] **Instant List Verification** — `useListVerification` hook + `ListVerification` component, cross-references army list units vs collection
+
+### Phase 2: Tournament Upgrades (needs migrations)
+- [ ] **Public Tournament Browsing** — `is_public` column on `tournaments`, "Browse All" tab, migration needed
+- [ ] **Tournament Filters** — `TournamentFilters` component (format, status, name, date, sort)
+- [ ] **Simple Leagues** — `leagues` + `league_tournaments` tables, `leagueStore`, `LeaguesPage` + `LeagueDetailPage`, migration needed
+- [ ] **Organisations** — `organisations` + `organisation_members` tables, `orgStore`, `OrganisationPage`, migration needed

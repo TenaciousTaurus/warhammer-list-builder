@@ -1,0 +1,325 @@
+/* ========================================
+   SETTINGS PAGE
+   ======================================== */
+
+.settings-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.settings-page__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.settings-page__header h1 {
+  margin: 0;
+}
+
+/* ========================================
+   SETTINGS SECTION
+   ======================================== */
+
+.settings-section {
+  padding: var(--space-lg);
+}
+
+.settings-section__title {
+  font-size: var(--text-md);
+  margin-bottom: var(--space-xs);
+}
+
+.settings-section__description {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-md);
+}
+
+.settings-section__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+/* ========================================
+   SETTINGS ROW (label + control)
+   ======================================== */
+
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-sm) 0;
+  gap: var(--space-md);
+}
+
+.settings-row__label {
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+.settings-row__control {
+  flex-shrink: 0;
+}
+
+.settings-row__control .form-select {
+  min-width: 180px;
+}
+
+/* ========================================
+   TOGGLE SETTING
+   ======================================== */
+
+.toggle-setting {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-sm) 0;
+  gap: var(--space-md);
+  cursor: pointer;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.toggle-setting:last-child {
+  border-bottom: none;
+}
+
+.toggle-setting__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.toggle-setting__label {
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+
+.toggle-setting__description {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+
+/* Toggle switch */
+.toggle-setting__switch {
+  position: relative;
+  flex-shrink: 0;
+  width: 44px;
+  height: 24px;
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+  padding: 0;
+}
+
+.toggle-setting__switch--on {
+  background: var(--color-gold);
+  border-color: var(--color-gold);
+}
+
+.toggle-setting__thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  background: var(--color-text-primary);
+  border-radius: var(--radius-full);
+  transition: transform var(--transition-fast);
+}
+
+.toggle-setting__switch--on .toggle-setting__thumb {
+  transform: translateX(20px);
+  background: var(--color-bg-primary);
+}
+
+/* ========================================
+   SETTINGS SUBHEADING
+   ======================================== */
+
+.settings-subheading {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-md);
+  margin-bottom: var(--space-xs);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-border);
+}
+
+/* ========================================
+   CUSTOM THEME EDITOR
+   ======================================== */
+
+.custom-theme-editor__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+}
+
+.custom-theme-editor__field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.custom-theme-editor__label {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.custom-theme-editor__input-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.custom-theme-editor__color-input {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  padding: 0;
+  background: none;
+}
+
+.custom-theme-editor__color-input::-webkit-color-swatch-wrapper {
+  padding: 2px;
+}
+
+.custom-theme-editor__color-input::-webkit-color-swatch {
+  border: none;
+  border-radius: var(--radius-xs);
+}
+
+.custom-theme-editor__hex {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  font-family: monospace;
+  min-width: 60px;
+}
+
+/* ========================================
+   FONT SETTINGS
+   ======================================== */
+
+.font-settings__row {
+  margin-bottom: var(--space-sm);
+}
+
+.font-settings__label {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.font-settings__slider {
+  width: 100%;
+  accent-color: var(--color-gold);
+}
+
+.font-settings__range-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+/* ========================================
+   THEME SHARE
+   ======================================== */
+
+.theme-share__section {
+  margin-bottom: var(--space-md);
+}
+
+.theme-share__section:last-child {
+  margin-bottom: 0;
+}
+
+.theme-share__heading {
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.theme-share__hint {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-sm);
+}
+
+.theme-share__textarea {
+  width: 100%;
+  font-family: monospace;
+  font-size: var(--text-xs);
+  resize: vertical;
+  margin-bottom: var(--space-sm);
+}
+
+.theme-share__error {
+  font-size: var(--text-xs);
+  color: var(--color-red-bright);
+  margin-top: var(--space-xs);
+}
+
+.theme-share__success {
+  font-size: var(--text-xs);
+  color: var(--color-green-bright);
+  margin-top: var(--space-xs);
+}
+
+/* ========================================
+   THEME PICKER DIVIDER
+   ======================================== */
+
+.theme-picker__divider {
+  height: 1px;
+  background: var(--color-border);
+  margin: var(--space-xs) 0;
+}
+
+.theme-picker__option-swatch--custom {
+  background: conic-gradient(
+    #c9a84c 0deg 90deg,
+    #c94c4c 90deg 180deg,
+    #4cb8b8 180deg 270deg,
+    #6090b8 270deg 360deg
+  );
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+
+@media (max-width: 768px) {
+  .settings-page {
+    padding: var(--space-md);
+  }
+
+  .settings-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-xs);
+  }
+
+  .settings-row__control .form-select {
+    min-width: unset;
+    width: 100%;
+  }
+}
