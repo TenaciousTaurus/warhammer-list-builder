@@ -42,16 +42,24 @@ export function UnitsPage() {
     if (!selectedFaction) return;
     setLoading(true);
     setExpandedUnit(null);
+
+    // Include parent faction units for subfactions (e.g. Ultramarines -> Space Marines)
+    const faction = factions.find(f => f.id === selectedFaction);
+    const factionIds = [selectedFaction];
+    if (faction?.parent_faction_id) {
+      factionIds.push(faction.parent_faction_id);
+    }
+
     supabase
       .from('units')
       .select('*, unit_points_tiers(*), weapons(*), abilities(*)')
-      .eq('faction_id', selectedFaction)
+      .in('faction_id', factionIds)
       .order('name')
       .then(({ data }) => {
         if (data) setUnits(data as UnitWithDetails[]);
         setLoading(false);
       });
-  }, [selectedFaction]);
+  }, [selectedFaction, factions]);
 
   // Available roles for this faction
   const availableRoles = useMemo(() => {

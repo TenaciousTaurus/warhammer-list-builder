@@ -28,10 +28,22 @@ export function CrusadeRosterPage() {
     setShowUnitPicker(true);
     setLoadingUnits(true);
 
+    // Include parent faction units for subfactions (e.g. Ultramarines -> Space Marines)
+    const { data: factionData } = await supabase
+      .from('factions')
+      .select('parent_faction_id')
+      .eq('id', roster.faction_id)
+      .single();
+
+    const factionIds = [roster.faction_id];
+    if (factionData?.parent_faction_id) {
+      factionIds.push(factionData.parent_faction_id);
+    }
+
     const { data, error: fetchError } = await supabase
       .from('units')
       .select('*')
-      .eq('faction_id', roster.faction_id)
+      .in('faction_id', factionIds)
       .order('name', { ascending: true });
 
     if (fetchError) {

@@ -218,18 +218,24 @@ export const useListEditorStore = create<ListEditorState>()((set, get) => ({
 
     const listUnits = (unitData ?? []) as ArmyListUnitWithDetails[];
 
-    // 3. Fetch available units (main faction + allied)
+    // 3. Fetch available units (main faction + parent faction + allied)
+    const { data: factionMeta } = await supabase
+      .from('factions')
+      .select('alignment, parent_faction_id')
+      .eq('id', list.faction_id)
+      .single();
+
+    // Build list of faction IDs to fetch units from (self + parent if exists)
+    const unitFactionIds = [list.faction_id];
+    if (factionMeta?.parent_faction_id) {
+      unitFactionIds.push(factionMeta.parent_faction_id);
+    }
+
     const { data: mainUnits } = await supabase
       .from('units')
       .select('*, unit_points_tiers(*), abilities(*), weapons(*)')
-      .eq('faction_id', list.faction_id)
+      .in('faction_id', unitFactionIds)
       .order('name');
-
-    const { data: factionMeta } = await supabase
-      .from('factions')
-      .select('alignment')
-      .eq('id', list.faction_id)
-      .single();
 
     const alliedFactionNames = ['Unaligned Forces'];
     if (factionMeta?.alignment === 'imperium') {

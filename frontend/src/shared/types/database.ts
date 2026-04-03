@@ -7,6 +7,7 @@ export type Database = {
           name: string;
           icon_url: string | null;
           alignment: 'imperium' | 'chaos' | 'xenos' | 'unaligned' | null;
+          parent_faction_id: string | null;
           created_at: string;
         };
         Insert: {
@@ -14,11 +15,13 @@ export type Database = {
           name: string;
           icon_url?: string | null;
           alignment?: 'imperium' | 'chaos' | 'xenos' | 'unaligned' | null;
+          parent_faction_id?: string | null;
         };
         Update: {
           id?: string;
           name?: string;
           icon_url?: string | null;
+          parent_faction_id?: string | null;
         };
         Relationships: [];
       };

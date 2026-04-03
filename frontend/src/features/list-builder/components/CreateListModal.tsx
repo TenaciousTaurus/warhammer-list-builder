@@ -42,10 +42,18 @@ export function CreateListModal({ onClose, onCreated }: CreateListModalProps) {
 
   useEffect(() => {
     if (!factionId) return;
+
+    // Find the faction to check for parent
+    const faction = factions.find(f => f.id === factionId);
+    const detFactionIds = [factionId];
+    if (faction?.parent_faction_id) {
+      detFactionIds.push(faction.parent_faction_id);
+    }
+
     supabase
       .from('detachments')
       .select('*')
-      .eq('faction_id', factionId)
+      .in('faction_id', detFactionIds)
       .order('name')
       .then(({ data }) => {
         if (data && data.length > 0) {
@@ -56,7 +64,7 @@ export function CreateListModal({ onClose, onCreated }: CreateListModalProps) {
           setDetachmentId('');
         }
       });
-  }, [factionId]);
+  }, [factionId, factions]);
 
   const selectedBattleSize = battleSizes.find(bs => bs.id === battleSizeId);
 
