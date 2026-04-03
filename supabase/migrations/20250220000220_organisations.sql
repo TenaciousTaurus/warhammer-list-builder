@@ -5,7 +5,7 @@ CREATE TABLE organisations (
   name text NOT NULL,
   description text,
   is_public boolean NOT NULL DEFAULT false,
-  share_code text UNIQUE DEFAULT left(encode(digest(gen_random_uuid()::text, 'md5'), 'hex')::text, 8),
+  share_code text UNIQUE NOT NULL DEFAULT substring(md5(random()::text), 1, 8),
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now()
 );
@@ -30,7 +30,7 @@ CREATE INDEX idx_org_members_user ON organisation_members (user_id);
 CREATE TRIGGER organisations_updated_at
   BEFORE UPDATE ON organisations
   FOR EACH ROW
-  EXECUTE FUNCTION update_updated_at_column();
+  EXECUTE FUNCTION public.update_updated_at();
 
 -- RLS
 ALTER TABLE organisations ENABLE ROW LEVEL SECURITY;

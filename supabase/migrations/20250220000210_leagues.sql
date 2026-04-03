@@ -6,7 +6,7 @@ CREATE TABLE leagues (
   description text,
   is_public boolean NOT NULL DEFAULT false,
   status text NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'completed', 'archived')),
-  share_code text UNIQUE DEFAULT encode(digest(gen_random_uuid()::text, 'md5'), 'hex')::text,
+  share_code text UNIQUE NOT NULL DEFAULT substring(md5(random()::text), 1, 8),
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now()
 );
@@ -27,14 +27,11 @@ CREATE INDEX idx_leagues_public ON leagues (is_public, status) WHERE is_public =
 CREATE INDEX idx_league_tournaments_league ON league_tournaments (league_id);
 CREATE INDEX idx_league_tournaments_tournament ON league_tournaments (tournament_id);
 
--- Trim share_code to 8 chars
-UPDATE leagues SET share_code = left(share_code, 8) WHERE length(share_code) > 8;
-
 -- Auto-update updated_at
 CREATE TRIGGER leagues_updated_at
   BEFORE UPDATE ON leagues
   FOR EACH ROW
-  EXECUTE FUNCTION update_updated_at_column();
+  EXECUTE FUNCTION public.update_updated_at();
 
 -- RLS
 ALTER TABLE leagues ENABLE ROW LEVEL SECURITY;
