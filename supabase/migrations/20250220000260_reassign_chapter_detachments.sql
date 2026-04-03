@@ -67,12 +67,34 @@ WHERE faction_id = '9f7c3840-0b7c-face-ee6a-35dd8ca20220'
     'Blade of Ultramar'
   );
 
--- Also delete the "Index" placeholder detachments from chapters that now have real ones
-DELETE FROM detachments
-WHERE name = 'Index'
-  AND faction_id IN (
-    SELECT id FROM factions WHERE name IN (
-      'Dark Angels', 'Blood Angels', 'Space Wolves',
-      'Black Templars', 'Deathwatch', 'Ultramarines'
-    )
-  );
+-- Reassign any army lists using "Index" detachments to the first real detachment
+-- for that faction, then delete the placeholder "Index" detachments.
+DO $$
+DECLARE
+  idx_det RECORD;
+  replacement_id uuid;
+BEGIN
+  FOR idx_det IN
+    SELECT d.id, d.faction_id
+    FROM detachments d
+    JOIN factions f ON f.id = d.faction_id
+    WHERE d.name = 'Index'
+      AND f.name IN ('Dark Angels', 'Blood Angels', 'Space Wolves',
+                     'Black Templars', 'Deathwatch', 'Ultramarines')
+  LOOP
+    -- Find the first non-Index detachment for this faction (own or parent)
+    SELECT dd.id INTO replacement_id
+    FROM detachments dd
+    WHERE dd.faction_id IN (idx_det.faction_id, '9f7c3840-0b7c-face-ee6a-35dd8ca20220')
+      AND dd.name != 'Index'
+    ORDER BY dd.name
+    LIMIT 1;
+
+    IF replacement_id IS NOT NULL THEN
+      UPDATE army_lists SET detachment_id = replacement_id
+      WHERE detachment_id = idx_det.id;
+    END IF;
+
+    DELETE FROM detachments WHERE id = idx_det.id;
+  END LOOP;
+END $$;
