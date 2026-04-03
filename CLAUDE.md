@@ -160,24 +160,20 @@ warforge/
 
 ## Phase Roadmap
 
-### Phase 1 — List Builder (EXISTING)
-**Status: Built.** Fully functional list builder with unit CRUD, points tracking, wargear, enhancements, leader attachments, model composition, import/export, QR sharing.
+### Phase 1 — List Builder
+**Status: Complete.** Unit CRUD, points tracking, wargear, enhancements, leader attachments, model composition, import/export, QR sharing, print-friendly view, tablet optimization, Legends toggle.
 
-**Remaining:** Print-friendly view, landscape/tablet optimization, Legends toggle.
-
-### Phase 2 — In-Game Play Mode (HIGHEST PRIORITY)
-**Status: In progress.** Basic play mode exists (localStorage-based game tracker, casualty tracker, secondary objectives, stratagem reference, battle reports).
-
-**Next:** Database-backed game sessions, Zustand store, phase-by-phase flow, CP/stratagem tracking, VP scoring, chess timer, dice roller, Supabase Realtime for multi-device sync.
+### Phase 2 — In-Game Play Mode
+**Status: Complete.** DB-backed game sessions via Zustand store, phase-by-phase flow (Command/Movement/Shooting/Charge/Fight), CP/stratagem tracking with event logging, VP scoring with secondary objectives, chess timer (persisted to session), dice roller, casualty tracker (DB-synced), battle reports, Supabase Realtime for multi-device sync, mission selection.
 
 ### Phase 3 — Collection & Hobby Tracker
-**Status: Not started.** Miniature inventory, painting progress pipeline, paint recipe storage, photo gallery.
+**Status: Complete.** Collection CRUD with grid/pipeline views, enhanced stats (per-status bars, per-faction breakdown, avg cost/model), automatic unit matching (UnitMatchPicker autocomplete), photo gallery (Supabase Storage), instant list verification, wishlist, paint recipes with step editor, paint library.
 
 ### Phase 4 — Crusade & Campaign Mode
-**Status: Not started.** Persistent unit progression (XP, honours, scars), battle logging, multiplayer campaigns.
+**Status: Schema + components built, needs integration testing.** Campaigns, rosters, unit progression (XP, honours, scars via JSONB), battle logging, requisitions, multiplayer campaigns with Realtime sync.
 
 ### Phase 5 — Social, Stats & Tournament
-**Status: Not started.** Win/loss stats, friends, head-to-head records, tournament brackets.
+**Status: Complete.** Profiles, friendships, player stats, head-to-head records, tournaments (Swiss/Single Elim/Round Robin) with Realtime sync, public tournament browsing with filters, leagues, organisations with role-based member management.
 
 ---
 
@@ -231,18 +227,19 @@ Frontend Dev: `http://localhost:5173`
 
 ---
 
-## Upcoming Work (Feature Expansion)
+## Upcoming Work
 
-Planned in order of priority. Full design in `.claude/plans/async-wandering-chipmunk.md`.
+### Data Quality
+- [ ] Fix ~55 units missing weapons/abilities (Legends + Fortification edge cases in BSData parser)
+- [ ] Code-split frontend bundle (currently 735KB, Vite warns at 500KB)
 
-### Phase 1: Collection Upgrades (frontend-heavy)
-- [ ] **Enhanced Collection Stats** — Extract `CollectionStats` component with per-status progress bars, per-faction breakdown, total invested, avg cost/model
-- [ ] **Automatic Unit Matching** — `UnitMatchPicker` autocomplete in `CollectionForm`, links entries to `units` via existing `unit_id` FK
-- [ ] **Photo Gallery** — Supabase Storage bucket (`collection-photos`), `PhotoUploader` + `PhotoGallery` components, migration needed
-- [ ] **Instant List Verification** — `useListVerification` hook + `ListVerification` component, cross-references army list units vs collection
+### Phase 4: Crusade Buildout
+- [ ] Wire crusade components to live data (schemas + stores exist, needs integration)
+- [ ] Post-battle sequence flow (XP awards, honour/scar selection)
+- [ ] Campaign leaderboard from real battle data
 
-### Phase 2: Tournament Upgrades (needs migrations)
-- [ ] **Public Tournament Browsing** — `is_public` column on `tournaments`, "Browse All" tab, migration needed
-- [ ] **Tournament Filters** — `TournamentFilters` component (format, status, name, date, sort)
-- [ ] **Simple Leagues** — `leagues` + `league_tournaments` tables, `leagueStore`, `LeaguesPage` + `LeagueDetailPage`, migration needed
-- [ ] **Organisations** — `organisations` + `organisation_members` tables, `orgStore`, `OrganisationPage`, migration needed
+### Future Enhancements
+- [ ] User paint inventory UI (table exists, no frontend)
+- [ ] Recipe step photos (column exists, no upload UI)
+- [ ] Invite codes for multiplayer game sessions
+- [ ] Opponent view for shared game sessions
