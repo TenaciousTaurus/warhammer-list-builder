@@ -1248,6 +1248,7 @@ export type Database = {
           points_limit: number;
           num_rounds: number;
           status: 'registration' | 'active' | 'completed' | 'cancelled';
+          is_public: boolean;
           share_code: string;
           settings: Record<string, unknown>;
           started_at: string | null;
@@ -1265,6 +1266,7 @@ export type Database = {
           points_limit?: number;
           num_rounds?: number;
           status?: 'registration' | 'active' | 'completed' | 'cancelled';
+          is_public?: boolean;
           share_code?: string;
           settings?: Record<string, unknown>;
           started_at?: string | null;
@@ -1280,6 +1282,7 @@ export type Database = {
           points_limit?: number;
           num_rounds?: number;
           status?: 'registration' | 'active' | 'completed' | 'cancelled';
+          is_public?: boolean;
           settings?: Record<string, unknown>;
           started_at?: string | null;
           completed_at?: string | null;
@@ -1510,6 +1513,48 @@ export type Tournament = Database['public']['Tables']['tournaments']['Row'];
 export type TournamentParticipant = Database['public']['Tables']['tournament_participants']['Row'];
 export type TournamentRound = Database['public']['Tables']['tournament_rounds']['Row'];
 export type TournamentPairing = Database['public']['Tables']['tournament_pairings']['Row'];
+
+// Leagues (manual types — not yet in generated schema)
+export interface League {
+  id: string;
+  owner_id: string;
+  name: string;
+  description: string | null;
+  is_public: boolean;
+  status: 'active' | 'completed' | 'archived';
+  share_code: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface LeagueTournament {
+  id: string;
+  league_id: string;
+  tournament_id: string;
+  sort_order: number;
+  added_at: string;
+}
+
+// Organisations (manual types — not yet in generated schema)
+export interface Organisation {
+  id: string;
+  owner_id: string;
+  name: string;
+  description: string | null;
+  is_public: boolean;
+  share_code: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OrganisationMember {
+  id: string;
+  organisation_id: string;
+  user_id: string;
+  role: 'owner' | 'admin' | 'member';
+  display_name: string;
+  joined_at: string;
+}
 
 // RPC response types
 export type CalculateListPointsResult = Database['public']['Functions']['calculate_list_points']['Returns'];

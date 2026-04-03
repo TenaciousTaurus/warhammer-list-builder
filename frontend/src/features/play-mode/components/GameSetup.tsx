@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useGameSessionStore } from '../stores/gameSessionStore';
 
 interface GameSetupProps {
@@ -9,11 +9,18 @@ interface GameSetupProps {
 
 export function GameSetup({ armyListId, userId, onGameCreated }: GameSetupProps) {
   const createSession = useGameSessionStore((s) => s.createSession);
+  const loadMissions = useGameSessionStore((s) => s.loadMissions);
+  const missions = useGameSessionStore((s) => s.missions);
   const loading = useGameSessionStore((s) => s.loading);
   const error = useGameSessionStore((s) => s.error);
 
   const [opponentName, setOpponentName] = useState('');
   const [opponentFaction, setOpponentFaction] = useState('');
+  const [missionId, setMissionId] = useState('');
+
+  useEffect(() => {
+    loadMissions();
+  }, [loadMissions]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,6 +29,7 @@ export function GameSetup({ armyListId, userId, onGameCreated }: GameSetupProps)
       userId,
       opponentName.trim() || undefined,
       opponentFaction.trim() || undefined,
+      missionId || undefined,
     );
     if (sessionId) {
       onGameCreated(sessionId);
@@ -59,6 +67,25 @@ export function GameSetup({ armyListId, userId, onGameCreated }: GameSetupProps)
           onChange={(e) => setOpponentFaction(e.target.value)}
         />
       </div>
+
+      {missions.length > 0 && (
+        <div className="game-setup__field">
+          <label className="game-setup__label" htmlFor="mission-select">
+            Mission
+          </label>
+          <select
+            id="mission-select"
+            className="game-setup__select"
+            value={missionId}
+            onChange={(e) => setMissionId(e.target.value)}
+          >
+            <option value="">-- No Mission --</option>
+            {missions.map((m) => (
+              <option key={m.id} value={m.id}>{m.name}</option>
+            ))}
+          </select>
+        </div>
+      )}
 
       {error && <p className="game-setup__error">{error}</p>}
 

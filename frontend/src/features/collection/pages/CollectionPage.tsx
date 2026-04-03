@@ -5,6 +5,7 @@ import type { PaintingStatus } from '../stores/collectionStore';
 import type { CollectionEntry } from '../../../shared/types/database';
 import { CollectionCard } from '../components/CollectionCard';
 import { CollectionForm } from '../components/CollectionForm';
+import { CollectionStats } from '../components/CollectionStats';
 import { PaintingPipeline } from '../components/PaintingPipeline';
 import { WishlistPanel } from '../components/WishlistPanel';
 
@@ -26,6 +27,7 @@ export function CollectionPage() {
     entries,
     wishlist,
     factions,
+    units,
     loading,
     error,
     loadCollection,
@@ -59,8 +61,13 @@ export function CollectionPage() {
     return map;
   }, [factions]);
 
-  // Unit names would come from a units lookup; for now use custom_name
-  const unitNames = useMemo(() => new Map<string, string>(), []);
+  const unitNames = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const u of units) {
+      map.set(u.id, u.name);
+    }
+    return map;
+  }, [units]);
 
   // Filter entries
   const filtered = useMemo(() => {
@@ -74,17 +81,6 @@ export function CollectionPage() {
       return true;
     });
   }, [entries, factionFilter, statusFilter, searchQuery]);
-
-  // Stats
-  const stats = useMemo(() => {
-    const totalModels = entries.reduce((sum, e) => sum + e.quantity, 0);
-    const finishedModels = entries
-      .filter((e) => e.painting_status === 'finished')
-      .reduce((sum, e) => sum + e.quantity, 0);
-    const paintingPercent = totalModels > 0 ? Math.round((finishedModels / totalModels) * 100) : 0;
-    const totalValue = entries.reduce((sum, e) => sum + (e.purchase_price ?? 0), 0);
-    return { totalModels, finishedModels, paintingPercent, totalValue };
-  }, [entries]);
 
   const handleSave = useCallback(
     (data: Partial<CollectionEntry>) => {
@@ -146,25 +142,8 @@ export function CollectionPage() {
         </button>
       </div>
 
-      {/* Stats Bar */}
-      <div className="collection-page__stats">
-        <div className="collection-page__stat">
-          <span className="collection-page__stat-value">{stats.totalModels}</span>
-          <span className="collection-page__stat-label">Models</span>
-        </div>
-        <div className="collection-page__stat">
-          <span className="collection-page__stat-value">{stats.paintingPercent}%</span>
-          <span className="collection-page__stat-label">Painted</span>
-        </div>
-        {stats.totalValue > 0 && (
-          <div className="collection-page__stat">
-            <span className="collection-page__stat-value">
-              ${stats.totalValue.toFixed(0)}
-            </span>
-            <span className="collection-page__stat-label">Invested</span>
-          </div>
-        )}
-      </div>
+      {/* Stats */}
+      <CollectionStats entries={entries} factions={factions} factionNames={factionNames} />
 
       {/* Error Banner */}
       {error && (
@@ -288,6 +267,8 @@ export function CollectionPage() {
         <CollectionForm
           entry={editingEntry}
           factions={factions}
+          units={units}
+          userId={user.id}
           onSave={handleSave}
           onClose={() => {
             setShowForm(false);

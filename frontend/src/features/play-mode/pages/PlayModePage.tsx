@@ -268,7 +268,6 @@ export function PlayModePage() {
 
                       <CasualtyTracker
                         armyListUnitId={lu.id}
-                        listId={id}
                         modelCount={lu.model_count}
                         wounds={lu.units.wounds}
                         isMultiWound={isMultiWound}

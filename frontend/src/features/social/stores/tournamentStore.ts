@@ -10,6 +10,7 @@ import type {
 
 interface TournamentState {
   tournaments: Tournament[];
+  publicTournaments: Tournament[];
   activeTournament: Tournament | null;
   participants: TournamentParticipant[];
   rounds: TournamentRound[];
@@ -19,6 +20,7 @@ interface TournamentState {
   error: string | null;
 
   loadMyTournaments: (userId: string) => Promise<void>;
+  loadPublicTournaments: () => Promise<void>;
   createTournament: (data: {
     name: string;
     description?: string;
@@ -27,6 +29,7 @@ interface TournamentState {
     points_limit: number;
     num_rounds: number;
     organizer_id: string;
+    is_public?: boolean;
   }) => Promise<string | null>;
   joinTournament: (
     shareCode: string,
@@ -48,6 +51,7 @@ interface TournamentState {
 
 export const useTournamentStore = create<TournamentState>()((set, get) => ({
   tournaments: [],
+  publicTournaments: [],
   activeTournament: null,
   participants: [],
   rounds: [],
@@ -105,6 +109,23 @@ export const useTournamentStore = create<TournamentState>()((set, get) => ({
     set({ tournaments: all, loading: false });
   },
 
+  loadPublicTournaments: async () => {
+    set({ error: null });
+
+    const { data, error } = await supabase
+      .from('tournaments')
+      .select('*')
+      .eq('is_public', true)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      set({ error: error.message });
+      return;
+    }
+
+    set({ publicTournaments: (data as Tournament[]) ?? [] });
+  },
+
   createTournament: async (data) => {
     set({ error: null });
 
@@ -118,6 +139,7 @@ export const useTournamentStore = create<TournamentState>()((set, get) => ({
         max_players: data.max_players,
         points_limit: data.points_limit,
         num_rounds: data.num_rounds,
+        is_public: data.is_public ?? false,
       })
       .select()
       .single();

@@ -4,6 +4,7 @@ import type {
   CollectionEntry,
   WishlistItem,
   Faction,
+  Unit,
 } from '../../../shared/types/database';
 
 export const PAINTING_STATUSES = [
@@ -22,6 +23,7 @@ interface CollectionState {
   entries: CollectionEntry[];
   wishlist: WishlistItem[];
   factions: Faction[];
+  units: Unit[];
   loading: boolean;
   error: string | null;
 
@@ -39,6 +41,7 @@ export const useCollectionStore = create<CollectionState>()((set, get) => ({
   entries: [],
   wishlist: [],
   factions: [],
+  units: [],
   loading: false,
   error: null,
 
@@ -47,7 +50,7 @@ export const useCollectionStore = create<CollectionState>()((set, get) => ({
   loadCollection: async (userId: string) => {
     set({ loading: true, error: null });
     try {
-      const [entriesRes, wishlistRes, factionsRes] = await Promise.all([
+      const [entriesRes, wishlistRes, factionsRes, unitsRes] = await Promise.all([
         supabase
           .from('collection_entries')
           .select('*')
@@ -61,6 +64,10 @@ export const useCollectionStore = create<CollectionState>()((set, get) => ({
         supabase
           .from('factions')
           .select('*')
+          .order('name', { ascending: true }),
+        supabase
+          .from('units')
+          .select('id, faction_id, name, role, is_legends')
           .order('name', { ascending: true }),
       ]);
 
@@ -79,11 +86,17 @@ export const useCollectionStore = create<CollectionState>()((set, get) => ({
         set({ loading: false, error: factionsRes.error.message });
         return;
       }
+      if (unitsRes.error) {
+        console.error('Failed to load units:', unitsRes.error);
+        set({ loading: false, error: unitsRes.error.message });
+        return;
+      }
 
       set({
         entries: (entriesRes.data as CollectionEntry[]) ?? [],
         wishlist: (wishlistRes.data as WishlistItem[]) ?? [],
         factions: (factionsRes.data as Faction[]) ?? [],
+        units: (unitsRes.data as Unit[]) ?? [],
         loading: false,
       });
     } catch {

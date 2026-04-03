@@ -1,41 +1,41 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { useGameSessionStore } from '../stores/gameSessionStore';
 
 interface CasualtyTrackerProps {
   armyListUnitId: string;
-  listId: string;
   modelCount: number;
   wounds: number;
   isMultiWound: boolean;
 }
 
-export function CasualtyTracker({ armyListUnitId, listId, modelCount, wounds, isMultiWound }: CasualtyTrackerProps) {
-  const storageKey = `play-${listId}`;
+export function CasualtyTracker({ armyListUnitId, modelCount, wounds, isMultiWound }: CasualtyTrackerProps) {
+  const session = useGameSessionStore((s) => s.session);
+  const storeUnitStates = useGameSessionStore((s) => s.unitStates);
+  const updateUnitState = useGameSessionStore((s) => s.updateUnitState);
 
-  function getStoredState(): Record<string, number[]> {
-    try {
-      const raw = localStorage.getItem(storageKey);
-      return raw ? JSON.parse(raw) : {};
-    } catch { return {}; }
-  }
-
-  function saveState(state: Record<string, number[]>) {
-    localStorage.setItem(storageKey, JSON.stringify(state));
-  }
-
-  // For multi-model units: array of 0 (alive) or 1 (dead)
-  // For multi-wound: array of current wounds per model
+  // Initialize from store state (DB-backed) or defaults
   const [modelStates, setModelStates] = useState<number[]>(() => {
-    const stored = getStoredState();
-    if (stored[armyListUnitId]) return stored[armyListUnitId];
+    const fromStore = storeUnitStates.find((us) => us.armyListUnitId === armyListUnitId);
+    if (fromStore) return fromStore.modelStates;
     if (isMultiWound) return Array(modelCount).fill(wounds);
     return Array(modelCount).fill(0);
   });
 
+  // Sync from store when remote updates arrive via Realtime
   useEffect(() => {
-    const state = getStoredState();
-    state[armyListUnitId] = modelStates;
-    saveState(state);
-  }, [modelStates]);
+    const fromStore = storeUnitStates.find((us) => us.armyListUnitId === armyListUnitId);
+    if (fromStore) {
+      setModelStates(fromStore.modelStates);
+    }
+  }, [storeUnitStates, armyListUnitId]);
+
+  // Persist to store + DB when local state changes
+  const handleStateChange = useCallback((newStates: number[]) => {
+    setModelStates(newStates);
+    if (session) {
+      updateUnitState(armyListUnitId, newStates);
+    }
+  }, [session, armyListUnitId, updateUnitState]);
 
   if (isMultiWound) {
     // Wound tracker per model
@@ -52,7 +52,7 @@ export function CasualtyTracker({ armyListUnitId, listId, modelCount, wounds, is
                 onClick={() => {
                   const next = [...modelStates];
                   next[i] = Math.max(0, next[i] - 1);
-                  setModelStates(next);
+                  handleStateChange(next);
                 }}
                 disabled={currentWounds === 0}
               >-</button>
@@ -64,7 +64,7 @@ export function CasualtyTracker({ armyListUnitId, listId, modelCount, wounds, is
                 onClick={() => {
                   const next = [...modelStates];
                   next[i] = Math.min(wounds, next[i] + 1);
-                  setModelStates(next);
+                  handleStateChange(next);
                 }}
                 disabled={currentWounds === wounds}
               >+</button>
@@ -87,7 +87,7 @@ export function CasualtyTracker({ armyListUnitId, listId, modelCount, wounds, is
             onClick={() => {
               const next = [...modelStates];
               next[i] = next[i] ? 0 : 1;
-              setModelStates(next);
+              handleStateChange(next);
             }}
             title={dead ? 'Mark alive' : 'Mark dead'}
           />

@@ -1,16 +1,21 @@
 import { useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../../shared/hooks/useAuth';
 import { useListEditor, getUnitPoints } from '../hooks/useListEditor';
+import { useListVerification } from '../../collection/hooks/useListVerification';
 import { UnitPicker } from '../components/UnitPicker';
 import { ListSummary } from '../components/ListSummary';
 import { ArmyRoster } from '../components/ArmyRoster';
 import { UnitDetailPanel } from '../components/UnitDetailPanel';
 import { ExportModal } from '../components/ExportModal';
+import { ListVerification } from '../../collection/components/ListVerification';
 
 export function ListEditorPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const editor = useListEditor(id);
+  const verification = useListVerification(editor.listUnits, user?.id);
 
   // Keyboard shortcuts
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
@@ -133,6 +138,8 @@ export function ListEditorPage() {
           onUpdatePointsLimit={editor.updatePointsLimit}
           onUpdateBattleSize={editor.updateBattleSize}
         />
+
+        <ListVerification {...verification} />
 
         <div className="list-editor__roster-list">
           <ArmyRoster

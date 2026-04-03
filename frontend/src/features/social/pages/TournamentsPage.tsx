@@ -1,27 +1,33 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../shared/hooks/useAuth';
 import { useTournamentStore } from '../stores/tournamentStore';
 import { TournamentCard } from '../components/TournamentCard';
+import { TournamentFilters } from '../components/TournamentFilters';
 import type { Tournament } from '../../../shared/types/database';
 import '../social.css';
 
 type TournamentFormat = Tournament['format'];
+type TournamentStatus = Tournament['status'];
+type Tab = 'mine' | 'browse';
 
 export function TournamentsPage() {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
   const {
     tournaments,
+    publicTournaments,
     participants,
     loading,
     error,
     loadMyTournaments,
+    loadPublicTournaments,
     createTournament,
     joinTournament,
     loadTournament,
   } = useTournamentStore();
 
+  const [tab, setTab] = useState<Tab>('mine');
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [joinCode, setJoinCode] = useState('');
@@ -31,13 +37,26 @@ export function TournamentsPage() {
     max_players: 8,
     points_limit: 2000,
     num_rounds: 3,
+    is_public: false,
   });
+
+  // Filters
+  const [nameQuery, setNameQuery] = useState('');
+  const [formatFilter, setFormatFilter] = useState<TournamentFormat | ''>('');
+  const [statusFilter, setStatusFilter] = useState<TournamentStatus | ''>('');
+  const [sortBy, setSortBy] = useState<'newest' | 'oldest' | 'name'>('newest');
 
   useEffect(() => {
     if (user?.id) {
       loadMyTournaments(user.id);
     }
   }, [user?.id, loadMyTournaments]);
+
+  useEffect(() => {
+    if (tab === 'browse') {
+      loadPublicTournaments();
+    }
+  }, [tab, loadPublicTournaments]);
 
   const handleCreate = async () => {
     if (!user?.id || !createForm.name.trim()) return;
@@ -55,6 +74,7 @@ export function TournamentsPage() {
         max_players: 8,
         points_limit: 2000,
         num_rounds: 3,
+        is_public: false,
       });
       navigate(`/tournament/${id}`);
     }
@@ -73,10 +93,35 @@ export function TournamentsPage() {
     navigate(`/tournament/${tournamentId}`);
   };
 
-  // Get participant counts per tournament
   const getParticipantCount = (tournamentId: string): number => {
     return participants.filter((p) => p.tournament_id === tournamentId).length;
   };
+
+  // Apply filters and sorting
+  const sourceList = tab === 'mine' ? tournaments : publicTournaments;
+
+  const filteredTournaments = useMemo(() => {
+    let result = sourceList;
+
+    if (nameQuery) {
+      const q = nameQuery.toLowerCase();
+      result = result.filter((t) => t.name.toLowerCase().includes(q));
+    }
+    if (formatFilter) {
+      result = result.filter((t) => t.format === formatFilter);
+    }
+    if (statusFilter) {
+      result = result.filter((t) => t.status === statusFilter);
+    }
+
+    result = [...result].sort((a, b) => {
+      if (sortBy === 'newest') return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      if (sortBy === 'oldest') return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+      return a.name.localeCompare(b.name);
+    });
+
+    return result;
+  }, [sourceList, nameQuery, formatFilter, statusFilter, sortBy]);
 
   if (authLoading || loading) {
     return (
@@ -111,6 +156,34 @@ export function TournamentsPage() {
       </div>
 
       {error && <div className="tournaments-page__error">{error}</div>}
+
+      {/* Tabs */}
+      <div className="tournaments-page__tabs">
+        <button
+          className={`tournaments-page__tab ${tab === 'mine' ? 'tournaments-page__tab--active' : ''}`}
+          onClick={() => setTab('mine')}
+        >
+          My Tournaments
+        </button>
+        <button
+          className={`tournaments-page__tab ${tab === 'browse' ? 'tournaments-page__tab--active' : ''}`}
+          onClick={() => setTab('browse')}
+        >
+          Browse All
+        </button>
+      </div>
+
+      {/* Filters */}
+      <TournamentFilters
+        nameQuery={nameQuery}
+        formatFilter={formatFilter}
+        statusFilter={statusFilter}
+        sortBy={sortBy}
+        onNameChange={setNameQuery}
+        onFormatChange={setFormatFilter}
+        onStatusChange={setStatusFilter}
+        onSortChange={setSortBy}
+      />
 
       {showCreateForm && (
         <div className="tournaments-page__create-form">
@@ -194,6 +267,18 @@ export function TournamentsPage() {
               />
             </div>
           </div>
+          <div className="tournaments-page__form-field">
+            <label className="tournaments-page__checkbox-label">
+              <input
+                type="checkbox"
+                checked={createForm.is_public}
+                onChange={(e) =>
+                  setCreateForm((prev) => ({ ...prev, is_public: e.target.checked }))
+                }
+              />
+              Make tournament publicly visible
+            </label>
+          </div>
           <div className="tournaments-page__form-actions">
             <button className="tournaments-page__submit-btn" onClick={handleCreate}>
               Create
@@ -238,16 +323,20 @@ export function TournamentsPage() {
         </div>
       )}
 
-      {tournaments.length === 0 ? (
+      {filteredTournaments.length === 0 ? (
         <div className="tournaments-page__empty">
-          <h2 className="tournaments-page__empty-title">No Tournaments</h2>
+          <h2 className="tournaments-page__empty-title">
+            {tab === 'mine' ? 'No Tournaments' : 'No Public Tournaments'}
+          </h2>
           <p className="tournaments-page__empty-text">
-            Create a new tournament or join one with a share code.
+            {tab === 'mine'
+              ? 'Create a new tournament or join one with a share code.'
+              : 'No public tournaments are available right now.'}
           </p>
         </div>
       ) : (
         <div className="tournaments-page__grid">
-          {tournaments.map((t) => (
+          {filteredTournaments.map((t) => (
             <TournamentCard
               key={t.id}
               tournament={t}

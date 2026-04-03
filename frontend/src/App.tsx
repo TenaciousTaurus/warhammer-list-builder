@@ -28,6 +28,10 @@ import { StatsPage } from './features/social/pages/StatsPage';
 import { TournamentsPage } from './features/social/pages/TournamentsPage';
 import { TournamentDetailPage } from './features/social/pages/TournamentDetailPage';
 import { TournamentRoundPage } from './features/social/pages/TournamentRoundPage';
+import { LeaguesPage } from './features/social/pages/LeaguesPage';
+import { LeagueDetailPage } from './features/social/pages/LeagueDetailPage';
+import { OrganisationsPage } from './features/social/pages/OrganisationsPage';
+import { OrganisationDetailPage } from './features/social/pages/OrganisationDetailPage';
 import { useState, type ReactNode } from 'react';
 import { FeedbackModal } from './shared/components/FeedbackModal';
 import { ThemePicker } from './shared/components/ThemePicker';
@@ -185,6 +189,10 @@ function App() {
             <Route path="/tournaments" element={<ProtectedRoute><TournamentsPage /></ProtectedRoute>} />
             <Route path="/tournament/:id" element={<ProtectedRoute><TournamentDetailPage /></ProtectedRoute>} />
             <Route path="/tournament/:id/round/:roundNumber" element={<ProtectedRoute><TournamentRoundPage /></ProtectedRoute>} />
+            <Route path="/leagues" element={<ProtectedRoute><LeaguesPage /></ProtectedRoute>} />
+            <Route path="/league/:id" element={<ProtectedRoute><LeagueDetailPage /></ProtectedRoute>} />
+            <Route path="/organisations" element={<ProtectedRoute><OrganisationsPage /></ProtectedRoute>} />
+            <Route path="/organisation/:id" element={<ProtectedRoute><OrganisationDetailPage /></ProtectedRoute>} />
             {/* Settings */}
             <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
             {/* Public routes */}

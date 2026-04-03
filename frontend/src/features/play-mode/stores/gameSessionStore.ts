@@ -5,6 +5,7 @@ import type {
   GameSession,
   GameSessionEvent,
   GameSessionScore,
+  Mission,
   Stratagem,
   SecondaryObjective,
 } from '../../../shared/types/database';
@@ -27,6 +28,7 @@ interface GameSessionState {
   unitStates: UnitCasualtyState[];
 
   // Reference data
+  missions: Mission[];
   stratagems: Stratagem[];
   secondaryObjectives: SecondaryObjective[];
 
@@ -40,7 +42,8 @@ interface GameSessionState {
   _pendingSyncs: number;
 
   // Session lifecycle
-  createSession: (armyListId: string, userId: string, opponentName?: string, opponentFaction?: string) => Promise<string | null>;
+  createSession: (armyListId: string, userId: string, opponentName?: string, opponentFaction?: string, missionId?: string) => Promise<string | null>;
+  loadMissions: () => Promise<void>;
   loadSession: (sessionId: string) => Promise<void>;
   resumeActiveSession: (userId: string) => Promise<GameSession | null>;
 
@@ -53,6 +56,9 @@ interface GameSessionState {
   adjustCP: (delta: number) => void;
   adjustMyVP: (delta: number) => void;
   adjustOpponentVP: (delta: number) => void;
+
+  // Timer
+  updateTimerSeconds: (playerSeconds: number, opponentSeconds: number) => void;
 
   // Scoring
   updateScore: (round: number, objectiveName: string, vp: number) => void;
@@ -137,6 +143,7 @@ export const useGameSessionStore = create<GameSessionState>()(
       events: [],
       scores: [],
       unitStates: [],
+      missions: [],
       stratagems: [],
       secondaryObjectives: [],
       loading: false,
@@ -149,7 +156,15 @@ export const useGameSessionStore = create<GameSessionState>()(
         set({ syncStatus: 'synced', syncError: null });
       },
 
-      createSession: async (armyListId, userId, opponentName, opponentFaction) => {
+      loadMissions: async () => {
+        const { data } = await supabase
+          .from('missions')
+          .select('*')
+          .order('name', { ascending: true });
+        if (data) set({ missions: data as Mission[] });
+      },
+
+      createSession: async (armyListId, userId, opponentName, opponentFaction, missionId) => {
         set({ loading: true, error: null });
         const { data, error } = await supabase
           .from('game_sessions')
@@ -158,6 +173,7 @@ export const useGameSessionStore = create<GameSessionState>()(
             army_list_id: armyListId,
             opponent_name: opponentName || null,
             opponent_faction: opponentFaction || null,
+            mission_id: missionId || null,
             status: 'active',
             started_at: new Date().toISOString(),
           })
@@ -314,6 +330,19 @@ export const useGameSessionStore = create<GameSessionState>()(
         if (!session) return;
         const newVP = Math.max(0, session.opponent_vp + delta);
         set({ session: { ...session, opponent_vp: newVP } });
+        get()._syncSession();
+      },
+
+      updateTimerSeconds: (playerSeconds, opponentSeconds) => {
+        const { session } = get();
+        if (!session) return;
+        set({
+          session: {
+            ...session,
+            timer_player_seconds: playerSeconds,
+            timer_opponent_seconds: opponentSeconds,
+          },
+        });
         get()._syncSession();
       },
 

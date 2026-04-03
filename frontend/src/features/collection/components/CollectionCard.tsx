@@ -1,6 +1,7 @@
 import type { CollectionEntry } from '../../../shared/types/database';
 import { PAINTING_STATUSES } from '../stores/collectionStore';
 import type { PaintingStatus } from '../stores/collectionStore';
+import { PhotoGallery } from './PhotoGallery';
 
 interface CollectionCardProps {
   entry: CollectionEntry;
@@ -62,6 +63,10 @@ export function CollectionCard({
           {STATUS_LABELS[status] ?? status}
         </span>
       </div>
+
+      {entry.photos && entry.photos.length > 0 && (
+        <PhotoGallery photos={entry.photos} />
+      )}
 
       {nextStatus && (
         <button
