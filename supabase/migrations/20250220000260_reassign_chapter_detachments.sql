@@ -80,7 +80,9 @@ BEGIN
     JOIN factions f ON f.id = d.faction_id
     WHERE d.name = 'Index'
       AND f.name IN ('Dark Angels', 'Blood Angels', 'Space Wolves',
-                     'Black Templars', 'Deathwatch', 'Ultramarines')
+                     'Black Templars', 'Deathwatch', 'Ultramarines',
+                     'Imperial Fists', 'Iron Hands', 'Raven Guard',
+                     'Salamanders', 'White Scars')
   LOOP
     -- Find the first non-Index detachment for this faction (own or parent)
     SELECT dd.id INTO replacement_id

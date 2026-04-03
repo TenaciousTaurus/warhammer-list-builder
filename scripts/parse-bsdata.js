@@ -393,14 +393,47 @@ function extractPointsTiers(node) {
 }
 
 /**
+ * Collect all category link names from a node AND its child model entries.
+ * Some catalogs (e.g. Ultramarines) put categories on child model nodes
+ * instead of the parent unit node, so we need to recurse.
+ */
+function collectCategoryLinks(node, depth = 0) {
+  if (depth > 4) return [];
+  const links = [];
+
+  for (const link of ensureArray(node?.categoryLinks?.categoryLink)) {
+    if (link['@_name']) links.push(link['@_name']);
+  }
+
+  // Recurse into child model entries
+  for (const child of ensureArray(node?.selectionEntries?.selectionEntry)) {
+    if (child['@_type'] === 'model') {
+      links.push(...collectCategoryLinks(child, depth + 1));
+    }
+  }
+
+  // Recurse into selectionEntryGroups containing models
+  for (const group of ensureArray(node?.selectionEntryGroups?.selectionEntryGroup)) {
+    for (const child of ensureArray(group?.selectionEntries?.selectionEntry)) {
+      if (child['@_type'] === 'model') {
+        links.push(...collectCategoryLinks(child, depth + 1));
+      }
+    }
+  }
+
+  return links;
+}
+
+/**
  * Extract role from category links on a unit entry.
+ * Recurses into child model entries to catch roles defined there.
  */
 function extractRole(node) {
   const roles = new Set();
+  const allCats = collectCategoryLinks(node);
 
-  for (const link of ensureArray(node?.categoryLinks?.categoryLink)) {
-    const catName = link['@_name'];
-    if (catName && ROLE_CATEGORIES[catName]) {
+  for (const catName of allCats) {
+    if (ROLE_CATEGORIES[catName]) {
       roles.add(ROLE_CATEGORIES[catName]);
     }
   }
@@ -415,13 +448,17 @@ function extractRole(node) {
 
 /**
  * Extract keywords from category links.
+ * Recurses into child model entries to catch keywords defined there.
  */
 function extractKeywords(node) {
+  const seen = new Set();
   const keywords = [];
-  for (const link of ensureArray(node?.categoryLinks?.categoryLink)) {
-    const name = link['@_name'];
+  const allCats = collectCategoryLinks(node);
+
+  for (const name of allCats) {
     if (name && !name.startsWith('Faction:') && !name.startsWith('Configuration') &&
-        !['Grenades'].includes(name)) {
+        !['Grenades'].includes(name) && !seen.has(name)) {
+      seen.add(name);
       keywords.push(name);
     }
   }
@@ -1263,10 +1300,17 @@ const CATALOGS = [
   { files: ['Imperium - Dark Angels.cat'], name: 'Dark Angels', alignment: 'imperium' },
   { files: ['Imperium - Deathwatch.cat'], name: 'Deathwatch', alignment: 'imperium' },
   { files: ['Imperium - Space Wolves.cat'], name: 'Space Wolves', alignment: 'imperium' },
+  { files: ['Imperium - Ultramarines.cat'], name: 'Ultramarines', alignment: 'imperium' },
+  { files: ['Imperium - Imperial Fists.cat'], name: 'Imperial Fists', alignment: 'imperium' },
+  { files: ['Imperium - Iron Hands.cat'], name: 'Iron Hands', alignment: 'imperium' },
+  { files: ['Imperium - Raven Guard.cat'], name: 'Raven Guard', alignment: 'imperium' },
+  { files: ['Imperium - Salamanders.cat'], name: 'Salamanders', alignment: 'imperium' },
+  { files: ['Imperium - White Scars.cat'], name: 'White Scars', alignment: 'imperium' },
   // Agents of the Imperium — allied units available to all Imperium armies
   { files: ['Imperium - Agents of the Imperium.cat'], name: 'Agents of the Imperium', alignment: 'imperium' },
   // ── Chaos ─────────────────────────────────────────────────────────
   { files: ['Chaos - Chaos Space Marines.cat'], name: 'Chaos Space Marines', alignment: 'chaos' },
+  { files: ['Chaos - Emperor\'s Children.cat'], name: 'Emperor\'s Children', alignment: 'chaos' },
   { files: ['Chaos - Death Guard.cat'], name: 'Death Guard', alignment: 'chaos' },
   { files: ['Chaos - Thousand Sons.cat'], name: 'Thousand Sons', alignment: 'chaos' },
   { files: ['Chaos - World Eaters.cat'], name: 'World Eaters', alignment: 'chaos' },
@@ -1275,6 +1319,7 @@ const CATALOGS = [
   // ── Xenos ─────────────────────────────────────────────────────────
   { files: ['Aeldari - Craftworlds.cat', 'Aeldari - Aeldari Library.cat'], name: 'Aeldari', alignment: 'xenos' },
   { files: ['Aeldari - Drukhari.cat', 'Aeldari - Aeldari Library.cat'], name: 'Drukhari', alignment: 'xenos' },
+  { files: ['Aeldari - Ynnari.cat', 'Aeldari - Aeldari Library.cat'], name: 'Ynnari', alignment: 'xenos' },
   { files: ['Leagues of Votann.cat'], name: 'Leagues of Votann', alignment: 'xenos' },
   { files: ['Genestealer Cults.cat', 'Library - Tyranids.cat'], name: 'Genestealer Cults', alignment: 'xenos' },
   { files: ['Necrons.cat'], name: 'Necrons', alignment: 'xenos' },

@@ -16,5 +16,18 @@ WHERE name IN (
   'Dark Angels',
   'Space Wolves',
   'Black Templars',
-  'Deathwatch'
+  'Deathwatch',
+  'Imperial Fists',
+  'Iron Hands',
+  'Raven Guard',
+  'Salamanders',
+  'White Scars'
 );
+
+-- Ynnari is a subfaction of Aeldari (Craftworlds)
+UPDATE factions SET parent_faction_id = (SELECT id FROM factions WHERE name = 'Aeldari')
+WHERE name = 'Ynnari';
+
+-- Emperor's Children is a subfaction of Chaos Space Marines
+UPDATE factions SET parent_faction_id = (SELECT id FROM factions WHERE name = 'Chaos Space Marines')
+WHERE name = 'Emperor''s Children';
