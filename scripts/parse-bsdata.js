@@ -41,6 +41,7 @@ const parser = new XMLParser({
       'profile', 'characteristic', 'categoryLink',
       'cost', 'constraint', 'modifier', 'rule',
       'categoryEntry', 'infoLink',
+      'condition', 'conditionGroup',
     ];
     return arrays.includes(name);
   },
@@ -970,10 +971,29 @@ function extractDetachments(root, entryIndex) {
       }
     }
 
+    // Check for chapter-specific ownership via notInstanceOf modifier
+    // Pattern: <modifier type="set" value="true" field="hidden">
+    //            <conditions>
+    //              <condition type="notInstanceOf" scope="primary-catalogue" childId="<catalogueId>"/>
+    //            </conditions>
+    //          </modifier>
+    // This means: "hide this detachment unless the primary catalogue IS childId"
+    let ownerCatalogueId = null;
+    for (const mod of ensureArray(entry?.modifiers?.modifier)) {
+      if (mod['@_type'] === 'set' && mod['@_field'] === 'hidden' && mod['@_value'] === 'true') {
+        for (const cond of ensureArray(mod?.conditions?.condition)) {
+          if (cond['@_type'] === 'notInstanceOf' && cond['@_scope'] === 'primary-catalogue' && cond['@_childId']) {
+            ownerCatalogueId = cond['@_childId'];
+          }
+        }
+      }
+    }
+
     detachments.push({
       name: detName,
       ruleText: ruleText.substring(0, 2000), // truncate long rules
       enhancements,
+      ownerCatalogueId, // null = generic (all subfactions), string = chapter-specific
     });
   }
 
@@ -1148,9 +1168,13 @@ function parseCatalog(filePath) {
     }
   }
 
+  // Extract the catalogue's own ID for building the catalogue -> faction map
+  const catalogueId = catalog['@_id'] || null;
+
   return {
     factionName,
     factionId,
+    catalogueId,
     detachments,
     units,
     leaderTargets,
@@ -1334,12 +1358,44 @@ let totalUnits = 0;
 let totalFactions = 0;
 const allSQL = [];
 
+// ── Build catalogue ID -> faction name map ──────────────────────────────────
+// This allows us to resolve chapter-specific detachment ownership.
+// Each .cat file has a catalogue @_id in its root element — we parse the first
+// .cat file for each CATALOGS entry to extract it.
+const catalogueIdToFaction = new Map(); // catalogueId -> { factionName, factionId }
+
+for (const catalogDef of CATALOGS) {
+  const firstFile = catalogDef.files[0];
+  const filePath = path.join(DATA_DIR, firstFile);
+  if (!fs.existsSync(filePath)) continue;
+
+  try {
+    const xml = fs.readFileSync(filePath, 'utf8');
+    const root = parser.parse(xml);
+    const catalog = root.catalogue || root.catalog;
+    if (catalog && catalog['@_id']) {
+      catalogueIdToFaction.set(catalog['@_id'], {
+        factionName: catalogDef.name,
+        factionId: uuidFromSeed(`faction:${catalogDef.name}`),
+      });
+    }
+  } catch (e) {
+    console.log(`  (warning: could not read catalogue ID from ${firstFile}: ${e.message})`);
+  }
+}
+
+console.log(`Built catalogue map: ${catalogueIdToFaction.size} entries`);
+
 // First, delete old generated migrations (keep 0001 schema)
 const existingMigrations = fs.readdirSync(OUT_DIR).filter(f => f.match(/^\d+_seed_.*\.sql$/));
 for (const f of existingMigrations) {
   fs.unlinkSync(path.join(OUT_DIR, f));
   console.log(`Deleted old migration: ${f}`);
 }
+
+// Track chapter-specific detachments that need to be emitted under a different faction
+// Map<factionName, detachment[]> — detachments to add to chapters after parent processing
+const chapterDetachments = new Map();
 
 for (const catalogDef of CATALOGS) {
   const factionName = catalogDef.name;
@@ -1374,9 +1430,27 @@ for (const catalogDef of CATALOGS) {
       }
     }
 
-    // Merge detachments
+    // Merge detachments — separate generic from chapter-specific
     for (const det of faction.detachments) {
-      if (!mergedDetachments.some(d => d.name === det.name)) {
+      if (mergedDetachments.some(d => d.name === det.name)) continue;
+
+      if (det.ownerCatalogueId) {
+        // This detachment belongs to a specific chapter — route it there
+        const ownerFaction = catalogueIdToFaction.get(det.ownerCatalogueId);
+        if (ownerFaction) {
+          const ownerName = ownerFaction.factionName;
+          if (!chapterDetachments.has(ownerName)) {
+            chapterDetachments.set(ownerName, []);
+          }
+          chapterDetachments.get(ownerName).push(det);
+          console.log(`    Routing detachment "${det.name}" -> ${ownerName}`);
+        } else {
+          // Unknown catalogue ID — keep it as generic (fallback)
+          console.log(`    WARNING: Unknown catalogue ID ${det.ownerCatalogueId} for detachment "${det.name}"`);
+          mergedDetachments.push(det);
+        }
+      } else {
+        // Generic detachment — stays with this faction
         mergedDetachments.push(det);
       }
     }
@@ -1399,6 +1473,17 @@ for (const catalogDef of CATALOGS) {
   console.log(`  -> ${mergedUnits.length} units, ${mergedDetachments.length} detachments`);
   totalUnits += mergedUnits.length;
   totalFactions++;
+
+  // Inject chapter-specific detachments that were routed from the parent faction
+  if (chapterDetachments.has(factionName)) {
+    const routed = chapterDetachments.get(factionName);
+    for (const det of routed) {
+      if (!mergedDetachments.some(d => d.name === det.name)) {
+        mergedDetachments.push(det);
+      }
+    }
+    console.log(`  -> Injected ${routed.length} chapter-specific detachment(s) from parent`);
+  }
 
   // If no detachments found, create a default one so lists can be created
   if (mergedDetachments.length === 0) {
