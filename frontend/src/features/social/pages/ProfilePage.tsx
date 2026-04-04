@@ -30,6 +30,7 @@ export function ProfilePage() {
 
   useEffect(() => {
     if (profile && editing) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- populating form from loaded profile data
       setEditForm({
         display_name: profile.display_name,
         bio: profile.bio ?? '',

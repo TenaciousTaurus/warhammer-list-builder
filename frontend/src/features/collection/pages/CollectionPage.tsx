@@ -93,7 +93,7 @@ export function CollectionPage() {
       setShowForm(false);
       setEditingEntry(null);
     },
-    [user?.id, editingEntry, addEntry, updateEntry]
+    [user, editingEntry, addEntry, updateEntry]
   );
 
   const handleEdit = useCallback((entry: CollectionEntry) => {
@@ -113,7 +113,7 @@ export function CollectionPage() {
       if (!user?.id) return;
       addWishlistItem({ user_id: user.id, name, priority });
     },
-    [user?.id, addWishlistItem]
+    [user, addWishlistItem]
   );
 
   if (!user) {

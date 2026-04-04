@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCrusadeStore } from '../stores/crusadeStore';
 import { XPProgressBar } from '../components/XPProgressBar';
@@ -21,14 +21,8 @@ export function CrusadeUnitDetailPage() {
 
   const unit = units.find((u) => u.id === unitId);
   const [editingNotes, setEditingNotes] = useState(false);
-  const [notes, setNotes] = useState('');
+  const [notes, setNotes] = useState(unit?.notes ?? '');
   const [confirmDelete, setConfirmDelete] = useState(false);
-
-  useEffect(() => {
-    if (unit) {
-      setNotes(unit.notes ?? '');
-    }
-  }, [unit]);
 
   const handleSaveNotes = useCallback(async () => {
     if (!unitId) return;

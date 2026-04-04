@@ -17,6 +17,7 @@ export function useGameRealtime(sessionId: string | null) {
 
   useEffect(() => {
     if (!sessionId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- early return sets status before subscribing
       setRealtimeStatus('disconnected');
       return;
     }

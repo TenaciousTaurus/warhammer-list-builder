@@ -17,5 +17,6 @@ function customRender(
 }
 
 // Re-export everything from testing library
+// eslint-disable-next-line react-refresh/only-export-components -- test helper, not a component file
 export * from '@testing-library/react';
 export { customRender as render };

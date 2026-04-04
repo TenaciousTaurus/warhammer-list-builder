@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import type { CollectionEntry, Faction, Unit } from '../../../shared/types/database';
 import { PAINTING_STATUSES } from '../stores/collectionStore';
 import type { PaintingStatus } from '../stores/collectionStore';
@@ -25,29 +25,15 @@ const STATUS_LABELS: Record<PaintingStatus, string> = {
 };
 
 export function CollectionForm({ entry, factions, units, userId, onSave, onClose }: CollectionFormProps) {
-  const [customName, setCustomName] = useState('');
-  const [factionId, setFactionId] = useState('');
-  const [unitId, setUnitId] = useState<string | null>(null);
-  const [quantity, setQuantity] = useState(1);
-  const [paintingStatus, setPaintingStatus] = useState<string>('unbuilt');
-  const [purchasePrice, setPurchasePrice] = useState('');
-  const [purchaseDate, setPurchaseDate] = useState('');
-  const [notes, setNotes] = useState('');
-  const [photos, setPhotos] = useState<string[]>([]);
-
-  useEffect(() => {
-    if (entry) {
-      setCustomName(entry.custom_name ?? '');
-      setFactionId(entry.faction_id ?? '');
-      setUnitId(entry.unit_id ?? null);
-      setQuantity(entry.quantity);
-      setPaintingStatus(entry.painting_status);
-      setPurchasePrice(entry.purchase_price != null ? String(entry.purchase_price) : '');
-      setPurchaseDate(entry.purchase_date ?? '');
-      setNotes(entry.notes ?? '');
-      setPhotos(entry.photos ?? []);
-    }
-  }, [entry]);
+  const [customName, setCustomName] = useState(entry?.custom_name ?? '');
+  const [factionId, setFactionId] = useState(entry?.faction_id ?? '');
+  const [unitId, setUnitId] = useState<string | null>(entry?.unit_id ?? null);
+  const [quantity, setQuantity] = useState(entry?.quantity ?? 1);
+  const [paintingStatus, setPaintingStatus] = useState<string>(entry?.painting_status ?? 'unbuilt');
+  const [purchasePrice, setPurchasePrice] = useState(entry?.purchase_price != null ? String(entry.purchase_price) : '');
+  const [purchaseDate, setPurchaseDate] = useState(entry?.purchase_date ?? '');
+  const [notes, setNotes] = useState(entry?.notes ?? '');
+  const [photos, setPhotos] = useState<string[]>(entry?.photos ?? []);
 
   const handleUnitSelect = (id: string | null) => {
     setUnitId(id);
