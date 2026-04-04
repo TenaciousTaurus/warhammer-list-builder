@@ -94,6 +94,6 @@ jobs:
             gh pr create \
               --title "chore: update BSData game data" \
               --body-file /tmp/pr-body.md \
-              --base main \
+              --base develop \
               --head "$BRANCH"
           fi
