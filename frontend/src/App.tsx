@@ -17,6 +17,7 @@ import { SharedListPage } from './shared/pages/SharedListPage';
 import { PlayModePage } from './features/play-mode/pages/PlayModePage';
 import { CollectionPage } from './features/collection/pages/CollectionPage';
 import { PaintRecipesPage } from './features/collection/pages/PaintRecipesPage';
+import { PaintInventoryPage } from './features/collection/pages/PaintInventoryPage';
 import { CampaignsPage } from './features/crusade/pages/CampaignsPage';
 import { CampaignDetailPage } from './features/crusade/pages/CampaignDetailPage';
 import { CrusadeRosterPage } from './features/crusade/pages/CrusadeRosterPage';
@@ -174,6 +175,7 @@ function App() {
             <Route path="/play/:id" element={<ProtectedRoute><PlayModePage /></ProtectedRoute>} />
             <Route path="/collection" element={<ProtectedRoute><CollectionPage /></ProtectedRoute>} />
             <Route path="/collection/recipes" element={<ProtectedRoute><PaintRecipesPage /></ProtectedRoute>} />
+            <Route path="/collection/paints" element={<ProtectedRoute><PaintInventoryPage /></ProtectedRoute>} />
             {/* Phase 4: Crusade & Campaign */}
             <Route path="/campaigns" element={<ProtectedRoute><CampaignsPage /></ProtectedRoute>} />
             <Route path="/campaign/:id" element={<ProtectedRoute><CampaignDetailPage /></ProtectedRoute>} />

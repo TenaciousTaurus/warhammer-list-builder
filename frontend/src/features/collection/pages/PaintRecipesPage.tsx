@@ -3,6 +3,7 @@ import { supabase } from '../../../shared/lib/supabase';
 import { useAuth } from '../../../shared/hooks/useAuth';
 import type { Paint, PaintRecipe, PaintRecipeStep } from '../../../shared/types/database';
 import { RecipeEditor } from '../components/RecipeEditor';
+import { CollectionSubNav } from '../components/CollectionSubNav';
 
 interface RecipeWithSteps extends PaintRecipe {
   paint_recipe_steps: (PaintRecipeStep & {
@@ -127,6 +128,8 @@ export function PaintRecipesPage() {
 
   return (
     <div className="recipes-page">
+      <CollectionSubNav />
+
       {/* Header */}
       <div className="recipes-page__header">
         <h1 className="recipes-page__title">Paint Recipes</h1>
