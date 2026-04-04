@@ -240,6 +240,6 @@ Frontend Dev: `http://localhost:5173`
 
 ### Future Enhancements
 - [ ] User paint inventory UI (table exists, no frontend)
-- [ ] Recipe step photos (column exists, no upload UI)
+- [x] Recipe step photos (upload per step in RecipeEditor, display in recipe card)
 - [ ] Invite codes for multiplayer game sessions
 - [ ] Opponent view for shared game sessions

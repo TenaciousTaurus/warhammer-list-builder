@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '../../../shared/lib/supabase';
 import { useAuth } from '../../../shared/hooks/useAuth';
 import type { Paint, PaintRecipe, PaintRecipeStep } from '../../../shared/types/database';
 import { PaintPicker } from './PaintPicker';
+
+const MAX_PHOTO_SIZE_MB = 5;
 
 interface RecipeEditorProps {
   recipe?: PaintRecipe | null;
@@ -47,10 +49,11 @@ interface StepDraft {
   technique: string;
   areaDescription: string;
   notes: string;
+  photoUrl: string | null;
 }
 
 function createEmptyStep(): StepDraft {
-  return { paintId: null, technique: 'base', areaDescription: '', notes: '' };
+  return { paintId: null, technique: 'base', areaDescription: '', notes: '', photoUrl: null };
 }
 
 export function RecipeEditor({ recipe, existingSteps, paints, onSave, onClose }: RecipeEditorProps) {
@@ -61,6 +64,50 @@ export function RecipeEditor({ recipe, existingSteps, paints, onSave, onClose }:
   const [steps, setSteps] = useState<StepDraft[]>([createEmptyStep()]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [uploadingStep, setUploadingStep] = useState<number | null>(null);
+  const photoInputRefs = useRef<Map<number, HTMLInputElement>>(new Map());
+
+  const handleStepPhoto = async (index: number, file: File) => {
+    if (!user?.id) return;
+    if (file.size > MAX_PHOTO_SIZE_MB * 1024 * 1024) {
+      setError(`Photo exceeds ${MAX_PHOTO_SIZE_MB}MB limit`);
+      return;
+    }
+
+    setUploadingStep(index);
+    setError(null);
+
+    const ext = file.name.split('.').pop()?.toLowerCase() ?? 'jpg';
+    const filename = `${user.id}/recipes/${recipe?.id ?? 'new'}/${index + 1}/${crypto.randomUUID()}.${ext}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('collection-photos')
+      .upload(filename, file, { upsert: false });
+
+    if (uploadError) {
+      setError(uploadError.message);
+      setUploadingStep(null);
+      return;
+    }
+
+    const { data: urlData } = supabase.storage
+      .from('collection-photos')
+      .getPublicUrl(filename);
+
+    updateStep(index, { photoUrl: urlData.publicUrl });
+    setUploadingStep(null);
+  };
+
+  const removeStepPhoto = async (index: number) => {
+    const url = steps[index].photoUrl;
+    if (!url) return;
+
+    const bucketPath = url.split('/collection-photos/')[1];
+    if (bucketPath) {
+      await supabase.storage.from('collection-photos').remove([bucketPath]);
+    }
+    updateStep(index, { photoUrl: null });
+  };
 
   useEffect(() => {
     if (recipe) {
@@ -76,6 +123,7 @@ export function RecipeEditor({ recipe, existingSteps, paints, onSave, onClose }:
           technique: s.technique,
           areaDescription: s.area_description ?? '',
           notes: s.notes ?? '',
+          photoUrl: s.photo_url ?? null,
         }))
       );
     }
@@ -152,6 +200,7 @@ export function RecipeEditor({ recipe, existingSteps, paints, onSave, onClose }:
           technique: s.technique,
           area_description: s.areaDescription.trim() || null,
           notes: s.notes.trim() || null,
+          photo_url: s.photoUrl || null,
         }));
         const { error: stepsErr } = await supabase.from('paint_recipe_steps').insert(stepRows);
         if (stepsErr) throw stepsErr;
@@ -279,6 +328,40 @@ export function RecipeEditor({ recipe, existingSteps, paints, onSave, onClose }:
                         placeholder="Optional notes"
                       />
                     </div>
+                  </div>
+                  {/* Step Photo */}
+                  <div className="recipe-editor__step-photo">
+                    {step.photoUrl ? (
+                      <div className="recipe-editor__step-photo-preview">
+                        <img src={step.photoUrl} alt={`Step ${index + 1}`} className="recipe-editor__step-photo-img" />
+                        <button
+                          type="button"
+                          className="recipe-editor__step-photo-remove"
+                          onClick={() => removeStepPhoto(index)}
+                          title="Remove photo"
+                        >
+                          &times;
+                        </button>
+                      </div>
+                    ) : (
+                      <label className="recipe-editor__step-photo-add">
+                        <input
+                          ref={(el) => { if (el) photoInputRefs.current.set(index, el); }}
+                          type="file"
+                          accept="image/jpeg,image/png,image/webp,image/gif"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) handleStepPhoto(index, file);
+                            e.target.value = '';
+                          }}
+                          className="recipe-editor__step-photo-input"
+                          disabled={uploadingStep === index}
+                        />
+                        <span className="recipe-editor__step-photo-btn">
+                          {uploadingStep === index ? 'Uploading...' : '+ Photo'}
+                        </span>
+                      </label>
+                    )}
                   </div>
                 </div>
                 <div className="recipe-editor__step-actions">
