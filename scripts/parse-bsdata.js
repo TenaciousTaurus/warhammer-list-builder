@@ -40,8 +40,8 @@ const parser = new XMLParser({
       'selectionEntry', 'selectionEntryGroup', 'entryLink',
       'profile', 'characteristic', 'categoryLink',
       'cost', 'constraint', 'modifier', 'rule',
-      'categoryEntry', 'infoLink',
-      'condition', 'conditionGroup',
+      'categoryEntry', 'infoLink', 'infoGroup',
+      'condition', 'conditionGroup', 'catalogueLink',
     ];
     return arrays.includes(name);
   },
@@ -155,43 +155,180 @@ function buildEntryIndex(root) {
 }
 
 /**
- * Extract weapon profiles from a node and its children (recursive).
- * Resolves entryLink references to shared weapons.
+ * Build a lookup map of shared profiles by ID.
+ * These are referenced via <infoLink type="profile" targetId="...">
+ * and live in <sharedProfiles> sections.
  */
-function extractWeapons(node, entryIndex, depth = 0) {
+function buildProfileIndex(root) {
+  const index = new Map();
+  for (const profile of ensureArray(root?.sharedProfiles?.profile)) {
+    if (profile['@_id']) {
+      index.set(profile['@_id'], profile);
+    }
+  }
+  return index;
+}
+
+/**
+ * Parse imported catalogues referenced via <catalogueLink> and merge their
+ * shared entries and profiles into the provided indexes.
+ * This enables resolving cross-catalogue entryLink and infoLink references
+ * (e.g. Space Wolves referencing weapons defined in Space Marines.cat).
+ *
+ * @param {object} catalog - The parsed catalogue root
+ * @param {Map} entryIndex - Entry index to merge into
+ * @param {Map} profileIndex - Profile index to merge into
+ * @param {Set} [visited] - Track visited catalogue IDs to avoid cycles
+ */
+function mergeImportedCatalogues(catalog, entryIndex, profileIndex, visited = new Set()) {
+  const catId = catalog['@_id'];
+  if (catId) visited.add(catId);
+
+  const links = ensureArray(catalog?.catalogueLinks?.catalogueLink);
+  for (const link of links) {
+    const targetId = link['@_targetId'];
+    if (!targetId || visited.has(targetId)) continue;
+    visited.add(targetId);
+
+    // Find the .cat file for this targetId by scanning all files
+    const catFile = findCatFileById(targetId);
+    if (!catFile) continue;
+
+    try {
+      const xml = fs.readFileSync(catFile, 'utf8');
+      const root = parser.parse(xml);
+      const importedCat = root.catalogue || root.catalog;
+      if (!importedCat) continue;
+
+      // Merge shared selection entries into the entry index
+      const importedEntryIndex = buildEntryIndex(importedCat);
+      for (const [id, entry] of importedEntryIndex) {
+        if (!entryIndex.has(id)) entryIndex.set(id, entry);
+      }
+
+      // Merge shared profiles into the profile index
+      const importedProfileIndex = buildProfileIndex(importedCat);
+      for (const [id, profile] of importedProfileIndex) {
+        if (!profileIndex.has(id)) profileIndex.set(id, profile);
+      }
+
+      // Recursively import any catalogues that the imported catalogue depends on
+      mergeImportedCatalogues(importedCat, entryIndex, profileIndex, visited);
+    } catch (e) {
+      console.log(`  (warning: could not import catalogue ${catFile}: ${e.message})`);
+    }
+  }
+}
+
+// Cache of catalogueId -> filePath for fast lookups
+let _catIdToFile = null;
+
+/**
+ * Find a .cat file by its catalogue @_id attribute.
+ * Builds a cache on first call by scanning all .cat files in DATA_DIR.
+ */
+function findCatFileById(catalogueId) {
+  if (!_catIdToFile) {
+    _catIdToFile = new Map();
+    const files = fs.readdirSync(DATA_DIR).filter(f => f.endsWith('.cat'));
+    for (const file of files) {
+      const filePath = path.join(DATA_DIR, file);
+      try {
+        // Read just the first few KB to get the catalogue ID from the header
+        const fd = fs.openSync(filePath, 'r');
+        const buf = Buffer.alloc(1024);
+        fs.readSync(fd, buf, 0, 1024, 0);
+        fs.closeSync(fd);
+        const header = buf.toString('utf8');
+        const match = header.match(/id="([^"]+)"/);
+        if (match) {
+          _catIdToFile.set(match[1], filePath);
+        }
+      } catch (e) {
+        // skip
+      }
+    }
+  }
+  return _catIdToFile.get(catalogueId) || null;
+}
+
+/**
+ * Parse a weapon from a profile node (Ranged Weapons or Melee Weapons).
+ * Returns the weapon object or null if not a weapon profile.
+ */
+function parseWeaponProfile(profile) {
+  const typeName = profile['@_typeName'];
+  if (typeName !== 'Ranged Weapons' && typeName !== 'Melee Weapons') return null;
+
+  const chars = parseCharacteristics(profile);
+  const wpnKeywords = (chars.Keywords || '')
+    .split(',')
+    .map(k => k.trim())
+    .filter(k => k && k !== '-');
+
+  return {
+    name: profile['@_name'],
+    type: typeName === 'Ranged Weapons' ? 'ranged' : 'melee',
+    range: typeName === 'Ranged Weapons' ? (chars.Range || null) : null,
+    attacks: chars.A || '1',
+    skill: chars.BS || chars.WS || '4+',
+    strength: parseInt(chars.S) || 4,
+    ap: parseInt(chars.AP) || 0,
+    damage: chars.D || '1',
+    keywords: wpnKeywords,
+  };
+}
+
+/**
+ * Extract weapon profiles from a node and its children (recursive).
+ * Resolves entryLink references to shared weapons and infoLink references
+ * to shared profiles. Also walks infoGroups containers.
+ */
+function extractWeapons(node, entryIndex, profileIndex, depth = 0) {
   if (depth > 6) return []; // prevent infinite recursion
   const weapons = [];
 
   // Direct profiles on this node
   for (const profile of ensureArray(node?.profiles?.profile)) {
-    const typeName = profile['@_typeName'];
-    if (typeName === 'Ranged Weapons' || typeName === 'Melee Weapons') {
-      const chars = parseCharacteristics(profile);
-      const wpnKeywords = (chars.Keywords || '')
-        .split(',')
-        .map(k => k.trim())
-        .filter(k => k && k !== '-');
+    const wpn = parseWeaponProfile(profile);
+    if (wpn) weapons.push(wpn);
+  }
 
-      weapons.push({
-        name: profile['@_name'],
-        type: typeName === 'Ranged Weapons' ? 'ranged' : 'melee',
-        range: typeName === 'Ranged Weapons' ? (chars.Range || null) : null,
-        attacks: chars.A || '1',
-        skill: chars.BS || chars.WS || '4+',
-        strength: parseInt(chars.S) || 4,
-        ap: parseInt(chars.AP) || 0,
-        damage: chars.D || '1',
-        keywords: wpnKeywords,
-      });
+  // Resolve infoLink type="profile" references to shared weapon profiles
+  for (const link of ensureArray(node?.infoLinks?.infoLink)) {
+    if (link['@_type'] === 'profile' && link['@_targetId'] && profileIndex) {
+      const target = profileIndex.get(link['@_targetId']);
+      if (target) {
+        const wpn = parseWeaponProfile(target);
+        if (wpn) weapons.push(wpn);
+      }
+    }
+  }
+
+  // Walk infoGroups containers for nested profiles and infoLinks
+  for (const group of ensureArray(node?.infoGroups?.infoGroup)) {
+    for (const profile of ensureArray(group?.profiles?.profile)) {
+      const wpn = parseWeaponProfile(profile);
+      if (wpn) weapons.push(wpn);
+    }
+    // infoLinks inside infoGroups
+    for (const link of ensureArray(group?.infoLinks?.infoLink)) {
+      if (link['@_type'] === 'profile' && link['@_targetId'] && profileIndex) {
+        const target = profileIndex.get(link['@_targetId']);
+        if (target) {
+          const wpn = parseWeaponProfile(target);
+          if (wpn) weapons.push(wpn);
+        }
+      }
     }
   }
 
   // Recurse into child selectionEntries
   for (const child of ensureArray(node?.selectionEntries?.selectionEntry)) {
-    weapons.push(...extractWeapons(child, entryIndex, depth + 1));
+    weapons.push(...extractWeapons(child, entryIndex, profileIndex, depth + 1));
   }
   for (const child of ensureArray(node?.selectionEntryGroups?.selectionEntryGroup)) {
-    weapons.push(...extractWeapons(child, entryIndex, depth + 1));
+    weapons.push(...extractWeapons(child, entryIndex, profileIndex, depth + 1));
   }
 
   // Resolve entryLinks (references to shared weapons)
@@ -199,57 +336,110 @@ function extractWeapons(node, entryIndex, depth = 0) {
     const targetId = link['@_targetId'];
     const target = entryIndex.get(targetId);
     if (target) {
-      weapons.push(...extractWeapons(target, entryIndex, depth + 1));
+      weapons.push(...extractWeapons(target, entryIndex, profileIndex, depth + 1));
     }
     // Also check profiles directly on the link itself
-    weapons.push(...extractWeapons(link, entryIndex, depth + 1));
+    weapons.push(...extractWeapons(link, entryIndex, profileIndex, depth + 1));
   }
 
   return weapons;
 }
 
 /**
- * Extract abilities from a unit entry.
+ * Classify an ability by name into a type category.
  */
-function extractAbilities(node) {
+function classifyAbility(name) {
+  const nameLower = name.toLowerCase();
+  if (nameLower.includes('invulnerable') || nameLower.match(/\d\+\s*invuln/) ||
+      (nameLower.includes('invulnerable save') || nameLower === 'invulnerable save')) {
+    return 'invulnerable';
+  }
+  if (['deep strike', 'deadly demise', 'feel no pain', 'firing deck',
+    'leader', 'lone operative', 'scouts', 'stealth', 'infiltrators',
+    'objective secured'].some(core => nameLower.includes(core.toLowerCase()))) {
+    return 'core';
+  }
+  if (['oath of moment', 'waaagh!', 'power of the machine spirit',
+    'power from pain', 'strands of fate', 'voice of the hive mind',
+    'harbingers of dread', 'shadow in the warp'].some(f => nameLower.includes(f.toLowerCase()))) {
+    return 'faction';
+  }
+  return 'unique';
+}
+
+/**
+ * Parse an ability from a profile node. Returns ability object or null.
+ */
+function parseAbilityProfile(profile) {
+  if (profile['@_typeName'] !== 'Abilities') return null;
+  const chars = parseCharacteristics(profile);
+  const desc = chars.Description || '';
+  const name = profile['@_name'];
+  return { name, type: classifyAbility(name), description: desc };
+}
+
+/**
+ * Extract abilities from a unit entry.
+ * Resolves infoLink type="profile" references and walks infoGroups.
+ */
+function extractAbilities(node, profileIndex) {
   const abilities = [];
+  const seen = new Set(); // Deduplicate by lowercase name
 
-  for (const profile of ensureArray(node?.profiles?.profile)) {
-    if (profile['@_typeName'] === 'Abilities') {
-      const chars = parseCharacteristics(profile);
-      const desc = chars.Description || '';
-      const name = profile['@_name'];
-
-      // Classify ability type
-      let type = 'unique';
-      const nameLower = name.toLowerCase();
-      if (nameLower.includes('invulnerable') || nameLower.match(/\d\+\s*invuln/)) {
-        type = 'invulnerable';
-      } else if (['deep strike', 'deadly demise', 'feel no pain', 'firing deck',
-        'leader', 'lone operative', 'scouts', 'stealth', 'infiltrators',
-        'objective secured'].some(core => nameLower.includes(core.toLowerCase()))) {
-        type = 'core';
-      } else if (['oath of moment', 'waaagh!', 'power of the machine spirit',
-        'power from pain', 'strands of fate', 'voice of the hive mind',
-        'harbingers of dread', 'shadow in the warp'].some(f => nameLower.includes(f.toLowerCase()))) {
-        type = 'faction';
-      }
-
-      abilities.push({ name, type, description: desc });
+  function addAbility(ability) {
+    if (!ability) return;
+    const key = ability.name.toLowerCase();
+    if (!seen.has(key)) {
+      seen.add(key);
+      abilities.push(ability);
     }
   }
 
-  // Check infoLinks for faction/core abilities referenced by name
+  // Direct profiles on this node
+  for (const profile of ensureArray(node?.profiles?.profile)) {
+    addAbility(parseAbilityProfile(profile));
+  }
+
+  // Resolve infoLink type="profile" references to shared ability profiles
   for (const link of ensureArray(node?.infoLinks?.infoLink)) {
+    if (link['@_type'] === 'profile' && link['@_targetId'] && profileIndex) {
+      const target = profileIndex.get(link['@_targetId']);
+      if (target) {
+        addAbility(parseAbilityProfile(target));
+      }
+    }
+    // Also handle infoLink type="rule" for faction/core abilities
     if (link['@_type'] === 'rule') {
       const name = link['@_name'];
       if (!name) continue;
-      // Only add well-known faction abilities from infoLinks
       const nameLower = name.toLowerCase();
       if (['oath of moment', 'templar vows'].some(f => nameLower.includes(f.toLowerCase()))) {
-        if (!abilities.some(a => a.name.toLowerCase() === nameLower)) {
-          abilities.push({ name, type: 'faction', description: '' });
+        addAbility({ name, type: 'faction', description: '' });
+      }
+    }
+  }
+
+  // Walk infoGroups containers for nested profiles and infoLinks
+  for (const group of ensureArray(node?.infoGroups?.infoGroup)) {
+    for (const profile of ensureArray(group?.profiles?.profile)) {
+      addAbility(parseAbilityProfile(profile));
+    }
+    // infoLinks inside infoGroups
+    for (const link of ensureArray(group?.infoLinks?.infoLink)) {
+      if (link['@_type'] === 'profile' && link['@_targetId'] && profileIndex) {
+        const target = profileIndex.get(link['@_targetId']);
+        if (target) {
+          addAbility(parseAbilityProfile(target));
         }
+      }
+    }
+  }
+
+  // Recurse into child model entries (abilities often live on the model, not the unit)
+  for (const child of ensureArray(node?.selectionEntries?.selectionEntry)) {
+    if (child['@_type'] === 'model') {
+      for (const a of extractAbilities(child, profileIndex)) {
+        addAbility(a);
       }
     }
   }
@@ -1014,6 +1204,13 @@ function parseCatalog(filePath) {
   // Build entry index for resolving shared references
   const entryIndex = buildEntryIndex(catalog);
 
+  // Build profile index for resolving infoLink type="profile" references
+  const profileIndex = buildProfileIndex(catalog);
+
+  // Import shared entries and profiles from linked catalogues
+  // (e.g. Space Wolves imports weapons from Space Marines.cat)
+  mergeImportedCatalogues(catalog, entryIndex, profileIndex);
+
   // Extract faction name (clean up the prefix)
   let factionName = catName
     .replace(/^Imperium - /, '')
@@ -1053,8 +1250,8 @@ function parseCatalog(filePath) {
         const role = extractRole(entry);
         const keywords = extractKeywords(entry);
         const maxPerList = extractMaxPerList(entry);
-        const weapons = extractWeapons(entry, entryIndex);
-        const abilities = extractAbilities(entry);
+        const weapons = extractWeapons(entry, entryIndex, profileIndex);
+        const abilities = extractAbilities(entry, profileIndex);
         const wargearOptions = extractWargearOptions(entry, entryIndex);
         const modelVariants = extractModelVariants(entry);
 
@@ -1109,8 +1306,8 @@ function parseCatalog(filePath) {
         const role = extractRole(target);
         const keywords = extractKeywords(target);
         const maxPerList = extractMaxPerList(target);
-        const weapons = extractWeapons(target, entryIndex);
-        const abilities = extractAbilities(target);
+        const weapons = extractWeapons(target, entryIndex, profileIndex);
+        const abilities = extractAbilities(target, profileIndex);
         const wargearOptions = extractWargearOptions(target, entryIndex);
         const modelVariants = extractModelVariants(target);
 
