@@ -1505,6 +1505,9 @@ export type Campaign = Database['public']['Tables']['campaigns']['Row'];
 export type CampaignMember = Database['public']['Tables']['campaign_members']['Row'];
 export type CrusadeRoster = Database['public']['Tables']['crusade_rosters']['Row'];
 export type CrusadeUnit = Database['public']['Tables']['crusade_units']['Row'];
+export type CrusadeUnitWithDetails = CrusadeUnit & {
+  units: { name: string; role: string; keywords: string[] } | null;
+};
 export type CrusadeBattle = Database['public']['Tables']['crusade_battles']['Row'];
 export type CrusadeBattleParticipant = Database['public']['Tables']['crusade_battle_participants']['Row'];
 export type RequisitionLogEntry = Database['public']['Tables']['requisition_log']['Row'];

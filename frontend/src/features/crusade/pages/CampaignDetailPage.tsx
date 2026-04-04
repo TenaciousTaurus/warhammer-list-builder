@@ -248,7 +248,7 @@ export function CampaignDetailPage() {
                     <CrusadeUnitCard
                       key={unit.id}
                       unit={unit}
-                      unitName={unit.unit_id}
+                      unitName={unit.custom_name || unit.units?.name || 'Unknown Unit'}
                       onClick={() => navigate(`/campaign/${id}/unit/${unit.id}`)}
                     />
                   ))}
