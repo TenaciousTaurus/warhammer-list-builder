@@ -41,6 +41,7 @@ export function useListVerification(
 
   useEffect(() => {
     if (!userId || unitIds.length === 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- early return resets state before async work
       setCollectionEntries([]);
       setVerified(false);
       return;

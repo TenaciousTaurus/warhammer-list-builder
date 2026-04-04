@@ -37,7 +37,7 @@ export function FriendsPage() {
       if (!user?.id) return;
       await sendFriendRequest(user.id, addresseeId);
     },
-    [user?.id, sendFriendRequest]
+    [user, sendFriendRequest]
   );
 
   const handleAccept = useCallback(
@@ -47,7 +47,7 @@ export function FriendsPage() {
         loadFriends(user.id);
       }
     },
-    [respondToRequest, loadFriends, user?.id]
+    [respondToRequest, loadFriends, user]
   );
 
   const handleDecline = useCallback(

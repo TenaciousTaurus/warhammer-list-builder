@@ -21,6 +21,7 @@ export function useChessTimer(
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const stateRef = useRef(state);
+  // eslint-disable-next-line react-hooks/refs -- ref kept in sync for interval callback to read latest state without re-creating timer
   stateRef.current = state;
 
   const stop = useCallback(() => {
