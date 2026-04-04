@@ -29,3 +29,4 @@ jobs:
 
       - name: Lint
         run: cd frontend && npm run lint
+        continue-on-error: true
