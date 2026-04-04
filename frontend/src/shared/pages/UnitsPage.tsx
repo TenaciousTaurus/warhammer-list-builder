@@ -40,8 +40,10 @@ export function UnitsPage() {
 
   useEffect(() => {
     if (!selectedFaction) return;
+    /* eslint-disable react-hooks/set-state-in-effect -- setting loading/reset state before async fetch */
     setLoading(true);
     setExpandedUnit(null);
+    /* eslint-enable react-hooks/set-state-in-effect */
 
     // Include parent faction units for subfactions (e.g. Ultramarines -> Space Marines)
     const faction = factions.find(f => f.id === selectedFaction);

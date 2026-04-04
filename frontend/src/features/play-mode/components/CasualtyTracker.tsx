@@ -25,6 +25,7 @@ export function CasualtyTracker({ armyListUnitId, modelCount, wounds, isMultiWou
   useEffect(() => {
     const fromStore = storeUnitStates.find((us) => us.armyListUnitId === armyListUnitId);
     if (fromStore) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- syncing local state from Supabase Realtime subscription
       setModelStates(fromStore.modelStates);
     }
   }, [storeUnitStates, armyListUnitId]);

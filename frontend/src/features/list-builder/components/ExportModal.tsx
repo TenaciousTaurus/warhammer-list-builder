@@ -67,7 +67,7 @@ function parseBattleScribeText(text: string): ParsedUnit[] {
 
     // BattleScribe unit header: "Unit Name [Xpts]" or "Unit Name [X pts]"
     // Can also have selections after colon
-    const bsMatch = line.match(/^([A-Z][A-Za-z0-9' \-]+?)\s*\[(\d+)\s*pts?\]/);
+    const bsMatch = line.match(/^([A-Z][A-Za-z0-9' -]+?)\s*\[(\d+)\s*pts?\]/);
     if (!bsMatch) continue;
 
     const name = bsMatch[1].trim();

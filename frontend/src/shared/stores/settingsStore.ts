@@ -47,11 +47,17 @@ export const useSettingsStore = create<SettingsState>()(
     }),
     {
       name: 'warforge-settings',
-      partialize: (state) => {
-        // Exclude actions from persistence
-        const { setSetting: _a, resetToDefaults: _b, ...rest } = state;
-        return rest;
-      },
+      partialize: (state) => ({
+        displayDensity: state.displayDensity,
+        defaultBattleSize: state.defaultBattleSize,
+        showConstantSelections: state.showConstantSelections,
+        showEmptyCategories: state.showEmptyCategories,
+        showUnitConstantSelections: state.showUnitConstantSelections,
+        useRadioButtons: state.useRadioButtons,
+        showOptionTypeIcons: state.showOptionTypeIcons,
+        autoFixErrors: state.autoFixErrors,
+        displayCascadingWarnings: state.displayCascadingWarnings,
+      }),
     },
   ),
 );
