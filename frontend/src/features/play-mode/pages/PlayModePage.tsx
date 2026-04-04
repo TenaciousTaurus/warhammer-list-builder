@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import '../play-mode.css';
 import { supabase } from '../../../shared/lib/supabase';
 import { useAuth } from '../../../shared/hooks/useAuth';
 import type { ArmyList, Enhancement, Detachment } from '../../../shared/types/database';

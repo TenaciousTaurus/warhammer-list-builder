@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
+import '../collection.css';
 import { supabase } from '../../../shared/lib/supabase';
 import { useAuth } from '../../../shared/hooks/useAuth';
 import type { Paint, PaintRecipe, PaintRecipeStep } from '../../../shared/types/database';
