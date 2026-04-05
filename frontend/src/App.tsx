@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, NavLink, Navigate } from 'react-router-dom';
+import * as Sentry from '@sentry/react';
 import './shared/css/base.css';
 import './shared/css/pages.css';
 import './features/list-builder/list-builder.css';
@@ -169,9 +170,25 @@ function RouteLoadingFallback() {
   );
 }
 
+function SentryFallback({ error, resetError }: { error: unknown; resetError: () => void }) {
+  const message = error instanceof Error ? error.message : 'An unexpected error occurred';
+  return (
+    <div style={{ padding: 'var(--space-lg)', textAlign: 'center' }}>
+      <h2>Something went wrong</h2>
+      <p style={{ color: 'var(--text-secondary)', margin: 'var(--space-md) 0' }}>
+        {message}
+      </p>
+      <button className="btn btn--primary" onClick={resetError}>
+        Try Again
+      </button>
+    </div>
+  );
+}
+
 function App() {
   return (
     <BrowserRouter>
+      <Sentry.ErrorBoundary fallback={SentryFallback}>
       <div className="app-layout">
         <AppHeader />
         <main className="app-main">
@@ -213,6 +230,7 @@ function App() {
           </Suspense>
         </main>
       </div>
+      </Sentry.ErrorBoundary>
     </BrowserRouter>
   );
 }
