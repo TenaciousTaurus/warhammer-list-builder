@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, NavLink, Navigate } from 'react-router-dom';
+import * as Sentry from '@sentry/react';
 import './shared/css/base.css';
 import './shared/css/pages.css';
 import './features/list-builder/list-builder.css';
@@ -35,6 +36,7 @@ const LeagueDetailPage = lazy(() => import('./features/social/pages/LeagueDetail
 const OrganisationsPage = lazy(() => import('./features/social/pages/OrganisationsPage').then(m => ({ default: m.OrganisationsPage })));
 const OrganisationDetailPage = lazy(() => import('./features/social/pages/OrganisationDetailPage').then(m => ({ default: m.OrganisationDetailPage })));
 const SettingsPage = lazy(() => import('./shared/pages/SettingsPage').then(m => ({ default: m.SettingsPage })));
+const ResetPasswordPage = lazy(() => import('./shared/pages/ResetPasswordPage').then(m => ({ default: m.ResetPasswordPage })));
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
@@ -169,15 +171,32 @@ function RouteLoadingFallback() {
   );
 }
 
+function SentryFallback({ error, resetError }: { error: unknown; resetError: () => void }) {
+  const message = error instanceof Error ? error.message : 'An unexpected error occurred';
+  return (
+    <div style={{ padding: 'var(--space-lg)', textAlign: 'center' }}>
+      <h2>Something went wrong</h2>
+      <p style={{ color: 'var(--text-secondary)', margin: 'var(--space-md) 0' }}>
+        {message}
+      </p>
+      <button className="btn btn--primary" onClick={resetError}>
+        Try Again
+      </button>
+    </div>
+  );
+}
+
 function App() {
   return (
     <BrowserRouter>
+      <Sentry.ErrorBoundary fallback={SentryFallback}>
       <div className="app-layout">
         <AppHeader />
         <main className="app-main">
           <Suspense fallback={<RouteLoadingFallback />}>
           <Routes>
             <Route path="/auth" element={<AuthPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
             <Route path="/lists" element={<ProtectedRoute><ListsPage /></ProtectedRoute>} />
             <Route path="/list/:id" element={<ProtectedRoute><ListEditorPage /></ProtectedRoute>} />
@@ -213,6 +232,7 @@ function App() {
           </Suspense>
         </main>
       </div>
+      </Sentry.ErrorBoundary>
     </BrowserRouter>
   );
 }
