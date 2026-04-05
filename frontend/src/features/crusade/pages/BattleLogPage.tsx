@@ -76,6 +76,7 @@ export function BattleLogPage() {
       is_draw: isDraw,
       mission_id: null,
       notes: battleNotes.trim() || null,
+      participants: [...selectedUnits].map((unitId) => ({ crusade_unit_id: unitId })),
     });
 
     setSubmitting(false);
@@ -83,7 +84,7 @@ export function BattleLogPage() {
     if (newBattleId) {
       setCreatedBattleId(newBattleId);
     }
-  }, [myMember, opponentId, campaignId, myVP, opponentVP, battleNotes, logBattle]);
+  }, [myMember, opponentId, campaignId, myVP, opponentVP, battleNotes, selectedUnits, logBattle]);
 
   const handlePostBattleComplete = useCallback(() => {
     navigate(`/campaign/${campaignId}`);
@@ -257,7 +258,7 @@ export function BattleLogPage() {
                   onChange={() => toggleUnit(unit.id)}
                 />
                 <span className="battle-log__unit-option-label">
-                  {unit.custom_name || unit.unit_id}
+                  {unit.custom_name || unit.units?.name || 'Unknown Unit'}
                 </span>
               </label>
             ))}

@@ -230,16 +230,20 @@ Frontend Dev: `http://localhost:5173`
 ## Upcoming Work
 
 ### Data Quality
-- [ ] Fix ~55 units missing weapons/abilities (Legends + Fortification edge cases in BSData parser)
-- [ ] Code-split frontend bundle (currently 735KB, Vite warns at 500KB)
+- [x] Parser ability extraction improved — now recurses into selectionEntryGroups and entryLinks
+- 19 units missing weapons: all Fortifications (no weapon profiles in BSData by design)
+- 2 units missing abilities: Tactical Drones, Spindle Drones (no ability profiles in BSData)
+- [x] Code-split frontend bundle (735KB → 304KB via React.lazy route splitting)
 
 ### Phase 4: Crusade Buildout
-- [ ] Wire crusade components to live data (schemas + stores exist, needs integration)
-- [ ] Post-battle sequence flow (XP awards, honour/scar selection)
-- [ ] Campaign leaderboard from real battle data
+- [x] Wire crusade components to live data (unit names resolved via join, battle participants saved, supply limit from DB)
+- [x] Post-battle sequence flow (XP awards via award_crusade_xp RPC, honour/scar selection)
+- [x] Campaign leaderboard from real battle data (CampaignLeaderboard component wired)
 
 ### Future Enhancements
 - [x] User paint inventory UI (PaintInventoryPage + store + collection sub-nav)
 - [ ] Recipe step photos (column exists, no upload UI)
+- [ ] User paint inventory UI (table exists, no frontend)
+- [x] Recipe step photos (upload per step in RecipeEditor, display in recipe card)
 - [ ] Invite codes for multiplayer game sessions
 - [ ] Opponent view for shared game sessions

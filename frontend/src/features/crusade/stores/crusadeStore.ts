@@ -5,6 +5,7 @@ import type {
   CampaignMember,
   CrusadeRoster,
   CrusadeUnit,
+  CrusadeUnitWithDetails,
   CrusadeBattle,
   RequisitionLogEntry,
   Faction,
@@ -17,7 +18,7 @@ interface CrusadeState {
   activeCampaign: Campaign | null;
   members: CampaignMember[];
   roster: CrusadeRoster | null;
-  units: CrusadeUnit[];
+  units: CrusadeUnitWithDetails[];
   battles: CrusadeBattle[];
   factions: Faction[];
   loading: boolean;
@@ -38,6 +39,8 @@ interface CrusadeState {
     custom_name?: string | null;
     model_count?: number;
     points_cost?: number;
+    unit_name?: string;
+    unit_role?: string;
   }) => Promise<void>;
   removeUnit: (unitId: string) => Promise<void>;
   updateUnit: (unitId: string, updates: Partial<CrusadeUnit>) => Promise<void>;
@@ -52,6 +55,7 @@ interface CrusadeState {
     is_draw?: boolean;
     mission_id?: string | null;
     notes?: string | null;
+    participants?: { crusade_unit_id: string }[];
   }) => Promise<string | null>;
   awardXP: (battleId: string) => Promise<void>;
   spendRP: (
@@ -245,13 +249,13 @@ export const useCrusadeStore = create<CrusadeState>()((set, get) => ({
 
       const { data: unitsData } = await supabase
         .from('crusade_units')
-        .select('*')
+        .select('*, units(name, role, keywords)')
         .eq('crusade_roster_id', roster.id)
         .order('sort_order', { ascending: true });
 
       set({
         roster,
-        units: (unitsData as CrusadeUnit[]) ?? [],
+        units: (unitsData as CrusadeUnitWithDetails[]) ?? [],
         loading: false,
       });
     } catch {
@@ -262,7 +266,7 @@ export const useCrusadeStore = create<CrusadeState>()((set, get) => ({
   addUnit: async (unit) => {
     const optimisticId = crypto.randomUUID();
     const now = new Date().toISOString();
-    const optimistic: CrusadeUnit = {
+    const optimistic: CrusadeUnitWithDetails = {
       id: optimisticId,
       crusade_roster_id: unit.crusade_roster_id,
       unit_id: unit.unit_id,
@@ -282,6 +286,7 @@ export const useCrusadeStore = create<CrusadeState>()((set, get) => ({
       sort_order: get().units.length,
       created_at: now,
       updated_at: now,
+      units: unit.unit_name ? { name: unit.unit_name, role: unit.unit_role ?? '', keywords: [] } : null,
     };
 
     set((state) => ({ units: [...state.units, optimistic] }));
@@ -296,7 +301,7 @@ export const useCrusadeStore = create<CrusadeState>()((set, get) => ({
         points_cost: unit.points_cost ?? 0,
         sort_order: get().units.length - 1,
       })
-      .select()
+      .select('*, units(name, role, keywords)')
       .single();
 
     if (error || !data) {
@@ -309,7 +314,7 @@ export const useCrusadeStore = create<CrusadeState>()((set, get) => ({
 
     set((state) => ({
       units: state.units.map((u) =>
-        u.id === optimisticId ? (data as CrusadeUnit) : u
+        u.id === optimisticId ? (data as CrusadeUnitWithDetails) : u
       ),
     }));
   },
@@ -396,6 +401,21 @@ export const useCrusadeStore = create<CrusadeState>()((set, get) => ({
     }
 
     const typedBattle = data as CrusadeBattle;
+
+    // Insert battle participants if provided
+    if (battle.participants && battle.participants.length > 0) {
+      const participantRows = battle.participants.map((p) => ({
+        crusade_battle_id: typedBattle.id,
+        crusade_unit_id: p.crusade_unit_id,
+      }));
+      const { error: partError } = await supabase
+        .from('crusade_battle_participants')
+        .insert(participantRows);
+      if (partError) {
+        console.error('Failed to insert battle participants:', partError);
+      }
+    }
+
     set((state) => ({
       battles: [typedBattle, ...state.battles],
     }));

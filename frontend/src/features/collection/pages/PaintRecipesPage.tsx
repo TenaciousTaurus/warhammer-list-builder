@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
+import '../collection.css';
 import { supabase } from '../../../shared/lib/supabase';
 import { useAuth } from '../../../shared/hooks/useAuth';
 import type { Paint, PaintRecipe, PaintRecipeStep } from '../../../shared/types/database';
@@ -249,6 +250,13 @@ export function PaintRecipesPage() {
                               <span className="recipe-card__step-notes">{step.notes}</span>
                             )}
                           </div>
+                          {step.photo_url && (
+                            <img
+                              src={step.photo_url}
+                              alt={`Step ${idx + 1}`}
+                              className="recipe-card__step-photo"
+                            />
+                          )}
                         </div>
                       ))}
                     </div>

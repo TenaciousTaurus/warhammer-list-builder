@@ -382,7 +382,8 @@ function parseAbilityProfile(profile) {
  * Extract abilities from a unit entry.
  * Resolves infoLink type="profile" references and walks infoGroups.
  */
-function extractAbilities(node, profileIndex) {
+function extractAbilities(node, profileIndex, entryIndex, depth = 0) {
+  if (depth > 6) return []; // prevent infinite recursion
   const abilities = [];
   const seen = new Set(); // Deduplicate by lowercase name
 
@@ -435,10 +436,26 @@ function extractAbilities(node, profileIndex) {
     }
   }
 
-  // Recurse into child model entries (abilities often live on the model, not the unit)
+  // Recurse into child selectionEntries (abilities often live on the model, not the unit)
   for (const child of ensureArray(node?.selectionEntries?.selectionEntry)) {
-    if (child['@_type'] === 'model') {
-      for (const a of extractAbilities(child, profileIndex)) {
+    for (const a of extractAbilities(child, profileIndex, entryIndex, depth + 1)) {
+      addAbility(a);
+    }
+  }
+
+  // Recurse into selectionEntryGroups (some units nest abilities here, e.g. Cultists, Drones)
+  for (const child of ensureArray(node?.selectionEntryGroups?.selectionEntryGroup)) {
+    for (const a of extractAbilities(child, profileIndex, entryIndex, depth + 1)) {
+      addAbility(a);
+    }
+  }
+
+  // Resolve entryLinks to shared entries that may contain abilities
+  for (const link of ensureArray(node?.entryLinks?.entryLink)) {
+    const targetId = link['@_targetId'];
+    const target = entryIndex ? entryIndex.get(targetId) : undefined;
+    if (target) {
+      for (const a of extractAbilities(target, profileIndex, entryIndex, depth + 1)) {
         addAbility(a);
       }
     }
@@ -1251,7 +1268,7 @@ function parseCatalog(filePath) {
         const keywords = extractKeywords(entry);
         const maxPerList = extractMaxPerList(entry);
         const weapons = extractWeapons(entry, entryIndex, profileIndex);
-        const abilities = extractAbilities(entry, profileIndex);
+        const abilities = extractAbilities(entry, profileIndex, entryIndex);
         const wargearOptions = extractWargearOptions(entry, entryIndex);
         const modelVariants = extractModelVariants(entry);
 
@@ -1307,7 +1324,7 @@ function parseCatalog(filePath) {
         const keywords = extractKeywords(target);
         const maxPerList = extractMaxPerList(target);
         const weapons = extractWeapons(target, entryIndex, profileIndex);
-        const abilities = extractAbilities(target, profileIndex);
+        const abilities = extractAbilities(target, profileIndex, entryIndex);
         const wargearOptions = extractWargearOptions(target, entryIndex);
         const modelVariants = extractModelVariants(target);
 
