@@ -1406,6 +1406,16 @@
   font-style: italic;
 }
 
+.recipe-card__step-photo {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
 .recipe-card__actions {
   display: flex;
   gap: var(--space-sm);
@@ -1672,6 +1682,62 @@
 
 .recipe-editor__step-remove:hover {
   color: var(--color-red-bright);
+}
+
+/* Step Photo */
+.recipe-editor__step-photo {
+  margin-top: var(--space-xs);
+}
+
+.recipe-editor__step-photo-preview {
+  position: relative;
+  display: inline-block;
+}
+
+.recipe-editor__step-photo-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
+.recipe-editor__step-photo-remove {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-red-bright);
+  color: #fff;
+  border: none;
+  font-size: 0.75rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.recipe-editor__step-photo-input {
+  display: none;
+}
+
+.recipe-editor__step-photo-btn {
+  display: inline-block;
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.recipe-editor__step-photo-btn:hover {
+  color: var(--color-gold-dim);
+  border-color: rgba(var(--gold-rgb), 0.4);
 }
 
 .recipe-editor__add-step {

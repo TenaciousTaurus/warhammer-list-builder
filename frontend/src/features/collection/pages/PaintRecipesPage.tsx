@@ -247,6 +247,13 @@ export function PaintRecipesPage() {
                               <span className="recipe-card__step-notes">{step.notes}</span>
                             )}
                           </div>
+                          {step.photo_url && (
+                            <img
+                              src={step.photo_url}
+                              alt={`Step ${idx + 1}`}
+                              className="recipe-card__step-photo"
+                            />
+                          )}
                         </div>
                       ))}
                     </div>
