@@ -1,8 +1,10 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
+import '../collection.css';
 import { supabase } from '../../../shared/lib/supabase';
 import { useAuth } from '../../../shared/hooks/useAuth';
 import type { Paint, PaintRecipe, PaintRecipeStep } from '../../../shared/types/database';
 import { RecipeEditor } from '../components/RecipeEditor';
+import { CollectionSubNav } from '../components/CollectionSubNav';
 
 interface RecipeWithSteps extends PaintRecipe {
   paint_recipe_steps: (PaintRecipeStep & {
@@ -127,6 +129,8 @@ export function PaintRecipesPage() {
 
   return (
     <div className="recipes-page">
+      <CollectionSubNav />
+
       {/* Header */}
       <div className="recipes-page__header">
         <h1 className="recipes-page__title">Paint Recipes</h1>
@@ -246,6 +250,13 @@ export function PaintRecipesPage() {
                               <span className="recipe-card__step-notes">{step.notes}</span>
                             )}
                           </div>
+                          {step.photo_url && (
+                            <img
+                              src={step.photo_url}
+                              alt={`Step ${idx + 1}`}
+                              className="recipe-card__step-photo"
+                            />
+                          )}
                         </div>
                       ))}
                     </div>

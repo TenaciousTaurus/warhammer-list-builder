@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
+import '../collection.css';
 import { useAuth } from '../../../shared/hooks/useAuth';
 import { useCollectionStore, PAINTING_STATUSES } from '../stores/collectionStore';
 import type { PaintingStatus } from '../stores/collectionStore';
@@ -8,6 +9,7 @@ import { CollectionForm } from '../components/CollectionForm';
 import { CollectionStats } from '../components/CollectionStats';
 import { PaintingPipeline } from '../components/PaintingPipeline';
 import { WishlistPanel } from '../components/WishlistPanel';
+import { CollectionSubNav } from '../components/CollectionSubNav';
 
 type ViewMode = 'grid' | 'pipeline';
 
@@ -128,6 +130,8 @@ export function CollectionPage() {
 
   return (
     <div className="collection-page">
+      <CollectionSubNav />
+
       {/* Header */}
       <div className="collection-page__header">
         <h1 className="collection-page__title">My Collection</h1>

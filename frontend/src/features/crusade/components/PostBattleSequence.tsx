@@ -113,7 +113,7 @@ export function PostBattleSequence({ battleId, onComplete }: PostBattleSequenceP
                         onChange={() => toggleParticipant(unit.id)}
                       />
                       <span className="battle-log__unit-option-label">
-                        {unit.custom_name || unit.unit_id}
+                        {unit.custom_name || unit.units?.name || 'Unknown Unit'}
                       </span>
                     </label>
                     {isSelected && participation && (
@@ -177,7 +177,7 @@ export function PostBattleSequence({ battleId, onComplete }: PostBattleSequenceP
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)', marginTop: 'var(--space-md)' }}>
                   {units.filter((u) => participations.has(u.id)).map((unit) => (
                     <div key={unit.id} style={{ display: 'flex', justifyContent: 'space-between', padding: 'var(--space-xs) var(--space-sm)', background: 'var(--glass-bg-light)', borderRadius: 'var(--radius-sm)' }}>
-                      <span style={{ color: 'var(--color-text-primary)' }}>{unit.custom_name || unit.unit_id}</span>
+                      <span style={{ color: 'var(--color-text-primary)' }}>{unit.custom_name || unit.units?.name || 'Unknown Unit'}</span>
                       <span style={{ color: 'var(--color-gold)', fontFamily: 'var(--font-display)', fontWeight: 700 }}>{unit.xp} XP</span>
                     </div>
                   ))}
@@ -205,7 +205,7 @@ export function PostBattleSequence({ battleId, onComplete }: PostBattleSequenceP
                 <option value="">-- Choose a unit --</option>
                 {units.filter((u) => participations.has(u.id)).map((unit) => (
                   <option key={unit.id} value={unit.id}>
-                    {unit.custom_name || unit.unit_id}
+                    {unit.custom_name || unit.units?.name || 'Unknown Unit'}
                   </option>
                 ))}
               </select>
