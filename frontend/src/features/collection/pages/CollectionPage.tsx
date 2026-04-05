@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
+import '../collection.css';
 import { useAuth } from '../../../shared/hooks/useAuth';
 import { useCollectionStore, PAINTING_STATUSES } from '../stores/collectionStore';
 import type { PaintingStatus } from '../stores/collectionStore';
