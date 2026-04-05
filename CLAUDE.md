@@ -230,8 +230,10 @@ Frontend Dev: `http://localhost:5173`
 ## Upcoming Work
 
 ### Data Quality
-- [ ] Fix ~55 units missing weapons/abilities (Legends + Fortification edge cases in BSData parser)
-- [ ] Code-split frontend bundle (currently 735KB, Vite warns at 500KB)
+- [x] Parser ability extraction improved — now recurses into selectionEntryGroups and entryLinks
+- 19 units missing weapons: all Fortifications (no weapon profiles in BSData by design)
+- 2 units missing abilities: Tactical Drones, Spindle Drones (no ability profiles in BSData)
+- [x] Code-split frontend bundle (735KB → 304KB via React.lazy route splitting)
 
 ### Phase 4: Crusade Buildout
 - [ ] Wire crusade components to live data (schemas + stores exist, needs integration)
