@@ -134,9 +134,11 @@ export function ListEditorPage() {
           onBack={() => navigate('/lists')}
           onExport={() => editor.setShowExport(true)}
           onPlay={() => navigate(`/play/${id}`)}
+          availableDetachments={editor.availableDetachments}
           onUpdateName={editor.updateListName}
           onUpdatePointsLimit={editor.updatePointsLimit}
           onUpdateBattleSize={editor.updateBattleSize}
+          onChangeDetachment={editor.changeDetachment}
         />
 
         <ListVerification {...verification} />

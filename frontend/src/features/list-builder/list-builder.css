@@ -1559,6 +1559,30 @@
 .list-editor__detachment {
   font-size: var(--text-sm);
   color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.list-editor__detachment-select {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  padding: 2px var(--space-sm);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), color var(--transition-fast);
+}
+
+.list-editor__detachment-select:hover {
+  border-color: rgba(var(--gold-rgb), 0.4);
+  color: var(--color-gold-dim);
+}
+
+.list-editor__detachment-select:focus {
+  outline: none;
+  border-color: var(--color-gold);
 }
 
 .list-editor__summary-actions {
