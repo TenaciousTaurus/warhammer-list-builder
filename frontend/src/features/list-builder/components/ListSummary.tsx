@@ -21,19 +21,22 @@ interface ListSummaryProps {
   pointsMismatch: boolean;
   serverValidation: ValidateArmyListResult | null;
   serverValidationError: boolean;
+  availableDetachments: Detachment[];
   onBack: () => void;
   onExport: () => void;
   onPlay: () => void;
   onUpdateName?: (name: string) => void;
   onUpdatePointsLimit?: (limit: number) => void;
   onUpdateBattleSize?: (battleSize: string, points: number) => void;
+  onChangeDetachment?: (detachmentId: string) => void;
 }
 
 export function ListSummary({
   list, totalPoints, overLimit, unitLimitWarnings, enhancementWarnings,
   battleSizeWarnings, transportWarnings,
-  pointsMismatch, serverValidation, serverValidationError, onBack, onExport, onPlay,
-  onUpdateName, onUpdatePointsLimit, onUpdateBattleSize,
+  pointsMismatch, serverValidation, serverValidationError, availableDetachments,
+  onBack, onExport, onPlay,
+  onUpdateName, onUpdatePointsLimit, onUpdateBattleSize, onChangeDetachment,
 }: ListSummaryProps) {
   const [showDetachmentRules, setShowDetachmentRules] = useState(false);
   const [editingName, setEditingName] = useState(false);
@@ -107,7 +110,19 @@ export function ListSummary({
             </h2>
           )}
           <span className="list-editor__detachment">
-            {list.detachments?.name}
+            {onChangeDetachment && availableDetachments.length > 1 ? (
+              <select
+                className="list-editor__detachment-select"
+                value={list.detachment_id}
+                onChange={(e) => onChangeDetachment(e.target.value)}
+              >
+                {availableDetachments.map((d) => (
+                  <option key={d.id} value={d.id}>{d.name}</option>
+                ))}
+              </select>
+            ) : (
+              list.detachments?.name
+            )}
             {currentBattleSize && (
               <span className="list-editor__battle-size"> &middot; {currentBattleSize.name}</span>
             )}

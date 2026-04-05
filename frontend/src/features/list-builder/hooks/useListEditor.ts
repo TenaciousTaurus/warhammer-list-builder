@@ -131,6 +131,7 @@ export function useListEditor(id: string | undefined) {
     rosterSectionPoints,
     rosterAlliedPoints,
     alliedUnitIds: store.alliedUnitIds,
+    availableDetachments: store.availableDetachments,
 
     // Actions
     addUnit: store.addUnit,
@@ -138,6 +139,7 @@ export function useListEditor(id: string | undefined) {
     updateListName: store.updateListName,
     updatePointsLimit: store.updatePointsLimit,
     updateBattleSize: store.updateBattleSize,
+    changeDetachment: store.changeDetachment,
     updateModelCount: store.updateModelCount,
     assignEnhancement: store.assignEnhancement,
     selectWargear: store.selectWargear,
