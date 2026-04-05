@@ -241,7 +241,7 @@ Frontend Dev: `http://localhost:5173`
 - [x] Campaign leaderboard from real battle data (CampaignLeaderboard component wired)
 
 ### Future Enhancements
-- [ ] User paint inventory UI (table exists, no frontend)
+- [x] User paint inventory UI (PaintInventoryPage + store + collection sub-nav)
 - [x] Recipe step photos (upload per step in RecipeEditor, display in recipe card)
 - [ ] Invite codes for multiplayer game sessions
 - [ ] Opponent view for shared game sessions

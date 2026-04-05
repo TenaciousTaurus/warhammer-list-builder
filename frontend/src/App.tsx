@@ -18,6 +18,7 @@ const SharedListPage = lazy(() => import('./shared/pages/SharedListPage').then(m
 const PlayModePage = lazy(() => import('./features/play-mode/pages/PlayModePage').then(m => ({ default: m.PlayModePage })));
 const CollectionPage = lazy(() => import('./features/collection/pages/CollectionPage').then(m => ({ default: m.CollectionPage })));
 const PaintRecipesPage = lazy(() => import('./features/collection/pages/PaintRecipesPage').then(m => ({ default: m.PaintRecipesPage })));
+const PaintInventoryPage = lazy(() => import('./features/collection/pages/PaintInventoryPage').then(m => ({ default: m.PaintInventoryPage })));
 const CampaignsPage = lazy(() => import('./features/crusade/pages/CampaignsPage').then(m => ({ default: m.CampaignsPage })));
 const CampaignDetailPage = lazy(() => import('./features/crusade/pages/CampaignDetailPage').then(m => ({ default: m.CampaignDetailPage })));
 const CrusadeRosterPage = lazy(() => import('./features/crusade/pages/CrusadeRosterPage').then(m => ({ default: m.CrusadeRosterPage })));
@@ -183,6 +184,7 @@ function App() {
             <Route path="/play/:id" element={<ProtectedRoute><PlayModePage /></ProtectedRoute>} />
             <Route path="/collection" element={<ProtectedRoute><CollectionPage /></ProtectedRoute>} />
             <Route path="/collection/recipes" element={<ProtectedRoute><PaintRecipesPage /></ProtectedRoute>} />
+            <Route path="/collection/paints" element={<ProtectedRoute><PaintInventoryPage /></ProtectedRoute>} />
             {/* Phase 4: Crusade & Campaign */}
             <Route path="/campaigns" element={<ProtectedRoute><CampaignsPage /></ProtectedRoute>} />
             <Route path="/campaign/:id" element={<ProtectedRoute><CampaignDetailPage /></ProtectedRoute>} />
