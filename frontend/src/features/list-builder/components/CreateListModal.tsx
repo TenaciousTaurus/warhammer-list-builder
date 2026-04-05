@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { supabase } from '../../../shared/lib/supabase';
 import { useAuth } from '../../../shared/hooks/useAuth';
-import type { Faction, Detachment, BattleSize } from '../../../shared/types/database';
+import type { Faction, BattleSize } from '../../../shared/types/database';
 
 interface CreateListModalProps {
   onClose: () => void;
@@ -11,11 +11,9 @@ interface CreateListModalProps {
 export function CreateListModal({ onClose, onCreated }: CreateListModalProps) {
   const { user } = useAuth();
   const [factions, setFactions] = useState<Faction[]>([]);
-  const [detachments, setDetachments] = useState<Detachment[]>([]);
   const [battleSizes, setBattleSizes] = useState<BattleSize[]>([]);
   const [name, setName] = useState('');
   const [factionId, setFactionId] = useState('');
-  const [detachmentId, setDetachmentId] = useState('');
   const [battleSizeId, setBattleSizeId] = useState('strike_force');
   const [saving, setSaving] = useState(false);
 
@@ -40,38 +38,32 @@ export function CreateListModal({ onClose, onCreated }: CreateListModalProps) {
       });
   }, []);
 
-  useEffect(() => {
-    if (!factionId) return;
+  const selectedBattleSize = battleSizes.find(bs => bs.id === battleSizeId);
 
-    // Find the faction to check for parent
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!name || !factionId) return;
+    setSaving(true);
+
+    // Auto-select the first available detachment for this faction
     const faction = factions.find(f => f.id === factionId);
     const detFactionIds = [factionId];
     if (faction?.parent_faction_id) {
       detFactionIds.push(faction.parent_faction_id);
     }
 
-    supabase
+    const { data: detachments } = await supabase
       .from('detachments')
-      .select('*')
+      .select('id')
       .in('faction_id', detFactionIds)
       .order('name')
-      .then(({ data }) => {
-        if (data && data.length > 0) {
-          setDetachments(data);
-          setDetachmentId(data[0].id);
-        } else {
-          setDetachments([]);
-          setDetachmentId('');
-        }
-      });
-  }, [factionId, factions]);
+      .limit(1);
 
-  const selectedBattleSize = battleSizes.find(bs => bs.id === battleSizeId);
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!name || !factionId || !detachmentId) return;
-    setSaving(true);
+    const detachmentId = detachments?.[0]?.id;
+    if (!detachmentId) {
+      setSaving(false);
+      return;
+    }
 
     const { error } = await supabase.from('army_lists').insert({
       name,
@@ -138,19 +130,6 @@ export function CreateListModal({ onClose, onCreated }: CreateListModalProps) {
           </div>
 
           <div className="form-group">
-            <label>Detachment</label>
-            <select
-              className="form-select"
-              value={detachmentId}
-              onChange={(e) => setDetachmentId(e.target.value)}
-            >
-              {detachments.map((d) => (
-                <option key={d.id} value={d.id}>{d.name}</option>
-              ))}
-            </select>
-          </div>
-
-          <div className="form-group">
             <label>Battle Size</label>
             <div className="battle-size-picker">
               {battleSizes.map((bs) => (
@@ -171,7 +150,7 @@ export function CreateListModal({ onClose, onCreated }: CreateListModalProps) {
             <button type="button" className="btn" onClick={onClose}>
               Cancel
             </button>
-            <button type="submit" className="btn btn--primary" disabled={saving || !name || !detachmentId}>
+            <button type="submit" className="btn btn--primary" disabled={saving || !name}>
               {saving ? 'Creating...' : 'Create List'}
             </button>
           </div>

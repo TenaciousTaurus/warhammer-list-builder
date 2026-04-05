@@ -75,6 +75,7 @@ interface ListEditorState {
   leaderTargets: LeaderTarget[];
   leaderAttachments: LeaderAttachment[];
   alliedUnitIds: Set<string>;
+  availableDetachments: Detachment[];
 
   // Validation
   serverValidation: ValidateArmyListResult | null;
@@ -103,6 +104,7 @@ interface ListEditorState {
   updateListName: (name: string) => Promise<void>;
   updatePointsLimit: (limit: number) => Promise<void>;
   updateBattleSize: (battleSize: string, points: number) => Promise<void>;
+  changeDetachment: (detachmentId: string) => Promise<void>;
 
   // Enhancements
   assignEnhancement: (armyListUnitId: string, enhancementId: string) => Promise<void>;
@@ -152,6 +154,7 @@ function getInitialState() {
     leaderTargets: [] as LeaderTarget[],
     leaderAttachments: [] as LeaderAttachment[],
     alliedUnitIds: new Set<string>(),
+    availableDetachments: [] as Detachment[],
     serverValidation: null as ValidateArmyListResult | null,
     serverValidationError: false,
     loading: true,
@@ -230,6 +233,14 @@ export const useListEditorStore = create<ListEditorState>()((set, get) => ({
     if (factionMeta?.parent_faction_id) {
       unitFactionIds.push(factionMeta.parent_faction_id);
     }
+
+    // Fetch available detachments for this faction (own + parent's generic ones)
+    const { data: detachmentData } = await supabase
+      .from('detachments')
+      .select('*')
+      .in('faction_id', unitFactionIds)
+      .order('name');
+    const availableDetachments = (detachmentData ?? []) as Detachment[];
 
     const { data: mainUnits } = await supabase
       .from('units')
@@ -351,6 +362,7 @@ export const useListEditorStore = create<ListEditorState>()((set, get) => ({
       listUnits,
       availableUnits,
       alliedUnitIds,
+      availableDetachments,
       enhancements: enhData ?? [],
       listEnhancements: listEnhData ?? [],
       wargearOptions: (wargearData ?? []) as WargearOption[],
@@ -491,6 +503,35 @@ export const useListEditorStore = create<ListEditorState>()((set, get) => ({
     if (!listId || !list) return;
     await supabase.from('army_lists').update({ battle_size: battleSize, points_limit: points }).eq('id', listId);
     set({ list: { ...list, battle_size: battleSize, points_limit: points } });
+    get()._fetchServerValidation();
+  },
+
+  changeDetachment: async (detachmentId: string) => {
+    const { listId, list, availableDetachments } = get();
+    if (!listId || !list) return;
+
+    const newDetachment = availableDetachments.find(d => d.id === detachmentId);
+    if (!newDetachment) return;
+
+    // Update DB
+    await supabase.from('army_lists').update({ detachment_id: detachmentId }).eq('id', listId);
+
+    // Clear existing enhancements (they belong to the old detachment)
+    await supabase.from('army_list_enhancements').delete().eq('army_list_id', listId);
+
+    // Fetch new enhancements for the new detachment
+    const { data: enhData } = await supabase
+      .from('enhancements')
+      .select('*')
+      .eq('detachment_id', detachmentId)
+      .order('points');
+
+    set({
+      list: { ...list, detachment_id: detachmentId, detachments: newDetachment },
+      enhancements: enhData ?? [],
+      listEnhancements: [],
+    });
+
     get()._fetchServerValidation();
   },
 
