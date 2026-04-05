@@ -141,6 +141,14 @@ export function ListEditorPage() {
           onChangeDetachment={editor.changeDetachment}
         />
 
+        <div className="list-editor__save-status">
+          {editor.saving ? (
+            <span className="list-editor__save-status--saving">Saving...</span>
+          ) : (
+            <span className="list-editor__save-status--saved">All changes saved</span>
+          )}
+        </div>
+
         <ListVerification {...verification} />
 
         <div className="list-editor__roster-list">

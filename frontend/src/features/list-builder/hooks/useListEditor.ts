@@ -97,6 +97,7 @@ export function useListEditor(id: string | undefined) {
     enhancements: store.enhancements,
     listEnhancements: store.listEnhancements,
     loading: store.loading,
+    saving: store.saving,
     showExport: store.showExport,
     setShowExport: store.setShowExport,
     unitPickerFilter: store.unitPickerFilter,
