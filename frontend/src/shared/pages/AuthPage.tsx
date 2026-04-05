@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { supabase } from '../lib/supabase';
 
 export function AuthPage() {
   const { user, loading, signIn, signUp } = useAuth();
-  const [mode, setMode] = useState<'login' | 'signup'>('login');
+  const [mode, setMode] = useState<'login' | 'signup' | 'forgot'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [signupSuccess, setSignupSuccess] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
 
   // Already logged in — redirect home
   if (user && !loading) return <Navigate to="/" replace />;
@@ -29,6 +31,23 @@ export function AuthPage() {
       setSignupSuccess(true);
     }
     // On login success, onAuthStateChange will fire and user state updates → redirect
+    setSubmitting(false);
+  }
+
+  async function handleForgotPassword(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+    setSubmitting(true);
+
+    const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+
+    if (resetError) {
+      setError(resetError.message);
+    } else {
+      setResetSent(true);
+    }
     setSubmitting(false);
   }
 
@@ -63,6 +82,70 @@ export function AuthPage() {
           >
             Sign In
           </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (mode === 'forgot') {
+    return (
+      <div className="auth-page">
+        <div className="auth-card card glass">
+          <div className="auth-card__icon">&#9876;</div>
+          <h2 className="auth-card__title">Reset Password</h2>
+          {resetSent ? (
+            <>
+              <p className="auth-card__subtitle">
+                Check your email for a password reset link. It may take a minute to arrive.
+              </p>
+              <button
+                className="btn btn--primary auth-card__submit"
+                onClick={() => { setMode('login'); setResetSent(false); setError(null); }}
+              >
+                Back to Sign In
+              </button>
+            </>
+          ) : (
+            <>
+              <p className="auth-card__subtitle">
+                Enter your email and we'll send you a link to reset your password.
+              </p>
+              <form onSubmit={handleForgotPassword} className="auth-form">
+                <div className="form-group">
+                  <label htmlFor="reset-email">Email</label>
+                  <input
+                    id="reset-email"
+                    className="form-input"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="commander@imperium.mil"
+                    required
+                    autoComplete="email"
+                  />
+                </div>
+                {error && (
+                  <div className="validation-banner validation-banner--error">{error}</div>
+                )}
+                <button
+                  type="submit"
+                  className="btn btn--primary auth-card__submit"
+                  disabled={submitting || !email}
+                >
+                  {submitting ? 'Sending...' : 'Send Reset Link'}
+                </button>
+              </form>
+              <div className="auth-card__toggle">
+                <button
+                  type="button"
+                  className="auth-card__toggle-btn"
+                  onClick={() => { setMode('login'); setError(null); }}
+                >
+                  Back to Sign In
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     );
@@ -110,6 +193,19 @@ export function AuthPage() {
               autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
             />
           </div>
+
+          {mode === 'login' && (
+            <div style={{ textAlign: 'right', marginTop: 'calc(var(--space-xs) * -1)' }}>
+              <button
+                type="button"
+                className="auth-card__toggle-btn"
+                style={{ fontSize: 'var(--text-xs)' }}
+                onClick={() => { setMode('forgot'); setError(null); }}
+              >
+                Forgot password?
+              </button>
+            </div>
+          )}
 
           {error && (
             <div className="validation-banner validation-banner--error">

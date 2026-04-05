@@ -16,6 +16,7 @@ export function CreateListModal({ onClose, onCreated }: CreateListModalProps) {
   const [factionId, setFactionId] = useState('');
   const [battleSizeId, setBattleSizeId] = useState('strike_force');
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     supabase
@@ -61,11 +62,12 @@ export function CreateListModal({ onClose, onCreated }: CreateListModalProps) {
 
     const detachmentId = detachments?.[0]?.id;
     if (!detachmentId) {
+      setError('No detachments found for this faction. Please try a different faction.');
       setSaving(false);
       return;
     }
 
-    const { error } = await supabase.from('army_lists').insert({
+    const { error: insertError } = await supabase.from('army_lists').insert({
       name,
       faction_id: factionId,
       detachment_id: detachmentId,
@@ -74,9 +76,13 @@ export function CreateListModal({ onClose, onCreated }: CreateListModalProps) {
       user_id: user!.id,
     });
 
-    if (!error) {
-      onCreated();
+    if (insertError) {
+      setError('Failed to create list. Please try again.');
+      setSaving(false);
+      return;
     }
+
+    onCreated();
     setSaving(false);
   }
 
@@ -103,7 +109,12 @@ export function CreateListModal({ onClose, onCreated }: CreateListModalProps) {
         onClick={(e) => e.stopPropagation()}
       >
         <h2 id="create-list-title" className="modal-panel__title">New Army List</h2>
-        <form onSubmit={handleSubmit} className="create-list-form">
+        {error && (
+          <div className="form-error" style={{ color: 'var(--danger)', marginBottom: 'var(--space-sm)', fontSize: '0.9rem' }}>
+            {error}
+          </div>
+        )}
+        <form onSubmit={handleSubmit} className="create-list-form" onChange={() => setError(null)}>
           <div className="form-group">
             <label>List Name</label>
             <input

@@ -35,6 +35,7 @@ const LeagueDetailPage = lazy(() => import('./features/social/pages/LeagueDetail
 const OrganisationsPage = lazy(() => import('./features/social/pages/OrganisationsPage').then(m => ({ default: m.OrganisationsPage })));
 const OrganisationDetailPage = lazy(() => import('./features/social/pages/OrganisationDetailPage').then(m => ({ default: m.OrganisationDetailPage })));
 const SettingsPage = lazy(() => import('./shared/pages/SettingsPage').then(m => ({ default: m.SettingsPage })));
+const ResetPasswordPage = lazy(() => import('./shared/pages/ResetPasswordPage').then(m => ({ default: m.ResetPasswordPage })));
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
@@ -178,6 +179,7 @@ function App() {
           <Suspense fallback={<RouteLoadingFallback />}>
           <Routes>
             <Route path="/auth" element={<AuthPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
             <Route path="/lists" element={<ProtectedRoute><ListsPage /></ProtectedRoute>} />
             <Route path="/list/:id" element={<ProtectedRoute><ListEditorPage /></ProtectedRoute>} />
