@@ -236,9 +236,9 @@ Frontend Dev: `http://localhost:5173`
 - [x] Code-split frontend bundle (735KB → 304KB via React.lazy route splitting)
 
 ### Phase 4: Crusade Buildout
-- [ ] Wire crusade components to live data (schemas + stores exist, needs integration)
-- [ ] Post-battle sequence flow (XP awards, honour/scar selection)
-- [ ] Campaign leaderboard from real battle data
+- [x] Wire crusade components to live data (unit names resolved via join, battle participants saved, supply limit from DB)
+- [x] Post-battle sequence flow (XP awards via award_crusade_xp RPC, honour/scar selection)
+- [x] Campaign leaderboard from real battle data (CampaignLeaderboard component wired)
 
 ### Future Enhancements
 - [ ] User paint inventory UI (table exists, no frontend)

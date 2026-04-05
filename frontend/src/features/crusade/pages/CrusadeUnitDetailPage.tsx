@@ -69,7 +69,7 @@ export function CrusadeUnitDetailPage() {
     );
   }
 
-  const displayName = unit.custom_name || unit.unit_id;
+  const displayName = unit.custom_name || unit.units?.name || 'Unknown Unit';
 
   return (
     <div className="crusade-roster">
