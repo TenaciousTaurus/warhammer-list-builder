@@ -9,7 +9,7 @@ import '../crusade.css';
 export function CrusadeRosterPage() {
   const { id: campaignId, memberId } = useParams<{ id: string; memberId: string }>();
   const navigate = useNavigate();
-  const { roster, units, loading, error, loadRoster, addUnit } = useCrusadeStore();
+  const { roster, units, members, factions, loading, error, loadRoster, addUnit } = useCrusadeStore();
 
   const [showUnitPicker, setShowUnitPicker] = useState(false);
   const [availableUnits, setAvailableUnits] = useState<Unit[]>([]);
@@ -61,17 +61,16 @@ export function CrusadeRosterPage() {
       custom_name: null,
       model_count: 1,
       points_cost: 0,
+      unit_name: unit.name,
+      unit_role: unit.role,
     });
     setShowUnitPicker(false);
     setUnitSearch('');
   }, [roster, addUnit]);
 
   const totalPoints = units.reduce((sum, u) => sum + u.points_cost, 0);
-  const supplyLimit = (() => {
-    // We need to derive supply limit from the campaign member
-    // For now use a reasonable default; the actual value should come from member.supply_limit
-    return 1000;
-  })();
+  const currentMember = members.find((m) => m.id === memberId);
+  const supplyLimit = currentMember?.supply_limit ?? 1000;
 
   const filteredUnits = availableUnits.filter((u) =>
     u.name.toLowerCase().includes(unitSearch.toLowerCase())
@@ -115,7 +114,7 @@ export function CrusadeRosterPage() {
     <div className="crusade-roster">
       <div className="crusade-roster__header">
         <h1 className="crusade-roster__name">{roster.name}</h1>
-        <span className="crusade-roster__faction">{roster.faction_id}</span>
+        <span className="crusade-roster__faction">{factions.find((f) => f.id === roster.faction_id)?.name ?? roster.faction_id}</span>
       </div>
 
       {error && (
@@ -151,7 +150,7 @@ export function CrusadeRosterPage() {
           <CrusadeUnitCard
             key={unit.id}
             unit={unit}
-            unitName={unit.unit_id}
+            unitName={unit.custom_name || unit.units?.name || 'Unknown Unit'}
             onClick={() => navigate(`/campaign/${campaignId}/unit/${unit.id}`)}
           />
         ))}

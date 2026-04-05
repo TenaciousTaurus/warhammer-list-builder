@@ -2,41 +2,39 @@ import { BrowserRouter, Routes, Route, NavLink, Navigate } from 'react-router-do
 import './shared/css/base.css';
 import './shared/css/pages.css';
 import './features/list-builder/list-builder.css';
-import './features/play-mode/play-mode.css';
-import './features/collection/collection.css';
-import './features/crusade/crusade.css';
-import './features/social/social.css';
 import './shared/css/settings.css';
 import { useAuth } from './shared/hooks/useAuth';
 import { AuthPage } from './shared/pages/AuthPage';
 import { DashboardPage } from './shared/pages/DashboardPage';
 import { ListsPage } from './features/list-builder/pages/ListsPage';
 import { ListEditorPage } from './features/list-builder/pages/ListEditorPage';
-import { UnitsPage } from './shared/pages/UnitsPage';
-import { SharedListPage } from './shared/pages/SharedListPage';
-import { PlayModePage } from './features/play-mode/pages/PlayModePage';
-import { CollectionPage } from './features/collection/pages/CollectionPage';
-import { PaintRecipesPage } from './features/collection/pages/PaintRecipesPage';
-import { PaintInventoryPage } from './features/collection/pages/PaintInventoryPage';
-import { CampaignsPage } from './features/crusade/pages/CampaignsPage';
-import { CampaignDetailPage } from './features/crusade/pages/CampaignDetailPage';
-import { CrusadeRosterPage } from './features/crusade/pages/CrusadeRosterPage';
-import { CrusadeUnitDetailPage } from './features/crusade/pages/CrusadeUnitDetailPage';
-import { BattleLogPage } from './features/crusade/pages/BattleLogPage';
-import { ProfilePage } from './features/social/pages/ProfilePage';
-import { FriendsPage } from './features/social/pages/FriendsPage';
-import { StatsPage } from './features/social/pages/StatsPage';
-import { TournamentsPage } from './features/social/pages/TournamentsPage';
-import { TournamentDetailPage } from './features/social/pages/TournamentDetailPage';
-import { TournamentRoundPage } from './features/social/pages/TournamentRoundPage';
-import { LeaguesPage } from './features/social/pages/LeaguesPage';
-import { LeagueDetailPage } from './features/social/pages/LeagueDetailPage';
-import { OrganisationsPage } from './features/social/pages/OrganisationsPage';
-import { OrganisationDetailPage } from './features/social/pages/OrganisationDetailPage';
-import { useState, type ReactNode } from 'react';
+import { lazy, Suspense, useState, type ReactNode } from 'react';
 import { FeedbackModal } from './shared/components/FeedbackModal';
 import { ThemePicker } from './shared/components/ThemePicker';
-import { SettingsPage } from './shared/pages/SettingsPage';
+
+// Lazy-loaded routes (code-split into separate chunks)
+const UnitsPage = lazy(() => import('./shared/pages/UnitsPage').then(m => ({ default: m.UnitsPage })));
+const SharedListPage = lazy(() => import('./shared/pages/SharedListPage').then(m => ({ default: m.SharedListPage })));
+const PlayModePage = lazy(() => import('./features/play-mode/pages/PlayModePage').then(m => ({ default: m.PlayModePage })));
+const CollectionPage = lazy(() => import('./features/collection/pages/CollectionPage').then(m => ({ default: m.CollectionPage })));
+const PaintRecipesPage = lazy(() => import('./features/collection/pages/PaintRecipesPage').then(m => ({ default: m.PaintRecipesPage })));
+const PaintInventoryPage = lazy(() => import('./features/collection/pages/PaintInventoryPage').then(m => ({ default: m.PaintInventoryPage })));
+const CampaignsPage = lazy(() => import('./features/crusade/pages/CampaignsPage').then(m => ({ default: m.CampaignsPage })));
+const CampaignDetailPage = lazy(() => import('./features/crusade/pages/CampaignDetailPage').then(m => ({ default: m.CampaignDetailPage })));
+const CrusadeRosterPage = lazy(() => import('./features/crusade/pages/CrusadeRosterPage').then(m => ({ default: m.CrusadeRosterPage })));
+const CrusadeUnitDetailPage = lazy(() => import('./features/crusade/pages/CrusadeUnitDetailPage').then(m => ({ default: m.CrusadeUnitDetailPage })));
+const BattleLogPage = lazy(() => import('./features/crusade/pages/BattleLogPage').then(m => ({ default: m.BattleLogPage })));
+const ProfilePage = lazy(() => import('./features/social/pages/ProfilePage').then(m => ({ default: m.ProfilePage })));
+const FriendsPage = lazy(() => import('./features/social/pages/FriendsPage').then(m => ({ default: m.FriendsPage })));
+const StatsPage = lazy(() => import('./features/social/pages/StatsPage').then(m => ({ default: m.StatsPage })));
+const TournamentsPage = lazy(() => import('./features/social/pages/TournamentsPage').then(m => ({ default: m.TournamentsPage })));
+const TournamentDetailPage = lazy(() => import('./features/social/pages/TournamentDetailPage').then(m => ({ default: m.TournamentDetailPage })));
+const TournamentRoundPage = lazy(() => import('./features/social/pages/TournamentRoundPage').then(m => ({ default: m.TournamentRoundPage })));
+const LeaguesPage = lazy(() => import('./features/social/pages/LeaguesPage').then(m => ({ default: m.LeaguesPage })));
+const LeagueDetailPage = lazy(() => import('./features/social/pages/LeagueDetailPage').then(m => ({ default: m.LeagueDetailPage })));
+const OrganisationsPage = lazy(() => import('./features/social/pages/OrganisationsPage').then(m => ({ default: m.OrganisationsPage })));
+const OrganisationDetailPage = lazy(() => import('./features/social/pages/OrganisationDetailPage').then(m => ({ default: m.OrganisationDetailPage })));
+const SettingsPage = lazy(() => import('./shared/pages/SettingsPage').then(m => ({ default: m.SettingsPage })));
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
@@ -161,12 +159,23 @@ function AppHeader() {
   );
 }
 
+function RouteLoadingFallback() {
+  return (
+    <div className="skeleton-list" style={{ padding: 'var(--space-lg)' }}>
+      <div className="skeleton skeleton--header" />
+      <div className="skeleton skeleton--bar" />
+      <div className="skeleton skeleton--bar" />
+    </div>
+  );
+}
+
 function App() {
   return (
     <BrowserRouter>
       <div className="app-layout">
         <AppHeader />
         <main className="app-main">
+          <Suspense fallback={<RouteLoadingFallback />}>
           <Routes>
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
@@ -201,6 +210,7 @@ function App() {
             <Route path="/units" element={<UnitsPage />} />
             <Route path="/shared/:code" element={<SharedListPage />} />
           </Routes>
+          </Suspense>
         </main>
       </div>
     </BrowserRouter>
