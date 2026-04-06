@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../shared/hooks/useAuth';
 import { useListEditor, getUnitPoints } from '../hooks/useListEditor';
@@ -9,6 +9,7 @@ import { ArmyRoster } from '../components/ArmyRoster';
 import { UnitDetailPanel } from '../components/UnitDetailPanel';
 import { ExportModal } from '../components/ExportModal';
 import { ListVerification } from '../../collection/components/ListVerification';
+import type { UnitWithRelations } from '../stores/listEditorStore';
 
 export function ListEditorPage() {
   const { id } = useParams<{ id: string }>();
@@ -16,6 +17,13 @@ export function ListEditorPage() {
   const { user } = useAuth();
   const editor = useListEditor(id);
   const verification = useListVerification(editor.listUnits, user?.id);
+  const [showMobilePicker, setShowMobilePicker] = useState(false);
+
+  // Wrap addUnit to auto-close picker on mobile
+  const handleAddUnit = useCallback((unit: UnitWithRelations) => {
+    editor.addUnit(unit);
+    setShowMobilePicker(false);
+  }, [editor]);
 
   // Keyboard shortcuts
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
@@ -99,8 +107,16 @@ export function ListEditorPage() {
 
   const selectedLu = editor.selectedLu;
 
+  const hasSelectedUnit = !!editor.selectedArmyListUnitId && !!selectedLu;
+
   return (
     <div className="list-editor">
+      {/* Mobile: picker backdrop */}
+      <div
+        className={`list-editor__picker-backdrop${showMobilePicker ? ' list-editor__picker-backdrop--open' : ''}`}
+        onClick={() => setShowMobilePicker(false)}
+      />
+
       {/* LEFT PANEL: Unit Picker */}
       <UnitPicker
         listName={editor.list.name}
@@ -113,9 +129,10 @@ export function ListEditorPage() {
         unitPickerFilter={editor.unitPickerFilter}
         showLegends={editor.showLegends}
         onFilterChange={editor.setUnitPickerFilter}
-        onAddUnit={editor.addUnit}
+        onAddUnit={handleAddUnit}
         onToggleRole={editor.togglePickerRole}
         onToggleLegends={editor.toggleLegends}
+        className={showMobilePicker ? 'list-editor__picker--open' : ''}
       />
 
       {/* CENTER PANEL: Army Roster */}
@@ -170,14 +187,30 @@ export function ListEditorPage() {
         </div>
       </div>
 
+      {/* Mobile: FAB to open picker */}
+      <button
+        className="list-editor__fab"
+        onClick={() => setShowMobilePicker(true)}
+        title="Add Unit"
+      >
+        +
+      </button>
+
       {/* RIGHT PANEL: Unit Detail */}
-      <div className="list-editor__detail">
+      <div className={`list-editor__detail${hasSelectedUnit ? ' list-editor__detail--open' : ''}`}>
         {selectedLu ? (() => {
           const isCharacter = selectedLu.units.role === 'character';
           const unitEnh = editor.unitEnhancementMap.get(selectedLu.id);
           const unitOpts = editor.wargearOptions.filter(w => w.unit_id === selectedLu.unit_id);
 
           return (
+            <>
+            <button
+              className="list-editor__detail-close"
+              onClick={() => editor.setSelectedArmyListUnitId(null)}
+            >
+              &larr; Back to roster
+            </button>
             <UnitDetailPanel
               unit={selectedLu.units}
               weapons={selectedLu.units.weapons ?? []}
@@ -233,6 +266,7 @@ export function ListEditorPage() {
                 };
               })()}
             />
+            </>
           );
         })() : (
           <div className="detail-panel detail-panel--empty">
