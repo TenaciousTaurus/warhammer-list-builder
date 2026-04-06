@@ -11,18 +11,32 @@ import { ExportModal } from '../components/ExportModal';
 import { ListVerification } from '../../collection/components/ListVerification';
 import type { UnitWithRelations } from '../stores/listEditorStore';
 
+type MobileTab = 'roster' | 'picker' | 'detail';
+
 export function ListEditorPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
   const editor = useListEditor(id);
   const verification = useListVerification(editor.listUnits, user?.id);
-  const [showMobilePicker, setShowMobilePicker] = useState(false);
+  const [mobileTab, setMobileTab] = useState<MobileTab>('roster');
 
-  // Wrap addUnit to auto-close picker on mobile
+  // On mobile, selecting a unit switches to detail tab
+  const handleSelectUnit = useCallback((unitId: string | null) => {
+    editor.setSelectedArmyListUnitId(unitId);
+    if (unitId) setMobileTab('detail');
+  }, [editor]);
+
+  // On mobile, adding a unit switches back to roster
   const handleAddUnit = useCallback((unit: UnitWithRelations) => {
     editor.addUnit(unit);
-    setShowMobilePicker(false);
+    setMobileTab('roster');
+  }, [editor]);
+
+  // Back from detail → roster
+  const handleBackToRoster = useCallback(() => {
+    editor.setSelectedArmyListUnitId(null);
+    setMobileTab('roster');
   }, [editor]);
 
   // Keyboard shortcuts
@@ -107,15 +121,23 @@ export function ListEditorPage() {
 
   const selectedLu = editor.selectedLu;
 
-  const hasSelectedUnit = !!editor.selectedArmyListUnitId && !!selectedLu;
-
   return (
     <div className="list-editor">
-      {/* Mobile: picker backdrop */}
-      <div
-        className={`list-editor__picker-backdrop${showMobilePicker ? ' list-editor__picker-backdrop--open' : ''}`}
-        onClick={() => setShowMobilePicker(false)}
-      />
+      {/* Mobile tab bar — hidden on desktop via CSS */}
+      <div className="list-editor__mobile-tabs">
+        <button
+          className={`list-editor__mobile-tab${mobileTab === 'roster' || mobileTab === 'detail' ? ' list-editor__mobile-tab--active' : ''}`}
+          onClick={() => { handleBackToRoster(); }}
+        >
+          Roster ({editor.totalPoints} pts)
+        </button>
+        <button
+          className={`list-editor__mobile-tab${mobileTab === 'picker' ? ' list-editor__mobile-tab--active' : ''}`}
+          onClick={() => setMobileTab('picker')}
+        >
+          + Add Units
+        </button>
+      </div>
 
       {/* LEFT PANEL: Unit Picker */}
       <UnitPicker
@@ -132,11 +154,11 @@ export function ListEditorPage() {
         onAddUnit={handleAddUnit}
         onToggleRole={editor.togglePickerRole}
         onToggleLegends={editor.toggleLegends}
-        className={showMobilePicker ? 'list-editor__picker--open' : ''}
+        className={mobileTab === 'picker' ? 'list-editor__picker--mobile-visible' : ''}
       />
 
       {/* CENTER PANEL: Army Roster */}
-      <div className="list-editor__roster">
+      <div className={`list-editor__roster${mobileTab === 'roster' ? ' list-editor__roster--mobile-visible' : ''}`}>
         <ListSummary
           list={editor.list}
           totalPoints={editor.totalPoints}
@@ -170,7 +192,7 @@ export function ListEditorPage() {
             selectedArmyListUnitId={editor.selectedArmyListUnitId}
             getEnhancementForUnit={editor.getEnhancementForUnit}
             getWargearSummary={editor.getWargearSummary}
-            onSelectUnit={editor.setSelectedArmyListUnitId}
+            onSelectUnit={handleSelectUnit}
             onRemoveUnit={editor.removeUnit}
             onReorder={editor.reorderUnits}
           />
@@ -187,17 +209,8 @@ export function ListEditorPage() {
         </div>
       </div>
 
-      {/* Mobile: FAB to open picker */}
-      <button
-        className="list-editor__fab"
-        onClick={() => setShowMobilePicker(true)}
-        title="Add Unit"
-      >
-        +
-      </button>
-
       {/* RIGHT PANEL: Unit Detail */}
-      <div className={`list-editor__detail${hasSelectedUnit ? ' list-editor__detail--open' : ''}`}>
+      <div className={`list-editor__detail${mobileTab === 'detail' && selectedLu ? ' list-editor__detail--mobile-visible' : ''}`}>
         {selectedLu ? (() => {
           const isCharacter = selectedLu.units.role === 'character';
           const unitEnh = editor.unitEnhancementMap.get(selectedLu.id);
@@ -207,7 +220,7 @@ export function ListEditorPage() {
             <>
             <button
               className="list-editor__detail-close"
-              onClick={() => editor.setSelectedArmyListUnitId(null)}
+              onClick={handleBackToRoster}
             >
               &larr; Back to roster
             </button>

@@ -1948,65 +1948,83 @@
   }
 }
 
-/* ---- MOBILE: overlay panels ---- */
+/* ---- MOBILE: tab-based layout ---- */
 @media (max-width: 768px) {
   .list-editor {
     flex-direction: column;
     height: auto;
     min-height: calc(100vh - 60px);
     gap: 0;
-    position: relative;
   }
 
-  /* Picker: slide-up drawer */
-  .list-editor__picker {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: auto;
-    width: 100%;
-    max-height: 75vh;
-    z-index: 50;
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    transform: translateY(100%);
-    transition: transform 300ms ease;
-  }
-
-  .list-editor__picker--open {
-    transform: translateY(0);
-  }
-
-  /* Backdrop behind picker */
-  .list-editor__picker-backdrop {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 49;
-  }
-
-  .list-editor__picker-backdrop--open {
-    display: block;
-  }
-
-  /* Detail: slide-in from right */
-  .list-editor__detail {
-    position: fixed;
+  /* Tab bar */
+  .list-editor__mobile-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--glass-border);
+    background: var(--glass-bg);
+    position: sticky;
     top: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    max-width: 100%;
-    max-height: 100vh;
-    z-index: 50;
-    border-radius: 0;
-    transform: translateX(100%);
-    transition: transform 300ms ease;
+    z-index: 10;
   }
 
-  .list-editor__detail--open {
-    transform: translateX(0);
+  .list-editor__mobile-tab {
+    flex: 1;
+    padding: var(--space-sm) var(--space-md);
+    background: none;
+    border: none;
+    color: var(--color-text-muted);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+    border-bottom: 2px solid transparent;
+  }
+
+  .list-editor__mobile-tab--active {
+    color: var(--color-gold);
+    border-bottom-color: var(--color-gold);
+  }
+
+  /* Hide all panels by default, show via modifier */
+  .list-editor__picker {
+    display: none;
+    width: 100%;
+    max-height: none;
+    position: static;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+  }
+
+  .list-editor__picker--mobile-visible {
+    display: flex;
+    flex: 1;
+  }
+
+  .list-editor__roster {
+    display: none;
+    width: 100%;
+  }
+
+  .list-editor__roster--mobile-visible {
+    display: flex;
+  }
+
+  .list-editor__detail {
+    display: none;
+    width: 100%;
+    max-height: none;
+    position: static;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+  }
+
+  .list-editor__detail--mobile-visible {
+    display: block;
   }
 
   /* Detail empty state: hidden on mobile */
@@ -2014,46 +2032,12 @@
     display: none;
   }
 
-  /* Roster: full width */
-  .list-editor__roster {
-    flex: 1;
-    width: 100%;
-    padding-bottom: 80px; /* room for FAB */
-  }
-
-  /* Floating Add Unit button */
-  .list-editor__fab {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    bottom: var(--space-md);
-    right: var(--space-md);
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: var(--color-gold);
-    color: var(--color-bg-primary);
-    font-size: 28px;
-    font-weight: 700;
-    border: none;
-    cursor: pointer;
-    z-index: 48;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    transition: transform var(--transition-fast), background var(--transition-fast);
-  }
-
-  .list-editor__fab:active {
-    transform: scale(0.92);
-  }
-
-  /* Mobile close button for detail panel */
+  /* Mobile back button for detail panel */
   .list-editor__detail-close {
     display: flex;
     align-items: center;
     gap: var(--space-xs);
     padding: var(--space-sm) var(--space-md);
-    border-bottom: 1px solid var(--glass-border);
     background: rgba(255, 255, 255, 0.03);
     color: var(--color-text-secondary);
     font-size: var(--text-sm);
@@ -2073,7 +2057,6 @@
     display: none;
   }
 
-  /* Hide save status on very small screens */
   .list-editor__save-status {
     font-size: 10px;
   }
@@ -2081,11 +2064,7 @@
 
 /* Desktop: hide mobile-only elements */
 @media (min-width: 769px) {
-  .list-editor__fab {
-    display: none;
-  }
-
-  .list-editor__picker-backdrop {
+  .list-editor__mobile-tabs {
     display: none;
   }
 
