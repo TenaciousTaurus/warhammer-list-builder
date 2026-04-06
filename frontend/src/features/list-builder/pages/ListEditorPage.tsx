@@ -154,7 +154,7 @@ export function ListEditorPage() {
         onAddUnit={handleAddUnit}
         onToggleRole={editor.togglePickerRole}
         onToggleLegends={editor.toggleLegends}
-        className={mobileTab === 'picker' ? 'list-editor__picker--mobile-visible' : ''}
+        className={mobileTab === 'picker' ? 'list-editor__picker--mobile-visible' : undefined}
       />
 
       {/* CENTER PANEL: Army Roster */}
