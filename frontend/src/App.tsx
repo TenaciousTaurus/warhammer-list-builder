@@ -13,30 +13,50 @@ import { lazy, Suspense, useState, type ReactNode } from 'react';
 import { FeedbackModal } from './shared/components/FeedbackModal';
 import { ThemePicker } from './shared/components/ThemePicker';
 
+// Auto-reload on stale chunk errors after deployment.
+// When Vite rebuilds, chunk hashes change — cached HTML may reference old filenames.
+function lazyRetry<T extends { default: React.ComponentType }>(
+  factory: () => Promise<T>,
+): Promise<T> {
+  return factory().catch((err: Error) => {
+    if (err.message.includes('dynamically imported module') || err.message.includes('Failed to fetch')) {
+      const reloaded = sessionStorage.getItem('chunk_reload');
+      if (!reloaded) {
+        sessionStorage.setItem('chunk_reload', '1');
+        window.location.reload();
+      }
+    }
+    throw err;
+  });
+}
+
 // Lazy-loaded routes (code-split into separate chunks)
-const UnitsPage = lazy(() => import('./shared/pages/UnitsPage').then(m => ({ default: m.UnitsPage })));
-const SharedListPage = lazy(() => import('./shared/pages/SharedListPage').then(m => ({ default: m.SharedListPage })));
-const PlayModePage = lazy(() => import('./features/play-mode/pages/PlayModePage').then(m => ({ default: m.PlayModePage })));
-const CollectionPage = lazy(() => import('./features/collection/pages/CollectionPage').then(m => ({ default: m.CollectionPage })));
-const PaintRecipesPage = lazy(() => import('./features/collection/pages/PaintRecipesPage').then(m => ({ default: m.PaintRecipesPage })));
-const PaintInventoryPage = lazy(() => import('./features/collection/pages/PaintInventoryPage').then(m => ({ default: m.PaintInventoryPage })));
-const CampaignsPage = lazy(() => import('./features/crusade/pages/CampaignsPage').then(m => ({ default: m.CampaignsPage })));
-const CampaignDetailPage = lazy(() => import('./features/crusade/pages/CampaignDetailPage').then(m => ({ default: m.CampaignDetailPage })));
-const CrusadeRosterPage = lazy(() => import('./features/crusade/pages/CrusadeRosterPage').then(m => ({ default: m.CrusadeRosterPage })));
-const CrusadeUnitDetailPage = lazy(() => import('./features/crusade/pages/CrusadeUnitDetailPage').then(m => ({ default: m.CrusadeUnitDetailPage })));
-const BattleLogPage = lazy(() => import('./features/crusade/pages/BattleLogPage').then(m => ({ default: m.BattleLogPage })));
-const ProfilePage = lazy(() => import('./features/social/pages/ProfilePage').then(m => ({ default: m.ProfilePage })));
-const FriendsPage = lazy(() => import('./features/social/pages/FriendsPage').then(m => ({ default: m.FriendsPage })));
-const StatsPage = lazy(() => import('./features/social/pages/StatsPage').then(m => ({ default: m.StatsPage })));
-const TournamentsPage = lazy(() => import('./features/social/pages/TournamentsPage').then(m => ({ default: m.TournamentsPage })));
-const TournamentDetailPage = lazy(() => import('./features/social/pages/TournamentDetailPage').then(m => ({ default: m.TournamentDetailPage })));
-const TournamentRoundPage = lazy(() => import('./features/social/pages/TournamentRoundPage').then(m => ({ default: m.TournamentRoundPage })));
-const LeaguesPage = lazy(() => import('./features/social/pages/LeaguesPage').then(m => ({ default: m.LeaguesPage })));
-const LeagueDetailPage = lazy(() => import('./features/social/pages/LeagueDetailPage').then(m => ({ default: m.LeagueDetailPage })));
-const OrganisationsPage = lazy(() => import('./features/social/pages/OrganisationsPage').then(m => ({ default: m.OrganisationsPage })));
-const OrganisationDetailPage = lazy(() => import('./features/social/pages/OrganisationDetailPage').then(m => ({ default: m.OrganisationDetailPage })));
-const SettingsPage = lazy(() => import('./shared/pages/SettingsPage').then(m => ({ default: m.SettingsPage })));
-const ResetPasswordPage = lazy(() => import('./shared/pages/ResetPasswordPage').then(m => ({ default: m.ResetPasswordPage })));
+const UnitsPage = lazy(() => lazyRetry(() => import('./shared/pages/UnitsPage').then(m => ({ default: m.UnitsPage }))));
+const SharedListPage = lazy(() => lazyRetry(() => import('./shared/pages/SharedListPage').then(m => ({ default: m.SharedListPage }))));
+const PlayModePage = lazy(() => lazyRetry(() => import('./features/play-mode/pages/PlayModePage').then(m => ({ default: m.PlayModePage }))));
+const CollectionPage = lazy(() => lazyRetry(() => import('./features/collection/pages/CollectionPage').then(m => ({ default: m.CollectionPage }))));
+const PaintRecipesPage = lazy(() => lazyRetry(() => import('./features/collection/pages/PaintRecipesPage').then(m => ({ default: m.PaintRecipesPage }))));
+const PaintInventoryPage = lazy(() => lazyRetry(() => import('./features/collection/pages/PaintInventoryPage').then(m => ({ default: m.PaintInventoryPage }))));
+const CampaignsPage = lazy(() => lazyRetry(() => import('./features/crusade/pages/CampaignsPage').then(m => ({ default: m.CampaignsPage }))));
+const CampaignDetailPage = lazy(() => lazyRetry(() => import('./features/crusade/pages/CampaignDetailPage').then(m => ({ default: m.CampaignDetailPage }))));
+const CrusadeRosterPage = lazy(() => lazyRetry(() => import('./features/crusade/pages/CrusadeRosterPage').then(m => ({ default: m.CrusadeRosterPage }))));
+const CrusadeUnitDetailPage = lazy(() => lazyRetry(() => import('./features/crusade/pages/CrusadeUnitDetailPage').then(m => ({ default: m.CrusadeUnitDetailPage }))));
+const BattleLogPage = lazy(() => lazyRetry(() => import('./features/crusade/pages/BattleLogPage').then(m => ({ default: m.BattleLogPage }))));
+const ProfilePage = lazy(() => lazyRetry(() => import('./features/social/pages/ProfilePage').then(m => ({ default: m.ProfilePage }))));
+const FriendsPage = lazy(() => lazyRetry(() => import('./features/social/pages/FriendsPage').then(m => ({ default: m.FriendsPage }))));
+const StatsPage = lazy(() => lazyRetry(() => import('./features/social/pages/StatsPage').then(m => ({ default: m.StatsPage }))));
+const TournamentsPage = lazy(() => lazyRetry(() => import('./features/social/pages/TournamentsPage').then(m => ({ default: m.TournamentsPage }))));
+const TournamentDetailPage = lazy(() => lazyRetry(() => import('./features/social/pages/TournamentDetailPage').then(m => ({ default: m.TournamentDetailPage }))));
+const TournamentRoundPage = lazy(() => lazyRetry(() => import('./features/social/pages/TournamentRoundPage').then(m => ({ default: m.TournamentRoundPage }))));
+const LeaguesPage = lazy(() => lazyRetry(() => import('./features/social/pages/LeaguesPage').then(m => ({ default: m.LeaguesPage }))));
+const LeagueDetailPage = lazy(() => lazyRetry(() => import('./features/social/pages/LeagueDetailPage').then(m => ({ default: m.LeagueDetailPage }))));
+const OrganisationsPage = lazy(() => lazyRetry(() => import('./features/social/pages/OrganisationsPage').then(m => ({ default: m.OrganisationsPage }))));
+const OrganisationDetailPage = lazy(() => lazyRetry(() => import('./features/social/pages/OrganisationDetailPage').then(m => ({ default: m.OrganisationDetailPage }))));
+const SettingsPage = lazy(() => lazyRetry(() => import('./shared/pages/SettingsPage').then(m => ({ default: m.SettingsPage }))));
+const ResetPasswordPage = lazy(() => lazyRetry(() => import('./shared/pages/ResetPasswordPage').then(m => ({ default: m.ResetPasswordPage }))));
+
+// Clear the reload flag on successful page load
+sessionStorage.removeItem('chunk_reload');
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
