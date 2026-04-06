@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../shared/hooks/useAuth';
 import { useListEditor, getUnitPoints } from '../hooks/useListEditor';
@@ -9,6 +9,9 @@ import { ArmyRoster } from '../components/ArmyRoster';
 import { UnitDetailPanel } from '../components/UnitDetailPanel';
 import { ExportModal } from '../components/ExportModal';
 import { ListVerification } from '../../collection/components/ListVerification';
+import type { UnitWithRelations } from '../stores/listEditorStore';
+
+type MobileTab = 'roster' | 'picker' | 'detail';
 
 export function ListEditorPage() {
   const { id } = useParams<{ id: string }>();
@@ -16,6 +19,25 @@ export function ListEditorPage() {
   const { user } = useAuth();
   const editor = useListEditor(id);
   const verification = useListVerification(editor.listUnits, user?.id);
+  const [mobileTab, setMobileTab] = useState<MobileTab>('roster');
+
+  // On mobile, selecting a unit switches to detail tab
+  const handleSelectUnit = useCallback((unitId: string | null) => {
+    editor.setSelectedArmyListUnitId(unitId);
+    if (unitId) setMobileTab('detail');
+  }, [editor]);
+
+  // On mobile, adding a unit switches back to roster
+  const handleAddUnit = useCallback((unit: UnitWithRelations) => {
+    editor.addUnit(unit);
+    setMobileTab('roster');
+  }, [editor]);
+
+  // Back from detail → roster
+  const handleBackToRoster = useCallback(() => {
+    editor.setSelectedArmyListUnitId(null);
+    setMobileTab('roster');
+  }, [editor]);
 
   // Keyboard shortcuts
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
@@ -101,6 +123,22 @@ export function ListEditorPage() {
 
   return (
     <div className="list-editor">
+      {/* Mobile tab bar — hidden on desktop via CSS */}
+      <div className="list-editor__mobile-tabs">
+        <button
+          className={`list-editor__mobile-tab${mobileTab === 'roster' || mobileTab === 'detail' ? ' list-editor__mobile-tab--active' : ''}`}
+          onClick={() => { handleBackToRoster(); }}
+        >
+          Roster ({editor.totalPoints} pts)
+        </button>
+        <button
+          className={`list-editor__mobile-tab${mobileTab === 'picker' ? ' list-editor__mobile-tab--active' : ''}`}
+          onClick={() => setMobileTab('picker')}
+        >
+          + Add Units
+        </button>
+      </div>
+
       {/* LEFT PANEL: Unit Picker */}
       <UnitPicker
         listName={editor.list.name}
@@ -113,13 +151,14 @@ export function ListEditorPage() {
         unitPickerFilter={editor.unitPickerFilter}
         showLegends={editor.showLegends}
         onFilterChange={editor.setUnitPickerFilter}
-        onAddUnit={editor.addUnit}
+        onAddUnit={handleAddUnit}
         onToggleRole={editor.togglePickerRole}
         onToggleLegends={editor.toggleLegends}
+        className={mobileTab === 'picker' ? 'list-editor__picker--mobile-visible' : undefined}
       />
 
       {/* CENTER PANEL: Army Roster */}
-      <div className="list-editor__roster">
+      <div className={`list-editor__roster${mobileTab === 'roster' ? ' list-editor__roster--mobile-visible' : ''}`}>
         <ListSummary
           list={editor.list}
           totalPoints={editor.totalPoints}
@@ -161,7 +200,7 @@ export function ListEditorPage() {
             selectedArmyListUnitId={editor.selectedArmyListUnitId}
             getEnhancementForUnit={editor.getEnhancementForUnit}
             getWargearSummary={editor.getWargearSummary}
-            onSelectUnit={editor.setSelectedArmyListUnitId}
+            onSelectUnit={handleSelectUnit}
             onRemoveUnit={editor.removeUnit}
             onReorder={editor.reorderUnits}
           />
@@ -179,13 +218,20 @@ export function ListEditorPage() {
       </div>
 
       {/* RIGHT PANEL: Unit Detail */}
-      <div className="list-editor__detail">
+      <div className={`list-editor__detail${mobileTab === 'detail' && selectedLu ? ' list-editor__detail--mobile-visible' : ''}`}>
         {selectedLu ? (() => {
           const isCharacter = selectedLu.units.role === 'character';
           const unitEnh = editor.unitEnhancementMap.get(selectedLu.id);
           const unitOpts = editor.wargearOptions.filter(w => w.unit_id === selectedLu.unit_id);
 
           return (
+            <>
+            <button
+              className="list-editor__detail-close"
+              onClick={handleBackToRoster}
+            >
+              &larr; Back to roster
+            </button>
             <UnitDetailPanel
               unit={selectedLu.units}
               weapons={selectedLu.units.weapons ?? []}
@@ -241,6 +287,7 @@ export function ListEditorPage() {
                 };
               })()}
             />
+            </>
           );
         })() : (
           <div className="detail-panel detail-panel--empty">

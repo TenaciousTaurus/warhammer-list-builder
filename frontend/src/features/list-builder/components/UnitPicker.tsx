@@ -14,12 +14,13 @@ interface UnitPickerProps {
   onAddUnit: (unit: UnitWithRelations) => void;
   onToggleRole: (role: string) => void;
   onToggleLegends: () => void;
+  className?: string;
 }
 
 export function UnitPicker({
   listName, totalPoints, filteredUnits, filteredAlliedUnits, unitsByRole, unitCountsInList,
   collapsedPickerRoles, unitPickerFilter, showLegends, onFilterChange,
-  onAddUnit, onToggleRole, onToggleLegends,
+  onAddUnit, onToggleRole, onToggleLegends, className,
 }: UnitPickerProps) {
   const isSearching = unitPickerFilter.length > 0;
 
@@ -52,7 +53,7 @@ export function UnitPicker({
   }
 
   return (
-    <div className="list-editor__picker">
+    <div className={`list-editor__picker${className ? ` ${className}` : ''}`}>
       <div className="list-editor__picker-header">
         <div className="list-editor__picker-title">{listName}</div>
         <div className="list-editor__picker-points">{totalPoints} pts</div>
