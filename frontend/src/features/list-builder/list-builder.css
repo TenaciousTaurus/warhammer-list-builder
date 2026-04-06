@@ -381,6 +381,21 @@
   overflow: hidden;
 }
 
+.list-editor__save-status {
+  text-align: center;
+  font-size: var(--text-xs);
+  padding: var(--space-xs) 0;
+}
+
+.list-editor__save-status--saving {
+  color: var(--color-gold);
+}
+
+.list-editor__save-status--saved {
+  color: var(--color-text-muted);
+  opacity: 0.6;
+}
+
 .list-editor__shortcuts-hint {
   display: flex;
   justify-content: center;

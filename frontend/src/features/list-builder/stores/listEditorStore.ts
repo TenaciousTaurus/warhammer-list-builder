@@ -83,6 +83,7 @@ interface ListEditorState {
 
   // UI state
   loading: boolean;
+  saving: boolean;
   error: string | null;
   showExport: boolean;
   unitPickerFilter: string;
@@ -158,6 +159,7 @@ function getInitialState() {
     serverValidation: null as ValidateArmyListResult | null,
     serverValidationError: false,
     loading: true,
+    saving: false,
     error: null as string | null,
     showExport: false,
     unitPickerFilter: '',
@@ -394,7 +396,9 @@ export const useListEditorStore = create<ListEditorState>()((set, get) => ({
 
   _refetch: async () => {
     const { listId } = get();
+    set({ saving: true });
     if (listId) await get()._fetchAll(listId);
+    set({ saving: false });
   },
 
   // ============================================================
@@ -486,15 +490,17 @@ export const useListEditorStore = create<ListEditorState>()((set, get) => ({
   updateListName: async (name: string) => {
     const { listId, list } = get();
     if (!listId || !list) return;
+    set({ saving: true, list: { ...list, name } });
     await supabase.from('army_lists').update({ name }).eq('id', listId);
-    set({ list: { ...list, name } });
+    set({ saving: false });
   },
 
   updatePointsLimit: async (limit: number) => {
     const { listId, list } = get();
     if (!listId || !list) return;
+    set({ saving: true, list: { ...list, points_limit: limit } });
     await supabase.from('army_lists').update({ points_limit: limit }).eq('id', listId);
-    set({ list: { ...list, points_limit: limit } });
+    set({ saving: false });
     get()._fetchServerValidation();
   },
 

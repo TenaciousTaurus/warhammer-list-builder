@@ -208,6 +208,13 @@ export function ListsPage() {
       ) : filteredAndSorted.length === 0 ? (
         <div className="empty-state card">
           <div className="empty-state__title">No lists match your search</div>
+          <button
+            className="btn btn--sm"
+            style={{ marginTop: 'var(--space-sm)' }}
+            onClick={() => setSearch('')}
+          >
+            Clear Search
+          </button>
         </div>
       ) : groupedLists ? (
         <div className="lists-page__grouped">

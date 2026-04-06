@@ -390,3 +390,302 @@ describe('selectSelectedLu', () => {
     expect(selectSelectedLu(state as never)).toBeNull();
   });
 });
+
+// ============================================================
+// Store ACTION tests
+// ============================================================
+
+import { useListEditorStore } from './listEditorStore';
+import { vi, beforeEach } from 'vitest';
+import { supabase } from '../../../shared/lib/supabase';
+
+/** Create a chainable mock that resolves when awaited */
+function mockChain(resolvedValue: Record<string, unknown> = { data: null, error: null }) {
+  const chain: Record<string, unknown> = {};
+  const methods = ['select', 'insert', 'update', 'delete', 'upsert', 'eq', 'in', 'or', 'order', 'single'];
+  for (const m of methods) {
+    chain[m] = vi.fn(() => chain);
+  }
+  // Make it thenable so `await` resolves
+  chain.then = vi.fn((resolve: (v: unknown) => void) => {
+    resolve(resolvedValue);
+    return chain;
+  });
+  return chain;
+}
+
+/** Helper: set store to a known baseline state and configure supabase mock */
+function resetStore(overrides?: Record<string, unknown>) {
+  // Configure supabase.from to return a properly resolving chain
+  vi.mocked(supabase.from).mockImplementation(() => mockChain() as never);
+
+  useListEditorStore.setState({
+    ...mockState(),
+    // Provide no-op defaults for internal helpers so actions don't throw
+    _refetch: vi.fn().mockResolvedValue(undefined),
+    _fetchServerValidation: vi.fn(),
+    availableDetachments: [],
+    ...overrides,
+  } as never);
+}
+
+describe('addUnit action', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    resetStore();
+  });
+
+  it('does not add a unit when max_per_list is reached', async () => {
+    const unit = mockUnit({ id: 'u1', max_per_list: 1 });
+    resetStore({
+      listUnits: [mockListUnit({ id: 'alu-1', unit_id: 'u1', units: unit })],
+    });
+
+    await useListEditorStore.getState().addUnit(unit);
+
+    // supabase.from should NOT have been called for an insert
+    expect(supabase.from).not.toHaveBeenCalled();
+  });
+
+  it('does nothing when listId is null', async () => {
+    resetStore({ listId: null });
+    const unit = mockUnit({ id: 'u1' });
+
+    await useListEditorStore.getState().addUnit(unit);
+
+    expect(supabase.from).not.toHaveBeenCalled();
+  });
+
+  it('calls supabase insert with correct table and data', async () => {
+    const unit = mockUnit({
+      id: 'u1',
+      max_per_list: 3,
+      unit_points_tiers: [
+        { id: 't1', unit_id: 'u1', model_count: 5, points: 90 },
+        { id: 't2', unit_id: 'u1', model_count: 10, points: 180 },
+      ],
+    });
+    resetStore({ listUnits: [], listId: 'list-1' });
+
+    await useListEditorStore.getState().addUnit(unit);
+
+    expect(supabase.from).toHaveBeenCalledWith('army_list_units');
+  });
+});
+
+describe('removeUnit action', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    resetStore();
+  });
+
+  it('clears selectedArmyListUnitId when removing the selected unit', async () => {
+    resetStore({ selectedArmyListUnitId: 'alu-1' });
+
+    await useListEditorStore.getState().removeUnit('alu-1');
+
+    expect(useListEditorStore.getState().selectedArmyListUnitId).toBeNull();
+  });
+
+  it('does not clear selectedArmyListUnitId when removing a different unit', async () => {
+    resetStore({ selectedArmyListUnitId: 'alu-2' });
+
+    await useListEditorStore.getState().removeUnit('alu-1');
+
+    expect(useListEditorStore.getState().selectedArmyListUnitId).toBe('alu-2');
+  });
+
+  it('calls supabase delete on army_list_units', async () => {
+    resetStore();
+
+    await useListEditorStore.getState().removeUnit('alu-1');
+
+    expect(supabase.from).toHaveBeenCalledWith('army_list_units');
+  });
+});
+
+describe('selectWargear action', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    resetStore();
+  });
+
+  it('optimistically updates unitWargearSelections Map', async () => {
+    resetStore({ unitWargearSelections: new Map() });
+
+    await useListEditorStore.getState().selectWargear('alu-1', 'ranged_weapon', 'opt-1');
+
+    const selections = useListEditorStore.getState().unitWargearSelections;
+    expect(selections.has('alu-1')).toBe(true);
+    expect(selections.get('alu-1')!.get('ranged_weapon')).toBe('opt-1');
+  });
+
+  it('replaces an existing wargear selection for the same group', async () => {
+    const initial = new Map<string, Map<string, string>>();
+    initial.set('alu-1', new Map([['ranged_weapon', 'opt-old']]));
+    resetStore({ unitWargearSelections: initial });
+
+    await useListEditorStore.getState().selectWargear('alu-1', 'ranged_weapon', 'opt-new');
+
+    const selections = useListEditorStore.getState().unitWargearSelections;
+    expect(selections.get('alu-1')!.get('ranged_weapon')).toBe('opt-new');
+  });
+
+  it('calls supabase delete on old selection and insert for new', async () => {
+    const initial = new Map<string, Map<string, string>>();
+    initial.set('alu-1', new Map([['ranged_weapon', 'opt-old']]));
+    resetStore({ unitWargearSelections: initial });
+
+    await useListEditorStore.getState().selectWargear('alu-1', 'ranged_weapon', 'opt-new');
+
+    // from() called for delete (old) and insert (new)
+    expect(supabase.from).toHaveBeenCalledWith('army_list_unit_wargear');
+  });
+});
+
+describe('reorderUnits action', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('optimistically reorders the listUnits array', async () => {
+    const lu0 = mockListUnit({ id: 'alu-0', sort_order: 0 });
+    const lu1 = mockListUnit({ id: 'alu-1', sort_order: 1 });
+    const lu2 = mockListUnit({ id: 'alu-2', sort_order: 2 });
+    resetStore({ listUnits: [lu0, lu1, lu2] });
+
+    // Move index 0 to index 2
+    await useListEditorStore.getState().reorderUnits(0, 2);
+
+    const ids = useListEditorStore.getState().listUnits.map(lu => lu.id);
+    expect(ids).toEqual(['alu-1', 'alu-2', 'alu-0']);
+  });
+
+  it('does nothing when fromIndex equals toIndex', async () => {
+    const lu0 = mockListUnit({ id: 'alu-0', sort_order: 0 });
+    resetStore({ listUnits: [lu0] });
+
+    await useListEditorStore.getState().reorderUnits(0, 0);
+
+    expect(supabase.from).not.toHaveBeenCalled();
+  });
+});
+
+describe('updateListName action', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    resetStore();
+  });
+
+  it('optimistically updates list.name', async () => {
+    await useListEditorStore.getState().updateListName('New Name');
+
+    expect(useListEditorStore.getState().list!.name).toBe('New Name');
+  });
+
+  it('calls supabase update on army_lists', async () => {
+    await useListEditorStore.getState().updateListName('New Name');
+
+    expect(supabase.from).toHaveBeenCalledWith('army_lists');
+  });
+
+  it('does nothing when listId is null', async () => {
+    resetStore({ listId: null });
+
+    await useListEditorStore.getState().updateListName('New Name');
+
+    expect(supabase.from).not.toHaveBeenCalled();
+  });
+});
+
+describe('updatePointsLimit action', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    resetStore();
+  });
+
+  it('optimistically updates list.points_limit', async () => {
+    await useListEditorStore.getState().updatePointsLimit(1000);
+
+    expect(useListEditorStore.getState().list!.points_limit).toBe(1000);
+  });
+
+  it('calls supabase update on army_lists', async () => {
+    await useListEditorStore.getState().updatePointsLimit(1500);
+
+    expect(supabase.from).toHaveBeenCalledWith('army_lists');
+  });
+
+  it('does nothing when listId is null', async () => {
+    resetStore({ listId: null });
+
+    await useListEditorStore.getState().updatePointsLimit(1500);
+
+    expect(supabase.from).not.toHaveBeenCalled();
+  });
+});
+
+describe('UI actions', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    resetStore();
+  });
+
+  it('setUnitPickerFilter updates the filter string', () => {
+    useListEditorStore.getState().setUnitPickerFilter('captain');
+
+    expect(useListEditorStore.getState().unitPickerFilter).toBe('captain');
+  });
+
+  it('setUnitPickerFilter clears the filter', () => {
+    useListEditorStore.getState().setUnitPickerFilter('captain');
+    useListEditorStore.getState().setUnitPickerFilter('');
+
+    expect(useListEditorStore.getState().unitPickerFilter).toBe('');
+  });
+
+  it('toggleLegends flips showLegends from false to true', () => {
+    resetStore({ showLegends: false });
+
+    useListEditorStore.getState().toggleLegends();
+
+    expect(useListEditorStore.getState().showLegends).toBe(true);
+  });
+
+  it('toggleLegends flips showLegends from true to false', () => {
+    resetStore({ showLegends: true });
+
+    useListEditorStore.getState().toggleLegends();
+
+    expect(useListEditorStore.getState().showLegends).toBe(false);
+  });
+
+  it('setSelectedArmyListUnitId sets the selected unit', () => {
+    useListEditorStore.getState().setSelectedArmyListUnitId('alu-5');
+
+    expect(useListEditorStore.getState().selectedArmyListUnitId).toBe('alu-5');
+  });
+
+  it('setSelectedArmyListUnitId clears with null', () => {
+    useListEditorStore.getState().setSelectedArmyListUnitId('alu-5');
+    useListEditorStore.getState().setSelectedArmyListUnitId(null);
+
+    expect(useListEditorStore.getState().selectedArmyListUnitId).toBeNull();
+  });
+
+  it('togglePickerRole adds a role to collapsedPickerRoles', () => {
+    resetStore({ collapsedPickerRoles: new Set<string>() });
+
+    useListEditorStore.getState().togglePickerRole('battleline');
+
+    expect(useListEditorStore.getState().collapsedPickerRoles.has('battleline')).toBe(true);
+  });
+
+  it('togglePickerRole removes a role that is already collapsed', () => {
+    resetStore({ collapsedPickerRoles: new Set<string>(['battleline']) });
+
+    useListEditorStore.getState().togglePickerRole('battleline');
+
+    expect(useListEditorStore.getState().collapsedPickerRoles.has('battleline')).toBe(false);
+  });
+});
