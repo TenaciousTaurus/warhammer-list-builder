@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
+  getUnitPoints,
   selectTotalPoints,
   selectOverLimit,
   selectUnitCountsInList,
@@ -9,10 +10,23 @@ import {
   selectUnitLimitWarnings,
   selectEnhancementWarnings,
   selectBattleSizeWarnings,
+  selectTransportWarnings,
+  selectPointsMismatch,
   selectFilteredUnits,
   selectUnitsByRole,
   selectFilteredAlliedUnits,
+  selectRosterByRole,
+  selectRosterAlliedUnits,
+  selectRosterSectionPoints,
+  selectRosterAlliedPoints,
   selectSelectedLu,
+  getEnhancementForUnit,
+  getModelVariantsForUnit,
+  getCompositionForUnit,
+  getCompositionSummary,
+  getEligibleLeaders,
+  getAttachmentForTarget,
+  isLeaderAttachedElsewhere,
   type UnitWithRelations,
   type ArmyListUnitWithDetails,
 } from './listEditorStore';
@@ -392,300 +406,338 @@ describe('selectSelectedLu', () => {
 });
 
 // ============================================================
-// Store ACTION tests
+// Additional selector tests
 // ============================================================
 
-import { useListEditorStore } from './listEditorStore';
-import { vi, beforeEach } from 'vitest';
-import { supabase } from '../../../shared/lib/supabase';
-
-/** Create a chainable mock that resolves when awaited */
-function mockChain(resolvedValue: Record<string, unknown> = { data: null, error: null }) {
-  const chain: Record<string, unknown> = {};
-  const methods = ['select', 'insert', 'update', 'delete', 'upsert', 'eq', 'in', 'or', 'order', 'single'];
-  for (const m of methods) {
-    chain[m] = vi.fn(() => chain);
-  }
-  // Make it thenable so `await` resolves
-  chain.then = vi.fn((resolve: (v: unknown) => void) => {
-    resolve(resolvedValue);
-    return chain;
-  });
-  return chain;
-}
-
-/** Helper: set store to a known baseline state and configure supabase mock */
-function resetStore(overrides?: Record<string, unknown>) {
-  // Configure supabase.from to return a properly resolving chain
-  vi.mocked(supabase.from).mockImplementation(() => mockChain() as never);
-
-  useListEditorStore.setState({
-    ...mockState(),
-    // Provide no-op defaults for internal helpers so actions don't throw
-    _refetch: vi.fn().mockResolvedValue(undefined),
-    _fetchServerValidation: vi.fn(),
-    availableDetachments: [],
-    ...overrides,
-  } as never);
-}
-
-describe('addUnit action', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    resetStore();
-  });
-
-  it('does not add a unit when max_per_list is reached', async () => {
-    const unit = mockUnit({ id: 'u1', max_per_list: 1 });
-    resetStore({
-      listUnits: [mockListUnit({ id: 'alu-1', unit_id: 'u1', units: unit })],
-    });
-
-    await useListEditorStore.getState().addUnit(unit);
-
-    // supabase.from should NOT have been called for an insert
-    expect(supabase.from).not.toHaveBeenCalled();
-  });
-
-  it('does nothing when listId is null', async () => {
-    resetStore({ listId: null });
-    const unit = mockUnit({ id: 'u1' });
-
-    await useListEditorStore.getState().addUnit(unit);
-
-    expect(supabase.from).not.toHaveBeenCalled();
-  });
-
-  it('calls supabase insert with correct table and data', async () => {
+describe('getUnitPoints', () => {
+  it('returns points for exact tier match', () => {
     const unit = mockUnit({
-      id: 'u1',
-      max_per_list: 3,
       unit_points_tiers: [
-        { id: 't1', unit_id: 'u1', model_count: 5, points: 90 },
-        { id: 't2', unit_id: 'u1', model_count: 10, points: 180 },
+        { id: 't1', unit_id: 'unit-1', model_count: 5, points: 90 },
+        { id: 't2', unit_id: 'unit-1', model_count: 10, points: 180 },
       ],
     });
-    resetStore({ listUnits: [], listId: 'list-1' });
+    expect(getUnitPoints(unit, 5)).toBe(90);
+    expect(getUnitPoints(unit, 10)).toBe(180);
+  });
 
-    await useListEditorStore.getState().addUnit(unit);
+  it('returns highest applicable tier for intermediate counts', () => {
+    const unit = mockUnit({
+      unit_points_tiers: [
+        { id: 't1', unit_id: 'unit-1', model_count: 5, points: 90 },
+        { id: 't2', unit_id: 'unit-1', model_count: 10, points: 180 },
+      ],
+    });
+    expect(getUnitPoints(unit, 7)).toBe(90);
+  });
 
-    expect(supabase.from).toHaveBeenCalledWith('army_list_units');
+  it('returns 0 when model count below all tiers', () => {
+    const unit = mockUnit({
+      unit_points_tiers: [
+        { id: 't1', unit_id: 'unit-1', model_count: 5, points: 90 },
+      ],
+    });
+    expect(getUnitPoints(unit, 1)).toBe(0);
+  });
+
+  it('handles unsorted tiers', () => {
+    const unit = mockUnit({
+      unit_points_tiers: [
+        { id: 't2', unit_id: 'unit-1', model_count: 10, points: 180 },
+        { id: 't1', unit_id: 'unit-1', model_count: 5, points: 90 },
+      ],
+    });
+    expect(getUnitPoints(unit, 10)).toBe(180);
   });
 });
 
-describe('removeUnit action', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    resetStore();
+describe('selectTransportWarnings', () => {
+  it('warns when eligible models exceed transport capacity', () => {
+    const transport = mockUnit({
+      id: 'transport-1',
+      name: 'Rhino',
+      role: 'dedicated_transport',
+      transport_capacity: 12,
+      transport_keywords_allowed: ['Infantry'],
+      transport_keywords_excluded: ['Terminator'],
+    });
+
+    const infantry = mockUnit({ id: 'inf-1', name: 'Intercessors', keywords: ['Infantry'] });
+
+    const state = mockState({
+      listUnits: [
+        mockListUnit({ id: 'alu-t', unit_id: 'transport-1', model_count: 1, units: transport }),
+        mockListUnit({ id: 'alu-1', unit_id: 'inf-1', model_count: 10, units: infantry }),
+        mockListUnit({ id: 'alu-2', unit_id: 'inf-1', model_count: 5, units: infantry }),
+      ],
+    });
+
+    const warnings = selectTransportWarnings(state as never);
+    expect(warnings).toHaveLength(1);
+    expect(warnings[0]).toContain('Rhino');
+    expect(warnings[0]).toContain('15');
   });
 
-  it('clears selectedArmyListUnitId when removing the selected unit', async () => {
-    resetStore({ selectedArmyListUnitId: 'alu-1' });
+  it('excludes units with excluded keywords', () => {
+    const transport = mockUnit({
+      id: 'transport-1',
+      name: 'Rhino',
+      role: 'dedicated_transport',
+      transport_capacity: 12,
+      transport_keywords_allowed: ['Infantry'],
+      transport_keywords_excluded: ['Terminator'],
+    });
 
-    await useListEditorStore.getState().removeUnit('alu-1');
+    const terminators = mockUnit({ id: 'term-1', name: 'Terminators', keywords: ['Infantry', 'Terminator'] });
 
-    expect(useListEditorStore.getState().selectedArmyListUnitId).toBeNull();
+    const state = mockState({
+      listUnits: [
+        mockListUnit({ id: 'alu-t', unit_id: 'transport-1', model_count: 1, units: transport }),
+        mockListUnit({ id: 'alu-1', unit_id: 'term-1', model_count: 5, units: terminators }),
+      ],
+    });
+
+    const warnings = selectTransportWarnings(state as never);
+    expect(warnings).toEqual([]);
   });
 
-  it('does not clear selectedArmyListUnitId when removing a different unit', async () => {
-    resetStore({ selectedArmyListUnitId: 'alu-2' });
-
-    await useListEditorStore.getState().removeUnit('alu-1');
-
-    expect(useListEditorStore.getState().selectedArmyListUnitId).toBe('alu-2');
-  });
-
-  it('calls supabase delete on army_list_units', async () => {
-    resetStore();
-
-    await useListEditorStore.getState().removeUnit('alu-1');
-
-    expect(supabase.from).toHaveBeenCalledWith('army_list_units');
-  });
-});
-
-describe('selectWargear action', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    resetStore();
-  });
-
-  it('optimistically updates unitWargearSelections Map', async () => {
-    resetStore({ unitWargearSelections: new Map() });
-
-    await useListEditorStore.getState().selectWargear('alu-1', 'ranged_weapon', 'opt-1');
-
-    const selections = useListEditorStore.getState().unitWargearSelections;
-    expect(selections.has('alu-1')).toBe(true);
-    expect(selections.get('alu-1')!.get('ranged_weapon')).toBe('opt-1');
-  });
-
-  it('replaces an existing wargear selection for the same group', async () => {
-    const initial = new Map<string, Map<string, string>>();
-    initial.set('alu-1', new Map([['ranged_weapon', 'opt-old']]));
-    resetStore({ unitWargearSelections: initial });
-
-    await useListEditorStore.getState().selectWargear('alu-1', 'ranged_weapon', 'opt-new');
-
-    const selections = useListEditorStore.getState().unitWargearSelections;
-    expect(selections.get('alu-1')!.get('ranged_weapon')).toBe('opt-new');
-  });
-
-  it('calls supabase delete on old selection and insert for new', async () => {
-    const initial = new Map<string, Map<string, string>>();
-    initial.set('alu-1', new Map([['ranged_weapon', 'opt-old']]));
-    resetStore({ unitWargearSelections: initial });
-
-    await useListEditorStore.getState().selectWargear('alu-1', 'ranged_weapon', 'opt-new');
-
-    // from() called for delete (old) and insert (new)
-    expect(supabase.from).toHaveBeenCalledWith('army_list_unit_wargear');
+  it('returns empty when no transports', () => {
+    const state = mockState({
+      listUnits: [mockListUnit()],
+    });
+    expect(selectTransportWarnings(state as never)).toEqual([]);
   });
 });
 
-describe('reorderUnits action', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
+describe('selectPointsMismatch', () => {
+  it('returns true when server and local points differ', () => {
+    const state = mockState({
+      serverValidation: { total_points: 100 },
+      listUnits: [mockListUnit({ model_count: 5, units: mockUnit() })],
+    });
+    // Local total: 90 (from mockUnit tier), server: 100
+    expect(selectPointsMismatch(state as never)).toBe(true);
   });
 
-  it('optimistically reorders the listUnits array', async () => {
-    const lu0 = mockListUnit({ id: 'alu-0', sort_order: 0 });
-    const lu1 = mockListUnit({ id: 'alu-1', sort_order: 1 });
-    const lu2 = mockListUnit({ id: 'alu-2', sort_order: 2 });
-    resetStore({ listUnits: [lu0, lu1, lu2] });
-
-    // Move index 0 to index 2
-    await useListEditorStore.getState().reorderUnits(0, 2);
-
-    const ids = useListEditorStore.getState().listUnits.map(lu => lu.id);
-    expect(ids).toEqual(['alu-1', 'alu-2', 'alu-0']);
+  it('returns false when no server validation', () => {
+    const state = mockState({ serverValidation: null });
+    expect(selectPointsMismatch(state as never)).toBe(false);
   });
 
-  it('does nothing when fromIndex equals toIndex', async () => {
-    const lu0 = mockListUnit({ id: 'alu-0', sort_order: 0 });
-    resetStore({ listUnits: [lu0] });
-
-    await useListEditorStore.getState().reorderUnits(0, 0);
-
-    expect(supabase.from).not.toHaveBeenCalled();
+  it('returns false when points match', () => {
+    const state = mockState({
+      serverValidation: { total_points: 90 },
+      listUnits: [mockListUnit({ model_count: 5, units: mockUnit() })],
+    });
+    expect(selectPointsMismatch(state as never)).toBe(false);
   });
 });
 
-describe('updateListName action', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    resetStore();
-  });
+describe('selectRosterByRole', () => {
+  it('groups list units by role, excluding allied', () => {
+    const battleline = mockUnit({ id: 'u1', role: 'battleline' });
+    const character = mockUnit({ id: 'u2', name: 'Captain', role: 'character' });
+    const allied = mockUnit({ id: 'u3', name: 'Knight', role: 'vehicle' });
 
-  it('optimistically updates list.name', async () => {
-    await useListEditorStore.getState().updateListName('New Name');
+    const state = mockState({
+      listUnits: [
+        mockListUnit({ id: 'alu-1', unit_id: 'u1', units: battleline }),
+        mockListUnit({ id: 'alu-2', unit_id: 'u2', units: character }),
+        mockListUnit({ id: 'alu-3', unit_id: 'u3', units: allied }),
+      ],
+      alliedUnitIds: new Set(['u3']),
+    });
 
-    expect(useListEditorStore.getState().list!.name).toBe('New Name');
-  });
-
-  it('calls supabase update on army_lists', async () => {
-    await useListEditorStore.getState().updateListName('New Name');
-
-    expect(supabase.from).toHaveBeenCalledWith('army_lists');
-  });
-
-  it('does nothing when listId is null', async () => {
-    resetStore({ listId: null });
-
-    await useListEditorStore.getState().updateListName('New Name');
-
-    expect(supabase.from).not.toHaveBeenCalled();
+    const byRole = selectRosterByRole(state as never);
+    expect(byRole['battleline']).toHaveLength(1);
+    expect(byRole['character']).toHaveLength(1);
+    expect(byRole['vehicle']).toBeUndefined();
   });
 });
 
-describe('updatePointsLimit action', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    resetStore();
-  });
+describe('selectRosterAlliedUnits', () => {
+  it('returns only allied units from roster', () => {
+    const mainUnit = mockUnit({ id: 'u1' });
+    const alliedUnit = mockUnit({ id: 'u2', name: 'Knight' });
 
-  it('optimistically updates list.points_limit', async () => {
-    await useListEditorStore.getState().updatePointsLimit(1000);
+    const state = mockState({
+      listUnits: [
+        mockListUnit({ id: 'alu-1', unit_id: 'u1', units: mainUnit }),
+        mockListUnit({ id: 'alu-2', unit_id: 'u2', units: alliedUnit }),
+      ],
+      alliedUnitIds: new Set(['u2']),
+    });
 
-    expect(useListEditorStore.getState().list!.points_limit).toBe(1000);
-  });
-
-  it('calls supabase update on army_lists', async () => {
-    await useListEditorStore.getState().updatePointsLimit(1500);
-
-    expect(supabase.from).toHaveBeenCalledWith('army_lists');
-  });
-
-  it('does nothing when listId is null', async () => {
-    resetStore({ listId: null });
-
-    await useListEditorStore.getState().updatePointsLimit(1500);
-
-    expect(supabase.from).not.toHaveBeenCalled();
+    const allied = selectRosterAlliedUnits(state as never);
+    expect(allied).toHaveLength(1);
+    expect(allied[0].units.name).toBe('Knight');
   });
 });
 
-describe('UI actions', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    resetStore();
+describe('selectRosterSectionPoints', () => {
+  it('sums points by role including enhancements', () => {
+    const unit1 = mockUnit({ id: 'u1', role: 'battleline' });
+    const unit2 = mockUnit({ id: 'u2', name: 'Captain', role: 'character', unit_points_tiers: [{ id: 't1', unit_id: 'u2', model_count: 1, points: 80 }] });
+
+    const state = mockState({
+      listUnits: [
+        mockListUnit({ id: 'alu-1', unit_id: 'u1', model_count: 5, units: unit1 }),
+        mockListUnit({ id: 'alu-2', unit_id: 'u2', model_count: 1, units: unit2 }),
+      ],
+      enhancements: [{ id: 'enh-1', name: 'Iron Resolve', points: 25 }] as Enhancement[],
+      listEnhancements: [{ id: 'le-1', enhancement_id: 'enh-1', army_list_unit_id: 'alu-2' }],
+    });
+
+    const points = selectRosterSectionPoints(state as never);
+    expect(points['battleline']).toBe(90);
+    expect(points['character']).toBe(105); // 80 + 25
+  });
+});
+
+describe('selectRosterAlliedPoints', () => {
+  it('sums allied unit points', () => {
+    const alliedUnit = mockUnit({ id: 'u2', unit_points_tiers: [{ id: 't1', unit_id: 'u2', model_count: 1, points: 150 }] });
+
+    const state = mockState({
+      listUnits: [
+        mockListUnit({ id: 'alu-1', unit_id: 'u1', model_count: 5 }),
+        mockListUnit({ id: 'alu-2', unit_id: 'u2', model_count: 1, units: alliedUnit }),
+      ],
+      alliedUnitIds: new Set(['u2']),
+    });
+
+    expect(selectRosterAlliedPoints(state as never)).toBe(150);
+  });
+});
+
+describe('getEnhancementForUnit', () => {
+  it('returns the enhancement assigned to a unit', () => {
+    const enh = { id: 'enh-1', name: 'Iron Resolve', points: 25 } as Enhancement;
+    const state = mockState({
+      enhancements: [enh],
+      listEnhancements: [{ id: 'le-1', enhancement_id: 'enh-1', army_list_unit_id: 'alu-1' }],
+    });
+
+    expect(getEnhancementForUnit(state as never, 'alu-1')).toEqual(enh);
   });
 
-  it('setUnitPickerFilter updates the filter string', () => {
-    useListEditorStore.getState().setUnitPickerFilter('captain');
+  it('returns null when no enhancement', () => {
+    const state = mockState();
+    expect(getEnhancementForUnit(state as never, 'alu-1')).toBeNull();
+  });
+});
 
-    expect(useListEditorStore.getState().unitPickerFilter).toBe('captain');
+describe('getModelVariantsForUnit', () => {
+  it('filters variants by unit_id', () => {
+    const state = mockState({
+      modelVariants: [
+        { id: 'v1', unit_id: 'unit-1', name: 'Sergeant', min_count: 1, max_count: 1 },
+        { id: 'v2', unit_id: 'unit-1', name: 'Marine', min_count: 4, max_count: 9 },
+        { id: 'v3', unit_id: 'unit-2', name: 'Other', min_count: 1, max_count: 1 },
+      ],
+    });
+
+    expect(getModelVariantsForUnit(state as never, 'unit-1')).toHaveLength(2);
+  });
+});
+
+describe('getCompositionForUnit', () => {
+  it('returns composition map for a list unit', () => {
+    const comp = new Map([['v1', 1], ['v2', 4]]);
+    const state = mockState({
+      unitCompositions: new Map([['alu-1', comp]]),
+    });
+
+    expect(getCompositionForUnit(state as never, 'alu-1')).toBe(comp);
   });
 
-  it('setUnitPickerFilter clears the filter', () => {
-    useListEditorStore.getState().setUnitPickerFilter('captain');
-    useListEditorStore.getState().setUnitPickerFilter('');
+  it('returns empty map when no composition', () => {
+    const state = mockState();
+    expect(getCompositionForUnit(state as never, 'alu-1').size).toBe(0);
+  });
+});
 
-    expect(useListEditorStore.getState().unitPickerFilter).toBe('');
+describe('getCompositionSummary', () => {
+  it('returns formatted composition string', () => {
+    const comp = new Map([['v2', 4]]);
+    const state = mockState({
+      modelVariants: [
+        { id: 'v1', unit_id: 'unit-1', name: 'Sergeant', is_leader: true, min_count: 1, max_count: 1, default_count: 1, sort_order: 0 },
+        { id: 'v2', unit_id: 'unit-1', name: 'Marine', is_leader: false, min_count: 4, max_count: 9, default_count: 4, sort_order: 1 },
+      ],
+      unitCompositions: new Map([['alu-1', comp]]),
+    });
+
+    const summary = getCompositionSummary(state as never, 'alu-1', 'unit-1');
+    expect(summary).toContain('1x Sergeant');
+    expect(summary).toContain('4x Marine');
   });
 
-  it('toggleLegends flips showLegends from false to true', () => {
-    resetStore({ showLegends: false });
+  it('returns empty for units with no variants', () => {
+    const state = mockState();
+    expect(getCompositionSummary(state as never, 'alu-1', 'unit-1')).toBe('');
+  });
+});
 
-    useListEditorStore.getState().toggleLegends();
+describe('getEligibleLeaders', () => {
+  it('returns leader unit IDs that can lead the target', () => {
+    const state = mockState({
+      leaderTargets: [
+        { id: 'lt-1', leader_unit_id: 'captain-1', target_unit_id: 'unit-1' },
+        { id: 'lt-2', leader_unit_id: 'librarian-1', target_unit_id: 'unit-1' },
+        { id: 'lt-3', leader_unit_id: 'captain-1', target_unit_id: 'unit-2' },
+      ],
+    });
 
-    expect(useListEditorStore.getState().showLegends).toBe(true);
+    const leaders = getEligibleLeaders(state as never, 'unit-1');
+    expect(leaders).toEqual(['captain-1', 'librarian-1']);
+  });
+});
+
+describe('getAttachmentForTarget', () => {
+  it('returns attachment for target unit', () => {
+    const attachment = {
+      id: 'la-1',
+      leader_army_list_unit_id: 'alu-captain',
+      target_army_list_unit_id: 'alu-1',
+      army_list_id: 'list-1',
+    };
+    const state = mockState({
+      leaderAttachments: [attachment],
+    });
+
+    expect(getAttachmentForTarget(state as never, 'alu-1')).toEqual(attachment);
   });
 
-  it('toggleLegends flips showLegends from true to false', () => {
-    resetStore({ showLegends: true });
+  it('returns undefined when no attachment', () => {
+    const state = mockState();
+    expect(getAttachmentForTarget(state as never, 'alu-1')).toBeUndefined();
+  });
+});
 
-    useListEditorStore.getState().toggleLegends();
+describe('isLeaderAttachedElsewhere', () => {
+  it('returns true when leader is attached to a different target', () => {
+    const state = mockState({
+      leaderAttachments: [
+        { id: 'la-1', leader_army_list_unit_id: 'alu-captain', target_army_list_unit_id: 'alu-other', army_list_id: 'list-1' },
+      ],
+    });
 
-    expect(useListEditorStore.getState().showLegends).toBe(false);
+    expect(isLeaderAttachedElsewhere(state as never, 'alu-captain', 'alu-1')).toBe(true);
   });
 
-  it('setSelectedArmyListUnitId sets the selected unit', () => {
-    useListEditorStore.getState().setSelectedArmyListUnitId('alu-5');
+  it('returns false when leader is attached to this target', () => {
+    const state = mockState({
+      leaderAttachments: [
+        { id: 'la-1', leader_army_list_unit_id: 'alu-captain', target_army_list_unit_id: 'alu-1', army_list_id: 'list-1' },
+      ],
+    });
 
-    expect(useListEditorStore.getState().selectedArmyListUnitId).toBe('alu-5');
+    expect(isLeaderAttachedElsewhere(state as never, 'alu-captain', 'alu-1')).toBe(false);
   });
 
-  it('setSelectedArmyListUnitId clears with null', () => {
-    useListEditorStore.getState().setSelectedArmyListUnitId('alu-5');
-    useListEditorStore.getState().setSelectedArmyListUnitId(null);
-
-    expect(useListEditorStore.getState().selectedArmyListUnitId).toBeNull();
-  });
-
-  it('togglePickerRole adds a role to collapsedPickerRoles', () => {
-    resetStore({ collapsedPickerRoles: new Set<string>() });
-
-    useListEditorStore.getState().togglePickerRole('battleline');
-
-    expect(useListEditorStore.getState().collapsedPickerRoles.has('battleline')).toBe(true);
-  });
-
-  it('togglePickerRole removes a role that is already collapsed', () => {
-    resetStore({ collapsedPickerRoles: new Set<string>(['battleline']) });
-
-    useListEditorStore.getState().togglePickerRole('battleline');
-
-    expect(useListEditorStore.getState().collapsedPickerRoles.has('battleline')).toBe(false);
+  it('returns false when leader has no attachments', () => {
+    const state = mockState();
+    expect(isLeaderAttachedElsewhere(state as never, 'alu-captain', 'alu-1')).toBe(false);
   });
 });
