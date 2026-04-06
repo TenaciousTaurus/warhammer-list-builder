@@ -177,7 +177,7 @@ describe('updateUnit', () => {
 
 describe('addHonour', () => {
   it('appends honour to unit', async () => {
-    const unit = mockUnit({ honours: [{ name: 'First Blood', description: 'First kill', effect: '+1A' }] });
+    const unit = mockUnit({ honours: [{ name: 'First Blood', description: 'First kill', type: 'battle_honour' }] });
     useCrusadeStore.setState({ units: [unit] });
 
     const chain = mockChain({ data: null, error: null });
@@ -186,7 +186,7 @@ describe('addHonour', () => {
     await useCrusadeStore.getState().addHonour('cu-1', {
       name: 'Veteran',
       description: 'Survived 5 battles',
-      effect: '+1 Ld',
+      type: 'battle_honour',
     });
 
     expect(useCrusadeStore.getState().units[0].honours).toHaveLength(2);
@@ -205,7 +205,7 @@ describe('addScar / removeScar', () => {
     await useCrusadeStore.getState().addScar('cu-1', {
       name: 'Battle Wound',
       description: 'Injured in combat',
-      effect: '-1 M',
+      type: 'battle_scar',
     });
 
     expect(useCrusadeStore.getState().units[0].scars).toHaveLength(1);
@@ -214,8 +214,8 @@ describe('addScar / removeScar', () => {
   it('removes scar by index', async () => {
     const unit = mockUnit({
       scars: [
-        { name: 'Scar A', description: 'a', effect: '-1' },
-        { name: 'Scar B', description: 'b', effect: '-2' },
+        { name: 'Scar A', description: 'a', type: 'battle_scar' as const },
+        { name: 'Scar B', description: 'b', type: 'battle_scar' as const },
       ],
     });
     useCrusadeStore.setState({ units: [unit] });
@@ -295,6 +295,6 @@ describe('updateCampaign', () => {
 describe('resetGame (no data loss)', () => {
   it('resetGame is not on crusade store', () => {
     // Verify crusade store doesn't have a resetGame — that's the game session store
-    expect((useCrusadeStore.getState() as Record<string, unknown>).resetGame).toBeUndefined();
+    expect((useCrusadeStore.getState() as unknown as Record<string, unknown>).resetGame).toBeUndefined();
   });
 });
