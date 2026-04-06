@@ -45,6 +45,7 @@ export function CreateListModal({ onClose, onCreated }: CreateListModalProps) {
     e.preventDefault();
     if (!name || !factionId) return;
     setSaving(true);
+    setError(null);
 
     // Auto-select the first available detachment for this faction
     const faction = factions.find(f => f.id === factionId);
@@ -77,12 +78,10 @@ export function CreateListModal({ onClose, onCreated }: CreateListModalProps) {
     });
 
     if (insertError) {
-      setError('Failed to create list. Please try again.');
-      setSaving(false);
-      return;
+      setError(insertError.message);
+    } else {
+      onCreated();
     }
-
-    onCreated();
     setSaving(false);
   }
 
@@ -109,12 +108,7 @@ export function CreateListModal({ onClose, onCreated }: CreateListModalProps) {
         onClick={(e) => e.stopPropagation()}
       >
         <h2 id="create-list-title" className="modal-panel__title">New Army List</h2>
-        {error && (
-          <div className="form-error" style={{ color: 'var(--danger)', marginBottom: 'var(--space-sm)', fontSize: '0.9rem' }}>
-            {error}
-          </div>
-        )}
-        <form onSubmit={handleSubmit} className="create-list-form" onChange={() => setError(null)}>
+        <form onSubmit={handleSubmit} className="create-list-form">
           <div className="form-group">
             <label>List Name</label>
             <input
@@ -156,6 +150,12 @@ export function CreateListModal({ onClose, onCreated }: CreateListModalProps) {
               ))}
             </div>
           </div>
+
+          {error && (
+            <div className="validation-banner validation-banner--error">
+              {error}
+            </div>
+          )}
 
           <div className="modal-panel__actions">
             <button type="button" className="btn" onClick={onClose}>
