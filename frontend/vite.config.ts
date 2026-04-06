@@ -11,6 +11,7 @@ export default defineConfig({
         manualChunks: {
           'supabase': ['@supabase/supabase-js'],
           'router': ['react-router-dom'],
+          'sentry': ['@sentry/react'],
         },
       },
     },
