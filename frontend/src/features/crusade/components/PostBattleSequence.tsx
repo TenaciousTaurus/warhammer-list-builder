@@ -97,7 +97,7 @@ export function PostBattleSequence({ battleId, onComplete }: PostBattleSequenceP
         return (
           <div className="post-battle__content">
             <h3 className="post-battle__content-title">Select Participating Units</h3>
-            <p style={{ color: 'var(--color-text-secondary)', fontSize: 'var(--text-sm)', marginBottom: 'var(--space-md)' }}>
+            <p className="post-battle__description">
               Check the units that fought in this battle and record their kills and survival.
             </p>
             <div className="battle-log__unit-select">
@@ -117,11 +117,11 @@ export function PostBattleSequence({ battleId, onComplete }: PostBattleSequenceP
                       </span>
                     </label>
                     {isSelected && participation && (
-                      <div style={{ display: 'flex', gap: 'var(--space-md)', paddingLeft: 'var(--space-xl)', paddingBottom: 'var(--space-sm)' }}>
-                        <div className="battle-log__field" style={{ flex: 1 }}>
-                          <label className="battle-log__label">Kills</label>
+                      <div className="post-battle__participation-detail">
+                        <div className="post-battle__participation-field form-group">
+                          <label>Kills</label>
                           <input
-                            className="battle-log__vp-input"
+                            className="form-input"
                             type="number"
                             min={0}
                             value={participation.kills}
@@ -142,7 +142,7 @@ export function PostBattleSequence({ battleId, onComplete }: PostBattleSequenceP
                 );
               })}
               {activeUnits.length === 0 && (
-                <p style={{ color: 'var(--color-text-muted)', textAlign: 'center', padding: 'var(--space-md)' }}>
+                <p className="campaign-detail__empty">
                   No active units in roster.
                 </p>
               )}
@@ -155,8 +155,8 @@ export function PostBattleSequence({ battleId, onComplete }: PostBattleSequenceP
           <div className="post-battle__content">
             <h3 className="post-battle__content-title">Award Experience</h3>
             {!xpAwarded ? (
-              <div style={{ textAlign: 'center', padding: 'var(--space-lg)' }}>
-                <p style={{ color: 'var(--color-text-secondary)', marginBottom: 'var(--space-lg)' }}>
+              <div className="post-battle__centered">
+                <p className="post-battle__description">
                   Award XP to all participating units based on the battle results.
                   Units that participated earn XP, with bonus XP for surviving and scoring kills.
                 </p>
@@ -170,15 +170,15 @@ export function PostBattleSequence({ battleId, onComplete }: PostBattleSequenceP
                 </button>
               </div>
             ) : (
-              <div style={{ textAlign: 'center', padding: 'var(--space-lg)' }}>
-                <p style={{ color: 'var(--color-green-bright)', fontSize: 'var(--text-md)', fontWeight: 600 }}>
+              <div className="post-battle__centered">
+                <p className="post-battle__xp-success">
                   XP has been awarded to all participating units.
                 </p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)', marginTop: 'var(--space-md)' }}>
+                <div className="post-battle__xp-list">
                   {units.filter((u) => participations.has(u.id)).map((unit) => (
-                    <div key={unit.id} style={{ display: 'flex', justifyContent: 'space-between', padding: 'var(--space-xs) var(--space-sm)', background: 'var(--glass-bg-light)', borderRadius: 'var(--radius-sm)' }}>
-                      <span style={{ color: 'var(--color-text-primary)' }}>{unit.custom_name || unit.units?.name || 'Unknown Unit'}</span>
-                      <span style={{ color: 'var(--color-gold)', fontFamily: 'var(--font-display)', fontWeight: 700 }}>{unit.xp} XP</span>
+                    <div key={unit.id} className="post-battle__xp-row">
+                      <span className="post-battle__xp-name">{unit.custom_name || unit.units?.name || 'Unknown Unit'}</span>
+                      <span className="post-battle__xp-value">{unit.xp} XP</span>
                     </div>
                   ))}
                 </div>
@@ -191,14 +191,14 @@ export function PostBattleSequence({ battleId, onComplete }: PostBattleSequenceP
         return (
           <div className="post-battle__content">
             <h3 className="post-battle__content-title">Honours & Scars</h3>
-            <p style={{ color: 'var(--color-text-secondary)', fontSize: 'var(--text-sm)', marginBottom: 'var(--space-md)' }}>
+            <p className="post-battle__description">
               Award battle honours to units that crossed XP thresholds, and apply battle scars to units that were destroyed or performed poorly.
             </p>
 
-            <div className="battle-log__field">
-              <label className="battle-log__label">Select Unit</label>
+            <div className="form-group">
+              <label>Select Unit</label>
               <select
-                className="battle-log__opponent-select"
+                className="form-select"
                 value={selectedHonourUnit ?? ''}
                 onChange={(e) => setSelectedHonourUnit(e.target.value || null)}
               >
@@ -231,7 +231,7 @@ export function PostBattleSequence({ battleId, onComplete }: PostBattleSequenceP
         return (
           <div className="post-battle__content">
             <h3 className="post-battle__content-title">Requisitions</h3>
-            <p style={{ color: 'var(--color-text-secondary)', fontSize: 'var(--text-sm)', marginBottom: 'var(--space-md)' }}>
+            <p className="post-battle__description">
               Spend Requisition Points to upgrade your roster, replace destroyed units, or remove battle scars.
             </p>
             <RequisitionPanel

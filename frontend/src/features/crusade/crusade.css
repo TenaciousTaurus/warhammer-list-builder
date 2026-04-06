@@ -1039,6 +1039,22 @@
   flex-shrink: 0;
 }
 
+.scar-badge__remove {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0 2px;
+  font-size: inherit;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity var(--transition-fast);
+}
+
+.scar-badge__remove:hover {
+  opacity: 1;
+}
+
 /* ========================================
    POST-BATTLE WIZARD
    ======================================== */
@@ -1180,6 +1196,61 @@
 .post-battle__finish-btn:hover {
   opacity: 0.9;
   box-shadow: var(--shadow-glow-green);
+}
+
+/* Post-battle utility classes */
+
+.post-battle__description {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-md);
+}
+
+.post-battle__centered {
+  text-align: center;
+  padding: var(--space-lg);
+}
+
+.post-battle__participation-detail {
+  display: flex;
+  gap: var(--space-md);
+  padding-left: var(--space-xl);
+  padding-bottom: var(--space-sm);
+}
+
+.post-battle__participation-field {
+  flex: 1;
+}
+
+.post-battle__xp-success {
+  color: var(--color-green-bright);
+  font-size: var(--text-md);
+  font-weight: 600;
+}
+
+.post-battle__xp-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.post-battle__xp-row {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--glass-bg-light);
+  border-radius: var(--radius-sm);
+}
+
+.post-battle__xp-name {
+  color: var(--color-text-primary);
+}
+
+.post-battle__xp-value {
+  color: var(--color-gold);
+  font-family: var(--font-display);
+  font-weight: 700;
 }
 
 /* ========================================
