@@ -5,6 +5,10 @@ import './index.css'
 import './themes.css'
 import App from './App.tsx'
 import { useAuthStore } from './shared/stores/authStore.ts'
+import { initSentry } from './sentry.ts'
+
+// Initialize Sentry before anything else so it captures all errors.
+initSentry();
 
 // Initialize Sentry before anything else.
 // Only runs in production — no noise during local dev.

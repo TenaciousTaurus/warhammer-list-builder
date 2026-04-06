@@ -175,7 +175,7 @@ function SentryFallback({ error, resetError }: { error: unknown; resetError: () 
   const message = error instanceof Error ? error.message : 'An unexpected error occurred';
   return (
     <div style={{ padding: 'var(--space-lg)', textAlign: 'center' }}>
-      <h2>Something went wrong</h2>
+      <h2 style={{ color: 'var(--gold)', fontFamily: 'var(--font-display)' }}>Something went wrong</h2>
       <p style={{ color: 'var(--text-secondary)', margin: 'var(--space-md) 0' }}>
         {message}
       </p>
@@ -188,8 +188,8 @@ function SentryFallback({ error, resetError }: { error: unknown; resetError: () 
 
 function App() {
   return (
+    <Sentry.ErrorBoundary fallback={SentryFallback}>
     <BrowserRouter>
-      <Sentry.ErrorBoundary fallback={SentryFallback}>
       <div className="app-layout">
         <AppHeader />
         <main className="app-main">
@@ -232,8 +232,8 @@ function App() {
           </Suspense>
         </main>
       </div>
-      </Sentry.ErrorBoundary>
     </BrowserRouter>
+    </Sentry.ErrorBoundary>
   );
 }
 
