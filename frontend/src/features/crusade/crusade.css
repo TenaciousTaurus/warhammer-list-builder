@@ -375,6 +375,124 @@
   margin: 0 0 var(--space-md);
 }
 
+/* Campaign detail utility classes */
+
+.campaign-detail__description {
+  color: var(--color-text-secondary);
+  margin-top: var(--space-xs);
+}
+
+.campaign-detail__info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.campaign-detail__stat-label {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.campaign-detail__stat-value {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.campaign-detail__stat-value--capitalize {
+  text-transform: capitalize;
+}
+
+.campaign-detail__member-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.campaign-detail__member-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--glass-bg-light);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+}
+
+.campaign-detail__member-name {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.campaign-detail__member-role {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}
+
+.campaign-detail__member-role--owner {
+  color: var(--color-gold);
+}
+
+.campaign-detail__section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-md);
+}
+
+.campaign-detail__section-header .campaign-detail__section-title {
+  margin: 0;
+}
+
+.campaign-detail__empty {
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: var(--space-lg);
+}
+
+.campaign-detail__battle-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.campaign-detail__battle-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-md);
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--glass-bg-light);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: border-color var(--transition-normal);
+}
+
+.campaign-detail__battle-row:hover {
+  border-color: var(--glass-border-hover);
+}
+
+.campaign-detail__battle-players {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.campaign-detail__battle-meta {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.campaign-detail__battle-score {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--color-gold);
+}
+
 /* ========================================
    CAMPAIGN LEADERBOARD
    ======================================== */
