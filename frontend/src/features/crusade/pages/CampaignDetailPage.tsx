@@ -110,7 +110,7 @@ export function CampaignDetailPage() {
         <div>
           <h1 className="campaign-detail__title">{activeCampaign.name}</h1>
           {activeCampaign.description && (
-            <p style={{ color: 'var(--color-text-secondary)', marginTop: 'var(--space-xs)' }}>
+            <p className="campaign-detail__description">
               {activeCampaign.description}
             </p>
           )}
@@ -131,7 +131,7 @@ export function CampaignDetailPage() {
       </div>
 
       {error && (
-        <div style={{ color: 'var(--color-red-bright)', background: 'rgba(192,64,64,0.1)', padding: 'var(--space-md)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(192,64,64,0.3)' }}>
+        <div className="validation-banner validation-banner--error">
           {error}
         </div>
       )}
@@ -154,50 +154,34 @@ export function CampaignDetailPage() {
       {activeTab === 'overview' && (
         <div className="campaign-detail__section">
           <h3 className="campaign-detail__section-title">Campaign Info</h3>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 'var(--space-md)', marginBottom: 'var(--space-lg)' }}>
+          <div className="campaign-detail__info-grid">
             <div>
-              <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Status</div>
-              <div style={{ fontWeight: 600, color: 'var(--color-text-primary)', textTransform: 'capitalize' }}>{activeCampaign.status}</div>
+              <div className="campaign-detail__stat-label">Status</div>
+              <div className="campaign-detail__stat-value campaign-detail__stat-value--capitalize">{activeCampaign.status}</div>
             </div>
             <div>
-              <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Points Limit</div>
-              <div style={{ fontWeight: 600, color: 'var(--color-text-primary)' }}>{activeCampaign.points_limit} pts</div>
+              <div className="campaign-detail__stat-label">Points Limit</div>
+              <div className="campaign-detail__stat-value">{activeCampaign.points_limit} pts</div>
             </div>
             <div>
-              <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Players</div>
-              <div style={{ fontWeight: 600, color: 'var(--color-text-primary)' }}>{members.length} / {activeCampaign.max_players}</div>
+              <div className="campaign-detail__stat-label">Players</div>
+              <div className="campaign-detail__stat-value">{members.length} / {activeCampaign.max_players}</div>
             </div>
             <div>
-              <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Created</div>
-              <div style={{ fontWeight: 600, color: 'var(--color-text-primary)' }}>{formatDate(activeCampaign.created_at)}</div>
+              <div className="campaign-detail__stat-label">Created</div>
+              <div className="campaign-detail__stat-value">{formatDate(activeCampaign.created_at)}</div>
             </div>
           </div>
 
           <h3 className="campaign-detail__section-title">Members</h3>
           {members.length === 0 ? (
-            <p style={{ color: 'var(--color-text-muted)' }}>No members yet.</p>
+            <p className="campaign-detail__empty">No members yet.</p>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-xs)' }}>
+            <div className="campaign-detail__member-list">
               {members.map((member) => (
-                <div
-                  key={member.id}
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    padding: 'var(--space-sm) var(--space-md)',
-                    background: 'var(--glass-bg-light)',
-                    border: '1px solid var(--glass-border)',
-                    borderRadius: 'var(--radius-md)',
-                  }}
-                >
-                  <span style={{ fontWeight: 600, color: 'var(--color-text-primary)' }}>{member.display_name}</span>
-                  <span style={{
-                    fontSize: 'var(--text-xs)',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.06em',
-                    color: member.role === 'owner' ? 'var(--color-gold)' : 'var(--color-text-muted)',
-                  }}>
+                <div key={member.id} className="campaign-detail__member-row">
+                  <span className="campaign-detail__member-name">{member.display_name}</span>
+                  <span className={`campaign-detail__member-role${member.role === 'owner' ? ' campaign-detail__member-role--owner' : ''}`}>
                     {member.role}
                   </span>
                 </div>
@@ -210,16 +194,16 @@ export function CampaignDetailPage() {
       {activeTab === 'roster' && (
         <div className="campaign-detail__section">
           {!myMember ? (
-            <p style={{ color: 'var(--color-text-muted)', textAlign: 'center', padding: 'var(--space-lg)' }}>
+            <p className="campaign-detail__empty">
               You are not a member of this campaign.
             </p>
           ) : !roster ? (
-            <div style={{ textAlign: 'center', padding: 'var(--space-lg)' }}>
-              <p style={{ color: 'var(--color-text-muted)', marginBottom: 'var(--space-md)' }}>
+            <div className="campaign-detail__empty">
+              <p>
                 You haven&apos;t created a roster yet. Go to roster management to set up your Crusade force.
               </p>
               <button
-                className="campaigns-page__create-btn"
+                className="btn btn--primary"
                 onClick={() => navigate(`/campaign/${id}/roster/${myMember.id}`)}
                 type="button"
               >
@@ -228,10 +212,10 @@ export function CampaignDetailPage() {
             </div>
           ) : (
             <>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-md)' }}>
-                <h3 className="campaign-detail__section-title" style={{ margin: 0 }}>{roster.name}</h3>
+              <div className="campaign-detail__section-header">
+                <h3 className="campaign-detail__section-title">{roster.name}</h3>
                 <button
-                  className="campaigns-page__join-btn"
+                  className="btn"
                   onClick={() => navigate(`/campaign/${id}/roster/${myMember.id}`)}
                   type="button"
                 >
@@ -239,7 +223,7 @@ export function CampaignDetailPage() {
                 </button>
               </div>
               {units.length === 0 ? (
-                <p style={{ color: 'var(--color-text-muted)', textAlign: 'center', padding: 'var(--space-md)' }}>
+                <p className="campaign-detail__empty">
                   No units in your roster yet.
                 </p>
               ) : (
@@ -261,10 +245,10 @@ export function CampaignDetailPage() {
 
       {activeTab === 'battles' && (
         <div className="campaign-detail__section">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-md)' }}>
-            <h3 className="campaign-detail__section-title" style={{ margin: 0 }}>Battle History</h3>
+          <div className="campaign-detail__section-header">
+            <h3 className="campaign-detail__section-title">Battle History</h3>
             <button
-              className="campaigns-page__create-btn"
+              className="btn btn--primary"
               onClick={() => navigate(`/campaign/${id}/battle/new`)}
               type="button"
             >
@@ -272,11 +256,11 @@ export function CampaignDetailPage() {
             </button>
           </div>
           {battles.length === 0 ? (
-            <p style={{ color: 'var(--color-text-muted)', textAlign: 'center', padding: 'var(--space-lg)' }}>
+            <p className="campaign-detail__empty">
               No battles recorded yet. Log your first battle to start tracking your campaign progress.
             </p>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-sm)' }}>
+            <div className="campaign-detail__battle-list">
               {battles.map((battle) => {
                 const p1 = members.find((m) => m.id === battle.player1_member_id);
                 const p2 = members.find((m) => m.id === battle.player2_member_id);
@@ -287,20 +271,19 @@ export function CampaignDetailPage() {
                 return (
                   <div
                     key={battle.id}
-                    className="campaign-leaderboard__row"
-                    style={{ gridTemplateColumns: '1fr auto', cursor: 'pointer' }}
+                    className="campaign-detail__battle-row"
                     onClick={() => navigate(`/campaign/${id}/battle/${battle.id}`)}
                   >
                     <div>
-                      <div style={{ fontWeight: 600, color: 'var(--color-text-primary)' }}>
+                      <div className="campaign-detail__battle-players">
                         {p1?.display_name ?? 'Unknown'} vs {p2?.display_name ?? 'Unknown'}
                       </div>
-                      <div style={{ fontSize: 'var(--text-xs)', color: 'var(--color-text-muted)' }}>
+                      <div className="campaign-detail__battle-meta">
                         {formatDate(battle.played_at)}
                         {battle.is_draw ? ' - Draw' : winner ? ` - ${winner.display_name} won` : ''}
                       </div>
                     </div>
-                    <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, color: 'var(--color-gold)' }}>
+                    <div className="campaign-detail__battle-score">
                       {battle.player1_vp} - {battle.player2_vp}
                     </div>
                   </div>

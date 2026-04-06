@@ -51,11 +51,11 @@ export function HonourScarEditor({
     <div className="honour-scar-editor">
       {/* Honours Section */}
       <div className="honour-scar-editor__section">
-        <div className="honour-scar-editor__section-header">
+        <div className="campaign-detail__section-header">
           <h4 className="campaign-detail__section-title">Battle Honours</h4>
           {!addingHonour && (
             <button
-              className="campaigns-page__join-btn"
+              className="btn"
               onClick={() => setAddingHonour(true)}
               type="button"
             >
@@ -65,7 +65,7 @@ export function HonourScarEditor({
         </div>
 
         {honours.length === 0 && !addingHonour && (
-          <p style={{ color: 'var(--color-text-muted)', fontSize: 'var(--text-sm)' }}>
+          <p className="crusade-unit-detail__notes-text crusade-unit-detail__notes-text--empty">
             No battle honours earned yet.
           </p>
         )}
@@ -81,41 +81,39 @@ export function HonourScarEditor({
 
         {addingHonour && (
           <div className="honour-scar-editor__form">
-            <div className="battle-log__field">
-              <label className="battle-log__label" htmlFor="honour-name">Honour Name</label>
+            <div className="form-group">
+              <label htmlFor="honour-name">Honour Name</label>
               <input
                 id="honour-name"
-                className="battle-log__vp-input"
+                className="form-input"
                 type="text"
                 value={honourName}
                 onChange={(e) => setHonourName(e.target.value)}
                 placeholder="e.g. Slayer of Champions"
                 autoFocus
-                style={{ textAlign: 'left' }}
               />
             </div>
-            <div className="battle-log__field">
-              <label className="battle-log__label" htmlFor="honour-desc">Description</label>
+            <div className="form-group">
+              <label htmlFor="honour-desc">Description</label>
               <input
                 id="honour-desc"
-                className="battle-log__vp-input"
+                className="form-input"
                 type="text"
                 value={honourDesc}
                 onChange={(e) => setHonourDesc(e.target.value)}
                 placeholder="Optional description"
-                style={{ textAlign: 'left' }}
               />
             </div>
-            <div className="join-modal__actions">
+            <div className="campaign-create__actions">
               <button
-                className="join-modal__cancel-btn"
+                className="btn"
                 onClick={() => { setAddingHonour(false); setHonourName(''); setHonourDesc(''); }}
                 type="button"
               >
                 Cancel
               </button>
               <button
-                className="join-modal__submit-btn"
+                className="btn btn--primary"
                 onClick={handleAddHonour}
                 disabled={!honourName.trim()}
                 type="button"
@@ -129,11 +127,11 @@ export function HonourScarEditor({
 
       {/* Scars Section */}
       <div className="honour-scar-editor__section">
-        <div className="honour-scar-editor__section-header">
+        <div className="campaign-detail__section-header">
           <h4 className="campaign-detail__section-title">Battle Scars</h4>
           {!addingScar && (
             <button
-              className="campaigns-page__join-btn"
+              className="btn"
               onClick={() => setAddingScar(true)}
               type="button"
             >
@@ -143,7 +141,7 @@ export function HonourScarEditor({
         </div>
 
         {scars.length === 0 && !addingScar && (
-          <p style={{ color: 'var(--color-text-muted)', fontSize: 'var(--text-sm)' }}>
+          <p className="crusade-unit-detail__notes-text crusade-unit-detail__notes-text--empty">
             No battle scars sustained.
           </p>
         )}
@@ -158,16 +156,6 @@ export function HonourScarEditor({
                 onClick={(e) => { e.stopPropagation(); onRemoveScar(index); }}
                 type="button"
                 title="Remove scar"
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: 'inherit',
-                  cursor: 'pointer',
-                  padding: '0 2px',
-                  fontSize: 'inherit',
-                  lineHeight: 1,
-                  opacity: 0.7,
-                }}
               >
                 &#215;
               </button>
@@ -177,41 +165,39 @@ export function HonourScarEditor({
 
         {addingScar && (
           <div className="honour-scar-editor__form">
-            <div className="battle-log__field">
-              <label className="battle-log__label" htmlFor="scar-name">Scar Name</label>
+            <div className="form-group">
+              <label htmlFor="scar-name">Scar Name</label>
               <input
                 id="scar-name"
-                className="battle-log__vp-input"
+                className="form-input"
                 type="text"
                 value={scarName}
                 onChange={(e) => setScarName(e.target.value)}
                 placeholder="e.g. Crippling Damage"
                 autoFocus
-                style={{ textAlign: 'left' }}
               />
             </div>
-            <div className="battle-log__field">
-              <label className="battle-log__label" htmlFor="scar-desc">Description</label>
+            <div className="form-group">
+              <label htmlFor="scar-desc">Description</label>
               <input
                 id="scar-desc"
-                className="battle-log__vp-input"
+                className="form-input"
                 type="text"
                 value={scarDesc}
                 onChange={(e) => setScarDesc(e.target.value)}
                 placeholder="Optional description"
-                style={{ textAlign: 'left' }}
               />
             </div>
-            <div className="join-modal__actions">
+            <div className="campaign-create__actions">
               <button
-                className="join-modal__cancel-btn"
+                className="btn"
                 onClick={() => { setAddingScar(false); setScarName(''); setScarDesc(''); }}
                 type="button"
               >
                 Cancel
               </button>
               <button
-                className="join-modal__submit-btn"
+                className="btn btn--primary"
                 onClick={handleAddScar}
                 disabled={!scarName.trim()}
                 type="button"

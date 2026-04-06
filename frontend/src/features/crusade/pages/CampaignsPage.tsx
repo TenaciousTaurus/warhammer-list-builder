@@ -125,85 +125,81 @@ export function CampaignsPage() {
       </div>
 
       {error && (
-        <div style={{ color: 'var(--color-red-bright)', background: 'rgba(192,64,64,0.1)', padding: 'var(--space-md)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(192,64,64,0.3)' }}>
+        <div className="validation-banner validation-banner--error">
           {error}
         </div>
       )}
 
       {/* Inline Create Form */}
       {showCreate && (
-        <div className="campaign-detail__section">
-          <h3 className="campaign-detail__section-title">New Campaign</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
-            <div className="battle-log__field">
-              <label className="battle-log__label" htmlFor="campaign-name">Campaign Name</label>
+        <div className="campaign-create__form">
+          <h3 className="campaign-create__title">New Campaign</h3>
+          <div className="form-group">
+            <label htmlFor="campaign-name">Campaign Name</label>
+            <input
+              id="campaign-name"
+              className="form-input"
+              type="text"
+              value={createName}
+              onChange={(e) => setCreateName(e.target.value)}
+              placeholder="Enter campaign name"
+              autoFocus
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="campaign-desc">Description (optional)</label>
+            <input
+              id="campaign-desc"
+              className="form-input"
+              type="text"
+              value={createDescription}
+              onChange={(e) => setCreateDescription(e.target.value)}
+              placeholder="What is this campaign about?"
+            />
+          </div>
+          <div className="campaign-create__row">
+            <div className="form-group">
+              <label htmlFor="campaign-max-players">Max Players</label>
               <input
-                id="campaign-name"
-                className="battle-log__vp-input"
-                type="text"
-                value={createName}
-                onChange={(e) => setCreateName(e.target.value)}
-                placeholder="Enter campaign name"
-                style={{ textAlign: 'left' }}
-                autoFocus
+                id="campaign-max-players"
+                className="form-input"
+                type="number"
+                min={2}
+                max={32}
+                value={createMaxPlayers}
+                onChange={(e) => setCreateMaxPlayers(Math.max(2, parseInt(e.target.value) || 2))}
               />
             </div>
-            <div className="battle-log__field">
-              <label className="battle-log__label" htmlFor="campaign-desc">Description (optional)</label>
+            <div className="form-group">
+              <label htmlFor="campaign-points-limit">Points Limit</label>
               <input
-                id="campaign-desc"
-                className="battle-log__vp-input"
-                type="text"
-                value={createDescription}
-                onChange={(e) => setCreateDescription(e.target.value)}
-                placeholder="What is this campaign about?"
-                style={{ textAlign: 'left' }}
+                id="campaign-points-limit"
+                className="form-input"
+                type="number"
+                min={500}
+                max={3000}
+                step={100}
+                value={createPointsLimit}
+                onChange={(e) => setCreatePointsLimit(Math.max(500, parseInt(e.target.value) || 500))}
               />
             </div>
-            <div className="battle-log__vp-inputs">
-              <div className="battle-log__vp-field">
-                <label className="battle-log__vp-label" htmlFor="campaign-max-players">Max Players</label>
-                <input
-                  id="campaign-max-players"
-                  className="battle-log__vp-input"
-                  type="number"
-                  min={2}
-                  max={32}
-                  value={createMaxPlayers}
-                  onChange={(e) => setCreateMaxPlayers(Math.max(2, parseInt(e.target.value) || 2))}
-                />
-              </div>
-              <div className="battle-log__vp-field">
-                <label className="battle-log__vp-label" htmlFor="campaign-points-limit">Points Limit</label>
-                <input
-                  id="campaign-points-limit"
-                  className="battle-log__vp-input"
-                  type="number"
-                  min={500}
-                  max={3000}
-                  step={100}
-                  value={createPointsLimit}
-                  onChange={(e) => setCreatePointsLimit(Math.max(500, parseInt(e.target.value) || 500))}
-                />
-              </div>
-            </div>
-            <div className="join-modal__actions">
-              <button
-                className="join-modal__cancel-btn"
-                onClick={() => setShowCreate(false)}
-                type="button"
-              >
-                Cancel
-              </button>
-              <button
-                className="join-modal__submit-btn"
-                onClick={handleCreate}
-                disabled={!createName.trim() || creating}
-                type="button"
-              >
-                {creating ? 'Creating...' : 'Create'}
-              </button>
-            </div>
+          </div>
+          <div className="campaign-create__actions">
+            <button
+              className="btn"
+              onClick={() => setShowCreate(false)}
+              type="button"
+            >
+              Cancel
+            </button>
+            <button
+              className="btn btn--primary"
+              onClick={handleCreate}
+              disabled={!createName.trim() || creating}
+              type="button"
+            >
+              {creating ? 'Creating...' : 'Create'}
+            </button>
           </div>
         </div>
       )}
