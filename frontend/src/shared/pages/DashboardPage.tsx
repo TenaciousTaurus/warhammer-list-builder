@@ -62,41 +62,9 @@ export function DashboardPage() {
   const totalGames = completedGames.length;
   const winRate = totalGames > 0 ? Math.round((wins / totalGames) * 100) : 0;
 
-  const isNewUser = recentLists.length === 0 && totalGames === 0;
-
   return (
     <div className="dashboard">
       <h2 className="dashboard__title">Command Center</h2>
-
-      {isNewUser && (
-        <div className="dashboard__welcome card">
-          <h3 className="dashboard__welcome-title">Welcome to WarForge, Commander</h3>
-          <p className="dashboard__welcome-subtitle">Your all-in-one Warhammer 40,000 companion. Here's how to get started:</p>
-          <div className="dashboard__welcome-steps">
-            <Link to="/lists" className="dashboard__welcome-step">
-              <span className="dashboard__welcome-step-num">1</span>
-              <span className="dashboard__welcome-step-text">
-                <strong>Create an army list</strong>
-                <span>Pick your faction, add units, and equip enhancements</span>
-              </span>
-            </Link>
-            <Link to="/units" className="dashboard__welcome-step">
-              <span className="dashboard__welcome-step-num">2</span>
-              <span className="dashboard__welcome-step-text">
-                <strong>Browse datasheets</strong>
-                <span>Explore unit stats, weapons, and abilities across all factions</span>
-              </span>
-            </Link>
-            <Link to="/collection" className="dashboard__welcome-step">
-              <span className="dashboard__welcome-step-num">3</span>
-              <span className="dashboard__welcome-step-text">
-                <strong>Track your collection</strong>
-                <span>Log your models, painting progress, and hobby projects</span>
-              </span>
-            </Link>
-          </div>
-        </div>
-      )}
 
       <div className="dashboard__grid">
         {/* Active Game Widget */}
@@ -186,17 +154,39 @@ export function DashboardPage() {
           </div>
         </div>
 
-        {/* Hobby Progress */}
+        {/* Collection & Hobby */}
         <div className="dashboard__card dashboard__card--hobby">
           <div className="dashboard__card-header">
             <span className="dashboard__card-icon">&#127912;</span>
-            <h3 className="dashboard__card-title">Hobby Progress</h3>
+            <h3 className="dashboard__card-title">Collection &amp; Hobby</h3>
+            <Link to="/collection" className="dashboard__card-link">Open</Link>
           </div>
           <div className="dashboard__card-body">
-            <p className="dashboard__empty">Track your models, paint recipes, and hobby progress.</p>
-            <Link to="/collection" className="btn btn--sm btn--primary" style={{ marginTop: 'var(--space-sm)' }}>
-              Go to Collection
-            </Link>
+            <p className="dashboard__empty-hint">
+              Track your miniatures, painting progress, and paint recipes.
+            </p>
+            <div className="dashboard__quick-links">
+              <Link to="/collection" className="dashboard__quick-link">My Collection</Link>
+              <Link to="/collection/recipes" className="dashboard__quick-link">Paint Recipes</Link>
+              <Link to="/collection/paints" className="dashboard__quick-link">Paint Inventory</Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Access */}
+        <div className="dashboard__card dashboard__card--explore">
+          <div className="dashboard__card-header">
+            <span className="dashboard__card-icon">&#128269;</span>
+            <h3 className="dashboard__card-title">Explore</h3>
+          </div>
+          <div className="dashboard__card-body">
+            <div className="dashboard__quick-links">
+              <Link to="/units" className="dashboard__quick-link">Browse All Units</Link>
+              <Link to="/campaigns" className="dashboard__quick-link">Crusade Campaigns</Link>
+              <Link to="/tournaments" className="dashboard__quick-link">Tournaments</Link>
+              <Link to="/leagues" className="dashboard__quick-link">Leagues</Link>
+              <Link to="/friends" className="dashboard__quick-link">Friends &amp; Stats</Link>
+            </div>
           </div>
         </div>
       </div>

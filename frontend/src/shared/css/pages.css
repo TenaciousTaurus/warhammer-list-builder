@@ -590,78 +590,33 @@
   color: var(--color-text-muted);
 }
 
-/* Welcome Card (new user onboarding) */
-.dashboard__welcome {
-  margin-bottom: var(--space-lg);
-  padding: var(--space-lg);
-  border: 1px solid var(--color-gold);
-  background: rgba(201, 168, 76, 0.05);
-}
-
-.dashboard__welcome-title {
-  font-family: var(--font-display);
-  font-size: var(--text-xl);
-  color: var(--color-gold);
-  margin: 0 0 var(--space-xs);
-}
-
-.dashboard__welcome-subtitle {
-  color: var(--color-text-secondary);
-  margin: 0 0 var(--space-md);
-}
-
-.dashboard__welcome-steps {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
-}
-
-.dashboard__welcome-step {
-  display: flex;
-  align-items: center;
-  gap: var(--space-md);
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--radius-md);
-  background: var(--glass-bg);
-  text-decoration: none;
-  color: var(--color-text-primary);
-  transition: background var(--transition-fast), border-color var(--transition-fast);
-  border: 1px solid transparent;
-}
-
-.dashboard__welcome-step:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: var(--color-gold);
-}
-
-.dashboard__welcome-step-num {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--color-gold);
-  color: var(--color-bg-primary);
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: var(--text-sm);
-  flex-shrink: 0;
-}
-
-.dashboard__welcome-step-text {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.dashboard__welcome-step-text strong {
-  color: var(--color-text-primary);
-}
-
-.dashboard__welcome-step-text span {
-  font-size: var(--text-sm);
+.dashboard__empty-hint {
   color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.dashboard__quick-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.dashboard__quick-link {
+  display: inline-block;
+  padding: var(--space-xs) var(--space-sm);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.dashboard__quick-link:hover {
+  color: var(--color-gold);
+  border-color: var(--color-gold-dim, rgba(201, 168, 76, 0.3));
 }
 
 @media (max-width: 768px) {
