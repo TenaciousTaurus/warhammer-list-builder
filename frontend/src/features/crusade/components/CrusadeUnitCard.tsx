@@ -67,15 +67,7 @@ export function CrusadeUnitCard({ unit, unitName, onClick }: CrusadeUnitCardProp
       )}
 
       {isDestroyed && (
-        <div className="crusade-unit-card__destroyed-banner" style={{
-          textAlign: 'center',
-          color: 'var(--color-red-bright)',
-          fontFamily: 'var(--font-display)',
-          fontWeight: 700,
-          fontSize: 'var(--text-sm)',
-          letterSpacing: '0.06em',
-          textTransform: 'uppercase',
-        }}>
+        <div className="crusade-unit-card__destroyed-banner">
           Destroyed
         </div>
       )}

@@ -102,6 +102,45 @@
 }
 
 /* ========================================
+   CAMPAIGN CREATE FORM
+   ======================================== */
+
+.campaign-create__form {
+  background: var(--gradient-card);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-md), var(--shadow-inset);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.campaign-create__title {
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  color: var(--color-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0;
+}
+
+.campaign-create__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+
+.campaign-create__actions {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: flex-end;
+}
+
+/* ========================================
    CAMPAIGN CARD
    ======================================== */
 
@@ -334,6 +373,124 @@
   text-transform: uppercase;
   color: var(--color-text-primary);
   margin: 0 0 var(--space-md);
+}
+
+/* Campaign detail utility classes */
+
+.campaign-detail__description {
+  color: var(--color-text-secondary);
+  margin-top: var(--space-xs);
+}
+
+.campaign-detail__info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.campaign-detail__stat-label {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.campaign-detail__stat-value {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.campaign-detail__stat-value--capitalize {
+  text-transform: capitalize;
+}
+
+.campaign-detail__member-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.campaign-detail__member-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--glass-bg-light);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+}
+
+.campaign-detail__member-name {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.campaign-detail__member-role {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}
+
+.campaign-detail__member-role--owner {
+  color: var(--color-gold);
+}
+
+.campaign-detail__section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-md);
+}
+
+.campaign-detail__section-header .campaign-detail__section-title {
+  margin: 0;
+}
+
+.campaign-detail__empty {
+  color: var(--color-text-muted);
+  text-align: center;
+  padding: var(--space-lg);
+}
+
+.campaign-detail__battle-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.campaign-detail__battle-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-md);
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--glass-bg-light);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: border-color var(--transition-normal);
+}
+
+.campaign-detail__battle-row:hover {
+  border-color: var(--glass-border-hover);
+}
+
+.campaign-detail__battle-players {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.campaign-detail__battle-meta {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.campaign-detail__battle-score {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--color-gold);
 }
 
 /* ========================================
@@ -697,6 +854,72 @@
   gap: var(--space-xs);
 }
 
+.crusade-unit-card__destroyed-banner {
+  text-align: center;
+  color: var(--color-red-bright);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-sm);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Unit detail page specific */
+
+.crusade-unit-detail__destroyed-banner {
+  text-align: center;
+  padding: var(--space-md);
+  background: rgba(192, 64, 64, 0.15);
+  border: 1px solid rgba(192, 64, 64, 0.3);
+  border-radius: var(--radius-lg);
+  color: var(--color-red-bright);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-md);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.crusade-unit-detail__name--destroyed {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.crusade-unit-detail__stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--space-md);
+}
+
+.crusade-unit-detail__notes-text {
+  font-size: var(--text-sm);
+  white-space: pre-wrap;
+  color: var(--color-text-secondary);
+}
+
+.crusade-unit-detail__notes-text--empty {
+  color: var(--color-text-muted);
+}
+
+.campaign-detail__section--danger {
+  border-color: rgba(192, 64, 64, 0.2);
+}
+
+.campaign-detail__section--danger .campaign-detail__section-title {
+  color: var(--color-red-bright);
+}
+
+.crusade-unit-detail__confirm-row {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: center;
+}
+
+.crusade-unit-detail__confirm-text {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+}
+
 /* ========================================
    XP BAR
    ======================================== */
@@ -814,6 +1037,22 @@
 .scar-badge__icon {
   font-size: var(--text-xs);
   flex-shrink: 0;
+}
+
+.scar-badge__remove {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0 2px;
+  font-size: inherit;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity var(--transition-fast);
+}
+
+.scar-badge__remove:hover {
+  opacity: 1;
 }
 
 /* ========================================
@@ -957,6 +1196,61 @@
 .post-battle__finish-btn:hover {
   opacity: 0.9;
   box-shadow: var(--shadow-glow-green);
+}
+
+/* Post-battle utility classes */
+
+.post-battle__description {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-md);
+}
+
+.post-battle__centered {
+  text-align: center;
+  padding: var(--space-lg);
+}
+
+.post-battle__participation-detail {
+  display: flex;
+  gap: var(--space-md);
+  padding-left: var(--space-xl);
+  padding-bottom: var(--space-sm);
+}
+
+.post-battle__participation-field {
+  flex: 1;
+}
+
+.post-battle__xp-success {
+  color: var(--color-green-bright);
+  font-size: var(--text-md);
+  font-weight: 600;
+}
+
+.post-battle__xp-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.post-battle__xp-row {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--glass-bg-light);
+  border-radius: var(--radius-sm);
+}
+
+.post-battle__xp-name {
+  color: var(--color-text-primary);
+}
+
+.post-battle__xp-value {
+  color: var(--color-gold);
+  font-family: var(--font-display);
+  font-weight: 700;
 }
 
 /* ========================================

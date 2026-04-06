@@ -33,6 +33,7 @@ export function TournamentsPage() {
   const [joinCode, setJoinCode] = useState('');
   const [createForm, setCreateForm] = useState({
     name: '',
+    description: '',
     format: 'swiss' as TournamentFormat,
     max_players: 8,
     points_limit: 2000,
@@ -70,6 +71,7 @@ export function TournamentsPage() {
       setShowCreateForm(false);
       setCreateForm({
         name: '',
+        description: '',
         format: 'swiss',
         max_players: 8,
         points_limit: 2000,
@@ -197,6 +199,18 @@ export function TournamentsPage() {
                 setCreateForm((prev) => ({ ...prev, name: e.target.value }))
               }
               placeholder="Tournament name..."
+            />
+          </div>
+          <div className="tournaments-page__form-field">
+            <label className="tournaments-page__label">Description (optional)</label>
+            <textarea
+              className="tournaments-page__textarea"
+              value={createForm.description}
+              onChange={(e) =>
+                setCreateForm((prev) => ({ ...prev, description: e.target.value }))
+              }
+              placeholder="Tournament description..."
+              rows={2}
             />
           </div>
           <div className="tournaments-page__form-field">
