@@ -1134,6 +1134,98 @@ function extractDetachments(root, entryIndex) {
 
   if (!detachmentGroup) return detachments;
 
+  // Build an index of detachment BSData entry IDs -> detachment names.
+  // Used for the "flat enhancement" fallback matching strategy.
+  const detEntryIdToName = new Map();
+  for (const entry of ensureArray(detachmentGroup?.selectionEntries?.selectionEntry)) {
+    if (entry['@_id'] && entry['@_name']) {
+      detEntryIdToName.set(entry['@_id'], entry['@_name']);
+    }
+  }
+
+  // Build a flat map of detachment name -> enhancements[] for factions that
+  // use a flat "Enhancements" group (no detachment-named sub-groups).
+  // Each enhancement's hidden modifier contains a lessThan condition on
+  // scope="force" whose childId is the detachment's BSData entry ID.
+  const flatEnhByDet = new Map();
+  for (const enhGroup of enhancementGroups) {
+    for (const enhEntry of ensureArray(enhGroup?.selectionEntries?.selectionEntry)) {
+      // Walk all modifiers looking for the detachment link.
+      // Two patterns exist:
+      // Pattern A: hidden="false" (default) + modifier sets hidden=true with lessThan/equalTo
+      //   → "hide if detachment NOT selected"
+      // Pattern B: hidden="true" (on entry) + modifierGroup sets hidden=false with atLeast
+      //   → "show if detachment IS selected"
+      let linkedDetName = null;
+
+      function collectAllConds(mod) {
+        return [
+          ...ensureArray(mod?.conditions?.condition),
+          ...ensureArray(mod?.conditionGroups?.conditionGroup).flatMap(cg => [
+            ...ensureArray(cg?.conditions?.condition),
+            ...ensureArray(cg?.conditionGroups?.conditionGroup).flatMap(cg2 =>
+              ensureArray(cg2?.conditions?.condition)
+            ),
+          ]),
+        ];
+      }
+
+      // Pattern A: modifier type="set" field="hidden" value="true"
+      for (const mod of ensureArray(enhEntry?.modifiers?.modifier)) {
+        if (mod['@_type'] === 'set' && mod['@_field'] === 'hidden' && mod['@_value'] === 'true') {
+          for (const cond of collectAllConds(mod)) {
+            const isHideIfMissing =
+              (cond['@_type'] === 'lessThan' || cond['@_type'] === 'equalTo') &&
+              (cond['@_scope'] === 'force' || cond['@_scope'] === 'roster');
+            if (isHideIfMissing && cond['@_childId']) {
+              const detName = detEntryIdToName.get(cond['@_childId']);
+              if (detName) { linkedDetName = detName; break; }
+            }
+          }
+          if (linkedDetName) break;
+        }
+      }
+
+      // Pattern B: entry hidden="true" + modifierGroup sets hidden=false with atLeast
+      if (!linkedDetName && enhEntry['@_hidden'] === 'true') {
+        for (const mg of ensureArray(enhEntry?.modifierGroups?.modifierGroup)) {
+          const mods = ensureArray(mg?.modifiers?.modifier);
+          const setsVisible = mods.some(m => m['@_type'] === 'set' && m['@_field'] === 'hidden' && m['@_value'] === 'false');
+          if (setsVisible) {
+            for (const cond of ensureArray(mg?.conditions?.condition)) {
+              if (cond['@_type'] === 'atLeast' &&
+                  (cond['@_scope'] === 'force' || cond['@_scope'] === 'roster') &&
+                  cond['@_childId']) {
+                const detName = detEntryIdToName.get(cond['@_childId']);
+                if (detName) { linkedDetName = detName; break; }
+              }
+            }
+            if (linkedDetName) break;
+          }
+        }
+      }
+      if (linkedDetName) {
+        if (!flatEnhByDet.has(linkedDetName)) flatEnhByDet.set(linkedDetName, []);
+        let enhPoints = 0;
+        for (const cost of ensureArray(enhEntry?.costs?.cost)) {
+          if (cost['@_name'] === 'pts') enhPoints = parseInt(cost['@_value']) || 0;
+        }
+        let enhDesc = '';
+        for (const profile of ensureArray(enhEntry?.profiles?.profile)) {
+          if (profile['@_typeName'] === 'Abilities') {
+            const chars = parseCharacteristics(profile);
+            enhDesc = chars.Description || '';
+          }
+        }
+        flatEnhByDet.get(linkedDetName).push({
+          name: enhEntry['@_name'],
+          points: enhPoints,
+          description: enhDesc,
+        });
+      }
+    }
+  }
+
   // Parse each detachment
   for (const entry of ensureArray(detachmentGroup?.selectionEntries?.selectionEntry)) {
     const detName = entry['@_name'];
@@ -1146,7 +1238,7 @@ function extractDetachments(root, entryIndex) {
       ruleText += `${rule['@_name']}: ${rule?.description || ''}`;
     }
 
-    // Find matching enhancements
+    // Find matching enhancements — Strategy 1: detachment-named sub-groups or comment field
     const enhancements = [];
     const detNameLower = detName.toLowerCase();
     for (const enhGroup of enhancementGroups) {
@@ -1176,6 +1268,12 @@ function extractDetachments(root, entryIndex) {
           });
         }
       }
+    }
+
+    // Strategy 2: flat enhancement matching via hidden modifier childId
+    // (for factions like Custodes, AdMech, Agents that use a single flat Enhancements group)
+    if (enhancements.length === 0 && flatEnhByDet.has(detName)) {
+      enhancements.push(...flatEnhByDet.get(detName));
     }
 
     // Check for chapter-specific ownership via notInstanceOf modifier
