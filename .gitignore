@@ -30,3 +30,6 @@ npm-debug.log*
 
 # Claude
 .claude/
+
+# Generator script working files (production data snapshots)
+scripts/.prod_*.csv
