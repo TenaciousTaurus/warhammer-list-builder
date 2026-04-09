@@ -166,12 +166,23 @@ export function PaintRecipesPage() {
       )}
 
       {/* Empty */}
-      {!loading && filtered.length === 0 && (
-        <div className="recipes-page__empty">
-          {recipes.length === 0
-            ? 'No paint recipes yet. Create one to track your painting steps!'
-            : 'No recipes match your search.'}
+      {!loading && filtered.length === 0 && recipes.length === 0 && (
+        <div className="empty-state card">
+          <div className="empty-state__icon">&#127912;</div>
+          <div className="empty-state__title">No Paint Recipes Yet</div>
+          <p className="empty-state__description">
+            Save the step-by-step paint schemes you use so you can match
+            them across batches. Create your first recipe to get started.
+          </p>
+          <div className="empty-state__action">
+            <button className="btn btn--primary" onClick={() => setShowEditor(true)}>
+              + New Recipe
+            </button>
+          </div>
         </div>
+      )}
+      {!loading && filtered.length === 0 && recipes.length > 0 && (
+        <div className="recipes-page__empty">No recipes match your search.</div>
       )}
 
       {/* Recipe Grid */}

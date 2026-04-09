@@ -142,9 +142,20 @@ export function CrusadeRosterPage() {
       {/* Unit List */}
       <div className="crusade-roster__unit-list">
         {units.length === 0 && (
-          <p style={{ color: 'var(--color-text-muted)', textAlign: 'center', padding: 'var(--space-lg)' }}>
-            No units in your roster yet. Add your first unit to begin your Crusade.
-          </p>
+          <div className="empty-state card">
+            <div className="empty-state__icon">&#9876;</div>
+            <div className="empty-state__title">Empty Roster</div>
+            <p className="empty-state__description">
+              Your Crusade force begins here. Add your first unit to start
+              tracking its battle honours, scars, and experience as your
+              campaign unfolds.
+            </p>
+            <div className="empty-state__action">
+              <button className="btn btn--primary" type="button" onClick={openUnitPicker}>
+                + Add First Unit
+              </button>
+            </div>
+          </div>
         )}
         {units.map((unit) => (
           <CrusadeUnitCard
