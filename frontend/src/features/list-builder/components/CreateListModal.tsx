@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../../shared/lib/supabase';
 import { useAuth } from '../../../shared/hooks/useAuth';
 import type { Faction, BattleSize } from '../../../shared/types/database';
+import { SAMPLE_LISTS } from '../data/sampleLists';
 
 interface CreateListModalProps {
   onClose: () => void;
@@ -10,12 +12,14 @@ interface CreateListModalProps {
 
 export function CreateListModal({ onClose, onCreated }: CreateListModalProps) {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [factions, setFactions] = useState<Faction[]>([]);
   const [battleSizes, setBattleSizes] = useState<BattleSize[]>([]);
   const [name, setName] = useState('');
   const [factionId, setFactionId] = useState('');
   const [battleSizeId, setBattleSizeId] = useState('strike_force');
   const [saving, setSaving] = useState(false);
+  const [loadingSample, setLoadingSample] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -83,6 +87,98 @@ export function CreateListModal({ onClose, onCreated }: CreateListModalProps) {
       onCreated();
     }
     setSaving(false);
+  }
+
+  /**
+   * Create a pre-populated demo list so brand-new users can see what a finished
+   * list looks like. Ignores the form's name/faction/battle-size selections and
+   * uses the values from SAMPLE_LISTS[0]. Units that fail to resolve by name are
+   * silently skipped — the user lands on a list with whatever DID match.
+   */
+  async function handleLoadSample() {
+    if (!user) return;
+    setLoadingSample(true);
+    setError(null);
+
+    const sample = SAMPLE_LISTS[0];
+
+    const faction = factions.find((f) => f.name === sample.factionName);
+    if (!faction) {
+      setError(`Sample list requires faction "${sample.factionName}" which isn't in the database.`);
+      setLoadingSample(false);
+      return;
+    }
+
+    const battleSize = battleSizes.find((bs) => bs.id === sample.battleSizeId);
+    if (!battleSize) {
+      setError(`Sample list requires battle size "${sample.battleSizeId}" which isn't available.`);
+      setLoadingSample(false);
+      return;
+    }
+
+    const detFactionIds = [faction.id];
+    if (faction.parent_faction_id) detFactionIds.push(faction.parent_faction_id);
+
+    const { data: detachments } = await supabase
+      .from('detachments')
+      .select('id')
+      .in('faction_id', detFactionIds)
+      .order('name')
+      .limit(1);
+
+    const detachmentId = detachments?.[0]?.id;
+    if (!detachmentId) {
+      setError('No detachments found for sample list faction.');
+      setLoadingSample(false);
+      return;
+    }
+
+    const { data: insertedList, error: listError } = await supabase
+      .from('army_lists')
+      .insert({
+        name: sample.listName,
+        faction_id: faction.id,
+        detachment_id: detachmentId,
+        points_limit: battleSize.max_points,
+        battle_size: sample.battleSizeId,
+        user_id: user.id,
+      })
+      .select('id')
+      .single();
+
+    if (listError || !insertedList) {
+      setError(listError?.message ?? 'Failed to create sample list');
+      setLoadingSample(false);
+      return;
+    }
+
+    // Look up units by name within this faction (and parent faction if any)
+    const { data: units } = await supabase
+      .from('units')
+      .select('id, name')
+      .in('faction_id', detFactionIds);
+
+    if (units) {
+      const inserts = sample.units
+        .map((s, idx) => {
+          const unit = units.find((u) => u.name.toLowerCase() === s.name.toLowerCase());
+          if (!unit) return null;
+          return {
+            army_list_id: insertedList.id,
+            unit_id: unit.id,
+            model_count: s.modelCount,
+            sort_order: idx,
+          };
+        })
+        .filter((x): x is NonNullable<typeof x> => x !== null);
+
+      if (inserts.length > 0) {
+        await supabase.from('army_list_units').insert(inserts);
+      }
+    }
+
+    setLoadingSample(false);
+    navigate(`/list/${insertedList.id}`);
   }
 
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -161,8 +257,20 @@ export function CreateListModal({ onClose, onCreated }: CreateListModalProps) {
             <button type="button" className="btn" onClick={onClose}>
               Cancel
             </button>
-            <button type="submit" className="btn btn--primary" disabled={saving || !name}>
+            <button type="submit" className="btn btn--primary" disabled={saving || loadingSample || !name}>
               {saving ? 'Creating...' : 'Create List'}
+            </button>
+          </div>
+
+          <div className="create-list-form__demo">
+            <span className="create-list-form__demo-label">Not sure where to start?</span>
+            <button
+              type="button"
+              className="create-list-form__demo-btn"
+              onClick={handleLoadSample}
+              disabled={saving || loadingSample}
+            >
+              {loadingSample ? 'Loading demo...' : 'Load a demo list \u2192'}
             </button>
           </div>
         </form>
