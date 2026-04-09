@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { useGameSessionStore, PHASES } from './gameSessionStore';
 import type { GameSession, GameSessionEvent } from '../../../shared/types/database';
+import { supabase } from '../../../shared/lib/supabase';
 
 // Reset store between tests
 beforeEach(() => {
@@ -317,5 +318,241 @@ describe('sync status', () => {
 
     expect(useGameSessionStore.getState().syncStatus).toBe('syncing');
     expect(useGameSessionStore.getState()._pendingSyncs).toBe(1);
+  });
+});
+
+describe('updateScore', () => {
+  it('inserts a new score entry when none exists for that round/objective', () => {
+    const session = createMockSession();
+    useGameSessionStore.setState({ session, scores: [] });
+
+    useGameSessionStore.getState().updateScore(2, 'Engage on All Fronts', 4);
+
+    const scores = useGameSessionStore.getState().scores;
+    expect(scores).toHaveLength(1);
+    expect(scores[0]).toMatchObject({
+      round: 2,
+      objective_name: 'Engage on All Fronts',
+      vp_scored: 4,
+    });
+  });
+
+  it('updates an existing score entry instead of duplicating', () => {
+    const session = createMockSession();
+    useGameSessionStore.setState({
+      session,
+      scores: [
+        { id: 's1', game_session_id: 'session-1', round: 1, objective_name: 'Behind Enemy Lines', vp_scored: 2 },
+      ],
+    });
+
+    useGameSessionStore.getState().updateScore(1, 'Behind Enemy Lines', 5);
+
+    const scores = useGameSessionStore.getState().scores;
+    expect(scores).toHaveLength(1);
+    expect(scores[0].vp_scored).toBe(5);
+  });
+
+  it('does nothing without a session', () => {
+    useGameSessionStore.setState({ session: null });
+    useGameSessionStore.getState().updateScore(1, 'Anything', 3);
+    expect(useGameSessionStore.getState().scores).toEqual([]);
+  });
+});
+
+describe('selectObjective', () => {
+  it('creates 5 score entries (one per round) at 0 VP', () => {
+    const session = createMockSession();
+    useGameSessionStore.setState({ session, scores: [] });
+
+    useGameSessionStore.getState().selectObjective('Cleanse');
+
+    const scores = useGameSessionStore.getState().scores;
+    expect(scores).toHaveLength(5);
+    expect(scores.map(s => s.round).sort()).toEqual([1, 2, 3, 4, 5]);
+    expect(scores.every(s => s.objective_name === 'Cleanse')).toBe(true);
+    expect(scores.every(s => s.vp_scored === 0)).toBe(true);
+  });
+
+  it('is a no-op when the objective is already selected', () => {
+    const session = createMockSession();
+    useGameSessionStore.setState({
+      session,
+      scores: [
+        { id: 's1', game_session_id: 'session-1', round: 1, objective_name: 'Cleanse', vp_scored: 0 },
+      ],
+    });
+
+    useGameSessionStore.getState().selectObjective('Cleanse');
+
+    expect(useGameSessionStore.getState().scores).toHaveLength(1);
+  });
+
+  it('does nothing without a session', () => {
+    useGameSessionStore.setState({ session: null });
+    useGameSessionStore.getState().selectObjective('Cleanse');
+    expect(useGameSessionStore.getState().scores).toEqual([]);
+  });
+});
+
+describe('deselectObjective', () => {
+  it('removes all score entries for the named objective', () => {
+    const session = createMockSession();
+    useGameSessionStore.setState({
+      session,
+      scores: [
+        { id: 's1', game_session_id: 'session-1', round: 1, objective_name: 'Cleanse', vp_scored: 0 },
+        { id: 's2', game_session_id: 'session-1', round: 2, objective_name: 'Cleanse', vp_scored: 3 },
+        { id: 's3', game_session_id: 'session-1', round: 1, objective_name: 'Engage', vp_scored: 2 },
+      ],
+    });
+
+    useGameSessionStore.getState().deselectObjective('Cleanse');
+
+    const scores = useGameSessionStore.getState().scores;
+    expect(scores).toHaveLength(1);
+    expect(scores[0].objective_name).toBe('Engage');
+  });
+
+  it('does nothing without a session', () => {
+    useGameSessionStore.setState({ session: null, scores: [] });
+    useGameSessionStore.getState().deselectObjective('Cleanse');
+    expect(useGameSessionStore.getState().scores).toEqual([]);
+  });
+});
+
+describe('updateTimerSeconds', () => {
+  it('writes both player and opponent seconds onto the session', () => {
+    const session = createMockSession();
+    useGameSessionStore.setState({ session });
+
+    useGameSessionStore.getState().updateTimerSeconds(120, 90);
+
+    const updated = useGameSessionStore.getState().session!;
+    expect(updated.timer_player_seconds).toBe(120);
+    expect(updated.timer_opponent_seconds).toBe(90);
+  });
+
+  it('does nothing without a session', () => {
+    useGameSessionStore.setState({ session: null });
+    useGameSessionStore.getState().updateTimerSeconds(60, 60);
+    expect(useGameSessionStore.getState().session).toBeNull();
+  });
+});
+
+describe('logEvent', () => {
+  it('tags the event with the session current_round and current_phase', () => {
+    const session = createMockSession({ current_round: 3, current_phase: 2 });
+    useGameSessionStore.setState({ session });
+
+    useGameSessionStore.getState().logEvent('test_event', 'something happened');
+
+    const events = useGameSessionStore.getState().events;
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({
+      round: 3,
+      phase: 2,
+      event_type: 'test_event',
+      description: 'something happened',
+    });
+  });
+
+  it('does nothing without a session', () => {
+    useGameSessionStore.setState({ session: null, events: [] });
+    useGameSessionStore.getState().logEvent('orphan', 'no session');
+    expect(useGameSessionStore.getState().events).toEqual([]);
+  });
+});
+
+describe('previousPhase edge cases', () => {
+  it('does nothing without a session', () => {
+    useGameSessionStore.setState({ session: null });
+    useGameSessionStore.getState().previousPhase();
+    expect(useGameSessionStore.getState().session).toBeNull();
+  });
+});
+
+// ============================================================
+// Lifecycle actions — these await supabase, so we override
+// the mock locally to return a chain that resolves immediately.
+// ============================================================
+describe('game lifecycle actions', () => {
+  beforeEach(() => {
+    function makeOkChain() {
+      const chain: Record<string, unknown> = {};
+      const methods = ['select', 'insert', 'update', 'delete', 'upsert', 'eq', 'in', 'or', 'order', 'limit', 'single'];
+      for (const m of methods) chain[m] = vi.fn(() => chain);
+      // Make the chain a proper thenable that resolves with { data: null, error: null }
+      chain.then = (resolve: (v: unknown) => unknown) => Promise.resolve({ data: null, error: null }).then(resolve);
+      return chain;
+    }
+    vi.mocked(supabase.from).mockImplementation(() => makeOkChain() as never);
+  });
+
+  describe('completeGame', () => {
+    it('sets status to completed, stores result and completion timestamp, and logs a game_end event', async () => {
+      const session = createMockSession({ status: 'active' });
+      useGameSessionStore.setState({ session });
+
+      await useGameSessionStore.getState().completeGame('win', 'Pulled it out in round 5');
+
+      const updated = useGameSessionStore.getState().session!;
+      expect(updated.status).toBe('completed');
+      expect(updated.result).toBe('win');
+      expect(updated.notes).toBe('Pulled it out in round 5');
+      expect(updated.completed_at).not.toBeNull();
+
+      const events = useGameSessionStore.getState().events;
+      expect(events.some(e => e.event_type === 'game_end' && e.description.includes('win'))).toBe(true);
+    });
+
+    it('preserves existing notes when no notes argument is supplied', async () => {
+      const session = createMockSession({ status: 'active', notes: 'Pre-game prep' });
+      useGameSessionStore.setState({ session });
+
+      await useGameSessionStore.getState().completeGame('loss');
+
+      expect(useGameSessionStore.getState().session!.notes).toBe('Pre-game prep');
+    });
+
+    it('does nothing without a session', async () => {
+      useGameSessionStore.setState({ session: null });
+      await useGameSessionStore.getState().completeGame('draw');
+      expect(useGameSessionStore.getState().session).toBeNull();
+    });
+  });
+
+  describe('pauseGame', () => {
+    it('sets session.status to paused', async () => {
+      const session = createMockSession({ status: 'active' });
+      useGameSessionStore.setState({ session });
+
+      await useGameSessionStore.getState().pauseGame();
+
+      expect(useGameSessionStore.getState().session!.status).toBe('paused');
+    });
+
+    it('does nothing without a session', async () => {
+      useGameSessionStore.setState({ session: null });
+      await useGameSessionStore.getState().pauseGame();
+      expect(useGameSessionStore.getState().session).toBeNull();
+    });
+  });
+
+  describe('resumeGame', () => {
+    it('sets session.status back to active', async () => {
+      const session = createMockSession({ status: 'paused' });
+      useGameSessionStore.setState({ session });
+
+      await useGameSessionStore.getState().resumeGame();
+
+      expect(useGameSessionStore.getState().session!.status).toBe('active');
+    });
+
+    it('does nothing without a session', async () => {
+      useGameSessionStore.setState({ session: null });
+      await useGameSessionStore.getState().resumeGame();
+      expect(useGameSessionStore.getState().session).toBeNull();
+    });
   });
 });

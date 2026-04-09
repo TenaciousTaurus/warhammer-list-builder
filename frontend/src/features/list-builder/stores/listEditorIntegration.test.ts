@@ -361,4 +361,128 @@ describe('List Builder Integration', () => {
       expect(useListEditorStore.getState().selectedArmyListUnitId).toBe('alu-cap');
     });
   });
+
+  describe('UI toggle actions', () => {
+    it('toggleLegends flips the showLegends flag', () => {
+      setupFullList();
+      expect(useListEditorStore.getState().showLegends).toBe(false);
+
+      useListEditorStore.getState().toggleLegends();
+      expect(useListEditorStore.getState().showLegends).toBe(true);
+
+      useListEditorStore.getState().toggleLegends();
+      expect(useListEditorStore.getState().showLegends).toBe(false);
+    });
+
+    it('togglePickerRole adds the role on first call and removes it on second', () => {
+      setupFullList();
+      expect(useListEditorStore.getState().collapsedPickerRoles.has('character')).toBe(false);
+
+      useListEditorStore.getState().togglePickerRole('character');
+      expect(useListEditorStore.getState().collapsedPickerRoles.has('character')).toBe(true);
+
+      useListEditorStore.getState().togglePickerRole('character');
+      expect(useListEditorStore.getState().collapsedPickerRoles.has('character')).toBe(false);
+    });
+
+    it('togglePickerRole handles multiple roles independently', () => {
+      setupFullList();
+
+      useListEditorStore.getState().togglePickerRole('character');
+      useListEditorStore.getState().togglePickerRole('battleline');
+
+      const collapsed = useListEditorStore.getState().collapsedPickerRoles;
+      expect(collapsed.has('character')).toBe(true);
+      expect(collapsed.has('battleline')).toBe(true);
+      expect(collapsed.has('vehicle')).toBe(false);
+    });
+
+    it('setShowExport updates the showExport flag', () => {
+      setupFullList();
+      expect(useListEditorStore.getState().showExport).toBe(false);
+
+      useListEditorStore.getState().setShowExport(true);
+      expect(useListEditorStore.getState().showExport).toBe(true);
+
+      useListEditorStore.getState().setShowExport(false);
+      expect(useListEditorStore.getState().showExport).toBe(false);
+    });
+
+    it('setUnitPickerFilter updates the filter string', () => {
+      setupFullList();
+
+      useListEditorStore.getState().setUnitPickerFilter('intercessor');
+      expect(useListEditorStore.getState().unitPickerFilter).toBe('intercessor');
+
+      useListEditorStore.getState().setUnitPickerFilter('');
+      expect(useListEditorStore.getState().unitPickerFilter).toBe('');
+    });
+  });
+
+  describe('reset', () => {
+    it('clears all loaded state back to initial values', () => {
+      setupFullList();
+
+      // Sanity-check there is loaded state
+      expect(useListEditorStore.getState().listUnits.length).toBeGreaterThan(0);
+      expect(useListEditorStore.getState().list).not.toBeNull();
+
+      useListEditorStore.getState().reset();
+
+      const state = useListEditorStore.getState();
+      expect(state.listId).toBeNull();
+      expect(state.list).toBeNull();
+      expect(state.listUnits).toEqual([]);
+      expect(state.availableUnits).toEqual([]);
+      expect(state.enhancements).toEqual([]);
+      expect(state.listEnhancements).toEqual([]);
+      expect(state.selectedArmyListUnitId).toBeNull();
+      expect(state.showLegends).toBe(false);
+    });
+  });
+
+  describe('removeUnit', () => {
+    it('clears selectedArmyListUnitId when removing the currently-selected unit', async () => {
+      setupFullList();
+      useListEditorStore.setState({ selectedArmyListUnitId: 'alu-cap' } as never);
+
+      await useListEditorStore.getState().removeUnit('alu-cap');
+
+      expect(useListEditorStore.getState().selectedArmyListUnitId).toBeNull();
+    });
+
+    it('preserves selectedArmyListUnitId when removing a different unit', async () => {
+      setupFullList();
+      useListEditorStore.setState({ selectedArmyListUnitId: 'alu-cap' } as never);
+
+      await useListEditorStore.getState().removeUnit('alu-int1');
+
+      expect(useListEditorStore.getState().selectedArmyListUnitId).toBe('alu-cap');
+    });
+  });
+
+  describe('reorderUnits', () => {
+    it('moves a unit from one index to another in local state', async () => {
+      setupFullList();
+      const before = useListEditorStore.getState().listUnits.map(lu => lu.id);
+      // Original order from setupFullList: hero, cap, int1, int2, erad
+      expect(before).toEqual(['alu-hero', 'alu-cap', 'alu-int1', 'alu-int2', 'alu-erad']);
+
+      // Move eradicators (index 4) to position 1
+      await useListEditorStore.getState().reorderUnits(4, 1);
+
+      const after = useListEditorStore.getState().listUnits.map(lu => lu.id);
+      expect(after).toEqual(['alu-hero', 'alu-erad', 'alu-cap', 'alu-int1', 'alu-int2']);
+    });
+
+    it('is a no-op when fromIndex equals toIndex', async () => {
+      setupFullList();
+      const before = useListEditorStore.getState().listUnits.map(lu => lu.id);
+
+      await useListEditorStore.getState().reorderUnits(2, 2);
+
+      const after = useListEditorStore.getState().listUnits.map(lu => lu.id);
+      expect(after).toEqual(before);
+    });
+  });
 });
