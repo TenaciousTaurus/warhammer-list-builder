@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../../shared/hooks/useAuth';
 import { useSocialStore } from '../stores/socialStore';
 import { StatsDashboard } from '../components/StatsDashboard';
@@ -37,11 +38,19 @@ export function StatsPage() {
   if (!stats) {
     return (
       <div className="stats-page">
-        <div className="stats-page__empty">
-          <h2 className="stats-page__empty-title">No Stats Yet</h2>
-          <p className="stats-page__empty-text">
-            Play some games to start tracking your performance.
+        <div className="empty-state card">
+          <div className="empty-state__icon">&#128200;</div>
+          <div className="empty-state__title">No Stats Yet</div>
+          <p className="empty-state__description">
+            Your battle record, win rate, and head-to-head matchups will appear
+            here once you've played a few games. Start a game from one of your
+            army lists to begin tracking.
           </p>
+          <div className="empty-state__action">
+            <Link to="/lists" className="btn btn--primary">
+              Go to My Lists
+            </Link>
+          </div>
         </div>
       </div>
     );
