@@ -24,6 +24,7 @@ import {
   getModelVariantsForUnit,
   getCompositionForUnit,
   getCompositionSummary,
+  getWargearSummary,
   getEligibleLeaders,
   getAttachmentForTarget,
   isLeaderAttachedElsewhere,
@@ -739,5 +740,49 @@ describe('isLeaderAttachedElsewhere', () => {
   it('returns false when leader has no attachments', () => {
     const state = mockState();
     expect(isLeaderAttachedElsewhere(state as never, 'alu-captain', 'alu-1')).toBe(false);
+  });
+});
+
+describe('getWargearSummary', () => {
+  it('returns default option names from multi-option groups when no selections exist', () => {
+    const state = mockState({
+      wargearOptions: [
+        // Multi-option group: should pick the default
+        { id: 'w1', unit_id: 'unit-1', group_name: 'Pistol', name: 'Bolt pistol', is_default: true },
+        { id: 'w2', unit_id: 'unit-1', group_name: 'Pistol', name: 'Plasma pistol', is_default: false },
+        // Single-option group: should NOT contribute (defaults logic only adds when group has >1)
+        { id: 'w3', unit_id: 'unit-1', group_name: 'Melee', name: 'Combat knife', is_default: true },
+        // Different unit, should be ignored
+        { id: 'w4', unit_id: 'other-unit', group_name: 'Pistol', name: 'Boltgun', is_default: true },
+      ],
+    });
+
+    expect(getWargearSummary(state as never, 'alu-1', 'unit-1')).toBe('Bolt pistol');
+  });
+
+  it('returns selected option names when selections exist', () => {
+    const selections = new Map<string, Map<string, string>>();
+    const unitSelections = new Map<string, string>();
+    unitSelections.set('Pistol', 'w2');
+    unitSelections.set('Special', 'w5');
+    selections.set('alu-1', unitSelections);
+
+    const state = mockState({
+      unitWargearSelections: selections,
+      wargearOptions: [
+        { id: 'w1', unit_id: 'unit-1', group_name: 'Pistol', name: 'Bolt pistol', is_default: true },
+        { id: 'w2', unit_id: 'unit-1', group_name: 'Pistol', name: 'Plasma pistol', is_default: false },
+        { id: 'w5', unit_id: 'unit-1', group_name: 'Special', name: 'Melta gun', is_default: false },
+      ],
+    });
+
+    const summary = getWargearSummary(state as never, 'alu-1', 'unit-1');
+    expect(summary).toContain('Plasma pistol');
+    expect(summary).toContain('Melta gun');
+  });
+
+  it('returns empty string when unit has no wargear options at all', () => {
+    const state = mockState();
+    expect(getWargearSummary(state as never, 'alu-1', 'unit-1')).toBe('');
   });
 });
