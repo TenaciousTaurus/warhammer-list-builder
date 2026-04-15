@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../hooks/useAuth';
+import { WelcomeModal } from '../components/WelcomeModal';
 import type { ArmyList, Faction, GameSession } from '../types/database';
 
 export function DashboardPage() {
@@ -10,6 +11,15 @@ export function DashboardPage() {
   const [activeGame, setActiveGame] = useState<(GameSession & { army_lists: ArmyList }) | null>(null);
   const [completedGames, setCompletedGames] = useState<GameSession[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showWelcome, setShowWelcome] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    // Show welcome modal once per user per browser
+    if (!localStorage.getItem(`warforge_welcomed_${user.id}`)) {
+      setShowWelcome(true);
+    }
+  }, [user]);
 
   useEffect(() => {
     if (!user) return;
@@ -64,6 +74,9 @@ export function DashboardPage() {
 
   return (
     <div className="dashboard">
+      {showWelcome && user && (
+        <WelcomeModal userId={user.id} onDone={() => setShowWelcome(false)} />
+      )}
       <h2 className="dashboard__title">Command Center</h2>
 
       <div className="dashboard__grid">
@@ -103,7 +116,7 @@ export function DashboardPage() {
           </div>
           <div className="dashboard__card-body">
             {totalGames === 0 ? (
-              <p className="dashboard__empty">No games played yet. Start a game from one of your lists.</p>
+              <p className="dashboard__empty">No games played yet. Build a list, then start a game from the list editor.</p>
             ) : (
               <div className="dashboard__stats-grid">
                 <div className="dashboard__stat">
