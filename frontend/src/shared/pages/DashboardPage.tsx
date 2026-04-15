@@ -11,15 +11,8 @@ export function DashboardPage() {
   const [activeGame, setActiveGame] = useState<(GameSession & { army_lists: ArmyList }) | null>(null);
   const [completedGames, setCompletedGames] = useState<GameSession[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showWelcome, setShowWelcome] = useState(false);
-
-  useEffect(() => {
-    if (!user) return;
-    // Show welcome modal once per user per browser
-    if (!localStorage.getItem(`warforge_welcomed_${user.id}`)) {
-      setShowWelcome(true);
-    }
-  }, [user]);
+  const [welcomeDismissed, setWelcomeDismissed] = useState(false);
+  const showWelcome = !welcomeDismissed && !!user && !localStorage.getItem(`warforge_welcomed_${user.id}`);
 
   useEffect(() => {
     if (!user) return;
@@ -75,7 +68,7 @@ export function DashboardPage() {
   return (
     <div className="dashboard">
       {showWelcome && user && (
-        <WelcomeModal userId={user.id} onDone={() => setShowWelcome(false)} />
+        <WelcomeModal userId={user.id} onDone={() => setWelcomeDismissed(true)} />
       )}
       <h2 className="dashboard__title">Command Center</h2>
 
