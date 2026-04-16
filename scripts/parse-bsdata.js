@@ -1089,7 +1089,14 @@ function extractDetachments(root, entryIndex) {
       for (const subGroup of ensureArray(node?.selectionEntryGroups?.selectionEntryGroup)) {
         groups.push(subGroup);
       }
-      // Also check direct entries
+      // Resolve entryLinks to sub-groups (e.g. IK Questor Forgepact is linked via entryLink)
+      for (const link of ensureArray(node?.entryLinks?.entryLink)) {
+        if (link['@_type'] === 'selectionEntryGroup' && link['@_targetId']) {
+          const target = entryIndex.get(link['@_targetId']);
+          if (target) groups.push(target);
+        }
+      }
+      // Also check direct entries (flat enhancement groups)
       if (node.selectionEntries) {
         groups.push(node);
       }
@@ -1110,6 +1117,26 @@ function extractDetachments(root, entryIndex) {
   for (const group of sharedGroups) {
     if (!detachmentGroup) detachmentGroup = findDetachmentGroup(group);
     enhancementGroups.push(...findEnhancementGroups(group));
+  }
+
+  // Also scan entryIndex for "Enhancements" groups from imported catalogs.
+  // Many factions (Tyranids, Imperial Knights, GSC) define their enhancement groups
+  // in a shared library catalog rather than the primary catalog. After
+  // mergeImportedCatalogues runs, those nodes are available in entryIndex.
+  {
+    const subGroupIdsSeen = new Set(enhancementGroups.map(g => g['@_id']).filter(Boolean));
+    const rootEnhGroupsSeen = new Set();
+    for (const node of entryIndex.values()) {
+      if (node['@_name'] !== 'Enhancements') continue;
+      if (node['@_id'] && rootEnhGroupsSeen.has(node['@_id'])) continue;
+      if (node['@_id']) rootEnhGroupsSeen.add(node['@_id']);
+      for (const subGroup of findEnhancementGroups(node)) {
+        const sgId = subGroup['@_id'];
+        if (sgId && subGroupIdsSeen.has(sgId)) continue;
+        if (sgId) subGroupIdsSeen.add(sgId);
+        enhancementGroups.push(subGroup);
+      }
+    }
   }
 
   // Also search sharedSelectionEntries for the "Detachment" entry (common pattern)
@@ -1226,6 +1253,72 @@ function extractDetachments(root, entryIndex) {
     }
   }
 
+  // Build index of IDs already captured by the shared enhancement groups, so the
+  // inline scan below doesn't double-count entries that appear in both places.
+  const capturedEnhIds = new Set();
+  for (const enhGroup of enhancementGroups) {
+    for (const enhEntry of ensureArray(enhGroup?.selectionEntries?.selectionEntry)) {
+      if (enhEntry['@_id']) capturedEnhIds.add(enhEntry['@_id']);
+    }
+  }
+
+  // Gap 1 — scan entryIndex for hidden upgrade entries linked to a detachment via
+  // Pattern B modifiers. These are enhancements embedded inside unit selectionEntries
+  // rather than living in a shared Enhancements group (e.g. Necrons Pantheon of Woe).
+  const inlineEnhByDet = new Map();
+  for (const [nodeId, node] of entryIndex) {
+    if (capturedEnhIds.has(nodeId)) continue;
+    if (node['@_hidden'] !== 'true') continue;
+    if (node['@_type'] !== 'upgrade') continue;
+
+    // Must have an Abilities profile to qualify as an enhancement
+    let enhDesc = '';
+    let hasAbilityProfile = false;
+    for (const profile of ensureArray(node?.profiles?.profile)) {
+      if (profile['@_typeName'] === 'Abilities') {
+        hasAbilityProfile = true;
+        const chars = parseCharacteristics(profile);
+        enhDesc = chars.Description || '';
+        break;
+      }
+    }
+    if (!hasAbilityProfile) continue;
+
+    // Pattern B: modifierGroup sets hidden=false via atLeast condition on detachment childId
+    let linkedDetName = null;
+    for (const mg of ensureArray(node?.modifierGroups?.modifierGroup)) {
+      const mods = ensureArray(mg?.modifiers?.modifier);
+      const setsVisible = mods.some(
+        m => m['@_type'] === 'set' && m['@_field'] === 'hidden' && m['@_value'] === 'false'
+      );
+      if (!setsVisible) continue;
+      for (const cond of ensureArray(mg?.conditions?.condition)) {
+        if (
+          cond['@_type'] === 'atLeast' &&
+          (cond['@_scope'] === 'force' || cond['@_scope'] === 'roster') &&
+          cond['@_childId']
+        ) {
+          const detName = detEntryIdToName.get(cond['@_childId']);
+          if (detName) { linkedDetName = detName; break; }
+        }
+      }
+      if (linkedDetName) break;
+    }
+    if (!linkedDetName) continue;
+
+    let enhPoints = 0;
+    for (const cost of ensureArray(node?.costs?.cost)) {
+      if (cost['@_name'] === 'pts') enhPoints = parseInt(cost['@_value']) || 0;
+    }
+
+    if (!inlineEnhByDet.has(linkedDetName)) inlineEnhByDet.set(linkedDetName, []);
+    inlineEnhByDet.get(linkedDetName).push({
+      name: node['@_name'],
+      points: enhPoints,
+      description: enhDesc,
+    });
+  }
+
   // Parse each detachment
   for (const entry of ensureArray(detachmentGroup?.selectionEntries?.selectionEntry)) {
     const detName = entry['@_name'];
@@ -1274,6 +1367,14 @@ function extractDetachments(root, entryIndex) {
     // (for factions like Custodes, AdMech, Agents that use a single flat Enhancements group)
     if (enhancements.length === 0 && flatEnhByDet.has(detName)) {
       enhancements.push(...flatEnhByDet.get(detName));
+    }
+
+    // Strategy 3: inline unit-embedded enhancements (e.g. Necrons Pantheon of Woe).
+    // These are hidden upgrade entries scattered throughout the catalog's unit definitions,
+    // not in any shared Enhancements group. Matched via the same Pattern B modifier as
+    // Strategy 2, but sourced from the full entryIndex rather than enhancement groups.
+    if (enhancements.length === 0 && inlineEnhByDet.has(detName)) {
+      enhancements.push(...inlineEnhByDet.get(detName));
     }
 
     // Check for chapter-specific ownership via notInstanceOf modifier
