@@ -19,13 +19,29 @@ The BSData parser converts BattleScribe `.cat` files into a SQL seed migration. 
 
 **Impact:** Enhancement count rose from 746 → 850 (+104), covering 28 previously empty detachments across 8 factions.
 
+### Cross-Catalog Enhancement Group Resolution + Inline Unit Enhancements
+
+**Problem:** Many factions (Imperial Knights, Tyranids, Genestealer Cults) define their enhancement groups in an imported library catalog rather than the primary `.cat` file. The parser only searched `root?.sharedSelectionEntryGroups` of the primary catalog, so library-defined enhancement groups were never found. Additionally, some enhancement groups within a library are referenced via `entryLink` rather than being direct children. Necrons Pantheon of Woe enhancements are embedded inside individual unit `selectionEntries`, not in any shared Enhancements group at all.
+
+**Fix:** Three changes to `extractDetachments` in `parse-bsdata.js`:
+
+1. **`findEnhancementGroups`** — now follows `entryLinks` of type `selectionEntryGroup` within an "Enhancements" group, resolving linked sub-groups via `entryIndex`. Fixes IK Questor Forgepact.
+2. **entryIndex scan** — after searching the primary catalog's `sharedSelectionEntryGroups`, scans all nodes in `entryIndex` (which includes merged imported catalogs) for nodes named `"Enhancements"`. Deduplicates by sub-group ID to prevent double-inserts. Fixes IK, GSC, and Tyranids.
+3. **Inline entryIndex scan (Strategy 3)** — scans all `hidden="true"` upgrade entries in `entryIndex` for Pattern B modifiers (modifierGroup sets `hidden=false` via `atLeast` condition on a detachment ID). Fixes Necrons Pantheon of Woe.
+
+**Impact:** Enhancement count rose from 850 → 918 (+68), covering:
+- Imperial Knights: 5 detachments now have enhancements (was 0)
+- Genestealer Cults: Biosanctic Broodsurge, Brood Brother Auxilia, Xenocreed Congregation (was 0)
+- Tyranids: all 8 detachments now have enhancements (was 0 — same root cause, not previously identified)
+- Necrons: Pantheon of Woe now has 4 enhancements (was 0)
+
 ---
 
 ## Known Gaps (still missing)
 
 These are edge cases that require more invasive parser changes. Estimated total: ~24 enhancements across 5 detachments.
 
-### Gap 1: Inline Unit-Embedded Enhancements
+### ~~Gap 1: Inline Unit-Embedded Enhancements~~ — FIXED
 
 **Faction:** Necrons
 **Detachment:** Pantheon of Woe (4 enhancements)
@@ -43,7 +59,7 @@ These are edge cases that require more invasive parser changes. Estimated total:
 
 ---
 
-### Gap 2: Cross-Catalog Enhancement Group Resolution
+### ~~Gap 2: Cross-Catalog Enhancement Group Resolution~~ — FIXED
 
 **Faction:** Imperial Knights
 **Detachment:** Questor Forgepact (4 enhancements)
@@ -61,7 +77,7 @@ These are edge cases that require more invasive parser changes. Estimated total:
 
 ---
 
-### Gap 3: Library-Defined GSC Codex Detachments
+### ~~Gap 3: Library-Defined GSC Codex Detachments~~ — FIXED
 
 **Faction:** Genestealer Cults
 **Detachments:** Biosanctic Broodsurge, Brood Brother Auxilia, Xenocreed Congregation (3 detachments × 4 enhancements = 12)
