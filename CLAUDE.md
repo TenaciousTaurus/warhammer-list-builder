@@ -72,49 +72,91 @@ warforge/
 │   └── bsdata/                            # BattleScribe catalog files (26 factions)
 ├── supabase/
 │   ├── config.toml                        # Supabase local config
-│   └── migrations/
+│   └── migrations/                        # 34 migrations (additive only)
 │       ├── 20250220000001_initial_schema.sql
 │       ├── 20250220000005_wargear_options.sql
-│       ├── 20250220000010_seed_all_factions.sql
+│       ├── 20250220000007_model_variants_and_leaders.sql
 │       ├── 20250220000020_calculate_list_points.sql
 │       ├── 20250220000030_duplicate_list_and_sharing.sql
 │       ├── 20250220000040_auth_rls_policies.sql
 │       ├── 20250220000050_battle_size_tiers.sql
 │       ├── 20250220000055_transport_capacity.sql
-│       └── 20250220000060_security_and_indexes.sql
+│       ├── 20250220000060_security_and_indexes.sql
+│       ├── 20250220000065_faction_alignment.sql
+│       ├── 20250220000070_legends_toggle.sql
+│       ├── 20250220000080_game_sessions.sql
+│       ├── 20250220000090_collection_tables.sql
+│       ├── 20250220000100_crusade_campaigns.sql
+│       ├── 20250220000110_crusade_battles.sql
+│       ├── 20250220000120_user_profiles_friends.sql
+│       ├── 20250220000130_tournaments.sql
+│       ├── 20250220000140_stats_and_rpcs.sql
+│       ├── 20250220000150_fix_handle_new_user.sql
+│       ├── 20250220000160_seed_all_factions.sql
+│       ├── 20250220000170_security_hardening.sql
+│       ├── 20250220000180_anon_deny_policies.sql
+│       ├── 20250220000190_collection_photos_bucket.sql
+│       ├── 20250220000200_public_tournaments.sql
+│       ├── 20250220000210_leagues.sql
+│       ├── 20250220000220_organisations.sql
+│       ├── 20250220000230_realtime_events_scores.sql
+│       ├── 20250220000250_faction_parent_child.sql
+│       ├── 20250220000260_reassign_chapter_detachments.sql
+│       ├── 20250220000280_set_new_chapter_parents.sql
+│       ├── 20250220000290_cleanup_duplicate_detachments.sql
+│       ├── 20250220000300_sync_chapter_detachments.sql
+│       ├── 20260406192539_fix_gsc_detachments_and_sync.sql
+│       ├── 20260406205758_fix_rls_recursion.sql
+│       └── 20260406210000_sync_missing_enhancements.sql
 └── frontend/
     ├── package.json
     ├── vite.config.ts
     ├── tsconfig.json / tsconfig.app.json / tsconfig.node.json
     ├── index.html
     └── src/
-        ├── main.tsx
-        ├── App.tsx                         # Router + layout
+        ├── main.tsx                        # Entry point, Sentry + auth init
+        ├── sentry.ts                       # Sentry config (DSN-gated)
+        ├── App.tsx                         # Router + layout + lazy routes
         ├── index.css                       # CSS custom properties (variables)
+        ├── themes.css                      # Theme definitions
+        ├── test/                           # Test setup + helpers
         ├── features/
         │   ├── list-builder/
         │   │   ├── components/             # ArmyRoster, UnitPicker, RosterItem, etc.
         │   │   │   └── unit-detail/        # ModelComposition, WargearToggle, etc.
         │   │   ├── hooks/                  # useListEditor
+        │   │   ├── stores/                 # listEditorStore (Zustand)
         │   │   ├── pages/                  # ListEditorPage, ListsPage
         │   │   └── list-builder.css
         │   ├── play-mode/
-        │   │   ├── components/             # GameTracker, CasualtyTracker, etc.
-        │   │   ├── stores/                 # gameSessionStore (Phase 2)
-        │   │   ├── hooks/                  # useGameSession (Phase 2)
+        │   │   ├── components/             # PhaseTracker, CasualtyTracker, ScoreBoard, etc.
+        │   │   ├── stores/                 # gameSessionStore (Zustand)
+        │   │   ├── hooks/                  # useChessTimer, useDiceRoller, useGameRealtime
         │   │   ├── pages/                  # PlayModePage
         │   │   └── play-mode.css
-        │   ├── collection/                 # Phase 3
-        │   ├── crusade/                    # Phase 4
-        │   └── social/                     # Phase 5
+        │   ├── collection/
+        │   │   ├── components/             # CollectionCard, PhotoGallery, RecipeEditor, etc.
+        │   │   ├── hooks/                  # useListVerification
+        │   │   ├── stores/                 # collectionStore, paintInventoryStore
+        │   │   └── pages/                  # CollectionPage, PaintRecipesPage, PaintInventoryPage
+        │   ├── crusade/
+        │   │   ├── components/             # CampaignCard, PostBattleSequence, XPProgressBar, etc.
+        │   │   ├── hooks/                  # useCampaignRealtime
+        │   │   ├── stores/                 # crusadeStore
+        │   │   └── pages/                  # CampaignsPage, CampaignDetailPage, BattleLogPage, etc.
+        │   └── social/
+        │       ├── components/             # ProfileCard, TournamentBracket, SwissStandings, etc.
+        │       ├── hooks/                  # useTournamentRealtime
+        │       ├── stores/                 # socialStore, tournamentStore, leagueStore, orgStore
+        │       └── pages/                  # ProfilePage, TournamentsPage, LeaguesPage, etc.
         └── shared/
-            ├── components/                 # ConfirmDialog, DatasheetView, StatLine
+            ├── components/                 # ConfirmDialog, DatasheetView, StatLine, ThemePicker, etc.
             ├── hooks/                      # useAuth (thin wrapper over authStore)
-            ├── stores/                     # authStore
+            ├── stores/                     # authStore, settingsStore, themeStore
             ├── types/                      # database.ts (all DB types)
-            ├── lib/                        # supabase.ts (client init)
-            ├── pages/                      # AuthPage, UnitsPage, SharedListPage
-            └── css/                        # base.css, pages.css
+            ├── lib/                        # supabase.ts (client init), cleanGameText.ts
+            ├── pages/                      # AuthPage, DashboardPage, UnitsPage, SharedListPage, SettingsPage, ResetPasswordPage
+            └── css/                        # base.css, pages.css, settings.css
 ```
 
 ---
