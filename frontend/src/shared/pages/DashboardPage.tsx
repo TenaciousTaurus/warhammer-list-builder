@@ -65,6 +65,33 @@ export function DashboardPage() {
   const totalGames = completedGames.length;
   const winRate = totalGames > 0 ? Math.round((wins / totalGames) * 100) : 0;
 
+  // Brand-new user: no lists, no games — show a focused welcome hero
+  // instead of the multi-card grid so the first action is obvious.
+  const isNewUser = recentLists.length === 0 && !activeGame && totalGames === 0;
+
+  if (isNewUser) {
+    return (
+      <div className="dashboard">
+        <div className="empty-state card">
+          <div className="empty-state__icon">&#9876;</div>
+          <div className="empty-state__title">Welcome to WarForge, Commander</div>
+          <p className="empty-state__description">
+            Let's get your first army list built. From there you can track games,
+            manage your collection, and run campaigns.
+          </p>
+          <div className="empty-state__action">
+            <Link to="/lists" className="btn btn--primary">
+              Create Your First List
+            </Link>
+          </div>
+          <p style={{ marginTop: 'var(--space-md)', fontSize: 'var(--text-sm)' }}>
+            or <Link to="/units">browse all units</Link>
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="dashboard">
       {showWelcome && user && (
