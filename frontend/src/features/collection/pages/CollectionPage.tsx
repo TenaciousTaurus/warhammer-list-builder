@@ -226,12 +226,23 @@ export function CollectionPage() {
       )}
 
       {/* Content */}
-      {!loading && filtered.length === 0 && (
-        <div className="collection-page__empty">
-          {entries.length === 0
-            ? 'Your collection is empty. Add your first unit to start tracking!'
-            : 'No units match your filters.'}
+      {!loading && filtered.length === 0 && entries.length === 0 && (
+        <div className="empty-state card">
+          <div className="empty-state__icon">&#128230;</div>
+          <div className="empty-state__title">Your Collection is Empty</div>
+          <p className="empty-state__description">
+            Track your miniatures, painting status, and points totals.
+            Add your first unit to get started.
+          </p>
+          <div className="empty-state__action">
+            <button className="btn btn--primary" onClick={() => setShowForm(true)}>
+              + Add Unit
+            </button>
+          </div>
         </div>
+      )}
+      {!loading && filtered.length === 0 && entries.length > 0 && (
+        <div className="collection-page__empty">No units match your filters.</div>
       )}
 
       {!loading && filtered.length > 0 && viewMode === 'grid' && (
