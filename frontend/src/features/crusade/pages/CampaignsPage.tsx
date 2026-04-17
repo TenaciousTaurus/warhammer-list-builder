@@ -4,6 +4,7 @@ import { useAuth } from '../../../shared/hooks/useAuth';
 import { useCrusadeStore } from '../stores/crusadeStore';
 import { CampaignCard } from '../components/CampaignCard';
 import { JoinCampaignModal } from '../components/JoinCampaignModal';
+import { WelcomeBanner } from '../../../shared/components/WelcomeBanner';
 import type { CampaignMember } from '../../../shared/types/database';
 import { supabase } from '../../../shared/lib/supabase';
 import '../crusade.css';
@@ -104,6 +105,12 @@ export function CampaignsPage() {
 
   return (
     <div className="campaigns-page">
+      <WelcomeBanner bannerKey="crusade-intro" title="What is Crusade?">
+        Crusade is the long-form narrative campaign mode for 40K. Track unit XP,
+        battle scars, honours, and requisition points across an evolving roster.
+        Create a campaign or join one with a share code to get started.
+      </WelcomeBanner>
+
       <div className="campaigns-page__header">
         <h1 className="campaigns-page__title">Crusade Campaigns</h1>
         <div className="campaigns-page__actions">
