@@ -124,8 +124,21 @@ export function LeagueDetailPage() {
         </h2>
 
         {activeLeague.tournaments.length === 0 ? (
-          <div className="league-detail__empty">
-            No tournaments linked to this league yet.
+          <div className="empty-state card">
+            <div className="empty-state__icon">&#127942;</div>
+            <div className="empty-state__title">No Tournaments Linked</div>
+            <p className="empty-state__description">
+              {isOwner
+                ? 'Link tournaments to this league to track standings across the season.'
+                : 'The league owner has not linked any tournaments to this league yet.'}
+            </p>
+            {isOwner && (
+              <div className="empty-state__action">
+                <button className="btn btn--primary" onClick={() => setShowAddTournament(true)}>
+                  + Add Tournament
+                </button>
+              </div>
+            )}
           </div>
         ) : (
           <div className="league-detail__grid">

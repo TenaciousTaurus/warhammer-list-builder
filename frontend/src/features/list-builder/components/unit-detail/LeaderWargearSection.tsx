@@ -14,9 +14,9 @@ export function LeaderWargearSection({
   selected,
   onSelect,
 }: LeaderWargearSectionProps) {
-  // Filter wargear options that belong to this leader variant
+  // Filter wargear options for this leader variant, excluding always-equipped items.
   const leaderOptions = wargearOptions.filter(
-    wo => wo.model_variant_id === leaderVariant.id
+    wo => wo.model_variant_id === leaderVariant.id && !wo.is_required
   );
 
   if (leaderOptions.length === 0) return null;
@@ -28,8 +28,8 @@ export function LeaderWargearSection({
     groups.get(opt.group_name)!.push(opt);
   }
 
-  // Only show groups with 2+ options (single-option groups are fixed)
-  const displayGroups = [...groups.entries()].filter(([, opts]) => opts.length > 1);
+  // Show all groups (single-option groups render as checkboxes via WargearToggle).
+  const displayGroups = [...groups.entries()].filter(([, opts]) => opts.length >= 1);
 
   if (displayGroups.length === 0) return null;
 

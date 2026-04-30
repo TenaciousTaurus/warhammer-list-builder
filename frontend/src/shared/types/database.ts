@@ -327,6 +327,7 @@ export type Database = {
           group_name: string;
           name: string;
           is_default: boolean;
+          is_required: boolean;
           points: number;
           model_variant_id: string | null;
           pool_group: string | null;
@@ -338,6 +339,7 @@ export type Database = {
           group_name: string;
           name: string;
           is_default?: boolean;
+          is_required?: boolean;
           points?: number;
           model_variant_id?: string | null;
           pool_group?: string | null;
@@ -349,6 +351,7 @@ export type Database = {
           group_name?: string;
           name?: string;
           is_default?: boolean;
+          is_required?: boolean;
           points?: number;
           model_variant_id?: string | null;
           pool_group?: string | null;

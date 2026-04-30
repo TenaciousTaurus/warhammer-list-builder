@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../shared/hooks/useAuth';
 import { useLeagueStore } from '../stores/leagueStore';
+import { WelcomeBanner } from '../../../shared/components/WelcomeBanner';
 import '../social.css';
 
 export function LeaguesPage() {
@@ -40,6 +41,12 @@ export function LeaguesPage() {
 
   return (
     <div className="leagues-page">
+      <WelcomeBanner bannerKey="leagues-intro" title="What are Leagues?">
+        Leagues group multiple tournaments into a season or series — like a
+        recurring weekly meta or a year-long campaign league. Create one to
+        link tournaments together and track standings across the whole season.
+      </WelcomeBanner>
+
       <div className="leagues-page__header">
         <h1 className="leagues-page__title">Leagues</h1>
         <button className="leagues-page__create-btn" onClick={() => setShowCreate(true)}>

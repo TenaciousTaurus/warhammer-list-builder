@@ -31,7 +31,8 @@ export function VariantWargearSection({
     wo => !wo.model_variant_id && !leaderVariantIds.has(wo.model_variant_id ?? '')
   );
 
-  const allWargear = [...variantWargear, ...unitLevelWargear];
+  // Strip always-equipped items — they are shown on the datasheet, not as choices.
+  const allWargear = [...variantWargear, ...unitLevelWargear].filter(wo => !wo.is_required);
 
   if (allWargear.length === 0) return null;
 
@@ -42,8 +43,9 @@ export function VariantWargearSection({
     groups.get(opt.group_name)!.push(opt);
   }
 
-  // Only show groups with 2+ options
-  const displayGroups = [...groups.entries()].filter(([, opts]) => opts.length > 1);
+  // Show all groups that have at least one option (single-option groups render
+  // as checkboxes via WargearToggle, so they are still useful to show).
+  const displayGroups = [...groups.entries()].filter(([, opts]) => opts.length >= 1);
 
   if (displayGroups.length === 0) return null;
 

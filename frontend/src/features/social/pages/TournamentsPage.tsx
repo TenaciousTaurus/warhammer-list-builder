@@ -4,6 +4,7 @@ import { useAuth } from '../../../shared/hooks/useAuth';
 import { useTournamentStore } from '../stores/tournamentStore';
 import { TournamentCard } from '../components/TournamentCard';
 import { TournamentFilters } from '../components/TournamentFilters';
+import { WelcomeBanner } from '../../../shared/components/WelcomeBanner';
 import type { Tournament } from '../../../shared/types/database';
 import '../social.css';
 
@@ -139,6 +140,12 @@ export function TournamentsPage() {
 
   return (
     <div className="tournaments-page">
+      <WelcomeBanner bannerKey="tournaments-intro" title="What are Tournaments?">
+        Run Swiss, Single Elimination, or Round Robin events with automated
+        pairings and standings. Create your own and invite players with a share
+        code, or browse public tournaments to enter one.
+      </WelcomeBanner>
+
       <div className="tournaments-page__header">
         <h1 className="tournaments-page__title">Tournaments</h1>
         <div className="tournaments-page__actions">
