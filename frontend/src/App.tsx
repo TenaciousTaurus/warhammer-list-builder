@@ -7,6 +7,7 @@ import './shared/css/settings.css';
 import { useAuth } from './shared/hooks/useAuth';
 import { AuthPage } from './shared/pages/AuthPage';
 import { DashboardPage } from './shared/pages/DashboardPage';
+import { LandingPage } from './shared/pages/LandingPage';
 import { ListsPage } from './features/list-builder/pages/ListsPage';
 import { ListEditorPage } from './features/list-builder/pages/ListEditorPage';
 import { lazy, Suspense, useState, type ReactNode } from 'react';
@@ -72,6 +73,12 @@ function ProtectedRoute({ children }: { children: ReactNode }) {
 
   if (!user) return <Navigate to="/auth" replace />;
   return <>{children}</>;
+}
+
+function HomeRoute() {
+  const { user, loading } = useAuth();
+  if (loading) return <RouteLoadingFallback />;
+  return user ? <DashboardPage /> : <LandingPage />;
 }
 
 function AppHeader() {
@@ -217,7 +224,7 @@ function App() {
           <Routes>
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
-            <Route path="/" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+            <Route path="/" element={<HomeRoute />} />
             <Route path="/lists" element={<ProtectedRoute><ListsPage /></ProtectedRoute>} />
             <Route path="/list/:id" element={<ProtectedRoute><ListEditorPage /></ProtectedRoute>} />
             <Route path="/play/:id" element={<ProtectedRoute><PlayModePage /></ProtectedRoute>} />

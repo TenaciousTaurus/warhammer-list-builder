@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../hooks/useAuth';
+import { WelcomeModal } from '../components/WelcomeModal';
 import type { ArmyList, Faction, GameSession } from '../types/database';
 
 export function DashboardPage() {
@@ -10,6 +11,8 @@ export function DashboardPage() {
   const [activeGame, setActiveGame] = useState<(GameSession & { army_lists: ArmyList }) | null>(null);
   const [completedGames, setCompletedGames] = useState<GameSession[]>([]);
   const [loading, setLoading] = useState(true);
+  const [welcomeDismissed, setWelcomeDismissed] = useState(false);
+  const showWelcome = !welcomeDismissed && !!user && !localStorage.getItem(`warforge_welcomed_${user.id}`);
 
   useEffect(() => {
     if (!user) return;
@@ -62,8 +65,38 @@ export function DashboardPage() {
   const totalGames = completedGames.length;
   const winRate = totalGames > 0 ? Math.round((wins / totalGames) * 100) : 0;
 
+  // Brand-new user: no lists, no games — show a focused welcome hero
+  // instead of the multi-card grid so the first action is obvious.
+  const isNewUser = recentLists.length === 0 && !activeGame && totalGames === 0;
+
+  if (isNewUser) {
+    return (
+      <div className="dashboard">
+        <div className="empty-state card">
+          <div className="empty-state__icon">&#9876;</div>
+          <div className="empty-state__title">Welcome to WarForge, Commander</div>
+          <p className="empty-state__description">
+            Let's get your first army list built. From there you can track games,
+            manage your collection, and run campaigns.
+          </p>
+          <div className="empty-state__action">
+            <Link to="/lists" className="btn btn--primary">
+              Create Your First List
+            </Link>
+          </div>
+          <p style={{ marginTop: 'var(--space-md)', fontSize: 'var(--text-sm)' }}>
+            or <Link to="/units">browse all units</Link>
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="dashboard">
+      {showWelcome && user && (
+        <WelcomeModal userId={user.id} onDone={() => setWelcomeDismissed(true)} />
+      )}
       <h2 className="dashboard__title">Command Center</h2>
 
       <div className="dashboard__grid">
@@ -103,7 +136,7 @@ export function DashboardPage() {
           </div>
           <div className="dashboard__card-body">
             {totalGames === 0 ? (
-              <p className="dashboard__empty">No games played yet. Start a game from one of your lists.</p>
+              <p className="dashboard__empty">No games played yet. Build a list, then start a game from the list editor.</p>
             ) : (
               <div className="dashboard__stats-grid">
                 <div className="dashboard__stat">
