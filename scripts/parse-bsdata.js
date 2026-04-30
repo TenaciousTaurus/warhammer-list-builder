@@ -776,7 +776,8 @@ function extractWargearFromGroup(group, entryIndex) {
 
   // Direct links — two sub-cases:
   //   type="selectionEntry"      → a single weapon/item; check min/max for is_required
-  //   type="selectionEntryGroup" → a sub-choice group (e.g. "Drones (0-2)"); always optional
+  //   type="selectionEntryGroup" → a sub-choice group (e.g. "Drones (0-2)"); always optional,
+  //                                 resolve target to extract sub_options
   for (const link of ensureArray(group?.entryLinks?.entryLink)) {
     const linkName = link['@_name'];
     if (!linkName) continue;
@@ -784,10 +785,57 @@ function extractWargearFromGroup(group, entryIndex) {
     for (const c of ensureArray(link?.costs?.cost)) {
       if (c['@_name'] === 'pts') pts = parseInt(c['@_value']) || 0;
     }
-    // selectionEntryGroup links are sub-choice groups, never "required" in the
-    // sense that they represent a set of options the player picks from.
     const isGroupLink = link['@_type'] === 'selectionEntryGroup';
     const required = !isGroupLink && isRequiredEquipment(link);
+
+    // For selectionEntryGroup links, resolve the target and extract sub-options
+    let subOptions = null;
+    let subPoolMax = null;
+    if (isGroupLink && entryIndex) {
+      const targetGroup = entryIndex.get(link['@_targetId']);
+      if (targetGroup) {
+        // Group-level pool max (total selections allowed across all sub-types)
+        for (const c of ensureArray(targetGroup?.constraints?.constraint)) {
+          if (c['@_type'] === 'max' && c['@_field'] === 'selections') {
+            const v = parseInt(c['@_value']);
+            if (v > 0 && v < 20) subPoolMax = v;
+          }
+        }
+        subOptions = [];
+        // Direct selectionEntry children of the target group
+        for (const e of ensureArray(targetGroup?.selectionEntries?.selectionEntry)) {
+          if (e['@_type'] !== 'upgrade') continue;
+          let maxCount = 2;
+          for (const c of ensureArray(e?.constraints?.constraint)) {
+            if (c['@_type'] === 'max' && c['@_field'] === 'selections') {
+              maxCount = parseInt(c['@_value']) || 2;
+            }
+          }
+          let sPts = 0;
+          for (const c of ensureArray(e?.costs?.cost)) {
+            if (c['@_name'] === 'pts') sPts = parseInt(c['@_value']) || 0;
+          }
+          subOptions.push({ name: e['@_name'], max_count: maxCount, points: sPts });
+        }
+        // entryLink children of the target group (linked drone types)
+        for (const subLink of ensureArray(targetGroup?.entryLinks?.entryLink)) {
+          if (!subLink['@_name']) continue;
+          let maxCount = 2;
+          for (const c of ensureArray(subLink?.constraints?.constraint)) {
+            if (c['@_type'] === 'max' && c['@_field'] === 'selections') {
+              maxCount = parseInt(c['@_value']) || 2;
+            }
+          }
+          let sPts = 0;
+          for (const c of ensureArray(subLink?.costs?.cost)) {
+            if (c['@_name'] === 'pts') sPts = parseInt(c['@_value']) || 0;
+          }
+          subOptions.push({ name: subLink['@_name'], max_count: maxCount, points: sPts });
+        }
+        if (subOptions.length === 0) subOptions = null;
+      }
+    }
+
     options.push({
       group_name: 'Wargear',
       name: linkName,
@@ -795,7 +843,8 @@ function extractWargearFromGroup(group, entryIndex) {
       is_required: required,
       points: pts,
       pool_group: groupPoolGroup,
-      pool_max: groupPoolMax,
+      pool_max: subPoolMax ?? groupPoolMax,
+      sub_options: subOptions,
     });
   }
 
@@ -1731,6 +1780,22 @@ function generateSQL(faction) {
         return `  (${esc(woId)}, ${esc(unit.id)}, ${esc(wo.group_name)}, ${esc(wo.name)}, ${wo.is_default}, ${isRequired}, ${wo.points}, ${mvIdSql}, ${poolGroupSql}, ${poolMaxSql})`;
       }).join(',\n') + '\nON CONFLICT (unit_id, group_name, name) DO UPDATE SET model_variant_id = EXCLUDED.model_variant_id, is_required = EXCLUDED.is_required, pool_group = EXCLUDED.pool_group, pool_max = EXCLUDED.pool_max;');
       lines.push('');
+
+      // Wargear sub-options (drone types, etc.) — emitted after the parent rows exist
+      const subRows = [];
+      for (const wo of unit.wargear_options) {
+        if (!wo.sub_options || wo.sub_options.length === 0) continue;
+        const woId = uuidFromSeed(`wargear:${factionName}:${unit.name}:${wo.group_name}:${wo.name}`);
+        for (const so of wo.sub_options) {
+          const soId = uuidFromSeed(`wargear_sub:${factionName}:${unit.name}:${wo.group_name}:${wo.name}:${so.name}`);
+          subRows.push(`  (${esc(soId)}, ${esc(woId)}, ${esc(so.name)}, ${so.max_count}, ${so.points})`);
+        }
+      }
+      if (subRows.length > 0) {
+        lines.push(`INSERT INTO public.wargear_sub_options (id, wargear_option_id, name, max_count, points) VALUES`);
+        lines.push(subRows.join(',\n') + '\nON CONFLICT (wargear_option_id, name) DO UPDATE SET max_count = EXCLUDED.max_count, points = EXCLUDED.points;');
+        lines.push('');
+      }
     }
   }
 
@@ -2069,6 +2134,17 @@ ALTER TABLE public.wargear_options ADD COLUMN IF NOT EXISTS model_variant_id uui
 ALTER TABLE public.wargear_options ADD COLUMN IF NOT EXISTS pool_group text;
 ALTER TABLE public.wargear_options ADD COLUMN IF NOT EXISTS pool_max integer;
 ALTER TABLE public.wargear_options ADD COLUMN IF NOT EXISTS is_required boolean NOT NULL DEFAULT false;
+
+-- Wargear sub-options (e.g. drone types within a "Drones (0-2)" group)
+CREATE TABLE IF NOT EXISTS public.wargear_sub_options (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  wargear_option_id uuid NOT NULL REFERENCES public.wargear_options(id) ON DELETE CASCADE,
+  name text NOT NULL,
+  max_count integer NOT NULL DEFAULT 2,
+  points integer NOT NULL DEFAULT 0,
+  UNIQUE (wargear_option_id, name)
+);
+CREATE INDEX IF NOT EXISTS idx_wargear_sub_options_parent ON public.wargear_sub_options(wargear_option_id);
 
 -- Extend army_list_unit_wargear with model_variant_id, quantity
 ALTER TABLE public.army_list_unit_wargear ADD COLUMN IF NOT EXISTS model_variant_id uuid REFERENCES public.unit_model_variants(id) ON DELETE SET NULL;

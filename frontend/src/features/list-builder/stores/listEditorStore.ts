@@ -3,7 +3,7 @@ import { supabase } from '../../../shared/lib/supabase';
 import type {
   ArmyList, Unit, UnitPointsTier, ArmyListUnit, Enhancement,
   Detachment, Ability, Weapon, ValidateArmyListResult, WargearOption,
-  ModelVariant, ArmyListUnitComposition, LeaderTarget, LeaderAttachment,
+  WargearSubOption, ModelVariant, ArmyListUnitComposition, LeaderTarget, LeaderAttachment,
 } from '../../../shared/types/database';
 import type { ParsedUnit } from '../components/ExportModal';
 
@@ -69,7 +69,12 @@ interface ListEditorState {
   enhancements: Enhancement[];
   listEnhancements: { id: string; enhancement_id: string; army_list_unit_id: string }[];
   wargearOptions: WargearOption[];
+  wargearSubOptions: WargearSubOption[];
   unitWargearSelections: Map<string, Map<string, string>>;
+  // Map<army_list_unit_id, Map<wargear_option_id, army_list_unit_wargear.id>>
+  unitWargearRowIds: Map<string, Map<string, string>>;
+  // Map<army_list_unit_wargear_id, Map<wargear_sub_option_id, quantity>>
+  unitWargearSubSelections: Map<string, Map<string, number>>;
   modelVariants: ModelVariant[];
   unitCompositions: Map<string, Map<string, number>>;
   leaderTargets: LeaderTarget[];
@@ -112,6 +117,7 @@ interface ListEditorState {
 
   // Wargear
   selectWargear: (armyListUnitId: string, groupName: string, optionId: string) => Promise<void>;
+  selectWargearSubOption: (armyListUnitWargearId: string, subOptionId: string, quantity: number) => Promise<void>;
 
   // Model composition
   updateComposition: (armyListUnitId: string, variantId: string, count: number) => Promise<void>;
@@ -149,7 +155,10 @@ function getInitialState() {
     enhancements: [] as Enhancement[],
     listEnhancements: [] as { id: string; enhancement_id: string; army_list_unit_id: string }[],
     wargearOptions: [] as WargearOption[],
+    wargearSubOptions: [] as WargearSubOption[],
     unitWargearSelections: new Map<string, Map<string, string>>(),
+    unitWargearRowIds: new Map<string, Map<string, string>>(),
+    unitWargearSubSelections: new Map<string, Map<string, number>>(),
     modelVariants: [] as ModelVariant[],
     unitCompositions: new Map<string, Map<string, number>>(),
     leaderTargets: [] as LeaderTarget[],
@@ -289,7 +298,7 @@ export const useListEditorStore = create<ListEditorState>()((set, get) => ({
       .select('*')
       .eq('army_list_id', listId);
 
-    // 5. Fetch wargear
+    // 5. Fetch wargear options + sub-options
     const unitIds = availableUnits.map(u => u.id);
     const { data: wargearData } = await supabase
       .from('wargear_options')
@@ -297,6 +306,15 @@ export const useListEditorStore = create<ListEditorState>()((set, get) => ({
       .in('unit_id', unitIds)
       .order('group_name')
       .order('is_default', { ascending: false });
+
+    const wargearOptionIds = (wargearData ?? []).map((w: WargearOption) => w.id);
+    const { data: wargearSubData } = wargearOptionIds.length > 0
+      ? await supabase
+          .from('wargear_sub_options')
+          .select('*')
+          .in('wargear_option_id', wargearOptionIds)
+          .order('name')
+      : { data: [] };
 
     // 6. Fetch model variants
     const { data: variantData } = await supabase
@@ -331,13 +349,36 @@ export const useListEditorStore = create<ListEditorState>()((set, get) => ({
 
       if (wargearSelData) {
         const selMap = new Map<string, Map<string, string>>();
+        const rowIdMap = new Map<string, Map<string, string>>();
         for (const sel of wargearSelData) {
           const opt = (wargearData ?? []).find((w: WargearOption) => w.id === sel.wargear_option_id);
           if (!opt) continue;
           if (!selMap.has(sel.army_list_unit_id)) selMap.set(sel.army_list_unit_id, new Map());
           selMap.get(sel.army_list_unit_id)!.set(opt.group_name, sel.wargear_option_id);
+          if (!rowIdMap.has(sel.army_list_unit_id)) rowIdMap.set(sel.army_list_unit_id, new Map());
+          rowIdMap.get(sel.army_list_unit_id)!.set(sel.wargear_option_id, sel.id);
         }
         unitWargearSelections = selMap;
+        set({ unitWargearRowIds: rowIdMap });
+
+        // Fetch sub-option selections keyed by army_list_unit_wargear.id
+        const wargearRowIds = wargearSelData.map(s => s.id);
+        if (wargearRowIds.length > 0) {
+          const { data: subSelData } = await supabase
+            .from('army_list_unit_wargear_sub')
+            .select('*')
+            .in('army_list_unit_wargear_id', wargearRowIds);
+          if (subSelData) {
+            const subMap = new Map<string, Map<string, number>>();
+            for (const sub of subSelData) {
+              if (!subMap.has(sub.army_list_unit_wargear_id)) {
+                subMap.set(sub.army_list_unit_wargear_id, new Map());
+              }
+              subMap.get(sub.army_list_unit_wargear_id)!.set(sub.wargear_sub_option_id, sub.quantity);
+            }
+            set({ unitWargearSubSelections: subMap });
+          }
+        }
       }
 
       const { data: compData } = await supabase
@@ -368,6 +409,7 @@ export const useListEditorStore = create<ListEditorState>()((set, get) => ({
       enhancements: enhData ?? [],
       listEnhancements: listEnhData ?? [],
       wargearOptions: (wargearData ?? []) as WargearOption[],
+      wargearSubOptions: (wargearSubData ?? []) as WargearSubOption[],
       unitWargearSelections,
       modelVariants: (variantData ?? []) as ModelVariant[],
       unitCompositions,
@@ -580,19 +622,57 @@ export const useListEditorStore = create<ListEditorState>()((set, get) => ({
           .eq('wargear_option_id', currentOptionId);
       }
     }
+
+    let newRowId: string | undefined;
     if (optionId) {
-      await supabase.from('army_list_unit_wargear').insert({
-        army_list_unit_id: armyListUnitId,
-        wargear_option_id: optionId,
-      });
+      const { data: inserted } = await supabase
+        .from('army_list_unit_wargear')
+        .insert({ army_list_unit_id: armyListUnitId, wargear_option_id: optionId })
+        .select('id')
+        .single();
+      newRowId = inserted?.id as string | undefined;
     }
 
-    // Optimistic local update
     set((state) => {
-      const next = new Map(state.unitWargearSelections);
-      if (!next.has(armyListUnitId)) next.set(armyListUnitId, new Map());
-      next.get(armyListUnitId)!.set(groupName, optionId);
-      return { unitWargearSelections: next };
+      const nextSel = new Map(state.unitWargearSelections);
+      if (!nextSel.has(armyListUnitId)) nextSel.set(armyListUnitId, new Map());
+      nextSel.get(armyListUnitId)!.set(groupName, optionId);
+
+      const nextRowIds = new Map(state.unitWargearRowIds);
+      if (!nextRowIds.has(armyListUnitId)) nextRowIds.set(armyListUnitId, new Map());
+      if (newRowId) {
+        nextRowIds.get(armyListUnitId)!.set(optionId, newRowId);
+      }
+
+      return { unitWargearSelections: nextSel, unitWargearRowIds: nextRowIds };
+    });
+  },
+
+  selectWargearSubOption: async (armyListUnitWargearId: string, subOptionId: string, quantity: number) => {
+    if (quantity <= 0) {
+      await supabase
+        .from('army_list_unit_wargear_sub')
+        .delete()
+        .eq('army_list_unit_wargear_id', armyListUnitWargearId)
+        .eq('wargear_sub_option_id', subOptionId);
+    } else {
+      await supabase
+        .from('army_list_unit_wargear_sub')
+        .upsert(
+          { army_list_unit_wargear_id: armyListUnitWargearId, wargear_sub_option_id: subOptionId, quantity },
+          { onConflict: 'army_list_unit_wargear_id,wargear_sub_option_id' },
+        );
+    }
+
+    set((state) => {
+      const next = new Map(state.unitWargearSubSelections);
+      if (!next.has(armyListUnitWargearId)) next.set(armyListUnitWargearId, new Map());
+      if (quantity <= 0) {
+        next.get(armyListUnitWargearId)!.delete(subOptionId);
+      } else {
+        next.get(armyListUnitWargearId)!.set(subOptionId, quantity);
+      }
+      return { unitWargearSubSelections: next };
     });
   },
 
