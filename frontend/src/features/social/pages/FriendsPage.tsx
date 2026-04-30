@@ -121,13 +121,19 @@ export function FriendsPage() {
             />
           </div>
 
-          {filteredFriends.length === 0 ? (
-            <div className="friends-page__empty">
-              <p className="friends-page__empty-text">
-                {searchQuery
-                  ? 'No friends match your search.'
-                  : 'No friends yet. Use the search bar above to find and add players.'}
+          {filteredFriends.length === 0 && !searchQuery ? (
+            <div className="empty-state card">
+              <div className="empty-state__icon">&#128101;</div>
+              <div className="empty-state__title">No Friends Yet</div>
+              <p className="empty-state__description">
+                Connect with other commanders to track head-to-head records,
+                share lists, and challenge each other to games. Use the search
+                bar above to find players by name or email.
               </p>
+            </div>
+          ) : filteredFriends.length === 0 ? (
+            <div className="friends-page__empty">
+              <p className="friends-page__empty-text">No friends match your search.</p>
             </div>
           ) : (
             <div className="friends-page__list">

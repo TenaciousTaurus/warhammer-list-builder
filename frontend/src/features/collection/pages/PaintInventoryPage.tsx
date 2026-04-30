@@ -217,12 +217,22 @@ export function PaintInventoryPage() {
           <div className="skeleton skeleton--bar" />
           <div className="skeleton skeleton--bar" />
         </div>
-      ) : filtered.length === 0 ? (
-        <div className="collection-page__empty">
-          {totalPaints === 0
-            ? 'No paints in your inventory yet. Add your first paint to get started.'
-            : 'No paints match your filters.'}
+      ) : filtered.length === 0 && totalPaints === 0 ? (
+        <div className="empty-state card">
+          <div className="empty-state__icon">&#127912;</div>
+          <div className="empty-state__title">No Paints in Inventory</div>
+          <p className="empty-state__description">
+            Track which paints you own and which ones you're running low on.
+            Add your first paint to start managing your hobby supplies.
+          </p>
+          <div className="empty-state__action">
+            <button className="btn btn--primary" onClick={() => setAddingPaint(true)}>
+              + Add Paint
+            </button>
+          </div>
         </div>
+      ) : filtered.length === 0 ? (
+        <div className="collection-page__empty">No paints match your filters.</div>
       ) : (
         <div className="paint-inventory__grid">
           {filtered.map((item) => (
