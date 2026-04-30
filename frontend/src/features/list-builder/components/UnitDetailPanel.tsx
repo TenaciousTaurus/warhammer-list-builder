@@ -165,11 +165,12 @@ export function UnitDetailPanel({
         const wargearGroups: [string, WargearOption[]][] = [];
         const groups = new Map<string, WargearOption[]>();
         for (const opt of wargear.options) {
+          if (opt.is_required) continue; // always-equipped, shown on datasheet only
           if (!groups.has(opt.group_name)) groups.set(opt.group_name, []);
           groups.get(opt.group_name)!.push(opt);
         }
         for (const [name, opts] of groups) {
-          if (opts.length > 1) wargearGroups.push([name, opts]);
+          if (opts.length >= 1) wargearGroups.push([name, opts]);
         }
         if (wargearGroups.length === 0) return null;
         return (
