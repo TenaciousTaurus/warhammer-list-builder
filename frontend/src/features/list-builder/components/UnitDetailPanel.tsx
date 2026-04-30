@@ -1,7 +1,8 @@
-import type { Unit, UnitPointsTier, Ability, Enhancement, Weapon, WargearOption, ModelVariant } from '../../../shared/types/database';
+import type { Unit, UnitPointsTier, Ability, Enhancement, Weapon, WargearOption, WargearSubOption, ModelVariant } from '../../../shared/types/database';
 import { StatLine } from '../../../shared/components/StatLine';
 import { cleanGameText } from '../../../shared/lib/cleanGameText';
 import { WargearToggle } from './unit-detail/WargearToggle';
+import { WargearSubPicker } from './unit-detail/WargearSubPicker';
 import { LeaderWargearSection } from './unit-detail/LeaderWargearSection';
 import { ModelCompositionSection } from './unit-detail/ModelCompositionSection';
 import { VariantWargearSection } from './unit-detail/VariantWargearSection';
@@ -35,6 +36,12 @@ interface UnitDetailPanelProps {
     options: WargearOption[];
     selected: Map<string, string>;
     onSelect: (groupName: string, optionId: string) => void;
+    subOptions: WargearSubOption[];
+    // Map<wargear_option_id, army_list_unit_wargear.id>
+    rowIds: Map<string, string>;
+    // Map<army_list_unit_wargear_id, Map<sub_option_id, quantity>>
+    subSelections: Map<string, Map<string, number>>;
+    onSelectSubOption: (armyListUnitWargearId: string, subOptionId: string, quantity: number) => void;
   };
   composition?: {
     variants: ModelVariant[];
@@ -180,15 +187,32 @@ export function UnitDetailPanel({
               <span className="detail-section__title">Wargear</span>
             </div>
             <div className="detail-section__content">
-              {wargearGroups.map(([groupName, opts]) => (
-                <WargearToggle
-                  key={groupName}
-                  groupName={groupName}
-                  options={opts}
-                  selectedId={wargear.selected.get(groupName) ?? opts.find(o => o.is_default)?.id ?? ''}
-                  onSelect={(optionId) => wargear.onSelect(groupName, optionId)}
-                />
-              ))}
+              {wargearGroups.map(([groupName, opts]) => {
+                const selectedOptId = wargear.selected.get(groupName) ?? opts.find(o => o.is_default)?.id ?? '';
+                const subs = wargear.subOptions.filter(s => s.wargear_option_id === selectedOptId);
+                const wargearRowId = wargear.rowIds.get(selectedOptId);
+                const subSels = wargearRowId ? (wargear.subSelections.get(wargearRowId) ?? new Map<string, number>()) : new Map<string, number>();
+                const selectedOpt = opts.find(o => o.id === selectedOptId);
+                return (
+                  <div key={groupName}>
+                    <WargearToggle
+                      groupName={groupName}
+                      options={opts}
+                      selectedId={selectedOptId}
+                      onSelect={(optionId) => wargear.onSelect(groupName, optionId)}
+                    />
+                    {subs.length > 0 && wargearRowId && selectedOpt && (
+                      <WargearSubPicker
+                        groupName={selectedOpt.name}
+                        poolMax={selectedOpt.pool_max ?? subs.reduce((max, s) => Math.max(max, s.max_count), 0)}
+                        subOptions={subs}
+                        selected={subSels}
+                        onChangeQuantity={(subId, qty) => wargear.onSelectSubOption(wargearRowId, subId, qty)}
+                      />
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
         );
