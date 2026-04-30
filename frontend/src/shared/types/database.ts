@@ -327,6 +327,7 @@ export type Database = {
           group_name: string;
           name: string;
           is_default: boolean;
+          is_required: boolean;
           points: number;
           model_variant_id: string | null;
           pool_group: string | null;
@@ -338,6 +339,7 @@ export type Database = {
           group_name: string;
           name: string;
           is_default?: boolean;
+          is_required?: boolean;
           points?: number;
           model_variant_id?: string | null;
           pool_group?: string | null;
@@ -349,6 +351,7 @@ export type Database = {
           group_name?: string;
           name?: string;
           is_default?: boolean;
+          is_required?: boolean;
           points?: number;
           model_variant_id?: string | null;
           pool_group?: string | null;
@@ -376,6 +379,51 @@ export type Database = {
           army_list_unit_id?: string;
           wargear_option_id?: string;
           model_variant_id?: string | null;
+          quantity?: number;
+        };
+        Relationships: [];
+      };
+      wargear_sub_options: {
+        Row: {
+          id: string;
+          wargear_option_id: string;
+          name: string;
+          max_count: number;
+          points: number;
+        };
+        Insert: {
+          id?: string;
+          wargear_option_id: string;
+          name: string;
+          max_count?: number;
+          points?: number;
+        };
+        Update: {
+          id?: string;
+          wargear_option_id?: string;
+          name?: string;
+          max_count?: number;
+          points?: number;
+        };
+        Relationships: [];
+      };
+      army_list_unit_wargear_sub: {
+        Row: {
+          id: string;
+          army_list_unit_wargear_id: string;
+          wargear_sub_option_id: string;
+          quantity: number;
+        };
+        Insert: {
+          id?: string;
+          army_list_unit_wargear_id: string;
+          wargear_sub_option_id: string;
+          quantity?: number;
+        };
+        Update: {
+          id?: string;
+          army_list_unit_wargear_id?: string;
+          wargear_sub_option_id?: string;
           quantity?: number;
         };
         Relationships: [];
@@ -1481,7 +1529,9 @@ export type ArmyList = Database['public']['Tables']['army_lists']['Row'];
 export type ArmyListUnit = Database['public']['Tables']['army_list_units']['Row'];
 export type ArmyListEnhancement = Database['public']['Tables']['army_list_enhancements']['Row'];
 export type WargearOption = Database['public']['Tables']['wargear_options']['Row'];
+export type WargearSubOption = Database['public']['Tables']['wargear_sub_options']['Row'];
 export type ArmyListUnitWargear = Database['public']['Tables']['army_list_unit_wargear']['Row'];
+export type ArmyListUnitWargearSub = Database['public']['Tables']['army_list_unit_wargear_sub']['Row'];
 export type ModelVariant = Database['public']['Tables']['unit_model_variants']['Row'];
 export type ArmyListUnitComposition = Database['public']['Tables']['army_list_unit_composition']['Row'];
 export type LeaderTarget = Database['public']['Tables']['unit_leader_targets']['Row'];

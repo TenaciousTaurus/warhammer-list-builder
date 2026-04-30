@@ -711,9 +711,29 @@ function extractMaxPerList(node) {
 }
 
 /**
+ * Returns true when a BSData entry/link node has scope="parent" constraints of
+ * min >= 1 AND max === 1, meaning the item is always equipped and not a user
+ * choice (e.g. a Space Marine's bolt pistol is always there).
+ */
+function isRequiredEquipment(node) {
+  let hasMin1 = false;
+  let hasMax1 = false;
+  for (const c of ensureArray(node?.constraints?.constraint)) {
+    if (c['@_field'] !== 'selections') continue;
+    if (c['@_type'] === 'min' && parseInt(c['@_value']) >= 1) hasMin1 = true;
+    if (c['@_type'] === 'max' && parseInt(c['@_value']) === 1) hasMax1 = true;
+  }
+  return hasMin1 && hasMax1;
+}
+
+/**
  * Extract wargear options from a "Wargear" selectionEntryGroup.
  * Handles direct entries, links, and subgroups.
  * Returns options with optional pool_group/pool_max from group constraints.
+ *
+ * is_required: true  → item is always equipped (min=1,max=1 constraints).
+ *                       Shown on the datasheet only; never rendered as a choice.
+ * is_required: false → item is a genuine player choice.
  */
 function extractWargearFromGroup(group, entryIndex) {
   const options = [];
@@ -731,7 +751,7 @@ function extractWargearFromGroup(group, entryIndex) {
     }
   }
 
-  // Direct entries (simple wargear options)
+  // Direct entries (simple wargear options — selectionEntry type="upgrade")
   const directEntries = ensureArray(group?.selectionEntries?.selectionEntry)
     .filter(e => e['@_type'] === 'upgrade');
 
@@ -741,10 +761,12 @@ function extractWargearFromGroup(group, entryIndex) {
       for (const c of ensureArray(e?.costs?.cost)) {
         if (c['@_name'] === 'pts') pts = parseInt(c['@_value']) || 0;
       }
+      const required = isRequiredEquipment(e);
       options.push({
         group_name: 'Wargear',
         name: e['@_name'],
         is_default: idx === 0,
+        is_required: required,
         points: pts,
         pool_group: groupPoolGroup,
         pool_max: groupPoolMax,
@@ -752,7 +774,10 @@ function extractWargearFromGroup(group, entryIndex) {
     });
   }
 
-  // Direct links (shared wargear references)
+  // Direct links — two sub-cases:
+  //   type="selectionEntry"      → a single weapon/item; check min/max for is_required
+  //   type="selectionEntryGroup" → a sub-choice group (e.g. "Drones (0-2)"); always optional,
+  //                                 resolve target to extract sub_options
   for (const link of ensureArray(group?.entryLinks?.entryLink)) {
     const linkName = link['@_name'];
     if (!linkName) continue;
@@ -760,13 +785,66 @@ function extractWargearFromGroup(group, entryIndex) {
     for (const c of ensureArray(link?.costs?.cost)) {
       if (c['@_name'] === 'pts') pts = parseInt(c['@_value']) || 0;
     }
+    const isGroupLink = link['@_type'] === 'selectionEntryGroup';
+    const required = !isGroupLink && isRequiredEquipment(link);
+
+    // For selectionEntryGroup links, resolve the target and extract sub-options
+    let subOptions = null;
+    let subPoolMax = null;
+    if (isGroupLink && entryIndex) {
+      const targetGroup = entryIndex.get(link['@_targetId']);
+      if (targetGroup) {
+        // Group-level pool max (total selections allowed across all sub-types)
+        for (const c of ensureArray(targetGroup?.constraints?.constraint)) {
+          if (c['@_type'] === 'max' && c['@_field'] === 'selections') {
+            const v = parseInt(c['@_value']);
+            if (v > 0 && v < 20) subPoolMax = v;
+          }
+        }
+        subOptions = [];
+        // Direct selectionEntry children of the target group
+        for (const e of ensureArray(targetGroup?.selectionEntries?.selectionEntry)) {
+          if (e['@_type'] !== 'upgrade') continue;
+          let maxCount = 2;
+          for (const c of ensureArray(e?.constraints?.constraint)) {
+            if (c['@_type'] === 'max' && c['@_field'] === 'selections') {
+              maxCount = parseInt(c['@_value']) || 2;
+            }
+          }
+          let sPts = 0;
+          for (const c of ensureArray(e?.costs?.cost)) {
+            if (c['@_name'] === 'pts') sPts = parseInt(c['@_value']) || 0;
+          }
+          subOptions.push({ name: e['@_name'], max_count: maxCount, points: sPts });
+        }
+        // entryLink children of the target group (linked drone types)
+        for (const subLink of ensureArray(targetGroup?.entryLinks?.entryLink)) {
+          if (!subLink['@_name']) continue;
+          let maxCount = 2;
+          for (const c of ensureArray(subLink?.constraints?.constraint)) {
+            if (c['@_type'] === 'max' && c['@_field'] === 'selections') {
+              maxCount = parseInt(c['@_value']) || 2;
+            }
+          }
+          let sPts = 0;
+          for (const c of ensureArray(subLink?.costs?.cost)) {
+            if (c['@_name'] === 'pts') sPts = parseInt(c['@_value']) || 0;
+          }
+          subOptions.push({ name: subLink['@_name'], max_count: maxCount, points: sPts });
+        }
+        if (subOptions.length === 0) subOptions = null;
+      }
+    }
+
     options.push({
       group_name: 'Wargear',
       name: linkName,
       is_default: options.filter(o => o.group_name === 'Wargear').length === 0,
+      is_required: required,
       points: pts,
       pool_group: groupPoolGroup,
-      pool_max: groupPoolMax,
+      pool_max: subPoolMax ?? groupPoolMax,
+      sub_options: subOptions,
     });
   }
 
@@ -798,6 +876,7 @@ function extractWargearFromGroup(group, entryIndex) {
         group_name: sgName,
         name: e['@_name'],
         is_default: sgIdx === 0,
+        is_required: isRequiredEquipment(e),
         points: pts,
         pool_group: sgPoolGroup || groupPoolGroup,
         pool_max: sgPoolMax || groupPoolMax,
@@ -815,10 +894,12 @@ function extractWargearFromGroup(group, entryIndex) {
       for (const c of ensureArray(link?.costs?.cost)) {
         if (c['@_name'] === 'pts') pts = parseInt(c['@_value']) || 0;
       }
+      const isGroupLink = link['@_type'] === 'selectionEntryGroup';
       options.push({
         group_name: sgName,
         name: targetName,
         is_default: options.filter(o => o.group_name === sgName).length === 0,
+        is_required: !isGroupLink && isRequiredEquipment(link),
         points: pts,
         pool_group: sgPoolGroup || groupPoolGroup,
         pool_max: sgPoolMax || groupPoolMax,
@@ -1680,9 +1761,9 @@ function generateSQL(faction) {
       lines.push('');
     }
 
-    // Wargear options (with model_variant_id, pool_group, pool_max)
+    // Wargear options (with model_variant_id, pool_group, pool_max, is_required)
     if (unit.wargear_options && unit.wargear_options.length > 0) {
-      lines.push(`INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, points, model_variant_id, pool_group, pool_max) VALUES`);
+      lines.push(`INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, is_required, points, model_variant_id, pool_group, pool_max) VALUES`);
       lines.push(unit.wargear_options.map(wo => {
         const woId = uuidFromSeed(`wargear:${factionName}:${unit.name}:${wo.group_name}:${wo.name}`);
         // Resolve model_variant_id if we have a model_variant_name
@@ -1695,9 +1776,26 @@ function generateSQL(faction) {
         }
         const poolGroupSql = wo.pool_group ? esc(wo.pool_group) : 'NULL';
         const poolMaxSql = wo.pool_max != null ? wo.pool_max : 'NULL';
-        return `  (${esc(woId)}, ${esc(unit.id)}, ${esc(wo.group_name)}, ${esc(wo.name)}, ${wo.is_default}, ${wo.points}, ${mvIdSql}, ${poolGroupSql}, ${poolMaxSql})`;
-      }).join(',\n') + '\nON CONFLICT (unit_id, group_name, name) DO UPDATE SET model_variant_id = EXCLUDED.model_variant_id, pool_group = EXCLUDED.pool_group, pool_max = EXCLUDED.pool_max;');
+        const isRequired = wo.is_required === true;
+        return `  (${esc(woId)}, ${esc(unit.id)}, ${esc(wo.group_name)}, ${esc(wo.name)}, ${wo.is_default}, ${isRequired}, ${wo.points}, ${mvIdSql}, ${poolGroupSql}, ${poolMaxSql})`;
+      }).join(',\n') + '\nON CONFLICT (unit_id, group_name, name) DO UPDATE SET model_variant_id = EXCLUDED.model_variant_id, is_required = EXCLUDED.is_required, pool_group = EXCLUDED.pool_group, pool_max = EXCLUDED.pool_max;');
       lines.push('');
+
+      // Wargear sub-options (drone types, etc.) — emitted after the parent rows exist
+      const subRows = [];
+      for (const wo of unit.wargear_options) {
+        if (!wo.sub_options || wo.sub_options.length === 0) continue;
+        const woId = uuidFromSeed(`wargear:${factionName}:${unit.name}:${wo.group_name}:${wo.name}`);
+        for (const so of wo.sub_options) {
+          const soId = uuidFromSeed(`wargear_sub:${factionName}:${unit.name}:${wo.group_name}:${wo.name}:${so.name}`);
+          subRows.push(`  (${esc(soId)}, ${esc(woId)}, ${esc(so.name)}, ${so.max_count}, ${so.points})`);
+        }
+      }
+      if (subRows.length > 0) {
+        lines.push(`INSERT INTO public.wargear_sub_options (id, wargear_option_id, name, max_count, points) VALUES`);
+        lines.push(subRows.join(',\n') + '\nON CONFLICT (wargear_option_id, name) DO UPDATE SET max_count = EXCLUDED.max_count, points = EXCLUDED.points;');
+        lines.push('');
+      }
     }
   }
 
@@ -2031,10 +2129,22 @@ CREATE TABLE IF NOT EXISTS public.army_list_leader_attachments (
 CREATE INDEX IF NOT EXISTS idx_army_list_leader_attachments_list ON public.army_list_leader_attachments(army_list_id);
 CREATE INDEX IF NOT EXISTS idx_army_list_leader_attachments_target ON public.army_list_leader_attachments(target_army_list_unit_id);
 
--- Extend wargear_options with model_variant_id, pool_group, pool_max
+-- Extend wargear_options with model_variant_id, pool_group, pool_max, is_required
 ALTER TABLE public.wargear_options ADD COLUMN IF NOT EXISTS model_variant_id uuid REFERENCES public.unit_model_variants(id) ON DELETE SET NULL;
 ALTER TABLE public.wargear_options ADD COLUMN IF NOT EXISTS pool_group text;
 ALTER TABLE public.wargear_options ADD COLUMN IF NOT EXISTS pool_max integer;
+ALTER TABLE public.wargear_options ADD COLUMN IF NOT EXISTS is_required boolean NOT NULL DEFAULT false;
+
+-- Wargear sub-options (e.g. drone types within a "Drones (0-2)" group)
+CREATE TABLE IF NOT EXISTS public.wargear_sub_options (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  wargear_option_id uuid NOT NULL REFERENCES public.wargear_options(id) ON DELETE CASCADE,
+  name text NOT NULL,
+  max_count integer NOT NULL DEFAULT 2,
+  points integer NOT NULL DEFAULT 0,
+  UNIQUE (wargear_option_id, name)
+);
+CREATE INDEX IF NOT EXISTS idx_wargear_sub_options_parent ON public.wargear_sub_options(wargear_option_id);
 
 -- Extend army_list_unit_wargear with model_variant_id, quantity
 ALTER TABLE public.army_list_unit_wargear ADD COLUMN IF NOT EXISTS model_variant_id uuid REFERENCES public.unit_model_variants(id) ON DELETE SET NULL;

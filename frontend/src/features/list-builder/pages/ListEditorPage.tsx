@@ -251,6 +251,12 @@ export function ListEditorPage() {
                 options: unitOpts,
                 selected: editor.unitWargearSelections.get(selectedLu.id) ?? new Map(),
                 onSelect: (groupName: string, optionId: string) => editor.selectWargear(selectedLu.id, groupName, optionId),
+                subOptions: editor.wargearSubOptions.filter(s =>
+                  unitOpts.some(o => o.id === s.wargear_option_id)
+                ),
+                rowIds: editor.unitWargearRowIds.get(selectedLu.id) ?? new Map(),
+                subSelections: editor.unitWargearSubSelections,
+                onSelectSubOption: editor.selectWargearSubOption,
               } : undefined}
               composition={(() => {
                 const variants = editor.getModelVariantsForUnit(selectedLu.unit_id);
