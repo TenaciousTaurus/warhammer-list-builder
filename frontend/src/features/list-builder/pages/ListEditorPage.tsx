@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../shared/hooks/useAuth';
 import { useListEditor, getUnitPoints } from '../hooks/useListEditor';
@@ -9,6 +9,7 @@ import { ArmyRoster } from '../components/ArmyRoster';
 import { UnitDetailPanel } from '../components/UnitDetailPanel';
 import { ExportModal } from '../components/ExportModal';
 import { ListVerification } from '../../collection/components/ListVerification';
+import { buildAllUnitKeywords, isEnhancementEligible } from '../lib/enhancementEligibility';
 import type { UnitWithRelations } from '../stores/listEditorStore';
 
 type MobileTab = 'roster' | 'picker' | 'detail';
@@ -20,6 +21,11 @@ export function ListEditorPage() {
   const editor = useListEditor(id);
   const verification = useListVerification(editor.listUnits, user?.id);
   const [mobileTab, setMobileTab] = useState<MobileTab>('roster');
+
+  const allUnitKeywords = useMemo(
+    () => buildAllUnitKeywords(editor.availableUnits),
+    [editor.availableUnits],
+  );
 
   // On mobile, selecting a unit switches to detail tab
   const handleSelectUnit = useCallback((unitId: string | null) => {
@@ -243,7 +249,10 @@ export function ListEditorPage() {
               onClose={() => editor.setSelectedArmyListUnitId(null)}
               enhancement={isCharacter ? {
                 assigned: unitEnh ? editor.enhancements.find(e => e.id === unitEnh.enhancementId) ?? null : null,
-                available: editor.enhancements.filter(e => !editor.assignedEnhancementIds.has(e.id) || e.id === unitEnh?.enhancementId),
+                available: editor.enhancements.filter(e =>
+                  (!editor.assignedEnhancementIds.has(e.id) || e.id === unitEnh?.enhancementId) &&
+                  isEnhancementEligible(e, selectedLu.units, allUnitKeywords)
+                ),
                 onAssign: (enhId) => editor.assignEnhancement(selectedLu.id, enhId),
                 limitReached: editor.enhancementLimitReached && !unitEnh,
               } : undefined}
