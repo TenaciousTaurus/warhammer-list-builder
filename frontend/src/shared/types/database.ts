@@ -9,6 +9,8 @@ export type Database = {
           alignment: 'imperium' | 'chaos' | 'xenos' | 'unaligned' | null;
           parent_faction_id: string | null;
           edition: string;
+          data_source: string;
+          data_source_updated_at: string | null;
           created_at: string;
         };
         Insert: {
@@ -18,6 +20,8 @@ export type Database = {
           alignment?: 'imperium' | 'chaos' | 'xenos' | 'unaligned' | null;
           parent_faction_id?: string | null;
           edition?: string;
+          data_source?: string;
+          data_source_updated_at?: string | null;
         };
         Update: {
           id?: string;
@@ -25,6 +29,8 @@ export type Database = {
           icon_url?: string | null;
           parent_faction_id?: string | null;
           edition?: string;
+          data_source?: string;
+          data_source_updated_at?: string | null;
         };
         Relationships: [];
       };
@@ -702,6 +708,7 @@ export type Database = {
           timer_player_seconds: number;
           timer_opponent_seconds: number;
           invite_code: string | null;
+          is_spectatable: boolean;
           notes: string | null;
           started_at: string | null;
           completed_at: string | null;
@@ -726,6 +733,7 @@ export type Database = {
           timer_player_seconds?: number;
           timer_opponent_seconds?: number;
           invite_code?: string | null;
+          is_spectatable?: boolean;
           notes?: string | null;
           started_at?: string | null;
           completed_at?: string | null;
@@ -748,6 +756,7 @@ export type Database = {
           timer_player_seconds?: number;
           timer_opponent_seconds?: number;
           invite_code?: string | null;
+          is_spectatable?: boolean;
           notes?: string | null;
           started_at?: string | null;
           completed_at?: string | null;

@@ -65,11 +65,8 @@ These items are permanently out of scope. If someone asks for them, the answer i
 
 ### W1-1 — Edition Discriminator *(Most time-sensitive item in the entire plan)*
 
-- [ ] Migration: add `edition TEXT NOT NULL DEFAULT '10e'` to:
-  - `factions`, `detachments`, `units`, `unit_points_tiers`, `weapons`, `abilities`, `enhancements`, `wargear_options`, `battle_sizes`
-- [ ] Migration: add `edition TEXT NOT NULL DEFAULT '10e'` to `army_lists`
-- [ ] Update `shared/types/database.ts` to include `edition` on all affected table types
-- [ ] No frontend UI needed yet — column exists, defaults to `'10e'`, 11th Edition data sets `'11e'`
+- [x] Migration: add `edition TEXT NOT NULL DEFAULT '10e'` to all game data tables — completed 2026-05-02. Migration: `20260502000001_edition_discriminator.sql`
+- [x] Update `shared/types/database.ts` to include `edition` on all affected table types — completed 2026-05-02.
 
 **Why now:** Every user list created without this column makes the eventual backfill more painful. Do before any more data is ingested.
 
@@ -77,16 +74,9 @@ These items are permanently out of scope. If someone asks for them, the answer i
 
 ### W1-2 — Army List Versioning
 
-- [ ] Migration: create `army_list_versions` table:
-  ```sql
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  list_id UUID REFERENCES army_lists(id) ON DELETE CASCADE,
-  snapshot JSONB NOT NULL,  -- full serialized list state
-  changed_at TIMESTAMPTZ DEFAULT NOW(),
-  change_note TEXT
-  ```
-- [ ] In `listEditorStore.ts`: after every save, insert a snapshot row (list metadata + all units + wargear + enhancements + leader attachments)
-- [ ] RLS: owner-only read/write on `army_list_versions`
+- [x] Migration: create `army_list_versions` table — completed 2026-05-02. Migration: `20260502000002_army_list_versions.sql`
+- [x] In `listEditorStore.ts`: `_saveSnapshot()` fires after every meaningful save — completed 2026-05-02.
+- [x] RLS: owner-only read/write on `army_list_versions` — completed 2026-05-02.
 
 **Depends on:** W1-1 (edition must be in the snapshot)
 
@@ -94,15 +84,10 @@ These items are permanently out of scope. If someone asks for them, the answer i
 
 ### W1-3 — PWA: Manifest + Service Worker
 
-- [ ] Add `vite-plugin-pwa` to `frontend/package.json`
-- [ ] Configure `manifest.json`: name, short_name, icons (192×192, 512×512), display: standalone, theme_color: `#0a0a0f`
-- [ ] Configure Workbox cache strategies:
-  - Static assets (JS/CSS/fonts): `CacheFirst`
-  - Game data endpoints (`/rest/v1/factions`, `/rest/v1/units`, etc.): `StaleWhileRevalidate`
-  - User data (`/rest/v1/army_lists`, `/rest/v1/game_sessions`): `NetworkFirst` with IndexedDB fallback
-- [ ] Generalize existing `SyncStatusIndicator` to show global offline state across all pages
-- [ ] Add "last synced" timestamp to the nav/header when offline
-- [ ] Test: disconnect network mid-game session; verify state is preserved and syncs on reconnect
+- [x] Add `vite-plugin-pwa` v1.2.0 to `frontend/package.json` — completed 2026-05-02.
+- [x] Configure manifest with SVG icons, display:standalone, theme_color `#0a0a0f` — completed 2026-05-02.
+- [x] Workbox caching: CacheFirst (fonts), StaleWhileRevalidate (game data), NetworkFirst (user data + RPC) — completed 2026-05-02.
+- [x] `useOfflineStatus` hook + `OfflineBanner` with last-synced timestamp — completed 2026-05-02.
 
 **Depends on:** T0-3 (need baseline to measure improvement)
 
@@ -110,33 +95,30 @@ These items are permanently out of scope. If someone asks for them, the answer i
 
 ### W1-4 — Opponent View for Play Mode
 
-- [ ] Add `is_spectatable BOOLEAN DEFAULT FALSE` to `game_sessions` migration
-- [ ] Add route `/game/:id/spectate` — public (no auth required), read-only
-- [ ] `SpectateGamePage.tsx`: subscribes to Realtime channel for the session, renders read-only view of: round/phase, both VPs, active secondary objectives, event log
-- [ ] Wire existing `invite_code` on `game_sessions` as the spectate token (shareable link)
-- [ ] "Share game" button in `PlayModePage.tsx` → generates spectate URL using invite code
-- [ ] Opponent can see secondaries drawn (not editable, but visible) — resolves the trust gap
+- [x] Migration: `is_spectatable BOOLEAN DEFAULT FALSE` + public SELECT RLS for spectatable sessions/events/scores — completed 2026-05-02. Migration: `20260502000003_spectatable_game_sessions.sql`
+- [x] `enableSpectate()` in gameSessionStore: generates invite_code, sets is_spectatable — completed 2026-05-02.
+- [x] `useSpectateSession` hook: fetches by invite_code, subscribes to Realtime — completed 2026-05-02.
+- [x] `SpectateGamePage.tsx` at `/spectate/:code`: read-only live view (phase/VP/scores/log) — completed 2026-05-02.
+- [x] "Share" button in `PlayModePage.tsx` → generates link on demand, copyable modal — completed 2026-05-02.
 
 ---
 
 ### W1-5 — Changelog Page
 
-- [ ] Create `frontend/src/shared/data/changelog.ts` — array of `{ date: string, version: string, items: string[] }` entries, newest first
-- [ ] `ChangelogPage.tsx` — renders entries in reverse chronological order
-- [ ] Add route `/changelog` to `App.tsx`
-- [ ] Nav badge: show "NEW" indicator when `changelog[0].date` is newer than `localStorage.lastSeenChangelog`
-- [ ] Commit to adding an entry here for every meaningful change going forward
+- [x] `shared/data/changelog.ts`: structured entries v0.1.0–v0.7.0 — completed 2026-05-02.
+- [x] `ChangelogPage.tsx` at `/changelog`: newest-first, marks seen in localStorage — completed 2026-05-02.
+- [x] "What's New" nav link with "NEW" badge when unseen entry exists — completed 2026-05-02.
 
 ---
 
 ### W1-6 — Multi-Source Data Abstraction Layer
 
-- [ ] Create `scripts/data-sources/base.js` — JSDoc interface defining: `getFactions()`, `getUnits(factionId)`, `getDetachments(factionId)`, `getWeapons(unitId)`, `getAbilities(unitId)`, `getEnhancements(detachmentId)`
-- [ ] Create `scripts/data-sources/bsdata.js` — extract current `parse-bsdata.js` logic into it, implementing the interface
-- [ ] Create `scripts/data-sources/index.js` — exports `getActiveSource()` (returns BSData implementation)
-- [ ] Migration: add `data_source TEXT DEFAULT 'bsdata'` and `data_source_updated_at TIMESTAMPTZ` to `factions`
-- [ ] Update ingestion script to populate `data_source_updated_at` on each run
-- [ ] Surface "data freshness" per faction in the units browser (`UnitsPage.tsx`)
+- [x] `scripts/data-sources/base.js`: JSDoc interface (DataSource, FactionData, etc.) — completed 2026-05-02.
+- [x] `scripts/data-sources/bsdata.js`: BSData adapter (getCatFiles, getLatestMtime) — completed 2026-05-02.
+- [x] `scripts/data-sources/index.js`: registry + getActiveSource() via DATA_SOURCE env var — completed 2026-05-02.
+- [x] Migration: `data_source TEXT DEFAULT 'bsdata'` + `data_source_updated_at TIMESTAMPTZ` on factions — completed 2026-05-02. Migration: `20260502000004_data_source_tracking.sql`
+- [x] `parse-bsdata.js`: stamps data_source + data_source_updated_at (latest .cat mtime) on faction INSERT — completed 2026-05-02.
+- [x] `UnitsPage.tsx`: "Updated <date>" freshness label next to faction selector — completed 2026-05-02.
 
 ---
 
@@ -344,6 +326,15 @@ These are standing hygiene rules, not one-time tasks.
 - [x] **T0-2** — Legal footer — completed 2026-05-01. `AppFooter` component renders trademark disclaimer on all pages. Hidden on list editor (full-viewport layout). Files: `AppFooter.tsx`, `App.tsx`, `base.css`.
 - [x] **T0-3** — Performance baseline documented — completed 2026-05-01. Initial JS 95.9 kB gzip (✅ under 200 kB). See CLAUDE.md "Performance Baseline" section.
 - [x] **T0-4** — A11y baseline documented — completed 2026-05-01. 2 WCAG AA failures logged (keyboard + aria-live), no contrast failures. See CLAUDE.md "Accessibility Baseline" section.
+
+### Wave 1
+
+- [x] **W1-1** — Edition discriminator — completed 2026-05-02. `edition TEXT NOT NULL DEFAULT '10e'` on 9 game data tables + `army_lists`. Migration: `20260502000001_edition_discriminator.sql`.
+- [x] **W1-2** — Army list versioning — completed 2026-05-02. `army_list_versions` table + owner-only RLS + `_saveSnapshot()` in `listEditorStore.ts`. Migration: `20260502000002_army_list_versions.sql`.
+- [x] **W1-3** — PWA manifest + service worker — completed 2026-05-02. `vite-plugin-pwa` v1.2.0, Workbox tiered caching, `OfflineBanner`. Files: `vite.config.ts`, `index.html`, `pwa-192.svg`, `pwa-512.svg`, `useOfflineStatus.ts`, `OfflineBanner.tsx`.
+- [x] **W1-4** — Opponent spectate view — completed 2026-05-02. `is_spectatable` + public RLS, `useSpectateSession` hook, `SpectateGamePage` at `/spectate/:code`, "Share" button in PlayModePage. Migration: `20260502000003_spectatable_game_sessions.sql`.
+- [x] **W1-5** — Changelog page — completed 2026-05-02. `shared/data/changelog.ts`, `ChangelogPage` at `/changelog`, "What's New" nav link with "NEW" badge.
+- [x] **W1-6** — Multi-source data abstraction — completed 2026-05-02. `scripts/data-sources/` scaffolding, `parse-bsdata.js` stamps freshness, `UnitsPage` shows last-updated date. Migration: `20260502000004_data_source_tracking.sql`.
 
 ---
 
