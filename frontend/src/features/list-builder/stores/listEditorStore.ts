@@ -140,6 +140,7 @@ interface ListEditorState {
   _fetchAll: (listId: string) => Promise<void>;
   _fetchServerValidation: () => Promise<void>;
   _refetch: () => Promise<void>;
+  _saveSnapshot: (changeNote?: string) => Promise<void>;
 }
 
 // ============================================================
@@ -441,6 +442,53 @@ export const useListEditorStore = create<ListEditorState>()((set, get) => ({
     set({ saving: true });
     if (listId) await get()._fetchAll(listId);
     set({ saving: false });
+    // Fire-and-forget — does not block the caller
+    get()._saveSnapshot();
+  },
+
+  _saveSnapshot: async (changeNote?: string) => {
+    const { listId, list, listUnits, listEnhancements, leaderAttachments, unitWargearSelections, unitCompositions } = get();
+    if (!listId || !list) return;
+
+    const snapshot = {
+      list: {
+        name: list.name,
+        faction_id: list.faction_id,
+        detachment_id: list.detachment_id,
+        points_limit: list.points_limit,
+        battle_size: list.battle_size,
+        edition: list.edition,
+      },
+      units: listUnits.map(lu => {
+        const enhEntry = listEnhancements.find(le => le.army_list_unit_id === lu.id);
+        const wargear = [...(unitWargearSelections.get(lu.id)?.entries() ?? [])].map(
+          ([group_name, option_id]) => ({ group_name, option_id })
+        );
+        const composition = [...(unitCompositions.get(lu.id)?.entries() ?? [])].map(
+          ([variant_id, count]) => ({ variant_id, count })
+        );
+        return {
+          unit_id: lu.unit_id,
+          unit_name: lu.units.name,
+          model_count: lu.model_count,
+          sort_order: lu.sort_order,
+          enhancement_id: enhEntry?.enhancement_id ?? null,
+          wargear,
+          composition,
+        };
+      }),
+      leader_attachments: leaderAttachments.map(la => ({
+        leader_army_list_unit_id: la.leader_army_list_unit_id,
+        target_army_list_unit_id: la.target_army_list_unit_id,
+      })),
+      total_points: selectTotalPoints(get()),
+    };
+
+    await supabase.from('army_list_versions').insert({
+      list_id: listId,
+      snapshot,
+      change_note: changeNote ?? null,
+    });
   },
 
   // ============================================================
@@ -523,6 +571,7 @@ export const useListEditorStore = create<ListEditorState>()((set, get) => ({
         .update({ sort_order: i })
         .eq('id', reordered[i].id);
     }
+    get()._saveSnapshot();
   },
 
   // ============================================================
@@ -535,6 +584,7 @@ export const useListEditorStore = create<ListEditorState>()((set, get) => ({
     set({ saving: true, list: { ...list, name } });
     await supabase.from('army_lists').update({ name }).eq('id', listId);
     set({ saving: false });
+    get()._saveSnapshot();
   },
 
   updatePointsLimit: async (limit: number) => {
@@ -552,6 +602,7 @@ export const useListEditorStore = create<ListEditorState>()((set, get) => ({
     await supabase.from('army_lists').update({ battle_size: battleSize, points_limit: points }).eq('id', listId);
     set({ list: { ...list, battle_size: battleSize, points_limit: points } });
     get()._fetchServerValidation();
+    get()._saveSnapshot();
   },
 
   changeDetachment: async (detachmentId: string) => {
@@ -581,6 +632,7 @@ export const useListEditorStore = create<ListEditorState>()((set, get) => ({
     });
 
     get()._fetchServerValidation();
+    get()._saveSnapshot();
   },
 
   // ============================================================
@@ -646,6 +698,7 @@ export const useListEditorStore = create<ListEditorState>()((set, get) => ({
 
       return { unitWargearSelections: nextSel, unitWargearRowIds: nextRowIds };
     });
+    get()._saveSnapshot();
   },
 
   selectWargearSubOption: async (armyListUnitWargearId: string, subOptionId: string, quantity: number) => {
