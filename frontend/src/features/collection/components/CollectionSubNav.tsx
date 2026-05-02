@@ -14,11 +14,20 @@ export function CollectionSubNav() {
       </NavLink>
       <NavLink
         to="/collection/recipes"
+        end
         className={({ isActive }) =>
           `collection-subnav__link${isActive ? ' collection-subnav__link--active' : ''}`
         }
       >
         Recipes
+      </NavLink>
+      <NavLink
+        to="/recipes/community"
+        className={({ isActive }) =>
+          `collection-subnav__link${isActive ? ' collection-subnav__link--active' : ''}`
+        }
+      >
+        Community
       </NavLink>
       <NavLink
         to="/collection/paints"

@@ -60,6 +60,8 @@ const SettingsPage = lazy(() => lazyRetry(() => import('./shared/pages/SettingsP
 const ResetPasswordPage = lazy(() => lazyRetry(() => import('./shared/pages/ResetPasswordPage').then(m => ({ default: m.ResetPasswordPage }))));
 const SpectateGamePage = lazy(() => lazyRetry(() => import('./features/play-mode/pages/SpectateGamePage').then(m => ({ default: m.SpectateGamePage }))));
 const ChangelogPage = lazy(() => lazyRetry(() => import('./shared/pages/ChangelogPage').then(m => ({ default: m.ChangelogPage }))));
+const CommunityRecipesPage = lazy(() => lazyRetry(() => import('./features/collection/pages/CommunityRecipesPage').then(m => ({ default: m.CommunityRecipesPage }))));
+const PublicRecipePage = lazy(() => lazyRetry(() => import('./features/collection/pages/PublicRecipePage').then(m => ({ default: m.PublicRecipePage }))));
 
 // Clear the reload flag on successful page load
 sessionStorage.removeItem('chunk_reload');
@@ -279,6 +281,8 @@ function App() {
             <Route path="/shared/:code" element={<SharedListPage />} />
             <Route path="/spectate/:code" element={<SpectateGamePage />} />
             <Route path="/changelog" element={<ChangelogPage />} />
+            <Route path="/recipes/community" element={<CommunityRecipesPage />} />
+            <Route path="/recipes/:schemeCode" element={<PublicRecipePage />} />
           </Routes>
           </Suspense>
         </main>

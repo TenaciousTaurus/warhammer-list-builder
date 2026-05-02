@@ -265,6 +265,8 @@ warforge/
 - **Migrations are additive** — never modify existing migrations
 - **RLS on every table** — game data = public read, user data = owner only
 - **Commit messages** — conventional commits: `feat:`, `fix:`, `chore:`, `refactor:`, `docs:`
+- **Squash-merge conflict risk** — GitHub's PR CI runs a test merge of `main` into the feature branch. If both branches touched the same file (e.g. `database.ts`), GitHub's auto-merge can silently drop new fields. Fix: resolve conflicts locally (`git merge origin/main`, fix markers, push). Never use GitHub's web conflict resolver. Keep `main` current with `develop` after every wave to minimize divergence.
+- **develop → main sync** — after merging a wave to develop, immediately open a `develop → main` PR to keep main current and prevent conflict buildup on the next wave's PRs.
 
 ---
 
@@ -289,20 +291,20 @@ Frontend Dev: `http://localhost:5173`
 
 ## Performance Baseline
 
-*Recorded 2026-05-01. Run `cd frontend && npm run build` to refresh.*
+*Recorded 2026-05-02 (post-Wave 1). Run `cd frontend && npm run build` to refresh.*
 
 ### Bundle Sizes (gzip)
 
 | Chunk | Raw | Gzip | Notes |
 |-------|-----|------|-------|
-| `index` (initial) | 322 kB | **95.9 kB** | ✅ Under 200 kB target |
+| `index` (initial) | 329 kB | **98.2 kB** | ✅ Under 200 kB target |
 | `supabase` | 171 kB | 45.4 kB | Lazy — loaded once on first auth |
 | `router` | 48 kB | 16.9 kB | Lazy |
-| `PlayModePage` | 41 kB | 10.4 kB | Lazy |
+| `PlayModePage` | 31 kB | 8.1 kB | Lazy (SpectateGamePage split out) |
 | `CollectionPage` | 28 kB | 7.2 kB | Lazy |
-| `index.css` (main) | 117 kB | 15.8 kB | Eager |
+| `index.css` (main) | ~120 kB | ~16.3 kB | Eager (offline banner + changelog CSS added) |
 
-**Total eager load (gzip):** ~112 kB (JS 95.9 + CSS 15.8)
+**Total eager load (gzip):** ~114 kB (JS 98.2 + CSS ~16.3) — still well under 200 kB target.
 
 ### Lighthouse Scores
 
