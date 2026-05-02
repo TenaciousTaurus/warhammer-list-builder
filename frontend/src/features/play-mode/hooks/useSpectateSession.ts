@@ -24,6 +24,7 @@ export function useSpectateSession(inviteCode: string | undefined): SpectateStat
 
   useEffect(() => {
     if (!inviteCode) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- early-return guard, not a cascading render
       setState(s => ({ ...s, loading: false, error: 'No invite code provided' }));
       return;
     }
