@@ -4,17 +4,34 @@
 
 WarForge is an all-in-one companion app for Warhammer 40,000 (10th Edition) that consolidates the fragmented ecosystem of tools players currently juggle — list building, in-game tracking, scoring, collection management, paint tracking, Crusade campaigns, and rules reference — into a single, cohesive experience.
 
+## Master Plan
+
+All development work is governed by **[WARFORGE_PLAN.md](./WARFORGE_PLAN.md)**.
+
+**Before starting any task:**
+1. Read WARFORGE_PLAN.md and identify which item the work maps to.
+2. If the work doesn't map to any item in the plan, stop and flag it — either it's in the anti-roadmap (don't build it) or the plan needs to be updated first.
+3. Never start work that isn't grounded in the plan without explicit confirmation from Jeff.
+
+**When completing a task:**
+1. Mark the item `[x]` in WARFORGE_PLAN.md with the completion date.
+2. Move the item to the "Completed Items" section at the bottom of WARFORGE_PLAN.md.
+3. Update CLAUDE.md if any new conventions or architectural decisions were established.
+
+---
+
 ## Session Start Protocol
 
 When I say "init" or "start session", do the following before any other work:
 
 1. Read this CLAUDE.md file fully.
-2. Walk through the entire project directory structure to understand the layout.
-3. Read all config files (package.json, tsconfig.json, .env.local, supabase/config.toml, etc.).
-4. Read key source files — entry points, route definitions, database schemas/models, stores, and shared utilities/types.
-5. Review any test files to understand expected behavior and edge cases.
-6. Check git status and recent commit history (last 10 commits) to understand what's been changing.
-7. Summarize your understanding back to me: architecture, tech stack, key patterns, current state of the codebase, and any potential issues you notice.
+2. Read WARFORGE_PLAN.md — understand current progress (what's checked, what's next).
+3. Walk through the entire project directory structure to understand the layout.
+4. Read all config files (package.json, tsconfig.json, .env.local, supabase/config.toml, etc.).
+5. Read key source files — entry points, route definitions, database schemas/models, stores, and shared utilities/types.
+6. Review any test files to understand expected behavior and edge cases.
+7. Check git status and recent commit history (last 10 commits) to understand what's been changing.
+8. Summarize your understanding back to me: architecture, tech stack, key patterns, current state of the codebase, where we are in the plan, and any potential issues you notice.
 
 Do NOT start making changes or suggestions until you've completed this review and I've confirmed your understanding is correct.
 
@@ -28,11 +45,12 @@ When I say "wrap up" or "end session", do the following:
 4. Check for any TODO, FIXME, or HACK comments we added — list them.
 5. Review git status — show all staged/unstaged changes and untracked files.
 6. Summarize what we accomplished: features added, bugs fixed, refactors done.
-7. Note any incomplete work, known issues, or things to pick up next session.
-8. Update CLAUDE.md if any new conventions, patterns, or architectural decisions were established.
-9. Suggest clear, descriptive commit message(s) using conventional commits format.
+7. Update WARFORGE_PLAN.md — mark completed items `[x]` with the date, move them to the Completed section.
+8. Note any incomplete work, known issues, or things to pick up next session.
+9. Update CLAUDE.md if any new conventions, patterns, or architectural decisions were established.
+10. Suggest clear, descriptive commit message(s) using conventional commits format.
 
-Do NOT consider the session complete until the build compiles clean and I've confirmed the summary.
+Do NOT consider the session complete until the build compiles clean, WARFORGE_PLAN.md is updated, and I've confirmed the summary.
 
 ---
 
@@ -266,6 +284,66 @@ cd frontend && npx tsc --noEmit # Type check without emit (faster)
 
 Supabase Studio: `http://localhost:54323`
 Frontend Dev: `http://localhost:5173`
+
+---
+
+## Performance Baseline
+
+*Recorded 2026-05-01. Run `cd frontend && npm run build` to refresh.*
+
+### Bundle Sizes (gzip)
+
+| Chunk | Raw | Gzip | Notes |
+|-------|-----|------|-------|
+| `index` (initial) | 322 kB | **95.9 kB** | ✅ Under 200 kB target |
+| `supabase` | 171 kB | 45.4 kB | Lazy — loaded once on first auth |
+| `router` | 48 kB | 16.9 kB | Lazy |
+| `PlayModePage` | 41 kB | 10.4 kB | Lazy |
+| `CollectionPage` | 28 kB | 7.2 kB | Lazy |
+| `index.css` (main) | 117 kB | 15.8 kB | Eager |
+
+**Total eager load (gzip):** ~112 kB (JS 95.9 + CSS 15.8)
+
+### Lighthouse Scores
+
+*Not yet recorded — requires production Vercel URL. Run manually via Chrome DevTools > Lighthouse > Mobile.*
+Target: 90+ Performance, 90+ Accessibility, 90+ SEO, PWA installable.
+
+---
+
+## Accessibility Baseline
+
+*Audited 2026-05-01 via code review. Axe DevTools manual pass still needed on deployed URL.*
+
+### Passing ✅
+- All modals have `role="dialog"`, `aria-labelledby`, and `aria-modal="true"`
+- Play mode controls have comprehensive `aria-label` attributes (PhaseTracker, ChessTimerDisplay)
+- Focus ring defined globally via `*:focus-visible` (gold outline, 2px, offset 2)
+- `ConfirmDialog` uses `role="alertdialog"`
+- Keyboard support present on CampaignCard, CrusadeUnitCard, TournamentCard, ProfileCard
+- `.sr-only` utility class defined for screen-reader-only content
+
+### Failing / To Fix ❌
+These are WCAG 2.1 AA failures — not yet fixed, fix in a future session:
+
+1. **WCAG 2.1.1 Keyboard** — 5 `div role="button"` elements lack `onKeyDown` handler:
+   - `CollectionCard.tsx:49`
+   - `PaintingPipeline.tsx:71`
+   - `LeaguesPage.tsx:117`
+   - `OrganisationsPage.tsx:145`
+   - `SharedListPage.tsx:144`
+   Fix: add `onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handler(); }}`
+
+2. **WCAG 4.1.3 Status Messages** — Dynamic VP/score/phase changes in play mode have no `aria-live` region. Screen readers won't announce state changes. Fix: wrap PhaseTracker output in `<div aria-live="polite">`.
+
+3. **Photo alt text** — `PhotoGallery.tsx` images use `alt=""`. Acceptable for decorative images per WCAG, but uploaded photos likely have semantic value. Fix: use photo filename or caption as alt text if available.
+
+### Color Contrast
+All checked hardcoded hex color values pass WCAG AA 4.5:1 on the dark background (`#0a0a0f`):
+- `#8a8a9a` on `#0a0a0f` ≈ 6.3:1 ✅
+- `#aaaabc` on `#0a0a0f` ≈ 7.2:1 ✅
+- `#4ade80`, `#5eead4`, `#60a5fa` all high-contrast on dark backgrounds ✅
+- Print styles hardcode black/dark text on white — correct and intentional ✅
 
 ---
 

@@ -1180,6 +1180,30 @@
 
 
 /* ========================================
+   FOOTER
+   ======================================== */
+
+.app-footer {
+  padding: var(--space-md) var(--space-xl);
+  border-top: 1px solid var(--glass-border);
+  text-align: center;
+}
+
+.app-footer__disclaimer {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  max-width: 680px;
+  margin: 0 auto;
+  opacity: 0.7;
+}
+
+/* Hide footer when list editor occupies the full viewport */
+.app-layout:has(.list-editor) .app-footer {
+  display: none;
+}
+
+/* ========================================
    PRINT STYLES
    ======================================== */
 
