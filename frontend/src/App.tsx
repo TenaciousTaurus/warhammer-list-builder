@@ -14,6 +14,7 @@ import { lazy, Suspense, useState, type ReactNode } from 'react';
 import { FeedbackModal } from './shared/components/FeedbackModal';
 import { ThemePicker } from './shared/components/ThemePicker';
 import { AppFooter } from './shared/components/AppFooter';
+import { OfflineBanner } from './shared/components/OfflineBanner';
 
 // Auto-reload on stale chunk errors after deployment.
 // When Vite rebuilds, chunk hashes change — cached HTML may reference old filenames.
@@ -184,6 +185,7 @@ function AppHeader() {
         )}
       </nav>
     </header>
+    <OfflineBanner />
     {showFeedback && <FeedbackModal onClose={() => setShowFeedback(false)} />}
     </>
   );
