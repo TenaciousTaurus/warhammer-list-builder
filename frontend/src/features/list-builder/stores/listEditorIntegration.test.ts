@@ -37,10 +37,11 @@ function mockUnit(overrides?: Partial<UnitWithRelations>): UnitWithRelations {
     transport_capacity: null,
     transport_keywords_allowed: null,
     transport_keywords_excluded: null,
+    edition: '10e',
     created_at: '2025-01-01T00:00:00Z',
     unit_points_tiers: [
-      { id: 't1', unit_id: 'unit-1', model_count: 5, points: 90 },
-      { id: 't2', unit_id: 'unit-1', model_count: 10, points: 180 },
+      { id: 't1', unit_id: 'unit-1', model_count: 5, points: 90, edition: '10e' },
+      { id: 't2', unit_id: 'unit-1', model_count: 10, points: 180, edition: '10e' },
     ],
     abilities: [],
     weapons: [],
@@ -80,7 +81,7 @@ function setupFullList() {
     name: 'Captain in Terminator Armour',
     role: 'character',
     max_per_list: 1,
-    unit_points_tiers: [{ id: 'tc1', unit_id: 'u-captain', model_count: 1, points: 95 }],
+    unit_points_tiers: [{ id: 'tc1', unit_id: 'u-captain', model_count: 1, points: 95, edition: '10e' }],
   });
   const intercessors = mockUnit({
     id: 'u-inter',
@@ -88,8 +89,8 @@ function setupFullList() {
     role: 'battleline',
     max_per_list: 6,
     unit_points_tiers: [
-      { id: 'ti1', unit_id: 'u-inter', model_count: 5, points: 90 },
-      { id: 'ti2', unit_id: 'u-inter', model_count: 10, points: 180 },
+      { id: 'ti1', unit_id: 'u-inter', model_count: 5, points: 90, edition: '10e' },
+      { id: 'ti2', unit_id: 'u-inter', model_count: 10, points: 180, edition: '10e' },
     ],
   });
   const epicHero = mockUnit({
@@ -97,7 +98,7 @@ function setupFullList() {
     name: 'Roboute Guilliman',
     role: 'epic_hero',
     max_per_list: 1,
-    unit_points_tiers: [{ id: 'th1', unit_id: 'u-hero', model_count: 1, points: 350 }],
+    unit_points_tiers: [{ id: 'th1', unit_id: 'u-hero', model_count: 1, points: 350, edition: '10e' }],
   });
   const eradicators = mockUnit({
     id: 'u-erad',
@@ -105,8 +106,8 @@ function setupFullList() {
     role: 'infantry',
     max_per_list: 3,
     unit_points_tiers: [
-      { id: 'te1', unit_id: 'u-erad', model_count: 3, points: 95 },
-      { id: 'te2', unit_id: 'u-erad', model_count: 6, points: 190 },
+      { id: 'te1', unit_id: 'u-erad', model_count: 3, points: 95, edition: '10e' },
+      { id: 'te2', unit_id: 'u-erad', model_count: 6, points: 190, edition: '10e' },
     ],
   });
 
@@ -119,9 +120,9 @@ function setupFullList() {
   ];
 
   const enhancements: Enhancement[] = [
-    { id: 'enh-1', detachment_id: 'det-1', name: 'Iron Resolve', points: 25, description: '' },
-    { id: 'enh-2', detachment_id: 'det-1', name: 'Storm of Fire', points: 20, description: '' },
-    { id: 'enh-3', detachment_id: 'det-1', name: 'Bolter Discipline', points: 15, description: '' },
+    { id: 'enh-1', detachment_id: 'det-1', name: 'Iron Resolve', points: 25, description: '', edition: '10e' },
+    { id: 'enh-2', detachment_id: 'det-1', name: 'Storm of Fire', points: 20, description: '', edition: '10e' },
+    { id: 'enh-3', detachment_id: 'det-1', name: 'Bolter Discipline', points: 15, description: '', edition: '10e' },
   ];
 
   vi.mocked(supabase.from).mockImplementation(() => mockChain() as never);
