@@ -302,30 +302,6 @@ export type Database = {
         };
         Relationships: [];
       };
-      army_list_versions: {
-        Row: {
-          id: string;
-          list_id: string;
-          snapshot: Record<string, unknown>;
-          changed_at: string;
-          change_note: string | null;
-        };
-        Insert: {
-          id?: string;
-          list_id: string;
-          snapshot: Record<string, unknown>;
-          changed_at?: string;
-          change_note?: string | null;
-        };
-        Update: {
-          id?: string;
-          list_id?: string;
-          snapshot?: Record<string, unknown>;
-          changed_at?: string;
-          change_note?: string | null;
-        };
-        Relationships: [];
-      };
       army_list_units: {
         Row: {
           id: string;
