@@ -960,6 +960,7 @@ export type Database = {
           unit_id: string | null;
           faction_id: string | null;
           is_public: boolean;
+          scheme_code: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -971,6 +972,7 @@ export type Database = {
           unit_id?: string | null;
           faction_id?: string | null;
           is_public?: boolean;
+          scheme_code?: string | null;
         };
         Update: {
           id?: string;
@@ -980,6 +982,7 @@ export type Database = {
           unit_id?: string | null;
           faction_id?: string | null;
           is_public?: boolean;
+          scheme_code?: string | null;
         };
         Relationships: [];
       };

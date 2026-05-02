@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import '../collection.css';
 import { supabase } from '../../../shared/lib/supabase';
 import { useAuth } from '../../../shared/hooks/useAuth';
@@ -37,6 +38,7 @@ export function PaintRecipesPage() {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [showEditor, setShowEditor] = useState(false);
   const [editingRecipe, setEditingRecipe] = useState<RecipeWithSteps | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
     if (!user?.id) return;
@@ -119,6 +121,14 @@ export function PaintRecipesPage() {
     fetchData();
   }, [fetchData]);
 
+  const handleCopyLink = useCallback(async (recipe: RecipeWithSteps) => {
+    if (!recipe.scheme_code) return;
+    const url = `${window.location.origin}/recipes/${recipe.scheme_code}`;
+    await navigator.clipboard.writeText(url);
+    setCopiedId(recipe.id);
+    setTimeout(() => setCopiedId(null), 2000);
+  }, []);
+
   if (!user) {
     return (
       <div className="recipes-page">
@@ -134,15 +144,20 @@ export function PaintRecipesPage() {
       {/* Header */}
       <div className="recipes-page__header">
         <h1 className="recipes-page__title">Paint Recipes</h1>
-        <button
-          className="recipes-page__add-btn"
-          onClick={() => {
-            setEditingRecipe(null);
-            setShowEditor(true);
-          }}
-        >
-          + New Recipe
-        </button>
+        <div className="recipes-page__header-actions">
+          <Link to="/recipes/community" className="btn btn--ghost btn--sm">
+            Browse Community
+          </Link>
+          <button
+            className="recipes-page__add-btn"
+            onClick={() => {
+              setEditingRecipe(null);
+              setShowEditor(true);
+            }}
+          >
+            + New Recipe
+          </button>
+        </div>
       </div>
 
       {/* Search */}
@@ -273,6 +288,17 @@ export function PaintRecipesPage() {
                     </div>
 
                     <div className="recipe-card__actions">
+                      {recipe.is_public && recipe.scheme_code && (
+                        <button
+                          className="recipe-card__copy-btn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleCopyLink(recipe);
+                          }}
+                        >
+                          {copiedId === recipe.id ? 'Copied!' : 'Copy Link'}
+                        </button>
+                      )}
                       <button
                         className="recipe-card__edit-btn"
                         onClick={(e) => {

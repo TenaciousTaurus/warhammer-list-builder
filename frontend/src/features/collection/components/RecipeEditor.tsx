@@ -6,6 +6,11 @@ import { PaintPicker } from './PaintPicker';
 
 const MAX_PHOTO_SIZE_MB = 5;
 
+interface Faction {
+  id: string;
+  name: string;
+}
+
 interface RecipeEditorProps {
   recipe?: PaintRecipe | null;
   existingSteps?: PaintRecipeStep[];
@@ -56,16 +61,35 @@ function createEmptyStep(): StepDraft {
   return { paintId: null, technique: 'base', areaDescription: '', notes: '', photoUrl: null };
 }
 
+function generateSchemeCode(): string {
+  return crypto.randomUUID().replace(/-/g, '').slice(0, 12);
+}
+
 export function RecipeEditor({ recipe, existingSteps, paints, onSave, onClose }: RecipeEditorProps) {
   const { user } = useAuth();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [isPublic, setIsPublic] = useState(false);
+  const [factionId, setFactionId] = useState<string>('');
+  const [schemeCode, setSchemeCode] = useState<string | null>(null);
   const [steps, setSteps] = useState<StepDraft[]>([createEmptyStep()]);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploadingStep, setUploadingStep] = useState<number | null>(null);
+  const [factions, setFactions] = useState<Faction[]>([]);
+  const [copied, setCopied] = useState(false);
   const photoInputRefs = useRef<Map<number, HTMLInputElement>>(new Map());
+
+  useEffect(() => {
+    supabase
+      .from('factions')
+      .select('id, name')
+      .is('parent_faction_id', null)
+      .order('name')
+      .then(({ data }) => {
+        if (data) setFactions(data);
+      });
+  }, []);
 
   const handleStepPhoto = async (index: number, file: File) => {
     if (!user?.id) return;
@@ -114,6 +138,8 @@ export function RecipeEditor({ recipe, existingSteps, paints, onSave, onClose }:
       setName(recipe.name);
       setDescription(recipe.description ?? '');
       setIsPublic(recipe.is_public);
+      setFactionId(recipe.faction_id ?? '');
+      setSchemeCode(recipe.scheme_code ?? null);
     }
     if (existingSteps && existingSteps.length > 0) {
       const sorted = [...existingSteps].sort((a, b) => a.step_order - b.step_order);
@@ -128,6 +154,21 @@ export function RecipeEditor({ recipe, existingSteps, paints, onSave, onClose }:
       );
     }
   }, [recipe, existingSteps]);
+
+  const handlePublicToggle = (checked: boolean) => {
+    setIsPublic(checked);
+    if (checked && !schemeCode) {
+      setSchemeCode(generateSchemeCode());
+    }
+  };
+
+  const handleCopyLink = async () => {
+    if (!schemeCode) return;
+    const url = `${window.location.origin}/recipes/${schemeCode}`;
+    await navigator.clipboard.writeText(url);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const updateStep = (index: number, patch: Partial<StepDraft>) => {
     setSteps((prev) => prev.map((s, i) => (i === index ? { ...s, ...patch } : s)));
@@ -156,42 +197,36 @@ export function RecipeEditor({ recipe, existingSteps, paints, onSave, onClose }:
 
     try {
       let recipeId = recipe?.id;
+      const recipePayload = {
+        name: name.trim(),
+        description: description.trim() || null,
+        is_public: isPublic,
+        faction_id: factionId || null,
+        scheme_code: isPublic ? (schemeCode ?? generateSchemeCode()) : (recipe?.scheme_code ?? null),
+      };
 
       if (recipeId) {
-        // Update existing recipe
         const { error: updateErr } = await supabase
           .from('paint_recipes')
-          .update({
-            name: name.trim(),
-            description: description.trim() || null,
-            is_public: isPublic,
-          })
+          .update(recipePayload)
           .eq('id', recipeId);
         if (updateErr) throw updateErr;
 
-        // Delete existing steps
         const { error: delErr } = await supabase
           .from('paint_recipe_steps')
           .delete()
           .eq('recipe_id', recipeId);
         if (delErr) throw delErr;
       } else {
-        // Create new recipe
         const { data, error: insertErr } = await supabase
           .from('paint_recipes')
-          .insert({
-            user_id: user.id,
-            name: name.trim(),
-            description: description.trim() || null,
-            is_public: isPublic,
-          })
+          .insert({ user_id: user.id, ...recipePayload })
           .select('id')
           .single();
         if (insertErr) throw insertErr;
         recipeId = data.id;
       }
 
-      // Insert steps
       if (steps.length > 0) {
         const stepRows = steps.map((s, i) => ({
           recipe_id: recipeId!,
@@ -218,6 +253,8 @@ export function RecipeEditor({ recipe, existingSteps, paints, onSave, onClose }:
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) onClose();
   };
+
+  const shareUrl = schemeCode ? `${window.location.origin}/recipes/${schemeCode}` : null;
 
   return (
     <div className="modal-backdrop" onClick={handleBackdropClick}>
@@ -263,14 +300,44 @@ export function RecipeEditor({ recipe, existingSteps, paints, onSave, onClose }:
             />
           </div>
 
+          <div className="recipe-editor__field">
+            <label className="recipe-editor__label" htmlFor="re-faction">
+              Faction
+            </label>
+            <select
+              id="re-faction"
+              className="recipe-editor__select"
+              value={factionId}
+              onChange={(e) => setFactionId(e.target.value)}
+            >
+              <option value="">Any faction</option>
+              {factions.map((f) => (
+                <option key={f.id} value={f.id}>{f.name}</option>
+              ))}
+            </select>
+          </div>
+
           <label className="recipe-editor__checkbox-label">
             <input
               type="checkbox"
               checked={isPublic}
-              onChange={(e) => setIsPublic(e.target.checked)}
+              onChange={(e) => handlePublicToggle(e.target.checked)}
             />
-            <span>Share publicly</span>
+            <span>Share publicly in community gallery</span>
           </label>
+
+          {isPublic && shareUrl && (
+            <div className="recipe-editor__share-link">
+              <span className="recipe-editor__share-url">{shareUrl}</span>
+              <button
+                type="button"
+                className="recipe-editor__share-copy"
+                onClick={handleCopyLink}
+              >
+                {copied ? 'Copied!' : 'Copy'}
+              </button>
+            </div>
+          )}
 
           {/* Steps */}
           <div className="recipe-editor__steps-header">
