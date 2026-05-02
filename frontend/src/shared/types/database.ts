@@ -702,6 +702,7 @@ export type Database = {
           timer_player_seconds: number;
           timer_opponent_seconds: number;
           invite_code: string | null;
+          is_spectatable: boolean;
           notes: string | null;
           started_at: string | null;
           completed_at: string | null;
@@ -726,6 +727,7 @@ export type Database = {
           timer_player_seconds?: number;
           timer_opponent_seconds?: number;
           invite_code?: string | null;
+          is_spectatable?: boolean;
           notes?: string | null;
           started_at?: string | null;
           completed_at?: string | null;
@@ -748,6 +750,7 @@ export type Database = {
           timer_player_seconds?: number;
           timer_opponent_seconds?: number;
           invite_code?: string | null;
+          is_spectatable?: boolean;
           notes?: string | null;
           started_at?: string | null;
           completed_at?: string | null;

@@ -57,6 +57,7 @@ const OrganisationsPage = lazy(() => lazyRetry(() => import('./features/social/p
 const OrganisationDetailPage = lazy(() => lazyRetry(() => import('./features/social/pages/OrganisationDetailPage').then(m => ({ default: m.OrganisationDetailPage }))));
 const SettingsPage = lazy(() => lazyRetry(() => import('./shared/pages/SettingsPage').then(m => ({ default: m.SettingsPage }))));
 const ResetPasswordPage = lazy(() => lazyRetry(() => import('./shared/pages/ResetPasswordPage').then(m => ({ default: m.ResetPasswordPage }))));
+const SpectateGamePage = lazy(() => lazyRetry(() => import('./features/play-mode/pages/SpectateGamePage').then(m => ({ default: m.SpectateGamePage }))));
 
 // Clear the reload flag on successful page load
 sessionStorage.removeItem('chunk_reload');
@@ -258,6 +259,7 @@ function App() {
             {/* Public routes */}
             <Route path="/units" element={<UnitsPage />} />
             <Route path="/shared/:code" element={<SharedListPage />} />
+            <Route path="/spectate/:code" element={<SpectateGamePage />} />
           </Routes>
           </Suspense>
         </main>

@@ -42,6 +42,14 @@ export function PlayModePage() {
   const [showEndGame, setShowEndGame] = useState(false);
   const [endGameResult, setEndGameResult] = useState<'win' | 'loss' | 'draw'>('win');
   const [endGameNotes, setEndGameNotes] = useState('');
+  const [spectateUrl, setSpectateUrl] = useState<string | null>(
+    gameStore.session?.invite_code && gameStore.session?.is_spectatable
+      ? `${window.location.origin}/spectate/${gameStore.session.invite_code}`
+      : null
+  );
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [shareLoading, setShareLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   // Load army list data
   useEffect(() => {
@@ -183,6 +191,25 @@ export function PlayModePage() {
     setShowEndGame(false);
   }
 
+  async function handleShareGame() {
+    setShareLoading(true);
+    const code = await gameStore.enableSpectate();
+    if (code) {
+      const url = `${window.location.origin}/spectate/${code}`;
+      setSpectateUrl(url);
+      setShowShareModal(true);
+    }
+    setShareLoading(false);
+  }
+
+  function handleCopyLink() {
+    if (!spectateUrl) return;
+    navigator.clipboard.writeText(spectateUrl).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
+
   return (
     <div className="play-mode">
       {/* Header */}
@@ -206,6 +233,14 @@ export function PlayModePage() {
             {realtimeStatus === 'connected' ? 'Synced' : realtimeStatus === 'connecting' ? 'Syncing...' : 'Offline'}
           </span>
           <span className="play-mode__lock-badge">&#9876; In Game</span>
+          <button
+            className="btn btn--sm"
+            onClick={spectateUrl ? () => setShowShareModal(true) : handleShareGame}
+            disabled={shareLoading}
+            title="Share a live spectate link with your opponent"
+          >
+            {shareLoading ? 'Sharing...' : 'Share'}
+          </button>
           <button className="btn btn--sm" onClick={() => gameStore.pauseGame().then(() => navigate(`/list/${id}`))}>
             Pause
           </button>
@@ -316,6 +351,27 @@ export function PlayModePage() {
           <EventLog events={gameStore.events} />
           <div className="play-mode__history-section">
             <BattleReport listId={id} listName={list.name} />
+          </div>
+        </div>
+      )}
+
+      {/* Share / Spectate Modal */}
+      {showShareModal && spectateUrl && (
+        <div className="modal-backdrop" onClick={() => setShowShareModal(false)}>
+          <div className="modal-panel modal-panel--sm" onClick={e => e.stopPropagation()}>
+            <h3 className="modal-panel__title">Share Live Game</h3>
+            <p style={{ color: 'var(--color-text-secondary)', fontSize: 'var(--text-sm)', marginBottom: 'var(--space-md)' }}>
+              Anyone with this link can watch your game in real time. They cannot make changes.
+            </p>
+            <div style={{ display: 'flex', gap: 'var(--space-sm)', alignItems: 'center', background: 'var(--color-bg-secondary)', padding: 'var(--space-sm) var(--space-md)', borderRadius: 'var(--radius-md)', border: '1px solid var(--color-border)' }}>
+              <span style={{ flex: 1, fontSize: 'var(--text-sm)', color: 'var(--color-text-primary)', wordBreak: 'break-all' }}>{spectateUrl}</span>
+              <button className="btn btn--sm btn--primary" onClick={handleCopyLink}>
+                {copied ? 'Copied!' : 'Copy'}
+              </button>
+            </div>
+            <div className="modal-panel__actions">
+              <button className="btn" onClick={() => setShowShareModal(false)}>Close</button>
+            </div>
           </div>
         </div>
       )}
