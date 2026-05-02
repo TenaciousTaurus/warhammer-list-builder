@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="80" fill="#0a0a0f"/>
+  <!-- Outer ring -->
+  <circle cx="256" cy="256" r="200" fill="none" stroke="#c9a84c" stroke-width="10"/>
+  <!-- Gear teeth (8 teeth) -->
+  <g fill="#c9a84c">
+    <rect x="235" y="30" width="42" height="54" rx="8"/>
+    <rect x="235" y="428" width="42" height="54" rx="8"/>
+    <rect x="30" y="235" width="54" height="42" rx="8"/>
+    <rect x="428" y="235" width="54" height="42" rx="8"/>
+    <rect x="87" y="87" width="42" height="54" rx="8" transform="rotate(45 108 114)"/>
+    <rect x="383" y="87" width="42" height="54" rx="8" transform="rotate(-45 404 114)"/>
+    <rect x="87" y="371" width="42" height="54" rx="8" transform="rotate(-45 108 398)"/>
+    <rect x="383" y="371" width="42" height="54" rx="8" transform="rotate(45 404 398)"/>
+  </g>
+  <!-- Inner circle -->
+  <circle cx="256" cy="256" r="118" fill="#0a0a0f" stroke="#c9a84c" stroke-width="8"/>
+  <!-- WF text -->
+  <text x="256" y="305" font-family="Arial, sans-serif" font-size="96" font-weight="900" fill="#c9a84c" text-anchor="middle" letter-spacing="-4">WF</text>
+</svg>
