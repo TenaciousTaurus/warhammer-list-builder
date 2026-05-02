@@ -8,6 +8,7 @@ export type Database = {
           icon_url: string | null;
           alignment: 'imperium' | 'chaos' | 'xenos' | 'unaligned' | null;
           parent_faction_id: string | null;
+          edition: string;
           created_at: string;
         };
         Insert: {
@@ -16,12 +17,14 @@ export type Database = {
           icon_url?: string | null;
           alignment?: 'imperium' | 'chaos' | 'xenos' | 'unaligned' | null;
           parent_faction_id?: string | null;
+          edition?: string;
         };
         Update: {
           id?: string;
           name?: string;
           icon_url?: string | null;
           parent_faction_id?: string | null;
+          edition?: string;
         };
         Relationships: [];
       };
@@ -31,6 +34,7 @@ export type Database = {
           faction_id: string;
           name: string;
           rule_text: string | null;
+          edition: string;
           created_at: string;
         };
         Insert: {
@@ -38,12 +42,14 @@ export type Database = {
           faction_id: string;
           name: string;
           rule_text?: string | null;
+          edition?: string;
         };
         Update: {
           id?: string;
           faction_id?: string;
           name?: string;
           rule_text?: string | null;
+          edition?: string;
         };
         Relationships: [];
       };
@@ -65,6 +71,7 @@ export type Database = {
           transport_capacity: number | null;
           transport_keywords_allowed: string[] | null;
           transport_keywords_excluded: string[] | null;
+          edition: string;
           created_at: string;
         };
         Insert: {
@@ -84,6 +91,7 @@ export type Database = {
           transport_capacity?: number | null;
           transport_keywords_allowed?: string[] | null;
           transport_keywords_excluded?: string[] | null;
+          edition?: string;
         };
         Update: {
           id?: string;
@@ -102,6 +110,7 @@ export type Database = {
           transport_capacity?: number | null;
           transport_keywords_allowed?: string[] | null;
           transport_keywords_excluded?: string[] | null;
+          edition?: string;
         };
         Relationships: [];
       };
@@ -111,18 +120,21 @@ export type Database = {
           unit_id: string;
           model_count: number;
           points: number;
+          edition: string;
         };
         Insert: {
           id?: string;
           unit_id: string;
           model_count: number;
           points: number;
+          edition?: string;
         };
         Update: {
           id?: string;
           unit_id?: string;
           model_count?: number;
           points?: number;
+          edition?: string;
         };
         Relationships: [];
       };
@@ -139,6 +151,7 @@ export type Database = {
           ap: number;
           damage: string;
           keywords: string[];
+          edition: string;
         };
         Insert: {
           id?: string;
@@ -152,6 +165,7 @@ export type Database = {
           ap: number;
           damage: string;
           keywords?: string[];
+          edition?: string;
         };
         Update: {
           id?: string;
@@ -165,6 +179,7 @@ export type Database = {
           ap?: number;
           damage?: string;
           keywords?: string[];
+          edition?: string;
         };
         Relationships: [];
       };
@@ -175,6 +190,7 @@ export type Database = {
           name: string;
           type: string;
           description: string;
+          edition: string;
         };
         Insert: {
           id?: string;
@@ -182,6 +198,7 @@ export type Database = {
           name: string;
           type: string;
           description: string;
+          edition?: string;
         };
         Update: {
           id?: string;
@@ -189,6 +206,7 @@ export type Database = {
           name?: string;
           type?: string;
           description?: string;
+          edition?: string;
         };
         Relationships: [];
       };
@@ -199,6 +217,7 @@ export type Database = {
           name: string;
           points: number;
           description: string;
+          edition: string;
         };
         Insert: {
           id?: string;
@@ -206,6 +225,7 @@ export type Database = {
           name: string;
           points: number;
           description: string;
+          edition?: string;
         };
         Update: {
           id?: string;
@@ -213,6 +233,7 @@ export type Database = {
           name?: string;
           points?: number;
           description?: string;
+          edition?: string;
         };
         Relationships: [];
       };
@@ -223,6 +244,7 @@ export type Database = {
           min_points: number;
           max_points: number;
           sort_order: number;
+          edition: string;
         };
         Insert: {
           id: string;
@@ -230,6 +252,7 @@ export type Database = {
           min_points: number;
           max_points: number;
           sort_order?: number;
+          edition?: string;
         };
         Update: {
           id?: string;
@@ -237,6 +260,7 @@ export type Database = {
           min_points?: number;
           max_points?: number;
           sort_order?: number;
+          edition?: string;
         };
         Relationships: [];
       };
@@ -250,6 +274,7 @@ export type Database = {
           points_limit: number;
           battle_size: string;
           share_code: string | null;
+          edition: string;
           created_at: string;
           updated_at: string;
         };
@@ -262,6 +287,7 @@ export type Database = {
           points_limit?: number;
           battle_size?: string;
           share_code?: string | null;
+          edition?: string;
         };
         Update: {
           id?: string;
@@ -272,6 +298,7 @@ export type Database = {
           points_limit?: number;
           battle_size?: string;
           share_code?: string | null;
+          edition?: string;
         };
         Relationships: [];
       };
@@ -332,6 +359,7 @@ export type Database = {
           model_variant_id: string | null;
           pool_group: string | null;
           pool_max: number | null;
+          edition: string;
         };
         Insert: {
           id?: string;
@@ -344,6 +372,7 @@ export type Database = {
           model_variant_id?: string | null;
           pool_group?: string | null;
           pool_max?: number | null;
+          edition?: string;
         };
         Update: {
           id?: string;
@@ -356,6 +385,7 @@ export type Database = {
           model_variant_id?: string | null;
           pool_group?: string | null;
           pool_max?: number | null;
+          edition?: string;
         };
         Relationships: [];
       };

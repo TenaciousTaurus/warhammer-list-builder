@@ -55,10 +55,11 @@ function mockUnit(overrides?: Partial<UnitWithRelations>): UnitWithRelations {
     transport_capacity: null,
     transport_keywords_allowed: null,
     transport_keywords_excluded: null,
+    edition: '10e',
     created_at: '2025-01-01T00:00:00Z',
     unit_points_tiers: [
-      { id: 't1', unit_id: 'unit-1', model_count: 5, points: 90 },
-      { id: 't2', unit_id: 'unit-1', model_count: 10, points: 180 },
+      { id: 't1', unit_id: 'unit-1', model_count: 5, points: 90, edition: '10e' },
+      { id: 't2', unit_id: 'unit-1', model_count: 10, points: 180, edition: '10e' },
     ],
     abilities: [],
     weapons: [],
@@ -123,8 +124,8 @@ function mockState(overrides?: Record<string, unknown>) {
 
 describe('selectTotalPoints', () => {
   it('calculates total from units + enhancements', () => {
-    const unit1 = mockUnit({ id: 'u1', unit_points_tiers: [{ id: 't1', unit_id: 'u1', model_count: 5, points: 90 }] });
-    const unit2 = mockUnit({ id: 'u2', name: 'Captain', role: 'character', unit_points_tiers: [{ id: 't2', unit_id: 'u2', model_count: 1, points: 80 }] });
+    const unit1 = mockUnit({ id: 'u1', unit_points_tiers: [{ id: 't1', unit_id: 'u1', model_count: 5, points: 90, edition: '10e' }] });
+    const unit2 = mockUnit({ id: 'u2', name: 'Captain', role: 'character', unit_points_tiers: [{ id: 't2', unit_id: 'u2', model_count: 1, points: 80, edition: '10e' }] });
 
     const state = mockState({
       listUnits: [
@@ -152,7 +153,7 @@ describe('selectOverLimit', () => {
   });
 
   it('returns true when over limit', () => {
-    const unit = mockUnit({ unit_points_tiers: [{ id: 't1', unit_id: 'unit-1', model_count: 5, points: 1500 }] });
+    const unit = mockUnit({ unit_points_tiers: [{ id: 't1', unit_id: 'unit-1', model_count: 5, points: 1500, edition: '10e' }] });
     const state = mockState({
       list: { ...mockState().list, points_limit: 1000 },
       listUnits: [mockListUnit({ model_count: 5, units: unit })],
@@ -414,8 +415,8 @@ describe('getUnitPoints', () => {
   it('returns points for exact tier match', () => {
     const unit = mockUnit({
       unit_points_tiers: [
-        { id: 't1', unit_id: 'unit-1', model_count: 5, points: 90 },
-        { id: 't2', unit_id: 'unit-1', model_count: 10, points: 180 },
+        { id: 't1', unit_id: 'unit-1', model_count: 5, points: 90, edition: '10e' },
+        { id: 't2', unit_id: 'unit-1', model_count: 10, points: 180, edition: '10e' },
       ],
     });
     expect(getUnitPoints(unit, 5)).toBe(90);
@@ -425,8 +426,8 @@ describe('getUnitPoints', () => {
   it('returns highest applicable tier for intermediate counts', () => {
     const unit = mockUnit({
       unit_points_tiers: [
-        { id: 't1', unit_id: 'unit-1', model_count: 5, points: 90 },
-        { id: 't2', unit_id: 'unit-1', model_count: 10, points: 180 },
+        { id: 't1', unit_id: 'unit-1', model_count: 5, points: 90, edition: '10e' },
+        { id: 't2', unit_id: 'unit-1', model_count: 10, points: 180, edition: '10e' },
       ],
     });
     expect(getUnitPoints(unit, 7)).toBe(90);
@@ -435,7 +436,7 @@ describe('getUnitPoints', () => {
   it('returns 0 when model count below all tiers', () => {
     const unit = mockUnit({
       unit_points_tiers: [
-        { id: 't1', unit_id: 'unit-1', model_count: 5, points: 90 },
+        { id: 't1', unit_id: 'unit-1', model_count: 5, points: 90, edition: '10e' },
       ],
     });
     expect(getUnitPoints(unit, 1)).toBe(0);
@@ -444,8 +445,8 @@ describe('getUnitPoints', () => {
   it('handles unsorted tiers', () => {
     const unit = mockUnit({
       unit_points_tiers: [
-        { id: 't2', unit_id: 'unit-1', model_count: 10, points: 180 },
-        { id: 't1', unit_id: 'unit-1', model_count: 5, points: 90 },
+        { id: 't2', unit_id: 'unit-1', model_count: 10, points: 180, edition: '10e' },
+        { id: 't1', unit_id: 'unit-1', model_count: 5, points: 90, edition: '10e' },
       ],
     });
     expect(getUnitPoints(unit, 10)).toBe(180);
@@ -578,7 +579,7 @@ describe('selectRosterAlliedUnits', () => {
 describe('selectRosterSectionPoints', () => {
   it('sums points by role including enhancements', () => {
     const unit1 = mockUnit({ id: 'u1', role: 'battleline' });
-    const unit2 = mockUnit({ id: 'u2', name: 'Captain', role: 'character', unit_points_tiers: [{ id: 't1', unit_id: 'u2', model_count: 1, points: 80 }] });
+    const unit2 = mockUnit({ id: 'u2', name: 'Captain', role: 'character', unit_points_tiers: [{ id: 't1', unit_id: 'u2', model_count: 1, points: 80, edition: '10e' }] });
 
     const state = mockState({
       listUnits: [
@@ -597,7 +598,7 @@ describe('selectRosterSectionPoints', () => {
 
 describe('selectRosterAlliedPoints', () => {
   it('sums allied unit points', () => {
-    const alliedUnit = mockUnit({ id: 'u2', unit_points_tiers: [{ id: 't1', unit_id: 'u2', model_count: 1, points: 150 }] });
+    const alliedUnit = mockUnit({ id: 'u2', unit_points_tiers: [{ id: 't1', unit_id: 'u2', model_count: 1, points: 150, edition: '10e' }] });
 
     const state = mockState({
       listUnits: [
