@@ -10,7 +10,8 @@ import { DashboardPage } from './shared/pages/DashboardPage';
 import { LandingPage } from './shared/pages/LandingPage';
 import { ListsPage } from './features/list-builder/pages/ListsPage';
 import { ListEditorPage } from './features/list-builder/pages/ListEditorPage';
-import { lazy, Suspense, useState, type ReactNode } from 'react';
+import { lazy, Suspense, useState, useMemo, type ReactNode } from 'react';
+import { changelog } from './shared/data/changelog';
 import { FeedbackModal } from './shared/components/FeedbackModal';
 import { ThemePicker } from './shared/components/ThemePicker';
 import { AppFooter } from './shared/components/AppFooter';
@@ -58,6 +59,7 @@ const OrganisationDetailPage = lazy(() => lazyRetry(() => import('./features/soc
 const SettingsPage = lazy(() => lazyRetry(() => import('./shared/pages/SettingsPage').then(m => ({ default: m.SettingsPage }))));
 const ResetPasswordPage = lazy(() => lazyRetry(() => import('./shared/pages/ResetPasswordPage').then(m => ({ default: m.ResetPasswordPage }))));
 const SpectateGamePage = lazy(() => lazyRetry(() => import('./features/play-mode/pages/SpectateGamePage').then(m => ({ default: m.SpectateGamePage }))));
+const ChangelogPage = lazy(() => lazyRetry(() => import('./shared/pages/ChangelogPage').then(m => ({ default: m.ChangelogPage }))));
 
 // Clear the reload flag on successful page load
 sessionStorage.removeItem('chunk_reload');
@@ -84,9 +86,17 @@ function HomeRoute() {
   return user ? <DashboardPage /> : <LandingPage />;
 }
 
+const LAST_SEEN_KEY = 'warforge-last-seen-changelog';
+
 function AppHeader() {
   const { user, signOut } = useAuth();
   const [showFeedback, setShowFeedback] = useState(false);
+
+  const hasNewChangelog = useMemo(() => {
+    const lastSeen = localStorage.getItem(LAST_SEEN_KEY);
+    if (!lastSeen) return true;
+    return changelog[0].date > lastSeen;
+  }, []);
 
   return (
     <>
@@ -145,6 +155,14 @@ function AppHeader() {
           }
         >
           Browse
+        </NavLink>
+        <NavLink
+          to="/changelog"
+          className={({ isActive }) =>
+            `app-header__link${isActive ? ' app-header__link--active' : ''}`
+          }
+        >
+          What's New{hasNewChangelog && <span className="app-header__new-badge">NEW</span>}
         </NavLink>
         <ThemePicker />
         {user && (
@@ -260,6 +278,7 @@ function App() {
             <Route path="/units" element={<UnitsPage />} />
             <Route path="/shared/:code" element={<SharedListPage />} />
             <Route path="/spectate/:code" element={<SpectateGamePage />} />
+            <Route path="/changelog" element={<ChangelogPage />} />
           </Routes>
           </Suspense>
         </main>
