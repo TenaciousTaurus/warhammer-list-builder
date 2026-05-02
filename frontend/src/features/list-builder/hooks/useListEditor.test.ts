@@ -20,10 +20,11 @@ describe('getUnitPoints', () => {
     transport_capacity: null,
     transport_keywords_allowed: null,
     transport_keywords_excluded: null,
+    edition: '10e',
     created_at: '2025-01-01T00:00:00Z',
     unit_points_tiers: [
-      { id: 't1', unit_id: 'unit-1', model_count: 5, points: 90 },
-      { id: 't2', unit_id: 'unit-1', model_count: 10, points: 180 },
+      { id: 't1', unit_id: 'unit-1', model_count: 5, points: 90, edition: '10e' },
+      { id: 't2', unit_id: 'unit-1', model_count: 10, points: 180, edition: '10e' },
     ],
   };
 
@@ -52,7 +53,7 @@ describe('getUnitPoints', () => {
     const unitOneTier = {
       ...mockUnit,
       unit_points_tiers: [
-        { id: 't1', unit_id: 'unit-1', model_count: 1, points: 70 },
+        { id: 't1', unit_id: 'unit-1', model_count: 1, points: 70, edition: '10e' },
       ],
     };
     expect(getUnitPoints(unitOneTier, 1)).toBe(70);
@@ -63,9 +64,9 @@ describe('getUnitPoints', () => {
     const unitThreeTiers = {
       ...mockUnit,
       unit_points_tiers: [
-        { id: 't1', unit_id: 'unit-1', model_count: 3, points: 65 },
-        { id: 't2', unit_id: 'unit-1', model_count: 6, points: 130 },
-        { id: 't3', unit_id: 'unit-1', model_count: 10, points: 200 },
+        { id: 't1', unit_id: 'unit-1', model_count: 3, points: 65, edition: '10e' },
+        { id: 't2', unit_id: 'unit-1', model_count: 6, points: 130, edition: '10e' },
+        { id: 't3', unit_id: 'unit-1', model_count: 10, points: 200, edition: '10e' },
       ],
     };
     expect(getUnitPoints(unitThreeTiers, 3)).toBe(65);
