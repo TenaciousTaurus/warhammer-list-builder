@@ -302,6 +302,30 @@ export type Database = {
         };
         Relationships: [];
       };
+      army_list_versions: {
+        Row: {
+          id: string;
+          list_id: string;
+          snapshot: Record<string, unknown>;
+          changed_at: string;
+          change_note: string | null;
+        };
+        Insert: {
+          id?: string;
+          list_id: string;
+          snapshot: Record<string, unknown>;
+          changed_at?: string;
+          change_note?: string | null;
+        };
+        Update: {
+          id?: string;
+          list_id?: string;
+          snapshot?: Record<string, unknown>;
+          changed_at?: string;
+          change_note?: string | null;
+        };
+        Relationships: [];
+      };
       army_list_units: {
         Row: {
           id: string;
@@ -1556,6 +1580,7 @@ export type Weapon = Database['public']['Tables']['weapons']['Row'];
 export type Ability = Database['public']['Tables']['abilities']['Row'];
 export type Enhancement = Database['public']['Tables']['enhancements']['Row'];
 export type ArmyList = Database['public']['Tables']['army_lists']['Row'];
+export type ArmyListVersion = Database['public']['Tables']['army_list_versions']['Row'];
 export type ArmyListUnit = Database['public']['Tables']['army_list_units']['Row'];
 export type ArmyListEnhancement = Database['public']['Tables']['army_list_enhancements']['Row'];
 export type WargearOption = Database['public']['Tables']['wargear_options']['Row'];
