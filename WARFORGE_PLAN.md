@@ -128,15 +128,15 @@ These items are permanently out of scope. If someone asks for them, the answer i
 
 ### W2-1 — Color Scheme Browse + Share *(Highest ROI — schema already 90% done)*
 
-- [ ] Migration: add `scheme_code TEXT UNIQUE` to `paint_recipes` (auto-generated nanoid on first public share)
-- [ ] Migration: RLS policy — `paint_recipes WHERE is_public = true` readable by anon
-- [ ] `CommunityRecipesPage.tsx` at `/recipes/community`:
+- [x] Migration: add `scheme_code TEXT UNIQUE` to `paint_recipes` (auto-generated nanoid on first public share) — completed 2026-05-02. Migration: `20260502000005_recipe_scheme_code.sql`
+- [x] Migration: RLS policy — `paint_recipes WHERE is_public = true` readable by anon — completed 2026-05-02.
+- [x] `CommunityRecipesPage.tsx` at `/recipes/community`:
   - Filter by faction (dropdown from `factions` table)
   - Filter by color family (derived from first step's paint hex)
   - Search by recipe name
-  - Cards link to public recipe detail
-- [ ] Route `/recipes/:scheme_code` — public share URL, no auth required
-- [ ] In `RecipeEditor.tsx`: "Make public" toggle that sets `is_public = true` and generates `scheme_code`; shows copyable share link
+  - Cards link to public recipe detail — completed 2026-05-02.
+- [x] Route `/recipes/:scheme_code` — public share URL, no auth required — completed 2026-05-02.
+- [x] In `RecipeEditor.tsx`: "Make public" toggle that sets `is_public = true` and generates `scheme_code`; shows copyable share link — completed 2026-05-02. Also added faction picker.
 
 ---
 
@@ -335,6 +335,10 @@ These are standing hygiene rules, not one-time tasks.
 - [x] **W1-4** — Opponent spectate view — completed 2026-05-02. `is_spectatable` + public RLS, `useSpectateSession` hook, `SpectateGamePage` at `/spectate/:code`, "Share" button in PlayModePage. Migration: `20260502000003_spectatable_game_sessions.sql`.
 - [x] **W1-5** — Changelog page — completed 2026-05-02. `shared/data/changelog.ts`, `ChangelogPage` at `/changelog`, "What's New" nav link with "NEW" badge.
 - [x] **W1-6** — Multi-source data abstraction — completed 2026-05-02. `scripts/data-sources/` scaffolding, `parse-bsdata.js` stamps freshness, `UnitsPage` shows last-updated date. Migration: `20260502000004_data_source_tracking.sql`.
+
+### Wave 2
+
+- [x] **W2-1** — Color Scheme Browse + Share — completed 2026-05-02. `scheme_code` + public RLS, `CommunityRecipesPage` at `/recipes/community`, `PublicRecipePage` at `/recipes/:schemeCode`, faction picker + share link in `RecipeEditor`, "Community" link in `CollectionSubNav`. Migration: `20260502000005_recipe_scheme_code.sql`.
 
 ---
 
