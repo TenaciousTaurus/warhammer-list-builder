@@ -132,6 +132,13 @@ export function UnitsPage() {
     return invuln?.description?.match(/(\d\+)/)?.[1] ?? null;
   };
 
+  const selectedFactionData = factions.find(f => f.id === selectedFaction);
+  const dataFreshnessLabel = selectedFactionData?.data_source_updated_at
+    ? new Date(selectedFactionData.data_source_updated_at).toLocaleDateString('en-GB', {
+        year: 'numeric', month: 'short', day: 'numeric',
+      })
+    : null;
+
   return (
     <div>
       <div className="units-page__header">
@@ -145,7 +152,14 @@ export function UnitsPage() {
 
       <div className="units-page__filters">
         <div className="form-group" style={{ minWidth: '200px' }}>
-          <label>Faction</label>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)' }}>
+            Faction
+            {dataFreshnessLabel && (
+              <span className="units-page__freshness" title={`Data last updated ${dataFreshnessLabel} from ${selectedFactionData?.data_source ?? 'bsdata'}`}>
+                Updated {dataFreshnessLabel}
+              </span>
+            )}
+          </label>
           <select
             className="form-select"
             value={selectedFaction}

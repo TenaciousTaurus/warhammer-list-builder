@@ -8,9 +8,15 @@ const { XMLParser } = require('fast-xml-parser');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const { getActiveSource } = require('./data-sources/index');
 
 const DATA_DIR = path.join(__dirname, '..', 'data', 'bsdata');
 const OUT_DIR = path.join(__dirname, '..', 'supabase', 'migrations');
+
+// Active data source — provides name and mtime for stamping faction rows
+const activeSource = getActiveSource();
+const DATA_SOURCE_NAME = activeSource.name;
+const DATA_SOURCE_UPDATED_AT = activeSource.getLatestMtime()?.toISOString() ?? new Date().toISOString();
 
 // Deterministic UUID from a string seed (so re-runs produce same IDs)
 function uuidFromSeed(seed) {
@@ -1689,9 +1695,9 @@ function generateSQL(faction) {
   lines.push('');
 
   // Faction
-  lines.push(`INSERT INTO public.factions (id, name, alignment) VALUES`);
-  lines.push(`  (${esc(factionId)}, ${esc(factionName)}, ${esc(alignment || 'xenos')})`);
-  lines.push(`ON CONFLICT (name) DO UPDATE SET name = EXCLUDED.name, alignment = EXCLUDED.alignment;`);
+  lines.push(`INSERT INTO public.factions (id, name, alignment, data_source, data_source_updated_at) VALUES`);
+  lines.push(`  (${esc(factionId)}, ${esc(factionName)}, ${esc(alignment || 'xenos')}, ${esc(DATA_SOURCE_NAME)}, ${esc(DATA_SOURCE_UPDATED_AT)})`);
+  lines.push(`ON CONFLICT (name) DO UPDATE SET name = EXCLUDED.name, alignment = EXCLUDED.alignment, data_source = EXCLUDED.data_source, data_source_updated_at = EXCLUDED.data_source_updated_at;`);
   lines.push('');
 
   // Detachments
@@ -2163,4 +2169,4 @@ END $$;
 `;
 
 fs.writeFileSync(path.join(OUT_DIR, migrationFile), header + allSQL.join('\n\n'));
-console.log(`\nWrote ${migrationFile}: ${totalFactions} factions, ${totalUnits} units`);
+console.log(`\nWrote ${migrationFile}: ${totalFactions} factions, ${totalUnits} units [source: ${DATA_SOURCE_NAME}, updated: ${DATA_SOURCE_UPDATED_AT}]`);
