@@ -71,6 +71,9 @@ interface GameSessionState {
   // Events
   logEvent: (eventType: string, description: string, data?: Record<string, unknown>) => void;
 
+  // Spectating
+  enableSpectate: () => Promise<string | null>;
+
   // Game completion
   completeGame: (result: 'win' | 'loss' | 'draw', notes?: string) => Promise<void>;
   pauseGame: () => Promise<void>;
@@ -484,6 +487,27 @@ export const useGameSessionStore = create<GameSessionState>()(
             data: data ?? null,
           })
         );
+      },
+
+      enableSpectate: async () => {
+        const { session } = get();
+        if (!session) return null;
+
+        // Reuse existing invite_code or generate a new one
+        const code = session.invite_code ?? crypto.randomUUID().replace(/-/g, '').slice(0, 12);
+
+        const { error } = await supabase
+          .from('game_sessions')
+          .update({ invite_code: code, is_spectatable: true })
+          .eq('id', session.id);
+
+        if (error) {
+          set({ syncStatus: 'error', syncError: `Enable spectate: ${error.message}` });
+          return null;
+        }
+
+        set({ session: { ...session, invite_code: code, is_spectatable: true } });
+        return code;
       },
 
       completeGame: async (result, notes) => {
