@@ -5,7 +5,8 @@ import { useTournamentStore } from '../stores/tournamentStore';
 import { TournamentCard } from '../components/TournamentCard';
 import { TournamentFilters } from '../components/TournamentFilters';
 import { WelcomeBanner } from '../../../shared/components/WelcomeBanner';
-import type { Tournament } from '../../../shared/types/database';
+import { supabase } from '../../../shared/lib/supabase';
+import type { Tournament, TournamentNearResult } from '../../../shared/types/database';
 import '../social.css';
 
 type TournamentFormat = Tournament['format'];
@@ -40,7 +41,12 @@ export function TournamentsPage() {
     points_limit: 2000,
     num_rounds: 3,
     is_public: false,
+    venue_city: '',
   });
+
+  const [nearbyTournaments, setNearbyTournaments] = useState<TournamentNearResult[] | null>(null);
+  const [nearMeLoading, setNearMeLoading] = useState(false);
+  const [nearMeError, setNearMeError] = useState<string | null>(null);
 
   // Filters
   const [nameQuery, setNameQuery] = useState('');
@@ -78,9 +84,39 @@ export function TournamentsPage() {
         points_limit: 2000,
         num_rounds: 3,
         is_public: false,
+        venue_city: '',
       });
       navigate(`/tournament/${id}`);
     }
+  };
+
+  const handleNearMe = () => {
+    if (!navigator.geolocation) {
+      setNearMeError('Geolocation is not supported by your browser.');
+      return;
+    }
+    setNearMeLoading(true);
+    setNearMeError(null);
+    setNearbyTournaments(null);
+    navigator.geolocation.getCurrentPosition(
+      async ({ coords }) => {
+        const { data, error: rpcError } = await supabase.rpc('tournaments_near', {
+          p_lat: coords.latitude,
+          p_lng: coords.longitude,
+          p_radius_km: 100,
+        });
+        if (rpcError) {
+          setNearMeError('Failed to fetch nearby tournaments.');
+        } else {
+          setNearbyTournaments((data as TournamentNearResult[]) ?? []);
+        }
+        setNearMeLoading(false);
+      },
+      () => {
+        setNearMeError('Location access denied.');
+        setNearMeLoading(false);
+      },
+    );
   };
 
   const handleJoin = async () => {
@@ -194,6 +230,55 @@ export function TournamentsPage() {
         onSortChange={setSortBy}
       />
 
+      {/* Near Me — browse tab only */}
+      {tab === 'browse' && (
+        <div className="tournaments-page__near-me">
+          <button
+            className="tournaments-page__near-me-btn"
+            onClick={handleNearMe}
+            disabled={nearMeLoading}
+          >
+            {nearMeLoading ? 'Locating…' : '📍 Near Me'}
+          </button>
+          {nearbyTournaments !== null && (
+            <button
+              className="tournaments-page__near-me-clear"
+              onClick={() => setNearbyTournaments(null)}
+            >
+              ✕ Clear
+            </button>
+          )}
+          {nearMeError && <span className="tournaments-page__near-me-error">{nearMeError}</span>}
+        </div>
+      )}
+
+      {/* Nearby results */}
+      {tab === 'browse' && nearbyTournaments !== null && (
+        <div className="tournaments-page__nearby">
+          <h3 className="tournaments-page__nearby-title">
+            Tournaments within 100 km ({nearbyTournaments.length})
+          </h3>
+          {nearbyTournaments.length === 0 ? (
+            <p className="tournaments-page__empty-text">No tournaments found nearby.</p>
+          ) : (
+            <div className="tournaments-page__grid">
+              {nearbyTournaments.map((t) => (
+                <div key={t.id} className="tournaments-page__nearby-item">
+                  <TournamentCard
+                    tournament={t as unknown as Tournament}
+                    participantCount={0}
+                    onClick={() => handleTournamentClick(t.id)}
+                  />
+                  <span className="tournaments-page__distance-badge">
+                    {Math.round(t.distance_km)} km
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       {showCreateForm && (
         <div className="tournaments-page__create-form">
           <h2 className="tournaments-page__form-title">New Tournament</h2>
@@ -287,6 +372,17 @@ export function TournamentsPage() {
                 }
               />
             </div>
+          </div>
+          <div className="tournaments-page__form-field">
+            <label className="tournaments-page__label">Venue City (optional)</label>
+            <input
+              className="tournaments-page__input"
+              value={createForm.venue_city}
+              onChange={(e) =>
+                setCreateForm((prev) => ({ ...prev, venue_city: e.target.value }))
+              }
+              placeholder="e.g. London, UK"
+            />
           </div>
           <div className="tournaments-page__form-field">
             <label className="tournaments-page__checkbox-label">

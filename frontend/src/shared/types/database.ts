@@ -1301,6 +1301,95 @@ export type Database = {
         };
         Relationships: [];
       };
+      // W2-4: Hobby Streaks & Achievements
+      hobby_streaks: {
+        Row: {
+          user_id: string;
+          current_streak_days: number;
+          longest_streak_days: number;
+          last_activity_date: string | null;
+          total_active_days: number;
+        };
+        Insert: {
+          user_id: string;
+          current_streak_days?: number;
+          longest_streak_days?: number;
+          last_activity_date?: string | null;
+          total_active_days?: number;
+        };
+        Update: {
+          current_streak_days?: number;
+          longest_streak_days?: number;
+          last_activity_date?: string | null;
+          total_active_days?: number;
+        };
+        Relationships: [];
+      };
+      achievements: {
+        Row: {
+          id: string;
+          slug: string;
+          name: string;
+          description: string;
+          icon: string;
+          criteria: Record<string, unknown>;
+        };
+        Insert: {
+          id?: string;
+          slug: string;
+          name: string;
+          description: string;
+          icon?: string;
+          criteria?: Record<string, unknown>;
+        };
+        Update: {
+          slug?: string;
+          name?: string;
+          description?: string;
+          icon?: string;
+          criteria?: Record<string, unknown>;
+        };
+        Relationships: [];
+      };
+      user_achievements: {
+        Row: {
+          user_id: string;
+          achievement_id: string;
+          earned_at: string;
+        };
+        Insert: {
+          user_id: string;
+          achievement_id: string;
+          earned_at?: string;
+        };
+        Update: {
+          earned_at?: string;
+        };
+        Relationships: [];
+      };
+      // W2-5: Paint Equivalents
+      paint_equivalents: {
+        Row: {
+          paint_id: string;
+          equivalent_paint_id: string;
+          similarity_score: number;
+          source: 'community' | 'lab_match' | 'manufacturer';
+          votes: number;
+        };
+        Insert: {
+          paint_id: string;
+          equivalent_paint_id: string;
+          similarity_score: number;
+          source: 'community' | 'lab_match' | 'manufacturer';
+          votes?: number;
+        };
+        Update: {
+          similarity_score?: number;
+          source?: 'community' | 'lab_match' | 'manufacturer';
+          votes?: number;
+        };
+        Relationships: [];
+      };
       // Phase 5: Social, Stats & Tournaments
       user_profiles: {
         Row: {
@@ -1372,6 +1461,9 @@ export type Database = {
           completed_at: string | null;
           created_at: string;
           updated_at: string;
+          venue_city: string | null;
+          venue_lat: number | null;
+          venue_lng: number | null;
         };
         Insert: {
           id?: string;
@@ -1416,6 +1508,8 @@ export type Database = {
           seed: number | null;
           dropped: boolean;
           registered_at: string;
+          list_submission_deadline: string | null;
+          submitted_list_id: string | null;
         };
         Insert: {
           id?: string;
@@ -1425,6 +1519,8 @@ export type Database = {
           display_name: string;
           seed?: number | null;
           dropped?: boolean;
+          list_submission_deadline?: string | null;
+          submitted_list_id?: string | null;
         };
         Update: {
           id?: string;
@@ -1434,6 +1530,8 @@ export type Database = {
           display_name?: string;
           seed?: number | null;
           dropped?: boolean;
+          list_submission_deadline?: string | null;
+          submitted_list_id?: string | null;
         };
         Relationships: [];
       };
@@ -1561,6 +1659,38 @@ export type Database = {
         Args: { p_battle_id: string };
         Returns: void;
       };
+      shopping_list_for_army: {
+        Args: { p_list_id: string; p_user_id: string };
+        Returns: ShoppingListItem[];
+      };
+      check_and_award_achievements: {
+        Args: { p_user_id: string };
+        Returns: { achievement_slug: string; achievement_name: string }[];
+      };
+      get_paint_equivalents: {
+        Args: { p_paint_id: string };
+        Returns: PaintEquivalentResult[];
+      };
+      tournaments_near: {
+        Args: { p_lat: number; p_lng: number; p_radius_km?: number };
+        Returns: TournamentNearResult[];
+      };
+      faction_win_rates: {
+        Args: { p_days?: number };
+        Returns: FactionWinRate[];
+      };
+      detachment_play_rates: {
+        Args: { p_days?: number };
+        Returns: DetachmentPlayRate[];
+      };
+      submit_tournament_list: {
+        Args: { p_participant_id: string; p_list_id: string };
+        Returns: { success: boolean; error?: string; details?: Record<string, unknown> };
+      };
+      restore_army_list_version: {
+        Args: { p_version_id: string };
+        Returns: string;
+      };
     };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;
@@ -1681,7 +1811,69 @@ export interface OrganisationMember {
 
 // RPC response types
 export type CalculateListPointsResult = Database['public']['Functions']['calculate_list_points']['Returns'];
+export type ShoppingListResult = Database['public']['Functions']['shopping_list_for_army']['Returns'];
 export type ValidateArmyListResult = Database['public']['Functions']['validate_army_list']['Returns'];
+
+// W2-4
+export type HobbyStreak = Database['public']['Tables']['hobby_streaks']['Row'];
+export type Achievement = Database['public']['Tables']['achievements']['Row'];
+export type UserAchievement = Database['public']['Tables']['user_achievements']['Row'];
+
+// W2-5
+export type PaintEquivalent = Database['public']['Tables']['paint_equivalents']['Row'];
+
+export interface PaintEquivalentResult {
+  equivalent_paint_id: string;
+  brand: string;
+  range_name: string;
+  paint_name: string;
+  paint_type: string;
+  hex_color: string | null;
+  is_metallic: boolean;
+  similarity_score: number;
+  source: string;
+  votes: number;
+}
+
+export interface TournamentNearResult {
+  id: string;
+  name: string;
+  format: string;
+  status: string;
+  is_public: boolean;
+  share_code: string;
+  max_players: number;
+  points_limit: number;
+  num_rounds: number;
+  venue_city: string | null;
+  venue_lat: number | null;
+  venue_lng: number | null;
+  distance_km: number;
+  created_at: string;
+}
+
+export interface FactionWinRate {
+  faction_id: string;
+  faction_name: string;
+  win_rate: number;
+  wins: number;
+  total_games: number;
+}
+
+export interface DetachmentPlayRate {
+  detachment_id: string;
+  detachment_name: string;
+  faction_name: string;
+  play_count: number;
+}
+
+export interface ShoppingListItem {
+  unit_id: string;
+  unit_name: string;
+  count_needed: number;
+  count_owned: number;
+  est_cost_usd: number | null;
+}
 
 export interface PlayerStats {
   total_games: number;

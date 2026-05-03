@@ -291,20 +291,21 @@ Frontend Dev: `http://localhost:5173`
 
 ## Performance Baseline
 
-*Recorded 2026-05-02 (post-Wave 1). Run `cd frontend && npm run build` to refresh.*
+*Recorded 2026-05-03 (post-Wave 2). Run `cd frontend && npm run build` to refresh.*
 
 ### Bundle Sizes (gzip)
 
 | Chunk | Raw | Gzip | Notes |
 |-------|-----|------|-------|
-| `index` (initial) | 329 kB | **98.2 kB** | ✅ Under 200 kB target |
+| `index` (initial) | 339 kB | **100.81 kB** | ✅ Under 200 kB target |
 | `supabase` | 171 kB | 45.4 kB | Lazy — loaded once on first auth |
 | `router` | 48 kB | 16.9 kB | Lazy |
-| `PlayModePage` | 31 kB | 8.1 kB | Lazy (SpectateGamePage split out) |
+| `PlayModePage` | 31 kB | 8.1 kB | Lazy |
 | `CollectionPage` | 28 kB | 7.2 kB | Lazy |
-| `index.css` (main) | ~120 kB | ~16.3 kB | Eager (offline banner + changelog CSS added) |
+| `TournamentDetailPage` | 13 kB | 3.5 kB | Lazy (W2-9 admin tab added) |
+| `index.css` (main) | 108 kB | **16.40 kB** | Eager |
 
-**Total eager load (gzip):** ~114 kB (JS 98.2 + CSS ~16.3) — still well under 200 kB target.
+**Total eager load (gzip):** ~117 kB (JS 100.81 + CSS 16.40) — well under 200 kB target.
 
 ### Lighthouse Scores
 

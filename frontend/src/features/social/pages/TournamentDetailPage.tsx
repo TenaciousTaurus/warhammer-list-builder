@@ -7,9 +7,10 @@ import { SwissStandings } from '../components/SwissStandings';
 import { TournamentBracket } from '../components/TournamentBracket';
 import { RoundRobinGrid } from '../components/RoundRobinGrid';
 import { PairingCard } from '../components/PairingCard';
+import { ListSubmitModal } from '../components/ListSubmitModal';
 import '../social.css';
 
-type DetailTab = 'standings' | 'rounds' | 'bracket';
+type DetailTab = 'standings' | 'rounds' | 'bracket' | 'admin';
 
 const FORMAT_LABELS: Record<string, string> = {
   swiss: 'Swiss',
@@ -46,6 +47,7 @@ export function TournamentDetailPage() {
 
   const [activeTab, setActiveTab] = useState<DetailTab>('standings');
   const [expandedRound, setExpandedRound] = useState<string | null>(null);
+  const [showSubmitModal, setShowSubmitModal] = useState(false);
 
   useTournamentRealtime(id ?? '');
 
@@ -57,6 +59,7 @@ export function TournamentDetailPage() {
   }, [id, loadTournament, loadStandings]);
 
   const isOrganizer = activeTournament?.organizer_id === user?.id;
+  const myParticipant = participants.find((p) => p.user_id === user?.id);
   const nextRoundNumber = rounds.length > 0 ? Math.max(...rounds.map((r) => r.round_number)) + 1 : 1;
 
   const handleStart = async () => {
@@ -99,6 +102,14 @@ export function TournamentDetailPage() {
 
   return (
     <div className="tournament-detail">
+      {showSubmitModal && myParticipant && (
+        <ListSubmitModal
+          participantId={myParticipant.id}
+          tournamentPointsLimit={activeTournament.points_limit}
+          onClose={() => setShowSubmitModal(false)}
+          onSubmitted={() => { if (id) loadTournament(id); }}
+        />
+      )}
       <div className="tournament-detail__header">
         <button className="tournament-detail__back-btn" onClick={() => navigate('/tournaments')}>
           Back
@@ -125,6 +136,14 @@ export function TournamentDetailPage() {
         </div>
         {activeTournament.description && (
           <p className="tournament-detail__description">{activeTournament.description}</p>
+        )}
+        {myParticipant && activeTournament.status === 'registration' && (
+          <button
+            className="tournament-detail__submit-list-btn"
+            onClick={() => setShowSubmitModal(true)}
+          >
+            {myParticipant.submitted_list_id ? 'Change Submitted List' : 'Submit My List'}
+          </button>
         )}
       </div>
 
@@ -175,6 +194,14 @@ export function TournamentDetailPage() {
             onClick={() => setActiveTab('bracket')}
           >
             Bracket
+          </button>
+        )}
+        {isOrganizer && (
+          <button
+            className={`tournament-detail__tab ${activeTab === 'admin' ? 'tournament-detail__tab--active' : ''}`}
+            onClick={() => setActiveTab('admin')}
+          >
+            Admin
           </button>
         )}
       </div>
@@ -243,6 +270,25 @@ export function TournamentDetailPage() {
             pairings={pairings}
             participants={participants}
           />
+        )}
+
+        {activeTab === 'admin' && isOrganizer && (
+          <div className="tournament-admin">
+            <h2 className="tournament-admin__title">Participant Lists</h2>
+            <p className="tournament-admin__hint">
+              {participants.filter((p) => p.submitted_list_id).length} / {participants.length} lists submitted
+            </p>
+            <div className="tournament-admin__list">
+              {participants.map((p) => (
+                <div key={p.id} className={`tournament-admin__row${p.submitted_list_id ? ' tournament-admin__row--submitted' : ''}`}>
+                  <span className="tournament-admin__player">{p.display_name}</span>
+                  <span className={`tournament-admin__status${p.submitted_list_id ? ' tournament-admin__status--submitted' : ' tournament-admin__status--pending'}`}>
+                    {p.submitted_list_id ? 'Submitted' : 'Pending'}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
         )}
       </div>
     </div>
