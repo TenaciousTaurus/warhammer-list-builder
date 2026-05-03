@@ -41,10 +41,13 @@ const defaultProps = {
   collapsedPickerRoles: new Set<string>(),
   unitPickerFilter: '',
   showLegends: false,
+  showOwnedOnly: false,
+  ownedUnitCounts: new Map<string, number>(),
   onFilterChange: vi.fn(),
   onAddUnit: vi.fn(),
   onToggleRole: vi.fn(),
   onToggleLegends: vi.fn(),
+  onToggleOwnedOnly: vi.fn(),
 };
 
 describe('UnitPicker', () => {
@@ -137,7 +140,7 @@ describe('UnitPicker', () => {
     const onToggleLegends = vi.fn();
     render(<UnitPicker {...defaultProps} onToggleLegends={onToggleLegends} />);
 
-    const checkbox = screen.getByRole('checkbox');
+    const checkbox = screen.getByLabelText('Legends');
     fireEvent.click(checkbox);
 
     expect(onToggleLegends).toHaveBeenCalled();
