@@ -140,7 +140,7 @@ describe('UnitPicker', () => {
     const onToggleLegends = vi.fn();
     render(<UnitPicker {...defaultProps} onToggleLegends={onToggleLegends} />);
 
-    const checkbox = screen.getByRole('checkbox');
+    const checkbox = screen.getByLabelText('Legends');
     fireEvent.click(checkbox);
 
     expect(onToggleLegends).toHaveBeenCalled();
