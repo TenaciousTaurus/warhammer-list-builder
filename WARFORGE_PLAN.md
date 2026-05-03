@@ -152,13 +152,13 @@ These items are permanently out of scope. If someone asks for them, the answer i
 
 ### W2-3 — Shopping List for Army
 
-- [ ] Migration: create RPC `shopping_list_for_army(p_list_id UUID, p_user_id UUID)`:
-  - Returns units in list not in collection, or where `collection_entries.quantity < army_list_units.model_count`
-  - Columns: `unit_id`, `unit_name`, `count_needed`, `count_owned`, `est_cost_usd` (from `wishlist_items.estimated_price` or NULL)
-- [ ] `ShoppingListModal.tsx`: triggered from "What do I need?" button on `ListEditorPage`
+- [x] Migration: create RPC `shopping_list_for_army(p_list_id UUID, p_user_id UUID)` — completed 2026-05-02. Migration: `20260502000006_shopping_list_rpc.sql`
+- [x] `ShoppingListModal.tsx`: triggered from "What do I need?" button on `ListEditorPage` — completed 2026-05-02
   - Shows diff as checklist: unit name, need X more, estimated cost
   - Total estimated cost at bottom
   - "Add all to wishlist" one-click action
+  - Checkboxes to mark individual units as acquired
+  - Graceful empty state when user owns everything
 
 ---
 
@@ -340,6 +340,14 @@ These are standing hygiene rules, not one-time tasks.
 
 - [x] **W2-1** — Color Scheme Browse + Share — completed 2026-05-02. `scheme_code` + public RLS, `CommunityRecipesPage` at `/recipes/community`, `PublicRecipePage` at `/recipes/:schemeCode`, faction picker + share link in `RecipeEditor`, "Community" link in `CollectionSubNav`. Migration: `20260502000005_recipe_scheme_code.sql`.
 - [x] **W2-2** — Collection-Aware List Filtering — completed 2026-05-02. `showOwnedOnly` + `ownedUnitCounts` in `listEditorStore`, `loadOwnedUnits()` fetches `collection_entries` on list load, `selectFilteredUnits` respects owned filter, "Owned only" toggle + "X owned" badge in `UnitPicker`, graceful empty state.
+- [x] **W2-3** — Shopping List for Army — completed 2026-05-02. `shopping_list_for_army` RPC (ownership-gated, joins collection + wishlist prices), `useShoppingList` hook, `ShoppingListModal` with checklist + cost total + "Add all to wishlist", "What do I need?" button in `ListSummary`. Migration: `20260502000006_shopping_list_rpc.sql`.
+- [x] **W2-4** — Hobby Streaks + Achievements — completed 2026-05-03. `hobby_streaks`, `achievements`, `user_achievements` tables + trigger `trg_update_hobby_streak`, RPC `check_and_award_achievements` (15 achievements seeded), `StreakWidget.tsx` on Dashboard, `AchievementsPanel.tsx` on ProfilePage. Migration: `20260502000007_hobby_streaks_achievements.sql`.
+- [x] **W2-5** — Cross-Brand Paint Equivalents — completed 2026-05-03. `paint_equivalents` table + `get_paint_equivalents` RPC (top-10 by similarity), `usePaintEquivalents` hook, `PaintPicker` enhanced with owned-badge, "!" indicator, equivalents callout with similarity scores + "Use" swap button. Migration: `20260502000008_paint_equivalents.sql`.
+- [x] **W2-6** — Distraction-Free Painting Mode — completed 2026-05-03. `PaintingModePage.tsx` at `/collection/recipes/:id/paint`: step-by-step full-screen view, swipe gestures, progress bar, dot pagination, step timer with vibration on completion, `localStorage` step persistence. Route wired in `App.tsx`.
+- [x] **W2-7** — Geographic Tournament Discovery — completed 2026-05-03. `venue_city/lat/lng` columns on `tournaments`, `tournaments_near` Haversine RPC, "📍 Near Me" button in `TournamentsPage` browse tab with distance badges, `venue_city` field in create form. Migrations: `20260502000009_geo_and_meta.sql`.
+- [x] **W2-8** — Meta Analysis Dashboard — completed 2026-05-03. `MetaPage.tsx` at `/meta` with Factions/Detachments tabs, bar-chart table, 30/60/90-day selector. `faction_win_rates` + `detachment_play_rates` RPCs. "Meta" nav link added. Migration: `20260502000009_geo_and_meta.sql`.
+- [x] **W2-9** — Tournament List Submission + TO Admin — completed 2026-05-03. `list_submission_deadline` + `submitted_list_id` on `tournament_participants`, `submit_tournament_list` RPC (validates + deadline-checks), `ListSubmitModal.tsx`, "Submit My List" button on `TournamentDetailPage`, "Admin" tab for organizers showing submission status per participant. Migration: `20260502000010_tournament_list_submission.sql`.
+- [x] **W2-10** — List Versioning UI — completed 2026-05-03. `ListHistoryPanel.tsx` (slide-in drawer from list editor), shows timestamp/note/snapshot summary per version, "Restore as new list" calls `restore_army_list_version` RPC (creates new list from snapshot metadata), "History" button in `ListSummary`. Migration: `20260502000011_restore_list_version.sql`.
 
 ---
 

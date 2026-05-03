@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../../../shared/hooks/useAuth';
 import { useSocialStore } from '../stores/socialStore';
+import { AchievementsPanel } from '../components/AchievementsPanel';
 import type { UserProfile } from '../../../shared/types/database';
 import '../social.css';
 
@@ -174,6 +175,10 @@ export function ProfilePage() {
           </div>
         </div>
       </div>
+
+      {viewedUserId && (
+        <AchievementsPanel userId={viewedUserId} />
+      )}
     </div>
   );
 }
