@@ -10,17 +10,20 @@ interface UnitPickerProps {
   collapsedPickerRoles: Set<string>;
   unitPickerFilter: string;
   showLegends: boolean;
+  showOwnedOnly: boolean;
+  ownedUnitCounts: Map<string, number>;
   onFilterChange: (filter: string) => void;
   onAddUnit: (unit: UnitWithRelations) => void;
   onToggleRole: (role: string) => void;
   onToggleLegends: () => void;
+  onToggleOwnedOnly: () => void;
   className?: string;
 }
 
 export function UnitPicker({
   listName, totalPoints, filteredUnits, filteredAlliedUnits, unitsByRole, unitCountsInList,
-  collapsedPickerRoles, unitPickerFilter, showLegends, onFilterChange,
-  onAddUnit, onToggleRole, onToggleLegends, className,
+  collapsedPickerRoles, unitPickerFilter, showLegends, showOwnedOnly, ownedUnitCounts,
+  onFilterChange, onAddUnit, onToggleRole, onToggleLegends, onToggleOwnedOnly, className,
 }: UnitPickerProps) {
   const isSearching = unitPickerFilter.length > 0;
 
@@ -30,6 +33,7 @@ export function UnitPicker({
       : 0;
     const currentCount = unitCountsInList.get(unit.id) ?? 0;
     const atLimit = currentCount >= unit.max_per_list;
+    const ownedCount = ownedUnitCounts.get(unit.id);
     return (
       <div
         key={unit.id}
@@ -39,6 +43,9 @@ export function UnitPicker({
         <div className="unit-picker-item__info">
           <span className="unit-picker-item__points-inline">{minTier}</span>
           <span className="unit-picker-item__name">{unit.name}</span>
+          {ownedCount !== undefined && (
+            <span className="unit-picker-item__owned-badge">{ownedCount} owned</span>
+          )}
           <span className="unit-picker-item__count">
             ({currentCount}/{unit.max_per_list})
           </span>
@@ -60,7 +67,11 @@ export function UnitPicker({
       </div>
 
       <div className="list-editor__picker-list">
-        {isSearching ? (
+        {showOwnedOnly && ownedUnitCounts.size === 0 ? (
+          <div className="picker__empty-owned">
+            Add models to your collection to use this filter.
+          </div>
+        ) : isSearching ? (
           <>
             {filteredUnits.map(renderUnitItem)}
             {filteredAlliedUnits.map(renderUnitItem)}
@@ -110,14 +121,24 @@ export function UnitPicker({
           value={unitPickerFilter}
           onChange={(e) => onFilterChange(e.target.value)}
         />
-        <label className="picker__legends-toggle">
-          <input
-            type="checkbox"
-            checked={showLegends}
-            onChange={onToggleLegends}
-          />
-          <span>Legends</span>
-        </label>
+        <div className="picker__toggles">
+          <label className="picker__legends-toggle">
+            <input
+              type="checkbox"
+              checked={showLegends}
+              onChange={onToggleLegends}
+            />
+            <span>Legends</span>
+          </label>
+          <label className="picker__owned-toggle">
+            <input
+              type="checkbox"
+              checked={showOwnedOnly}
+              onChange={onToggleOwnedOnly}
+            />
+            <span>Owned only</span>
+          </label>
+        </div>
       </div>
     </div>
   );
