@@ -95,6 +95,8 @@ interface ListEditorState {
   selectedArmyListUnitId: string | null;
   collapsedPickerRoles: Set<string>;
   showLegends: boolean;
+  showOwnedOnly: boolean;
+  ownedUnitCounts: Map<string, number>;
 
   // Actions
   init: (listId: string) => Promise<void>;
@@ -135,6 +137,8 @@ interface ListEditorState {
   setSelectedArmyListUnitId: (id: string | null) => void;
   togglePickerRole: (role: string) => void;
   toggleLegends: () => void;
+  toggleOwnedOnly: () => void;
+  loadOwnedUnits: () => Promise<void>;
 
   // Internal (prefixed with _ to indicate private)
   _fetchAll: (listId: string) => Promise<void>;
@@ -176,6 +180,8 @@ function getInitialState() {
     selectedArmyListUnitId: null as string | null,
     collapsedPickerRoles: new Set<string>(),
     showLegends: false,
+    showOwnedOnly: false,
+    ownedUnitCounts: new Map<string, number>(),
   };
 }
 
@@ -420,6 +426,9 @@ export const useListEditorStore = create<ListEditorState>()((set, get) => ({
       serverValidationError: !!valError,
       loading: false,
     });
+
+    // Load owned units asynchronously — doesn't block initial render
+    get().loadOwnedUnits();
   },
 
   _fetchServerValidation: async () => {
@@ -883,6 +892,26 @@ export const useListEditorStore = create<ListEditorState>()((set, get) => ({
   },
 
   toggleLegends: () => set((state) => ({ showLegends: !state.showLegends })),
+
+  toggleOwnedOnly: () => set((state) => ({ showOwnedOnly: !state.showOwnedOnly })),
+
+  loadOwnedUnits: async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+    const { data } = await supabase
+      .from('collection_entries')
+      .select('unit_id, quantity')
+      .eq('user_id', user.id)
+      .gt('quantity', 0)
+      .not('unit_id', 'is', null);
+    if (data) {
+      const counts = new Map<string, number>();
+      for (const entry of data) {
+        if (entry.unit_id) counts.set(entry.unit_id, entry.quantity as number);
+      }
+      set({ ownedUnitCounts: counts });
+    }
+  },
 }));
 
 // ============================================================
@@ -1023,10 +1052,11 @@ export function selectPointsMismatch(state: ListEditorState): boolean {
   return state.serverValidation !== null && state.serverValidation.total_points !== selectTotalPoints(state);
 }
 
-/** Filtered units (respecting legends toggle and search) */
+/** Filtered units (respecting legends toggle, owned filter, and search) */
 export function selectFilteredUnits(state: ListEditorState): UnitWithRelations[] {
   return state.availableUnits.filter(u => {
     if (!state.showLegends && u.is_legends) return false;
+    if (state.showOwnedOnly && !state.ownedUnitCounts.has(u.id)) return false;
     return u.name.toLowerCase().includes(state.unitPickerFilter.toLowerCase());
   });
 }

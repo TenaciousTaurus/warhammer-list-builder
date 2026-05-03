@@ -156,10 +156,13 @@ export function ListEditorPage() {
         collapsedPickerRoles={editor.collapsedPickerRoles}
         unitPickerFilter={editor.unitPickerFilter}
         showLegends={editor.showLegends}
+        showOwnedOnly={editor.showOwnedOnly}
+        ownedUnitCounts={editor.ownedUnitCounts}
         onFilterChange={editor.setUnitPickerFilter}
         onAddUnit={handleAddUnit}
         onToggleRole={editor.togglePickerRole}
         onToggleLegends={editor.toggleLegends}
+        onToggleOwnedOnly={editor.toggleOwnedOnly}
         className={mobileTab === 'picker' ? 'list-editor__picker--mobile-visible' : undefined}
       />
 

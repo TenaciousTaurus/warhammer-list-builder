@@ -113,6 +113,8 @@ export function useListEditor(id: string | undefined) {
     setSelectedArmyListUnitId: store.setSelectedArmyListUnitId,
     collapsedPickerRoles: store.collapsedPickerRoles,
     showLegends: store.showLegends,
+    showOwnedOnly: store.showOwnedOnly,
+    ownedUnitCounts: store.ownedUnitCounts,
     selectedLu,
 
     // Computed
@@ -152,6 +154,7 @@ export function useListEditor(id: string | undefined) {
     reorderUnits: store.reorderUnits,
     togglePickerRole: store.togglePickerRole,
     toggleLegends: store.toggleLegends,
+    toggleOwnedOnly: store.toggleOwnedOnly,
 
     // Helpers (bound to current state)
     getWargearSummary: (armyListUnitId: string, unitId: string) =>

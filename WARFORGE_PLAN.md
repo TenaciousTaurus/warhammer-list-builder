@@ -142,11 +142,11 @@ These items are permanently out of scope. If someone asks for them, the answer i
 
 ### W2-2 — Collection-Aware List Filtering
 
-- [ ] Add `showOwnedOnly: boolean` flag to `listEditorStore.ts`
-- [ ] When flag is true: filter unit picker results by joining `units.id` against `collection_entries.unit_id` for the current user (quantity > 0)
-- [ ] `UnitPicker.tsx`: add "Owned only" toggle button with a collection icon
-- [ ] Show "X owned" badge on unit cards even when filter is off (passive signal)
-- [ ] Graceful state: if user has no collection entries, toggle shows "Add models to your collection to use this filter"
+- [x] Add `showOwnedOnly: boolean` flag to `listEditorStore.ts` — completed 2026-05-02
+- [x] When flag is true: filter unit picker results by joining `units.id` against `collection_entries.unit_id` for the current user (quantity > 0) — completed 2026-05-02
+- [x] `UnitPicker.tsx`: add "Owned only" toggle button — completed 2026-05-02
+- [x] Show "X owned" badge on unit cards even when filter is off (passive signal) — completed 2026-05-02
+- [x] Graceful state: if user has no collection entries, toggle shows "Add models to your collection to use this filter" — completed 2026-05-02
 
 ---
 
@@ -339,6 +339,7 @@ These are standing hygiene rules, not one-time tasks.
 ### Wave 2
 
 - [x] **W2-1** — Color Scheme Browse + Share — completed 2026-05-02. `scheme_code` + public RLS, `CommunityRecipesPage` at `/recipes/community`, `PublicRecipePage` at `/recipes/:schemeCode`, faction picker + share link in `RecipeEditor`, "Community" link in `CollectionSubNav`. Migration: `20260502000005_recipe_scheme_code.sql`.
+- [x] **W2-2** — Collection-Aware List Filtering — completed 2026-05-02. `showOwnedOnly` + `ownedUnitCounts` in `listEditorStore`, `loadOwnedUnits()` fetches `collection_entries` on list load, `selectFilteredUnits` respects owned filter, "Owned only" toggle + "X owned" badge in `UnitPicker`, graceful empty state.
 
 ---
 
