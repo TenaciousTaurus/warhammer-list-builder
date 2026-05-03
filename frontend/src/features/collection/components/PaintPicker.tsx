@@ -27,6 +27,7 @@ export function PaintPicker({ paints, selectedPaintId, onSelect, ownedPaintIds }
   useEffect(() => {
     if (selectedNotOwned && selectedPaintId) {
       fetchEquivs(selectedPaintId);
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- collapsing panel when selection changes is intentional UI reset
       setShowEquivs(false);
     } else {
       clearEquivs();
