@@ -25,6 +25,8 @@ interface ListSummaryProps {
   onBack: () => void;
   onExport: () => void;
   onPlay: () => void;
+  onShoppingList?: () => void;
+  onHistory?: () => void;
   onUpdateName?: (name: string) => void;
   onUpdatePointsLimit?: (limit: number) => void;
   onUpdateBattleSize?: (battleSize: string, points: number) => void;
@@ -35,7 +37,7 @@ export function ListSummary({
   list, totalPoints, overLimit, unitLimitWarnings, enhancementWarnings,
   battleSizeWarnings, transportWarnings,
   pointsMismatch, serverValidation, serverValidationError, availableDetachments,
-  onBack, onExport, onPlay,
+  onBack, onExport, onPlay, onShoppingList, onHistory,
   onUpdateName, onUpdatePointsLimit, onUpdateBattleSize, onChangeDetachment,
 }: ListSummaryProps) {
   const [showDetachmentRules, setShowDetachmentRules] = useState(false);
@@ -138,6 +140,16 @@ export function ListSummary({
           <button className="btn" onClick={() => window.print()}>
             Print
           </button>
+          {onShoppingList && (
+            <button className="btn" onClick={onShoppingList} title="What do I need to buy?">
+              What do I need?
+            </button>
+          )}
+          {onHistory && (
+            <button className="btn" onClick={onHistory} title="View version history">
+              History
+            </button>
+          )}
           <button className="btn btn--primary" onClick={onPlay}>
             Play
           </button>

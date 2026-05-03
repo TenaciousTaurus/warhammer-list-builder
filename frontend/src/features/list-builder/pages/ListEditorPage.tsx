@@ -8,6 +8,8 @@ import { ListSummary } from '../components/ListSummary';
 import { ArmyRoster } from '../components/ArmyRoster';
 import { UnitDetailPanel } from '../components/UnitDetailPanel';
 import { ExportModal } from '../components/ExportModal';
+import { ShoppingListModal } from '../components/ShoppingListModal';
+import { ListHistoryPanel } from '../components/ListHistoryPanel';
 import { ListVerification } from '../../collection/components/ListVerification';
 import { buildAllUnitKeywords, isEnhancementEligible } from '../lib/enhancementEligibility';
 import type { UnitWithRelations } from '../stores/listEditorStore';
@@ -21,6 +23,8 @@ export function ListEditorPage() {
   const editor = useListEditor(id);
   const verification = useListVerification(editor.listUnits, user?.id);
   const [mobileTab, setMobileTab] = useState<MobileTab>('roster');
+  const [showShoppingList, setShowShoppingList] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
 
   const allUnitKeywords = useMemo(
     () => buildAllUnitKeywords(editor.availableUnits),
@@ -182,6 +186,8 @@ export function ListEditorPage() {
           onBack={() => navigate('/lists')}
           onExport={() => editor.setShowExport(true)}
           onPlay={() => navigate(`/play/${id}`)}
+          onShoppingList={user ? () => setShowShoppingList(true) : undefined}
+          onHistory={user ? () => setShowHistory(true) : undefined}
           availableDetachments={editor.availableDetachments}
           onUpdateName={editor.updateListName}
           onUpdatePointsLimit={editor.updatePointsLimit}
@@ -316,6 +322,24 @@ export function ListEditorPage() {
           </div>
         )}
       </div>
+
+      {/* Shopping list modal */}
+      {showShoppingList && user && editor.list && (
+        <ShoppingListModal
+          listId={editor.list.id}
+          userId={user.id}
+          factionId={editor.list.faction_id}
+          onClose={() => setShowShoppingList(false)}
+        />
+      )}
+
+      {/* List history panel */}
+      {showHistory && editor.list && (
+        <ListHistoryPanel
+          listId={editor.list.id}
+          onClose={() => setShowHistory(false)}
+        />
+      )}
 
       {/* Export modal */}
       {editor.showExport && (

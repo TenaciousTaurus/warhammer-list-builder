@@ -30,6 +30,7 @@ interface TournamentState {
     num_rounds: number;
     organizer_id: string;
     is_public?: boolean;
+    venue_city?: string;
   }) => Promise<string | null>;
   joinTournament: (
     shareCode: string,
@@ -140,6 +141,7 @@ export const useTournamentStore = create<TournamentState>()((set, get) => ({
         points_limit: data.points_limit,
         num_rounds: data.num_rounds,
         is_public: data.is_public ?? false,
+        venue_city: data.venue_city || null,
       })
       .select()
       .single();

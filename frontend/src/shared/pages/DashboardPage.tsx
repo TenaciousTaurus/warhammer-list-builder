@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../hooks/useAuth';
 import { WelcomeModal } from '../components/WelcomeModal';
+import { StreakWidget } from '../../features/collection/components/StreakWidget';
 import type { ArmyList, Faction, GameSession } from '../types/database';
 
 export function DashboardPage() {
@@ -45,6 +46,8 @@ export function DashboardPage() {
       if (activeRes.data) setActiveGame(activeRes.data as GameSession & { army_lists: ArmyList });
       if (completedRes.data) setCompletedGames(completedRes.data as GameSession[]);
       setLoading(false);
+      // Fire-and-forget: award any newly unlocked achievements
+      supabase.rpc('check_and_award_achievements', { p_user_id: user.id });
     })();
   }, [user]);
 
@@ -203,6 +206,18 @@ export function DashboardPage() {
               <Link to="/collection/recipes" className="dashboard__quick-link">Paint Recipes</Link>
               <Link to="/collection/paints" className="dashboard__quick-link">Paint Inventory</Link>
             </div>
+          </div>
+        </div>
+
+        {/* Hobby Streak Widget */}
+        <div className="dashboard__card dashboard__card--streak">
+          <div className="dashboard__card-header">
+            <span className="dashboard__card-icon">🔥</span>
+            <h3 className="dashboard__card-title">Hobby Streak</h3>
+            <Link to="/collection" className="dashboard__card-link">Hobby</Link>
+          </div>
+          <div className="dashboard__card-body">
+            {user && <StreakWidget userId={user.id} />}
           </div>
         </div>
 

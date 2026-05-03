@@ -62,6 +62,8 @@ const SpectateGamePage = lazy(() => lazyRetry(() => import('./features/play-mode
 const ChangelogPage = lazy(() => lazyRetry(() => import('./shared/pages/ChangelogPage').then(m => ({ default: m.ChangelogPage }))));
 const CommunityRecipesPage = lazy(() => lazyRetry(() => import('./features/collection/pages/CommunityRecipesPage').then(m => ({ default: m.CommunityRecipesPage }))));
 const PublicRecipePage = lazy(() => lazyRetry(() => import('./features/collection/pages/PublicRecipePage').then(m => ({ default: m.PublicRecipePage }))));
+const PaintingModePage = lazy(() => lazyRetry(() => import('./features/collection/pages/PaintingModePage').then(m => ({ default: m.PaintingModePage }))));
+const MetaPage = lazy(() => lazyRetry(() => import('./features/social/pages/MetaPage').then(m => ({ default: m.MetaPage }))));
 
 // Clear the reload flag on successful page load
 sessionStorage.removeItem('chunk_reload');
@@ -159,6 +161,14 @@ function AppHeader() {
           Browse
         </NavLink>
         <NavLink
+          to="/meta"
+          className={({ isActive }) =>
+            `app-header__link${isActive ? ' app-header__link--active' : ''}`
+          }
+        >
+          Meta
+        </NavLink>
+        <NavLink
           to="/changelog"
           className={({ isActive }) =>
             `app-header__link${isActive ? ' app-header__link--active' : ''}`
@@ -254,6 +264,7 @@ function App() {
             <Route path="/play/:id" element={<ProtectedRoute><PlayModePage /></ProtectedRoute>} />
             <Route path="/collection" element={<ProtectedRoute><CollectionPage /></ProtectedRoute>} />
             <Route path="/collection/recipes" element={<ProtectedRoute><PaintRecipesPage /></ProtectedRoute>} />
+            <Route path="/collection/recipes/:id/paint" element={<ProtectedRoute><PaintingModePage /></ProtectedRoute>} />
             <Route path="/collection/paints" element={<ProtectedRoute><PaintInventoryPage /></ProtectedRoute>} />
             {/* Phase 4: Crusade & Campaign */}
             <Route path="/campaigns" element={<ProtectedRoute><CampaignsPage /></ProtectedRoute>} />
@@ -283,6 +294,7 @@ function App() {
             <Route path="/changelog" element={<ChangelogPage />} />
             <Route path="/recipes/community" element={<CommunityRecipesPage />} />
             <Route path="/recipes/:schemeCode" element={<PublicRecipePage />} />
+            <Route path="/meta" element={<MetaPage />} />
           </Routes>
           </Suspense>
         </main>
