@@ -411,9 +411,8 @@ export function TournamentsPage() {
       )}
 
       {showJoinModal && (
-        <div className="join-modal">
-          <div className="join-modal__backdrop" onClick={() => setShowJoinModal(false)} />
-          <div className="join-modal__content">
+        <div className="join-modal__overlay" onClick={() => setShowJoinModal(false)}>
+          <div className="join-modal" onClick={(e) => e.stopPropagation()}>
             <h2 className="join-modal__title">Join Tournament</h2>
             <p className="join-modal__text">
               Enter the share code provided by the tournament organizer.
@@ -426,11 +425,11 @@ export function TournamentsPage() {
               autoFocus
             />
             <div className="join-modal__actions">
-              <button className="join-modal__join-btn" onClick={handleJoin}>
+              <button className="join-modal__btn join-modal__btn--join" onClick={handleJoin}>
                 Join
               </button>
               <button
-                className="join-modal__cancel-btn"
+                className="join-modal__btn join-modal__btn--cancel"
                 onClick={() => setShowJoinModal(false)}
               >
                 Cancel
