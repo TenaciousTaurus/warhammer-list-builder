@@ -91,6 +91,3 @@ export function PreGameChecklist({ onConfirm, onCancel }: PreGameChecklistProps)
   );
 }
 
-export function shouldShowChecklist(): boolean {
-  return localStorage.getItem(SKIP_KEY) !== '1';
-}

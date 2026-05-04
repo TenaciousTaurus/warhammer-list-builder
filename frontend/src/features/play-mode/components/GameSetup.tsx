@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useGameSessionStore } from '../stores/gameSessionStore';
-import { PreGameChecklist, shouldShowChecklist } from './PreGameChecklist';
+import { PreGameChecklist } from './PreGameChecklist';
+import { shouldShowChecklist } from '../utils/checklist';
 
 interface GameSetupProps {
   armyListId: string;
