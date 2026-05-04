@@ -165,6 +165,11 @@ export const useThemeStore = create<ThemeState>()(
         customTheme: state.customTheme,
         fontSize: state.fontSize,
       }),
+      onRehydrateStorage: () => (rehydratedState) => {
+        if (rehydratedState) {
+          applyTheme(rehydratedState.themeId, rehydratedState.customTheme, rehydratedState.fontSize);
+        }
+      },
     },
   ),
 );
