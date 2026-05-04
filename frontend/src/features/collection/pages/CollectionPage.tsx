@@ -5,6 +5,7 @@ import { useCollectionStore, PAINTING_STATUSES } from '../stores/collectionStore
 import type { PaintingStatus } from '../stores/collectionStore';
 import type { CollectionEntry } from '../../../shared/types/database';
 import { CollectionCard } from '../components/CollectionCard';
+import { CollectionDetailModal } from '../components/CollectionDetailModal';
 import { CollectionForm } from '../components/CollectionForm';
 import { CollectionStats } from '../components/CollectionStats';
 import { PaintingPipeline } from '../components/PaintingPipeline';
@@ -45,6 +46,7 @@ export function CollectionPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [factionFilter, setFactionFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
+  const [viewingEntry, setViewingEntry] = useState<CollectionEntry | null>(null);
   const [editingEntry, setEditingEntry] = useState<CollectionEntry | null>(null);
   const [showForm, setShowForm] = useState(false);
 
@@ -98,7 +100,12 @@ export function CollectionPage() {
     [user, editingEntry, addEntry, updateEntry]
   );
 
+  const handleView = useCallback((entry: CollectionEntry) => {
+    setViewingEntry(entry);
+  }, []);
+
   const handleEdit = useCallback((entry: CollectionEntry) => {
+    setViewingEntry(null);
     setEditingEntry(entry);
     setShowForm(true);
   }, []);
@@ -253,7 +260,7 @@ export function CollectionPage() {
               entry={entry}
               unitName={unitNames.get(entry.unit_id ?? '')}
               factionName={factionNames.get(entry.faction_id ?? '')}
-              onEdit={() => handleEdit(entry)}
+              onView={() => handleView(entry)}
               onStatusChange={(status) => handleStatusChange(entry.id, status)}
             />
           ))}
@@ -276,6 +283,17 @@ export function CollectionPage() {
         onAdd={handleAddWishlist}
         onRemove={removeWishlistItem}
       />
+
+      {/* Detail Modal */}
+      {viewingEntry && (
+        <CollectionDetailModal
+          entry={viewingEntry}
+          unitName={unitNames.get(viewingEntry.unit_id ?? '')}
+          factionName={factionNames.get(viewingEntry.faction_id ?? '')}
+          onEdit={() => handleEdit(viewingEntry)}
+          onClose={() => setViewingEntry(null)}
+        />
+      )}
 
       {/* Form Modal */}
       {showForm && (
