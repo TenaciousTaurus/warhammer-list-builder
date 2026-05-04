@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../hooks/useAuth';
 import { WelcomeModal } from '../components/WelcomeModal';
 import { StreakWidget } from '../../features/collection/components/StreakWidget';
+import { FriendActivityFeed } from '../../features/social/components/FriendActivityFeed';
 import type { ArmyList, Faction, GameSession } from '../types/database';
 
 export function DashboardPage() {
@@ -218,6 +219,18 @@ export function DashboardPage() {
           </div>
           <div className="dashboard__card-body">
             {user && <StreakWidget userId={user.id} />}
+          </div>
+        </div>
+
+        {/* Friend Activity Feed */}
+        <div className="dashboard__card dashboard__card--activity">
+          <div className="dashboard__card-header">
+            <span className="dashboard__card-icon">&#128101;</span>
+            <h3 className="dashboard__card-title">Friend Activity</h3>
+            <Link to="/friends" className="dashboard__card-link">Friends</Link>
+          </div>
+          <div className="dashboard__card-body">
+            {user && <FriendActivityFeed userId={user.id} />}
           </div>
         </div>
 
