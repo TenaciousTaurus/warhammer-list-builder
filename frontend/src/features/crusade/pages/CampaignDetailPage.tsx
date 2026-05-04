@@ -5,16 +5,18 @@ import { useCrusadeStore } from '../stores/crusadeStore';
 import { useCampaignRealtime } from '../hooks/useCampaignRealtime';
 import { CampaignLeaderboard } from '../components/CampaignLeaderboard';
 import { CrusadeUnitCard } from '../components/CrusadeUnitCard';
-import type { CampaignMember } from '../../../shared/types/database';
+import { NarrativeLog } from '../components/NarrativeLog';
+import type { CampaignMember, NarrativeEntry } from '../../../shared/types/database';
 import '../crusade.css';
 
-type TabId = 'overview' | 'roster' | 'battles' | 'leaderboard';
+type TabId = 'overview' | 'roster' | 'battles' | 'leaderboard' | 'journal';
 
 const TABS: { id: TabId; label: string }[] = [
   { id: 'overview', label: 'Overview' },
   { id: 'roster', label: 'Roster' },
   { id: 'battles', label: 'Battles' },
   { id: 'leaderboard', label: 'Leaderboard' },
+  { id: 'journal', label: 'Journal' },
 ];
 
 export function CampaignDetailPage() {
@@ -31,6 +33,7 @@ export function CampaignDetailPage() {
     error,
     loadCampaign,
     loadRoster,
+    updateCampaign,
   } = useCrusadeStore();
 
   const [activeTab, setActiveTab] = useState<TabId>('overview');
@@ -64,6 +67,18 @@ export function CampaignDetailPage() {
       // Fallback: select text
     }
   }, [activeCampaign]);
+
+  const handleAddNarrativeEntry = useCallback(async (entry: NarrativeEntry) => {
+    if (!activeCampaign || !id) return;
+    const updated = [...(activeCampaign.narrative_entries ?? []), entry];
+    await updateCampaign(id, { narrative_entries: updated });
+  }, [activeCampaign, id, updateCampaign]);
+
+  const handleDeleteNarrativeEntry = useCallback(async (entryId: string) => {
+    if (!activeCampaign || !id) return;
+    const updated = (activeCampaign.narrative_entries ?? []).filter(e => e.id !== entryId);
+    await updateCampaign(id, { narrative_entries: updated });
+  }, [activeCampaign, id, updateCampaign]);
 
   const formatDate = (dateStr: string) => {
     return new Date(dateStr).toLocaleDateString(undefined, {
@@ -298,6 +313,18 @@ export function CampaignDetailPage() {
         <div className="campaign-detail__section">
           <h3 className="campaign-detail__section-title">Leaderboard</h3>
           <CampaignLeaderboard members={members} battles={battles} />
+        </div>
+      )}
+
+      {activeTab === 'journal' && (
+        <div className="campaign-detail__section">
+          <NarrativeLog
+            entries={activeCampaign.narrative_entries ?? []}
+            authorName={myMember?.display_name ?? 'Unknown'}
+            canEdit={!!myMember}
+            onAddEntry={handleAddNarrativeEntry}
+            onDeleteEntry={handleDeleteNarrativeEntry}
+          />
         </div>
       )}
     </div>

@@ -1765,3 +1765,350 @@
     grid-template-columns: repeat(3, 1fr);
   }
 }
+
+/* ========================================
+   NARRATIVE LOG (W3-4)
+   ======================================== */
+
+.narrative-log {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.narrative-log__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+}
+
+.narrative-log__compose {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.narrative-log__compose-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.narrative-log__compose-label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.narrative-log__textarea {
+  resize: vertical;
+  min-height: 120px;
+  font-family: var(--font-body);
+  line-height: 1.6;
+}
+
+.narrative-log__compose-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+}
+
+.narrative-log__empty {
+  padding: var(--space-xl) 0;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+.narrative-log__entries {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.narrative-log__entry {
+  background: var(--gradient-card);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  transition: border-color var(--transition-fast);
+}
+
+.narrative-log__entry:hover {
+  border-color: var(--glass-border-hover);
+}
+
+.narrative-log__entry-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.narrative-log__entry-title {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--gold);
+}
+
+.narrative-log__entry-meta {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.narrative-log__entry-content {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.narrative-log__delete-btn {
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.narrative-log__entry:hover .narrative-log__delete-btn {
+  opacity: 1;
+}
+
+.narrative-log__delete-confirm {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-shrink: 0;
+}
+
+/* ========================================
+   CRUSADE PRINT CARDS (W3-5)
+   ======================================== */
+
+/* Screen: hide the print layout entirely */
+.crusade-print-cards {
+  display: none;
+}
+
+/* Print: hide everything except the cards */
+@media print {
+  .app-header,
+  .app-main > *:not(.crusade-roster),
+  .crusade-roster > *:not(.crusade-print-cards),
+  .app-footer,
+  .offline-banner {
+    display: none !important;
+  }
+
+  .crusade-print-cards {
+    display: block;
+  }
+
+  body, .app-layout, .app-main, .crusade-roster {
+    background: #fff !important;
+    color: #000 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}
+
+/* Print card layout */
+.crusade-print-cards__roster-title {
+  font-size: 14pt;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 12pt;
+  padding-bottom: 8pt;
+  border-bottom: 2pt solid #000;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.crusade-print-cards__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12pt;
+}
+
+.crusade-print-card {
+  border: 1.5pt solid #000;
+  border-radius: 4pt;
+  padding: 10pt;
+  break-inside: avoid;
+  page-break-inside: avoid;
+  font-family: Arial, sans-serif;
+  font-size: 9pt;
+  position: relative;
+}
+
+.crusade-print-card--destroyed {
+  border-style: dashed;
+  opacity: 0.7;
+}
+
+.crusade-print-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8pt;
+  border-bottom: 1pt solid #000;
+  padding-bottom: 6pt;
+  margin-bottom: 8pt;
+}
+
+.crusade-print-card__name {
+  font-size: 11pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  flex: 1;
+}
+
+.crusade-print-card__rank {
+  font-size: 8pt;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #555;
+  white-space: nowrap;
+}
+
+.crusade-print-card__stats {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 4pt;
+  margin-bottom: 6pt;
+}
+
+.crusade-print-card__stat {
+  text-align: center;
+  border: 0.5pt solid #ccc;
+  border-radius: 2pt;
+  padding: 3pt 2pt;
+}
+
+.crusade-print-card__stat-value {
+  font-size: 12pt;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.crusade-print-card__stat-label {
+  font-size: 6pt;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #666;
+  margin-top: 2pt;
+}
+
+.crusade-print-card__xp-note {
+  font-size: 7pt;
+  color: #666;
+  margin-bottom: 6pt;
+  font-style: italic;
+}
+
+.crusade-print-card__section {
+  margin-top: 6pt;
+  padding-top: 6pt;
+  border-top: 0.5pt solid #ddd;
+}
+
+.crusade-print-card__section-label {
+  font-size: 7pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #444;
+  margin-bottom: 3pt;
+}
+
+.crusade-print-card__honour {
+  font-size: 8pt;
+  margin-bottom: 2pt;
+  padding-left: 8pt;
+}
+
+.crusade-print-card__honour-name {
+  font-weight: 600;
+}
+
+.crusade-print-card__scar {
+  font-size: 8pt;
+  margin-bottom: 2pt;
+  padding-left: 8pt;
+}
+
+.crusade-print-card__scar-name {
+  font-weight: 600;
+  color: #c00;
+}
+
+.crusade-print-card__notes {
+  font-size: 8pt;
+  color: #444;
+  white-space: pre-wrap;
+}
+
+.crusade-print-card__destroyed {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-15deg);
+  font-size: 20pt;
+  font-weight: 900;
+  color: rgba(200, 0, 0, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  pointer-events: none;
+}
+
+.crusade-print-card__footer {
+  display: flex;
+  align-items: center;
+  gap: 6pt;
+  margin-top: 8pt;
+  padding-top: 6pt;
+  border-top: 0.5pt solid #ddd;
+}
+
+.crusade-print-card__footer-label {
+  font-size: 7pt;
+  color: #666;
+  flex: 1;
+}
+
+.crusade-print-card__xp-boxes {
+  display: flex;
+  gap: 3pt;
+}
+
+.crusade-print-card__xp-box {
+  width: 12pt;
+  height: 12pt;
+  border: 1pt solid #888;
+  border-radius: 1pt;
+}
+
+/* Print button (screen only) */
+.crusade-roster__print-btn {
+  flex-shrink: 0;
+}
+
+.crusade-roster__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-md);
+}

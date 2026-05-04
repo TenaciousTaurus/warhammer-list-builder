@@ -64,6 +64,9 @@ const CommunityRecipesPage = lazy(() => lazyRetry(() => import('./features/colle
 const PublicRecipePage = lazy(() => lazyRetry(() => import('./features/collection/pages/PublicRecipePage').then(m => ({ default: m.PublicRecipePage }))));
 const PaintingModePage = lazy(() => lazyRetry(() => import('./features/collection/pages/PaintingModePage').then(m => ({ default: m.PaintingModePage }))));
 const MetaPage = lazy(() => lazyRetry(() => import('./features/social/pages/MetaPage').then(m => ({ default: m.MetaPage }))));
+const BattleReportPage = lazy(() => lazyRetry(() => import('./features/play-mode/pages/BattleReportPage').then(m => ({ default: m.BattleReportPage }))));
+const RivalryPage = lazy(() => lazyRetry(() => import('./features/social/pages/RivalryPage').then(m => ({ default: m.RivalryPage }))));
+const ApiReferencePage = lazy(() => lazyRetry(() => import('./features/social/pages/ApiReferencePage').then(m => ({ default: m.ApiReferencePage }))));
 
 // Clear the reload flag on successful page load
 sessionStorage.removeItem('chunk_reload');
@@ -295,6 +298,9 @@ function App() {
             <Route path="/recipes/community" element={<CommunityRecipesPage />} />
             <Route path="/recipes/:schemeCode" element={<PublicRecipePage />} />
             <Route path="/meta" element={<MetaPage />} />
+            <Route path="/report/:code" element={<BattleReportPage />} />
+            <Route path="/rivalry/:user1Id/:user2Id" element={<RivalryPage />} />
+            <Route path="/api" element={<ApiReferencePage />} />
           </Routes>
           </Suspense>
         </main>

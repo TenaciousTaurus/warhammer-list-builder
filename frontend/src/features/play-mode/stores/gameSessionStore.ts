@@ -74,6 +74,9 @@ interface GameSessionState {
   // Spectating
   enableSpectate: () => Promise<string | null>;
 
+  // Battle report sharing
+  generateReportCode: () => Promise<string | null>;
+
   // Game completion
   completeGame: (result: 'win' | 'loss' | 'draw', notes?: string) => Promise<void>;
   pauseGame: () => Promise<void>;
@@ -487,6 +490,25 @@ export const useGameSessionStore = create<GameSessionState>()(
             data: data ?? null,
           })
         );
+      },
+
+      generateReportCode: async () => {
+        const { session } = get();
+        if (!session) return null;
+
+        if (session.report_code) return session.report_code;
+
+        const { data, error } = await supabase.rpc('generate_battle_report_code', {
+          p_session_id: session.id,
+        });
+
+        if (error || !data) {
+          set({ syncStatus: 'error', syncError: `Generate report: ${error?.message ?? 'Unknown error'}` });
+          return null;
+        }
+
+        set({ session: { ...session, report_code: data as string } });
+        return data as string;
       },
 
       enableSpectate: async () => {
