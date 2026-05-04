@@ -10,12 +10,13 @@ import { DashboardPage } from './shared/pages/DashboardPage';
 import { LandingPage } from './shared/pages/LandingPage';
 import { ListsPage } from './features/list-builder/pages/ListsPage';
 import { ListEditorPage } from './features/list-builder/pages/ListEditorPage';
-import { lazy, Suspense, useState, useMemo, type ReactNode } from 'react';
+import { lazy, Suspense, useState, useMemo, useEffect, type ReactNode } from 'react';
 import { changelog } from './shared/data/changelog';
 import { FeedbackModal } from './shared/components/FeedbackModal';
 import { ThemePicker } from './shared/components/ThemePicker';
 import { AppFooter } from './shared/components/AppFooter';
 import { OfflineBanner } from './shared/components/OfflineBanner';
+import { supabase } from './shared/lib/supabase';
 
 // Auto-reload on stale chunk errors after deployment.
 // When Vite rebuilds, chunk hashes change — cached HTML may reference old filenames.
@@ -95,9 +96,39 @@ function HomeRoute() {
 
 const LAST_SEEN_KEY = 'warforge-last-seen-changelog';
 
+// Module-level cache so we only fetch once per browser session
+let cachedDataUpdatedAt: string | null | undefined = undefined;
+
+function useGameDataFreshness() {
+  const [updatedAt, setUpdatedAt] = useState<string | null | undefined>(cachedDataUpdatedAt);
+
+  useEffect(() => {
+    if (cachedDataUpdatedAt !== undefined) return;
+    supabase
+      .from('factions')
+      .select('data_source_updated_at')
+      .order('data_source_updated_at', { ascending: false })
+      .limit(1)
+      .then(({ data }) => {
+        const val = data?.[0]?.data_source_updated_at ?? null;
+        cachedDataUpdatedAt = val;
+        setUpdatedAt(val);
+      });
+  }, []);
+
+  if (!updatedAt) return null;
+  const date = new Date(updatedAt);
+  const now = new Date();
+  const diffDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
+  if (diffDays === 0) return 'Data: today';
+  if (diffDays === 1) return 'Data: yesterday';
+  return `Data: ${diffDays}d ago`;
+}
+
 function AppHeader() {
   const { user, signOut } = useAuth();
   const [showFeedback, setShowFeedback] = useState(false);
+  const dataFreshness = useGameDataFreshness();
 
   const hasNewChangelog = useMemo(() => {
     const lastSeen = localStorage.getItem(LAST_SEEN_KEY);
@@ -180,6 +211,11 @@ function AppHeader() {
           What's New{hasNewChangelog && <span className="app-header__new-badge">NEW</span>}
         </NavLink>
         <ThemePicker />
+        {dataFreshness && (
+          <span className="app-header__data-freshness" title="Last BSData sync date">
+            {dataFreshness}
+          </span>
+        )}
         {user && (
           <NavLink
             to="/settings"
