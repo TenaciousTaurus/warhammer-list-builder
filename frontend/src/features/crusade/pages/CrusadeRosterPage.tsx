@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCrusadeStore } from '../stores/crusadeStore';
 import { CrusadeUnitCard } from '../components/CrusadeUnitCard';
+import { CrusadePrintCards } from '../components/CrusadePrintCards';
 import { supabase } from '../../../shared/lib/supabase';
 import type { Unit } from '../../../shared/types/database';
 import '../crusade.css';
@@ -110,11 +111,27 @@ export function CrusadeRosterPage() {
   const pointsPercent = supplyLimit > 0 ? Math.min(100, (totalPoints / supplyLimit) * 100) : 0;
   const isOverSupply = totalPoints > supplyLimit;
 
+  const factionName = factions.find(f => f.id === roster.faction_id)?.name ?? roster.faction_id;
+
+  function handlePrintCards() {
+    window.print();
+  }
+
   return (
     <div className="crusade-roster">
+      {/* Hidden print layout — shown only by @media print */}
+      <CrusadePrintCards roster={roster} units={units} factionName={factionName} />
+
       <div className="crusade-roster__header">
-        <h1 className="crusade-roster__name">{roster.name}</h1>
-        <span className="crusade-roster__faction">{factions.find((f) => f.id === roster.faction_id)?.name ?? roster.faction_id}</span>
+        <div>
+          <h1 className="crusade-roster__name">{roster.name}</h1>
+          <span className="crusade-roster__faction">{factionName}</span>
+        </div>
+        {units.length > 0 && (
+          <button className="btn btn--sm btn--ghost crusade-roster__print-btn" type="button" onClick={handlePrintCards}>
+            Print Cards
+          </button>
+        )}
       </div>
 
       {error && (

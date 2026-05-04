@@ -5,6 +5,7 @@ import { useAuth } from '../../../shared/hooks/useAuth';
 import type { ArmyList, Faction } from '../../../shared/types/database';
 import { CreateListModal } from '../components/CreateListModal';
 import { ConfirmDialog } from '../../../shared/components/ConfirmDialog';
+import { ListCompareModal } from '../components/ListCompareModal';
 
 function relativeTime(dateStr: string): string {
   const now = Date.now();
@@ -35,6 +36,9 @@ export function ListsPage() {
   const [sort, setSort] = useState<SortOption>('updated');
   const [groupByFaction, setGroupByFaction] = useState(true);
   const [confirmDelete, setConfirmDelete] = useState<{ id: string; name: string } | null>(null);
+  const [compareMode, setCompareMode] = useState(false);
+  const [compareSelection, setCompareSelection] = useState<string[]>([]);
+  const [compareModal, setCompareModal] = useState<{ a: ArmyList & { factions: Faction }; b: ArmyList & { factions: Faction } } | null>(null);
 
   const fetchLists = useCallback(async () => {
     if (!user) return;
@@ -58,6 +62,34 @@ export function ListsPage() {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- initial data fetch on mount
     fetchLists();
   }, [fetchLists]);
+
+  function handleCompareClick() {
+    setCompareMode(true);
+    setCompareSelection([]);
+  }
+
+  function handleCompareCancel() {
+    setCompareMode(false);
+    setCompareSelection([]);
+  }
+
+  function handleCompareSelectList(list: ArmyList & { factions: Faction }) {
+    const alreadySelected = compareSelection.includes(list.id);
+    if (alreadySelected) {
+      setCompareSelection(prev => prev.filter(id => id !== list.id));
+      return;
+    }
+    const next = [...compareSelection, list.id];
+    if (next.length === 2) {
+      const listAObj = lists.find(l => l.id === next[0])!;
+      const listBObj = lists.find(l => l.id === next[1])!;
+      setCompareModal({ a: listAObj, b: listBObj });
+      setCompareMode(false);
+      setCompareSelection([]);
+    } else {
+      setCompareSelection(next);
+    }
+  }
 
   async function handleDelete(id: string) {
     const { error: deleteError } = await supabase.from('army_lists').delete().eq('id', id);
@@ -116,6 +148,31 @@ export function ListsPage() {
   }
 
   function renderListCard(list: ArmyList & { factions: Faction }) {
+    const isSelected = compareSelection.includes(list.id);
+
+    if (compareMode) {
+      return (
+        <div
+          key={list.id}
+          className={`list-card list-card--selectable${isSelected ? ' list-card--selected' : ''}`}
+          onClick={() => handleCompareSelectList(list)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') handleCompareSelectList(list); }}
+          aria-pressed={isSelected}
+        >
+          <div className="list-card__compare-check">{isSelected ? '✓' : ''}</div>
+          <div className="list-card__info">
+            <h3 className="list-card__name">{list.name}</h3>
+            <span className="list-card__meta">
+              {list.factions?.name} &middot; {list.points_limit} pts
+            </span>
+          </div>
+          <span className="list-card__time">{relativeTime(list.updated_at)}</span>
+        </div>
+      );
+    }
+
     return (
       <div key={list.id} className="list-card">
         <Link to={`/list/${list.id}`} className="list-card__link">
@@ -151,10 +208,30 @@ export function ListsPage() {
     <div>
       <div className="lists-page__header">
         <h2 className="lists-page__title">My Army Lists</h2>
-        <button className="btn btn--primary" onClick={() => setShowCreate(true)}>
-          + New List
-        </button>
+        <div className="lists-page__header-actions">
+          {lists.length >= 2 && !compareMode && (
+            <button className="btn btn--sm btn--ghost" onClick={handleCompareClick}>
+              Compare Lists
+            </button>
+          )}
+          <button className="btn btn--primary" onClick={() => setShowCreate(true)}>
+            + New List
+          </button>
+        </div>
       </div>
+
+      {compareMode && (
+        <div className="lists-page__compare-banner">
+          <span>
+            {compareSelection.length === 0
+              ? 'Select the first list to compare'
+              : 'Select the second list to compare'}
+          </span>
+          <button className="btn btn--sm btn--ghost" onClick={handleCompareCancel}>
+            Cancel
+          </button>
+        </div>
+      )}
 
       {error && (
         <div className="error-banner" style={{ color: 'var(--color-red-bright)', background: 'rgba(192,64,64,0.1)', padding: 'var(--space-md)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(192,64,64,0.3)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-md)' }}>
@@ -251,6 +328,14 @@ export function ListsPage() {
           variant="danger"
           onConfirm={() => handleDelete(confirmDelete.id)}
           onCancel={() => setConfirmDelete(null)}
+        />
+      )}
+
+      {compareModal && (
+        <ListCompareModal
+          listA={compareModal.a}
+          listB={compareModal.b}
+          onClose={() => setCompareModal(null)}
         />
       )}
     </div>
