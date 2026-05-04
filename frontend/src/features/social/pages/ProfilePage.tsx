@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../../../shared/hooks/useAuth';
 import { useSocialStore } from '../stores/socialStore';
 import { AchievementsPanel } from '../components/AchievementsPanel';
@@ -125,6 +125,14 @@ export function ProfilePage() {
             <button className="profile-card__edit-btn" onClick={() => setEditing(true)}>
               Edit Profile
             </button>
+          )}
+          {!isOwnProfile && user && !editing && (
+            <Link
+              to={`/rivalry/${user.id}/${id}`}
+              className="btn btn--secondary profile-card__rivalry-btn"
+            >
+              ⚔ View Rivalry
+            </Link>
           )}
           {editing && (
             <div className="profile-card__edit-actions">

@@ -709,6 +709,7 @@ export type Database = {
           timer_opponent_seconds: number;
           invite_code: string | null;
           is_spectatable: boolean;
+          report_code: string | null;
           notes: string | null;
           started_at: string | null;
           completed_at: string | null;
@@ -734,6 +735,7 @@ export type Database = {
           timer_opponent_seconds?: number;
           invite_code?: string | null;
           is_spectatable?: boolean;
+          report_code?: string | null;
           notes?: string | null;
           started_at?: string | null;
           completed_at?: string | null;
@@ -757,6 +759,7 @@ export type Database = {
           timer_opponent_seconds?: number;
           invite_code?: string | null;
           is_spectatable?: boolean;
+          report_code?: string | null;
           notes?: string | null;
           started_at?: string | null;
           completed_at?: string | null;
@@ -1055,6 +1058,7 @@ export type Database = {
           points_limit: number;
           status: 'recruiting' | 'active' | 'completed' | 'archived';
           settings: Record<string, unknown>;
+          narrative_entries: NarrativeEntry[];
           created_at: string;
           updated_at: string;
         };
@@ -1068,6 +1072,7 @@ export type Database = {
           points_limit?: number;
           status?: 'recruiting' | 'active' | 'completed' | 'archived';
           settings?: Record<string, unknown>;
+          narrative_entries?: NarrativeEntry[];
         };
         Update: {
           id?: string;
@@ -1078,6 +1083,7 @@ export type Database = {
           points_limit?: number;
           status?: 'recruiting' | 'active' | 'completed' | 'archived';
           settings?: Record<string, unknown>;
+          narrative_entries?: NarrativeEntry[];
         };
         Relationships: [];
       };
@@ -1691,6 +1697,14 @@ export type Database = {
         Args: { p_version_id: string };
         Returns: string;
       };
+      get_friend_activity: {
+        Args: { p_user_id: string; p_limit?: number };
+        Returns: FriendActivityItem[];
+      };
+      generate_battle_report_code: {
+        Args: { p_session_id: string };
+        Returns: string;
+      };
     };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;
@@ -1698,6 +1712,22 @@ export type Database = {
 };
 
 // JSONB sub-types for Crusade
+export interface FriendActivityItem {
+  activity_type: 'game' | 'painted';
+  actor_id: string;
+  actor_name: string;
+  description: string;
+  activity_at: string;
+}
+
+export interface NarrativeEntry {
+  id: string;
+  title: string;
+  content: string;
+  author: string;
+  created_at: string;
+}
+
 export interface BattleHonour {
   name: string;
   description: string;

@@ -265,14 +265,14 @@ These items are permanently out of scope. If someone asks for them, the answer i
 
 *Quality and community features. No strict sequencing — pick by what users are asking for.*
 
-- [ ] **W3-1** — Multi-list comparison view: pick 2 lists, see side-by-side diff (units in A not in B, points delta, detachment difference)
-- [ ] **W3-2** — Pre-game checklist modal: "Have you set up objectives? Decided first turn? Declared warlord?" — simple checklist before play mode starts
-- [ ] **W3-3** — Battle report export: shareable public URL for completed game session (turn-by-turn timeline, final score, faction matchup). No auth required to view.
-- [ ] **W3-4** — Crusade narrative log: `narrative_entries JSONB` on `campaigns`; markdown-friendly journal per campaign with rich text editor in `CampaignDetailPage`
-- [ ] **W3-5** — Crusade card printable export: CSS `@media print` layout for each crusade unit — stat line, XP/rank, honours, scars. "Print cards" button on roster page.
-- [ ] **W3-6** — Friend activity feed: tasteful feed on Dashboard — "Mike finished painting a Rhino 2 hours ago." Pulls from collection status changes + game results for friends. No algorithmic ranking.
-- [ ] **W3-7** — Player rivalries page: auto-generated `/rivalry/:user1/:user2` using existing `get_head_to_head` RPC + a dedicated UI page. Entry points on Profile and StatsPage.
-- [ ] **W3-8** — Public read-only API: document and surface existing PostgREST public endpoints (game data + public lists + public tournaments). Simple API reference page at `/api` or in docs.
+- [x] **W3-1** — Multi-list comparison view: pick 2 lists, see side-by-side diff (units in A not in B, points delta, detachment difference) — completed 2026-05-03. `ListCompareModal.tsx` + compare-select mode on `ListsPage`.
+- [x] **W3-2** — Pre-game checklist modal: "Have you set up objectives? Decided first turn? Declared warlord?" — simple checklist before play mode starts — completed 2026-05-03. `PreGameChecklist.tsx` wired into `GameSetup.tsx`; "Don't show again" persisted to localStorage.
+- [x] **W3-3** — Battle report export: shareable public URL for completed game session (turn-by-turn timeline, final score, faction matchup). No auth required to view — completed 2026-05-03. `report_code` on `game_sessions`, `generate_battle_report_code` RPC, `BattleReportPage` at `/report/:code`, Share button in `BattleReport.tsx`. Migration: `20260503000001_battle_report_export.sql`.
+- [x] **W3-4** — Crusade narrative log — completed 2026-05-03. `narrative_entries JSONB` on `campaigns`, `NarrativeLog.tsx` component with compose form + newlines-preserved display, "Journal" tab on `CampaignDetailPage`, owner/member write access, newest-first with per-entry delete. Migration: `20260503000002_campaign_narrative_log.sql`.
+- [x] **W3-5** — Crusade card printable export — completed 2026-05-03. `CrusadePrintCards.tsx` renders stat grid + honours + scars + XP checkboxes per unit; hidden on screen, shown only via `@media print`. "Print Cards" button on `CrusadeRosterPage` calls `window.print()`.
+- [x] **W3-6** — Friend activity feed — completed 2026-05-03. `get_friend_activity` SECURITY DEFINER RPC merges game completions + paint completions for accepted friends (last 30 days). `FriendActivityFeed.tsx` with relative timestamps + activity type icons. Dashboard card added between Hobby Streak and Quick Access. Migration: `20260503000003_friend_activity_feed.sql`.
+- [x] **W3-7** — Player rivalries page — completed 2026-05-03. `RivalryPage.tsx` at `/rivalry/:user1Id/:user2Id` uses existing `get_head_to_head` RPC. Hero header with player avatars + VS block, win/draw/loss stats, visual win-rate split bar, recent battles table. "⚔ View Rivalry" button on `ProfilePage` when viewing another user.
+- [x] **W3-8** — Public API reference — completed 2026-05-03. `ApiReferencePage.tsx` at `/api` documents all public PostgREST endpoints (factions, units, weapons, abilities, public army lists, tournaments, paint recipes) with parameters, examples, and PostgREST filter reference table. No auth required.
 
 ---
 
@@ -348,6 +348,14 @@ These are standing hygiene rules, not one-time tasks.
 - [x] **W2-8** — Meta Analysis Dashboard — completed 2026-05-03. `MetaPage.tsx` at `/meta` with Factions/Detachments tabs, bar-chart table, 30/60/90-day selector. `faction_win_rates` + `detachment_play_rates` RPCs. "Meta" nav link added. Migration: `20260502000009_geo_and_meta.sql`.
 - [x] **W2-9** — Tournament List Submission + TO Admin — completed 2026-05-03. `list_submission_deadline` + `submitted_list_id` on `tournament_participants`, `submit_tournament_list` RPC (validates + deadline-checks), `ListSubmitModal.tsx`, "Submit My List" button on `TournamentDetailPage`, "Admin" tab for organizers showing submission status per participant. Migration: `20260502000010_tournament_list_submission.sql`.
 - [x] **W2-10** — List Versioning UI — completed 2026-05-03. `ListHistoryPanel.tsx` (slide-in drawer from list editor), shows timestamp/note/snapshot summary per version, "Restore as new list" calls `restore_army_list_version` RPC (creates new list from snapshot metadata), "History" button in `ListSummary`. Migration: `20260502000011_restore_list_version.sql`.
+
+### Wave 3
+
+- [x] **W3-1** — Multi-list comparison — completed 2026-05-03. `ListCompareModal.tsx` + compare-select mode on `ListsPage`. Side-by-side shared/only-A/only-B unit diff, points delta, detachment display.
+- [x] **W3-2** — Pre-game checklist — completed 2026-05-03. `PreGameChecklist.tsx` interstitial in `GameSetup.tsx` with 6 setup items, "Start Anyway" escape hatch, localStorage "don't show again" preference.
+- [x] **W3-3** — Battle report export — completed 2026-05-03. `report_code` column + `generate_battle_report_code` RPC + public RLS on `game_sessions`. `BattleReportPage` at `/report/:code` (public, no auth). "Share Report" button per game card in `BattleReport.tsx`. Migration: `20260503000001_battle_report_export.sql`.
+- [x] **W3-4** — Crusade narrative log — completed 2026-05-03. `narrative_entries JSONB` on `campaigns`, `NarrativeLog.tsx` component with compose form + newlines-preserved display, "Journal" tab on `CampaignDetailPage`, owner/member write access, newest-first with per-entry delete. Migration: `20260503000002_campaign_narrative_log.sql`.
+- [x] **W3-5** — Crusade card printable export — completed 2026-05-03. `CrusadePrintCards.tsx` renders stat grid + honours + scars + XP checkboxes per unit; hidden on screen, shown only via `@media print`. "Print Cards" button on `CrusadeRosterPage` calls `window.print()`.
 
 ---
 

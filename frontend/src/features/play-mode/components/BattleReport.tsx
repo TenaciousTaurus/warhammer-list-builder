@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../../shared/lib/supabase';
 import type { GameSession } from '../../../shared/types/database';
+import { useGameSessionStore } from '../stores/gameSessionStore';
 
 interface BattleReportProps {
   listId: string;
@@ -11,6 +12,10 @@ export function BattleReport({ listId, listName }: BattleReportProps) {
   const [games, setGames] = useState<GameSession[]>([]);
   const [expandedGame, setExpandedGame] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [sharingId, setSharingId] = useState<string | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const generateReportCode = useGameSessionStore(s => s.generateReportCode);
+  const sessionInStore = useGameSessionStore(s => s.session);
 
   useEffect(() => {
     (async () => {
@@ -25,6 +30,32 @@ export function BattleReport({ listId, listName }: BattleReportProps) {
       setLoading(false);
     })();
   }, [listId]);
+
+  async function handleShareReport(game: GameSession) {
+    setSharingId(game.id);
+    let code = game.report_code;
+    if (!code) {
+      // If this is the active session in the store, use the store's generateReportCode
+      if (sessionInStore?.id === game.id) {
+        code = await generateReportCode();
+      } else {
+        // Otherwise call the RPC directly and patch local state
+        const { data } = await supabase.rpc('generate_battle_report_code', { p_session_id: game.id });
+        code = data as string | null;
+      }
+      if (code) {
+        setGames(prev => prev.map(g => g.id === game.id ? { ...g, report_code: code! } : g));
+      }
+    }
+    setSharingId(null);
+    if (code) {
+      const url = `${window.location.origin}/report/${code}`;
+      void navigator.clipboard.writeText(url).then(() => {
+        setCopiedId(game.id);
+        setTimeout(() => setCopiedId(id => id === game.id ? null : id), 2000);
+      });
+    }
+  }
 
   if (loading) return <div className="skeleton" style={{ height: '80px' }} />;
   if (games.length === 0) return null;
@@ -89,6 +120,31 @@ export function BattleReport({ listId, listName }: BattleReportProps) {
               <div className="battle-report__card-body" onClick={e => e.stopPropagation()}>
                 {game.notes && <div><strong>Notes:</strong> {game.notes}</div>}
                 <div><strong>Rounds:</strong> {game.current_round}</div>
+                <div className="battle-report__card-share">
+                  <button
+                    className="btn btn--sm btn--ghost"
+                    onClick={() => void handleShareReport(game)}
+                    disabled={sharingId === game.id}
+                  >
+                    {sharingId === game.id
+                      ? 'Generating...'
+                      : copiedId === game.id
+                        ? '✓ Link Copied!'
+                        : game.report_code
+                          ? 'Copy Report Link'
+                          : 'Share Report'}
+                  </button>
+                  {game.report_code && (
+                    <a
+                      href={`/report/${game.report_code}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="battle-report__card-view-link"
+                    >
+                      View public report ↗
+                    </a>
+                  )}
+                </div>
               </div>
             )}
           </div>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useGameSessionStore } from '../stores/gameSessionStore';
+import { PreGameChecklist, shouldShowChecklist } from './PreGameChecklist';
 
 interface GameSetupProps {
   armyListId: string;
@@ -17,6 +18,7 @@ export function GameSetup({ armyListId, userId, onGameCreated }: GameSetupProps)
   const [opponentName, setOpponentName] = useState('');
   const [opponentFaction, setOpponentFaction] = useState('');
   const [missionId, setMissionId] = useState('');
+  const [showChecklist, setShowChecklist] = useState(false);
 
   useEffect(() => {
     loadMissions();
@@ -24,6 +26,14 @@ export function GameSetup({ armyListId, userId, onGameCreated }: GameSetupProps)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (shouldShowChecklist()) {
+      setShowChecklist(true);
+      return;
+    }
+    await doCreateSession();
+  };
+
+  const doCreateSession = async () => {
     const sessionId = await createSession(
       armyListId,
       userId,
@@ -37,6 +47,13 @@ export function GameSetup({ armyListId, userId, onGameCreated }: GameSetupProps)
   };
 
   return (
+    <>
+    {showChecklist && (
+      <PreGameChecklist
+        onConfirm={() => { setShowChecklist(false); void doCreateSession(); }}
+        onCancel={() => setShowChecklist(false)}
+      />
+    )}
     <form className="game-setup" onSubmit={handleSubmit}>
       <h2 className="game-setup__title">New Game</h2>
 
@@ -97,5 +114,6 @@ export function GameSetup({ armyListId, userId, onGameCreated }: GameSetupProps)
         {loading ? 'Creating...' : 'Start Game'}
       </button>
     </form>
+    </>
   );
 }
