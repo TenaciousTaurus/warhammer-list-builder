@@ -2054,6 +2054,14 @@
   text-align: center;
 }
 
+.join-modal__text {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  text-align: center;
+  margin: 0 0 var(--space-lg);
+  line-height: 1.5;
+}
+
 .join-modal__input-group {
   display: flex;
   flex-direction: column;
