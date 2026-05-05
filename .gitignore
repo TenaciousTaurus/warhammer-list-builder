@@ -39,8 +39,3 @@ scripts/.prod_*.csv
 
 # Generated sync SQL (CI artifact, not committed)
 supabase/bsdata-sync.sql
-
-# Internal project planning docs (not for public repo)
-CLAUDE.md
-HANDOFF.md
-WARFORGE_PLAN.md
