@@ -1298,15 +1298,25 @@
   margin-left: 2px;
 }
 
+/* User area in app header — wraps so freshness label sits on its own line */
+.app-header__user {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+  justify-content: flex-end;
+  max-width: 260px;
+}
+
 /* Data freshness indicator in app header */
 .app-header__data-freshness {
-  font-size: 0.65rem;
+  display: block;
+  width: 100%;
+  font-size: 0.6rem;
   color: var(--color-text-muted);
-  white-space: nowrap;
-  padding: 2px 6px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  opacity: 0.7;
+  text-align: center;
+  opacity: 0.6;
+  margin-top: 2px;
 }
 
 /* ========================================

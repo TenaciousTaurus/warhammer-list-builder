@@ -211,11 +211,6 @@ function AppHeader() {
           What's New{hasNewChangelog && <span className="app-header__new-badge">NEW</span>}
         </NavLink>
         <ThemePicker />
-        {dataFreshness && (
-          <span className="app-header__data-freshness" title="Last BSData sync date">
-            {dataFreshness}
-          </span>
-        )}
         {user && (
           <NavLink
             to="/settings"
@@ -242,16 +237,28 @@ function AppHeader() {
             <button className="btn btn--sm app-header__signout" onClick={signOut}>
               Sign Out
             </button>
+            {dataFreshness && (
+              <span className="app-header__data-freshness" title="Last game data sync">
+                {dataFreshness}
+              </span>
+            )}
           </div>
         ) : (
-          <NavLink
-            to="/auth"
-            className={({ isActive }) =>
-              `app-header__link${isActive ? ' app-header__link--active' : ''}`
-            }
-          >
-            Sign In
-          </NavLink>
+          <div className="app-header__user">
+            <NavLink
+              to="/auth"
+              className={({ isActive }) =>
+                `app-header__link${isActive ? ' app-header__link--active' : ''}`
+              }
+            >
+              Sign In
+            </NavLink>
+            {dataFreshness && (
+              <span className="app-header__data-freshness" title="Last game data sync">
+                {dataFreshness}
+              </span>
+            )}
+          </div>
         )}
       </nav>
     </header>
