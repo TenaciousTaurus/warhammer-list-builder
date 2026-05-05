@@ -6,6 +6,9 @@ import { FontSettings } from '../components/FontSettings';
 import { ThemeSharePanel } from '../components/ThemeSharePanel';
 import { useSettingsStore } from '../stores/settingsStore';
 import type { DisplayDensity } from '../stores/settingsStore';
+import { useAuth } from '../hooks/useAuth';
+import { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
 
 const BATTLE_SIZES = [
   { value: '', label: 'None' },
@@ -15,7 +18,77 @@ const BATTLE_SIZES = [
   { value: 'Onslaught', label: 'Onslaught (3000)' },
 ];
 
+const ADMIN_EMAIL = 'jeff.bukowski92@gmail.com';
+
+function AdminSyncPanel() {
+  const [lastUpdated, setLastUpdated] = useState<string | null>(null);
+  const [syncStatus, setSyncStatus] = useState<'idle' | 'running' | 'success' | 'error'>('idle');
+  const [statusMessage, setStatusMessage] = useState('');
+
+  useEffect(() => {
+    supabase
+      .from('factions')
+      .select('data_source_updated_at')
+      .order('data_source_updated_at', { ascending: false })
+      .limit(1)
+      .then(({ data }) => {
+        if (data?.[0]?.data_source_updated_at) {
+          setLastUpdated(new Date(data[0].data_source_updated_at).toLocaleString());
+        }
+      });
+  }, []);
+
+  const handleSync = async () => {
+    setSyncStatus('running');
+    setStatusMessage('Triggering sync...');
+
+    const { error } = await supabase.functions.invoke('trigger-bsdata-sync');
+
+    if (error) {
+      setSyncStatus('error');
+      setStatusMessage(`Failed: ${error.message}`);
+    } else {
+      setSyncStatus('success');
+      setStatusMessage('Sync triggered. The workflow will run in ~1–2 minutes and apply updates to production automatically.');
+    }
+  };
+
+  const statusColor =
+    syncStatus === 'success' ? 'var(--color-green-bright)' :
+    syncStatus === 'error' ? 'var(--color-red-bright)' :
+    'var(--color-text-muted)';
+
+  return (
+    <SettingsSection title="Admin: Game Data" description="Manage BSData sync. Only visible to the site owner.">
+      <div className="settings-row">
+        <label className="settings-row__label">Last Data Update</label>
+        <span className="settings-row__value">{lastUpdated ?? 'Loading...'}</span>
+      </div>
+      <div className="settings-row">
+        <label className="settings-row__label">Manual Sync</label>
+        <div className="settings-row__control">
+          <button
+            className="btn btn--primary btn--sm"
+            onClick={handleSync}
+            disabled={syncStatus === 'running'}
+          >
+            {syncStatus === 'running' ? 'Triggering...' : 'Sync Game Data Now'}
+          </button>
+        </div>
+      </div>
+      {statusMessage && (
+        <p style={{ fontSize: 'var(--text-sm)', color: statusColor, marginTop: 'var(--space-sm)' }}>
+          {statusMessage}
+        </p>
+      )}
+    </SettingsSection>
+  );
+}
+
 export function SettingsPage() {
+  const { user } = useAuth();
+  const isAdmin = user?.email === ADMIN_EMAIL;
+
   const {
     displayDensity,
     defaultBattleSize,
@@ -143,6 +216,8 @@ export function SettingsPage() {
         <h4 className="settings-subheading">Share Theme</h4>
         <ThemeSharePanel />
       </SettingsSection>
+
+      {isAdmin && <AdminSyncPanel />}
     </div>
   );
 }

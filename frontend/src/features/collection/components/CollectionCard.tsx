@@ -7,7 +7,7 @@ interface CollectionCardProps {
   entry: CollectionEntry;
   unitName?: string;
   factionName?: string;
-  onEdit: () => void;
+  onView: () => void;
   onStatusChange: (status: string) => void;
 }
 
@@ -31,7 +31,7 @@ export function CollectionCard({
   entry,
   unitName,
   factionName,
-  onEdit,
+  onView,
   onStatusChange,
 }: CollectionCardProps) {
   const displayName = entry.custom_name || unitName || 'Unknown Unit';
@@ -46,7 +46,8 @@ export function CollectionCard({
   };
 
   return (
-    <div className="collection-card" onClick={onEdit} role="button" tabIndex={0}>
+    <div className="collection-card" onClick={onView} role="button" tabIndex={0}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') onView(); }}>
       <div className="collection-card__header">
         <div className="collection-card__status-dot" data-status={status} />
         <h3 className="collection-card__name">{displayName}</h3>

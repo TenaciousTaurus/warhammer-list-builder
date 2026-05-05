@@ -36,3 +36,6 @@ npm-debug.log*
 
 # Generator script working files (production data snapshots)
 scripts/.prod_*.csv
+
+# Generated sync SQL (CI artifact, not committed)
+supabase/bsdata-sync.sql
