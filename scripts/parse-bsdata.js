@@ -1682,6 +1682,139 @@ function parseCatalog(filePath) {
 }
 
 /**
+ * Generate upsert-safe sync SQL for a faction (production-safe, no truncates).
+ * Preserves all user data — uses ON CONFLICT DO UPDATE for stable IDs,
+ * and DELETE+INSERT for child tables (weapons, abilities, points tiers).
+ */
+function generateSyncSQL(faction) {
+  const lines = [];
+  const { factionName, factionId, alignment, detachments, units } = faction;
+  const leaderTargets = faction.leaderTargets || [];
+
+  lines.push(`-- ${factionName}`);
+
+  // Faction (upsert by name)
+  lines.push(`INSERT INTO public.factions (id, name, alignment, data_source, data_source_updated_at) VALUES`);
+  lines.push(`  (${esc(factionId)}, ${esc(factionName)}, ${esc(alignment || 'xenos')}, ${esc(DATA_SOURCE_NAME)}, ${esc(DATA_SOURCE_UPDATED_AT)})`);
+  lines.push(`ON CONFLICT (name) DO UPDATE SET alignment = EXCLUDED.alignment, data_source = EXCLUDED.data_source, data_source_updated_at = EXCLUDED.data_source_updated_at;`);
+  lines.push('');
+
+  // Detachments (upsert by faction_id + name)
+  for (const det of detachments) {
+    const detId = uuidFromSeed(`detachment:${factionName}:${det.name}`);
+    lines.push(`INSERT INTO public.detachments (id, faction_id, name, rule_text) VALUES`);
+    lines.push(`  (${esc(detId)}, ${esc(factionId)}, ${esc(det.name)}, ${esc(det.ruleText)})`);
+    lines.push(`ON CONFLICT (faction_id, name) DO UPDATE SET rule_text = EXCLUDED.rule_text;`);
+    lines.push('');
+
+    // Enhancements (upsert by id — deterministic UUID)
+    for (const enh of det.enhancements) {
+      const enhId = uuidFromSeed(`enhancement:${factionName}:${det.name}:${enh.name}`);
+      lines.push(`INSERT INTO public.enhancements (id, detachment_id, name, points, description) VALUES`);
+      lines.push(`  (${esc(enhId)}, ${esc(detId)}, ${esc(enh.name)}, ${enh.points}, ${esc(enh.description)})`);
+      lines.push(`ON CONFLICT (id) DO UPDATE SET detachment_id = EXCLUDED.detachment_id, name = EXCLUDED.name, points = EXCLUDED.points, description = EXCLUDED.description;`);
+      lines.push('');
+    }
+  }
+
+  // Units (upsert by id — deterministic UUID preserves army_list_units FK references)
+  for (const unit of units) {
+    const kwArray = `'{${unit.keywords.map(k => `"${k.replace(/"/g, '\\"').replace(/'/g, "''")}"`).join(', ')}}'`;
+
+    lines.push(`INSERT INTO public.units (id, faction_id, name, role, movement, toughness, save, wounds, leadership, objective_control, keywords, max_per_list, is_legends) VALUES`);
+    lines.push(`  (${esc(unit.id)}, ${esc(factionId)}, ${esc(unit.name)}, ${esc(unit.role)}, ${esc(unit.movement)}, ${unit.toughness}, ${esc(unit.save)}, ${unit.wounds}, ${unit.leadership}, ${unit.objective_control}, ${kwArray}, ${unit.max_per_list}, ${unit.is_legends || false})`);
+    lines.push(`ON CONFLICT (id) DO UPDATE SET faction_id = EXCLUDED.faction_id, name = EXCLUDED.name, role = EXCLUDED.role, movement = EXCLUDED.movement, toughness = EXCLUDED.toughness, save = EXCLUDED.save, wounds = EXCLUDED.wounds, leadership = EXCLUDED.leadership, objective_control = EXCLUDED.objective_control, keywords = EXCLUDED.keywords, max_per_list = EXCLUDED.max_per_list, is_legends = EXCLUDED.is_legends;`);
+    lines.push('');
+
+    // Points tiers: delete by unit_id then reinsert (no unique constraint beyond PK)
+    lines.push(`DELETE FROM public.unit_points_tiers WHERE unit_id = ${esc(unit.id)};`);
+    if (unit.points_tiers.length > 0) {
+      lines.push(`INSERT INTO public.unit_points_tiers (unit_id, model_count, points) VALUES`);
+      lines.push(unit.points_tiers.map(t =>
+        `  (${esc(unit.id)}, ${t.model_count}, ${t.points})`
+      ).join(',\n') + ';');
+    }
+    lines.push('');
+
+    // Weapons: delete by unit_id then reinsert
+    lines.push(`DELETE FROM public.weapons WHERE unit_id = ${esc(unit.id)};`);
+    if (unit.weapons.length > 0) {
+      lines.push(`INSERT INTO public.weapons (unit_id, name, type, range, attacks, skill, strength, ap, damage, keywords) VALUES`);
+      lines.push(unit.weapons.map(w => {
+        const wkw = `'{${w.keywords.map(k => `"${k.replace(/"/g, '\\"').replace(/'/g, "''")}"`).join(', ')}}'`;
+        return `  (${esc(unit.id)}, ${esc(w.name)}, ${esc(w.type)}, ${w.range ? esc(w.range) : 'NULL'}, ${esc(w.attacks)}, ${esc(w.skill)}, ${w.strength}, ${w.ap}, ${esc(w.damage)}, ${wkw})`;
+      }).join(',\n') + ';');
+    }
+    lines.push('');
+
+    // Abilities: delete by unit_id then reinsert
+    lines.push(`DELETE FROM public.abilities WHERE unit_id = ${esc(unit.id)};`);
+    if (unit.abilities.length > 0) {
+      lines.push(`INSERT INTO public.abilities (unit_id, name, type, description) VALUES`);
+      lines.push(unit.abilities.map(a =>
+        `  (${esc(unit.id)}, ${esc(a.name)}, ${esc(a.type)}, ${esc(a.description)})`
+      ).join(',\n') + ';');
+    }
+    lines.push('');
+
+    // Model variants (upsert by unit_id + name)
+    if (unit.model_variants && unit.model_variants.length > 0) {
+      lines.push(`INSERT INTO public.unit_model_variants (id, unit_id, name, min_count, max_count, default_count, is_leader, sort_order, group_name) VALUES`);
+      lines.push(unit.model_variants.map(mv => {
+        const mvId = uuidFromSeed(`model_variant:${factionName}:${unit.name}:${mv.name}`);
+        return `  (${esc(mvId)}, ${esc(unit.id)}, ${esc(mv.name)}, ${mv.min_count}, ${mv.max_count}, ${mv.default_count}, ${mv.is_leader}, ${mv.sort_order}, ${esc(mv.group_name)})`;
+      }).join(',\n') + '\nON CONFLICT (unit_id, name) DO UPDATE SET min_count = EXCLUDED.min_count, max_count = EXCLUDED.max_count, default_count = EXCLUDED.default_count, is_leader = EXCLUDED.is_leader, sort_order = EXCLUDED.sort_order, group_name = EXCLUDED.group_name;');
+      lines.push('');
+    }
+
+    // Wargear options (upsert by unit_id + group_name + name)
+    if (unit.wargear_options && unit.wargear_options.length > 0) {
+      lines.push(`INSERT INTO public.wargear_options (id, unit_id, group_name, name, is_default, is_required, points, model_variant_id, pool_group, pool_max) VALUES`);
+      lines.push(unit.wargear_options.map(wo => {
+        const woId = uuidFromSeed(`wargear:${factionName}:${unit.name}:${wo.group_name}:${wo.name}`);
+        let mvIdSql = 'NULL';
+        if (wo.model_variant_name && unit.model_variants) {
+          const mv = unit.model_variants.find(v => v.name === wo.model_variant_name);
+          if (mv) mvIdSql = esc(uuidFromSeed(`model_variant:${factionName}:${unit.name}:${mv.name}`));
+        }
+        const poolGroupSql = wo.pool_group ? esc(wo.pool_group) : 'NULL';
+        const poolMaxSql = wo.pool_max != null ? wo.pool_max : 'NULL';
+        return `  (${esc(woId)}, ${esc(unit.id)}, ${esc(wo.group_name)}, ${esc(wo.name)}, ${wo.is_default}, ${wo.is_required === true}, ${wo.points}, ${mvIdSql}, ${poolGroupSql}, ${poolMaxSql})`;
+      }).join(',\n') + '\nON CONFLICT (unit_id, group_name, name) DO UPDATE SET model_variant_id = EXCLUDED.model_variant_id, is_required = EXCLUDED.is_required, pool_group = EXCLUDED.pool_group, pool_max = EXCLUDED.pool_max;');
+      lines.push('');
+
+      const subRows = [];
+      for (const wo of unit.wargear_options) {
+        if (!wo.sub_options || wo.sub_options.length === 0) continue;
+        const woId = uuidFromSeed(`wargear:${factionName}:${unit.name}:${wo.group_name}:${wo.name}`);
+        for (const so of wo.sub_options) {
+          const soId = uuidFromSeed(`wargear_sub:${factionName}:${unit.name}:${wo.group_name}:${wo.name}:${so.name}`);
+          subRows.push(`  (${esc(soId)}, ${esc(woId)}, ${esc(so.name)}, ${so.max_count}, ${so.points})`);
+        }
+      }
+      if (subRows.length > 0) {
+        lines.push(`INSERT INTO public.wargear_sub_options (id, wargear_option_id, name, max_count, points) VALUES`);
+        lines.push(subRows.join(',\n') + '\nON CONFLICT (wargear_option_id, name) DO UPDATE SET max_count = EXCLUDED.max_count, points = EXCLUDED.points;');
+        lines.push('');
+      }
+    }
+  }
+
+  // Leader targets (insert or ignore)
+  for (const lt of leaderTargets) {
+    const leaderId = uuidFromSeed(`unit:${factionName}:${lt.leader_unit_name}`);
+    const targetId = uuidFromSeed(`unit:${factionName}:${lt.target_unit_name}`);
+    const ltId = uuidFromSeed(`leader_target:${factionName}:${lt.leader_unit_name}:${lt.target_unit_name}`);
+    lines.push(`INSERT INTO public.unit_leader_targets (id, leader_unit_id, target_unit_id) VALUES`);
+    lines.push(`  (${esc(ltId)}, ${esc(leaderId)}, ${esc(targetId)})`);
+    lines.push(`ON CONFLICT (leader_unit_id, target_unit_id) DO NOTHING;`);
+  }
+  if (leaderTargets.length > 0) lines.push('');
+
+  return lines.join('\n');
+}
+
+/**
  * Generate SQL migration for a faction.
  */
 function generateSQL(faction) {
@@ -1874,6 +2007,7 @@ const CATALOGS = [
 let totalUnits = 0;
 let totalFactions = 0;
 const allSQL = [];
+const allSyncSQL = [];
 
 // ── Build catalogue ID -> faction name map ──────────────────────────────────
 // This allows us to resolve chapter-specific detachment ownership.
@@ -2026,15 +2160,16 @@ for (const catalogDef of CATALOGS) {
     }
   }
 
-  const sql = generateSQL({
+  const factionData = {
     factionName,
     factionId,
     alignment: catalogDef.alignment || 'xenos',
     detachments: mergedDetachments,
     units: mergedUnits,
     leaderTargets: reExtractedLeaderTargets,
-  });
-  allSQL.push(sql);
+  };
+  allSQL.push(generateSQL(factionData));
+  allSyncSQL.push(generateSyncSQL(factionData));
 }
 
 // Write a single combined migration
@@ -2170,3 +2305,18 @@ END $$;
 
 fs.writeFileSync(path.join(OUT_DIR, migrationFile), header + allSQL.join('\n\n'));
 console.log(`\nWrote ${migrationFile}: ${totalFactions} factions, ${totalUnits} units [source: ${DATA_SOURCE_NAME}, updated: ${DATA_SOURCE_UPDATED_AT}]`);
+
+// Write production-safe sync SQL (upsert-only, no truncates, preserves user data)
+const syncFile = path.join(__dirname, '..', 'supabase', 'bsdata-sync.sql');
+const syncHeader = `-- ============================================================
+-- BSData Production Sync — upsert-safe, preserves user data
+-- ${totalFactions} factions, ${totalUnits} total units
+-- Generated: ${new Date().toISOString()}
+-- Source: ${DATA_SOURCE_NAME} (updated: ${DATA_SOURCE_UPDATED_AT})
+-- ============================================================
+-- Run against production: psql "$SUPABASE_DB_URL" -f supabase/bsdata-sync.sql
+-- ============================================================
+
+`;
+fs.writeFileSync(syncFile, syncHeader + allSyncSQL.join('\n\n'));
+console.log(`Wrote bsdata-sync.sql (production-safe upsert)`);

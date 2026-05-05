@@ -1298,6 +1298,17 @@
   margin-left: 2px;
 }
 
+/* Data freshness indicator in app header */
+.app-header__data-freshness {
+  font-size: 0.65rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  padding: 2px 6px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  opacity: 0.7;
+}
+
 /* ========================================
    PRINT STYLES
    ======================================== */
@@ -1698,6 +1709,10 @@
 
 /* Extra small screens */
 @media (max-width: 480px) {
+  .app-header__data-freshness {
+    display: none;
+  }
+
   .app-header__nav {
     gap: var(--space-xs);
   }

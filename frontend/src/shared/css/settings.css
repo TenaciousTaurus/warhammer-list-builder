@@ -64,6 +64,11 @@
   font-weight: 500;
 }
 
+.settings-row__value {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
 .settings-row__control {
   flex-shrink: 0;
 }
