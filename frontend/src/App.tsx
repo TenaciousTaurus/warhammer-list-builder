@@ -211,11 +211,6 @@ function AppHeader() {
           What's New{hasNewChangelog && <span className="app-header__new-badge">NEW</span>}
         </NavLink>
         <ThemePicker />
-        {dataFreshness && (
-          <span className="app-header__data-freshness" title="Last BSData sync date">
-            {dataFreshness}
-          </span>
-        )}
         {user && (
           <NavLink
             to="/settings"
