@@ -37,6 +37,14 @@ jobs:
       - name: Run parser
         run: node scripts/parse-bsdata.js
 
+      - name: Apply sync to production database
+        if: env.SUPABASE_DB_URL != ''
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          psql "$SUPABASE_DB_URL" -f supabase/bsdata-sync.sql
+          echo "Production sync complete"
+
       - name: Normalize timestamp
         run: |
           sed -i 's/^-- Generated: .*$/-- Generated: (auto-generated)/' \
