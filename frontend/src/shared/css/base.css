@@ -1298,15 +1298,24 @@
   margin-left: 2px;
 }
 
-/* Data freshness indicator in app header */
+/* User area — wraps so freshness label sits on its own line below buttons */
+.app-header__user {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+  justify-content: flex-end;
+  max-width: 280px;
+}
+
+/* Data freshness indicator — full-width row below buttons */
 .app-header__data-freshness {
-  font-size: 0.65rem;
+  display: block;
+  width: 100%;
+  font-size: 0.6rem;
   color: var(--color-text-muted);
-  white-space: nowrap;
-  padding: 2px 6px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  opacity: 0.7;
+  text-align: right;
+  opacity: 0.55;
 }
 
 /* ========================================
