@@ -12,7 +12,7 @@
  */
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY")!;
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "https://warforge.website",
@@ -56,7 +56,7 @@ Deno.serve(async (req) => {
   // Forward request headers, replacing authorization if not present
   const headers = new Headers(req.headers);
   if (!headers.has("apikey")) {
-    headers.set("apikey", SUPABASE_SERVICE_ROLE_KEY);
+    headers.set("apikey", SUPABASE_ANON_KEY);
   }
 
   const response = await fetch(targetUrlWithParams.toString(), {

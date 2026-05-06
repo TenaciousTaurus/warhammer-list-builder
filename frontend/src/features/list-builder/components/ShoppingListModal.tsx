@@ -16,8 +16,8 @@ export function ShoppingListModal({ listId, userId, factionId, onClose }: Shoppi
   const [addedCount, setAddedCount] = useState<number | null>(null);
 
   useEffect(() => {
-    fetch(listId, userId);
-  }, [fetch, listId, userId]);
+    fetch(listId);
+  }, [fetch, listId]);
 
   function toggleChecked(unitId: string) {
     setChecked((prev) => {
