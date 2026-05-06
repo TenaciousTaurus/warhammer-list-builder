@@ -88,6 +88,211 @@
   --gradient-gold-subtle: linear-gradient(135deg, rgba(var(--gold-rgb), 0.15) 0%, rgba(var(--gold-rgb), 0.05) 100%);
 }
 
+/* --- Plague Garden ---
+   Fetid brown-green backgrounds + sickly chartreuse accent.
+   Evokes Nurgle's Garden, decay, and grotesque vitality.
+   ------------------------------------------------------------ */
+[data-theme="plague-garden"] {
+  /* Backgrounds */
+  --color-bg-primary: #0c100a;
+  --color-bg-secondary: #141a10;
+  --color-bg-tertiary: #1c2418;
+  --color-bg-card: #171d14;
+  --color-bg-hover: #222e1e;
+  --color-border: #2e3c28;
+  --color-border-light: #3e4e38;
+
+  /* Accent */
+  --color-gold: #78be3c;
+  --color-gold-dim: #568a28;
+  --color-gold-bright: #9ad64e;
+  --gold-rgb: 120, 190, 60;
+
+  /* Focus */
+  --focus-ring: 0 0 0 2px rgba(var(--gold-rgb), 0.4);
+
+  /* Glass */
+  --glass-bg: rgba(20, 26, 16, 0.6);
+  --glass-bg-heavy: rgba(20, 26, 16, 0.8);
+  --glass-bg-light: rgba(28, 36, 24, 0.4);
+  --glass-border-active: rgba(var(--gold-rgb), 0.3);
+
+  /* Shadows */
+  --shadow-glow-gold: 0 0 20px rgba(var(--gold-rgb), 0.15), 0 0 40px rgba(var(--gold-rgb), 0.05);
+
+  /* Gradients */
+  --gradient-card: linear-gradient(135deg, rgba(23, 29, 20, 0.8) 0%, rgba(15, 20, 12, 0.9) 100%);
+  --gradient-card-hover: linear-gradient(135deg, rgba(28, 36, 24, 0.85) 0%, rgba(18, 24, 14, 0.95) 100%);
+  --gradient-header: linear-gradient(180deg, rgba(20, 26, 16, 0.95) 0%, rgba(12, 16, 10, 0.9) 100%);
+  --gradient-sidebar: linear-gradient(180deg, rgba(16, 22, 12, 0.95) 0%, rgba(10, 14, 8, 0.98) 100%);
+  --gradient-gold: linear-gradient(135deg, #78be3c 0%, #568a28 100%);
+  --gradient-gold-subtle: linear-gradient(135deg, rgba(var(--gold-rgb), 0.15) 0%, rgba(var(--gold-rgb), 0.05) 100%);
+}
+
+/* --- Necron Tomb ---
+   Near-black backgrounds with a subtle green cast + gauss green accent.
+   Evokes ancient alien tombs, reanimation protocols, undying legions.
+   ------------------------------------------------------------ */
+[data-theme="necron-tomb"] {
+  /* Backgrounds */
+  --color-bg-primary: #090c09;
+  --color-bg-secondary: #0f140f;
+  --color-bg-tertiary: #151c15;
+  --color-bg-card: #121812;
+  --color-bg-hover: #1a221a;
+  --color-border: #243024;
+  --color-border-light: #344234;
+
+  /* Accent */
+  --color-gold: #3cd672;
+  --color-gold-dim: #28a858;
+  --color-gold-bright: #5eed8c;
+  --gold-rgb: 60, 214, 114;
+
+  /* Focus */
+  --focus-ring: 0 0 0 2px rgba(var(--gold-rgb), 0.4);
+
+  /* Glass */
+  --glass-bg: rgba(15, 20, 15, 0.6);
+  --glass-bg-heavy: rgba(15, 20, 15, 0.8);
+  --glass-bg-light: rgba(21, 28, 21, 0.4);
+  --glass-border-active: rgba(var(--gold-rgb), 0.3);
+
+  /* Shadows */
+  --shadow-glow-gold: 0 0 20px rgba(var(--gold-rgb), 0.15), 0 0 40px rgba(var(--gold-rgb), 0.05);
+
+  /* Gradients */
+  --gradient-card: linear-gradient(135deg, rgba(18, 24, 18, 0.8) 0%, rgba(12, 16, 12, 0.9) 100%);
+  --gradient-card-hover: linear-gradient(135deg, rgba(21, 28, 21, 0.85) 0%, rgba(14, 20, 14, 0.95) 100%);
+  --gradient-header: linear-gradient(180deg, rgba(15, 20, 15, 0.95) 0%, rgba(9, 12, 9, 0.9) 100%);
+  --gradient-sidebar: linear-gradient(180deg, rgba(12, 16, 12, 0.95) 0%, rgba(8, 10, 8, 0.98) 100%);
+  --gradient-gold: linear-gradient(135deg, #3cd672 0%, #28a858 100%);
+  --gradient-gold-subtle: linear-gradient(135deg, rgba(var(--gold-rgb), 0.15) 0%, rgba(var(--gold-rgb), 0.05) 100%);
+}
+
+/* --- Night Lords ---
+   Deep navy-indigo backgrounds + electric blue accent.
+   Evokes VIII Legion's lightning motifs, terror tactics, endless night.
+   ------------------------------------------------------------ */
+[data-theme="night-lords"] {
+  /* Backgrounds */
+  --color-bg-primary: #08080f;
+  --color-bg-secondary: #10101c;
+  --color-bg-tertiary: #181828;
+  --color-bg-card: #141422;
+  --color-bg-hover: #1e1e34;
+  --color-border: #28284a;
+  --color-border-light: #383860;
+
+  /* Accent */
+  --color-gold: #3a7fff;
+  --color-gold-dim: #2860cc;
+  --color-gold-bright: #5c9aff;
+  --gold-rgb: 58, 127, 255;
+
+  /* Focus */
+  --focus-ring: 0 0 0 2px rgba(var(--gold-rgb), 0.4);
+
+  /* Glass */
+  --glass-bg: rgba(16, 16, 28, 0.6);
+  --glass-bg-heavy: rgba(16, 16, 28, 0.8);
+  --glass-bg-light: rgba(24, 24, 40, 0.4);
+  --glass-border-active: rgba(var(--gold-rgb), 0.3);
+
+  /* Shadows */
+  --shadow-glow-gold: 0 0 20px rgba(var(--gold-rgb), 0.15), 0 0 40px rgba(var(--gold-rgb), 0.05);
+
+  /* Gradients */
+  --gradient-card: linear-gradient(135deg, rgba(20, 20, 34, 0.8) 0%, rgba(14, 14, 26, 0.9) 100%);
+  --gradient-card-hover: linear-gradient(135deg, rgba(24, 24, 40, 0.85) 0%, rgba(16, 16, 32, 0.95) 100%);
+  --gradient-header: linear-gradient(180deg, rgba(16, 16, 28, 0.95) 0%, rgba(8, 8, 18, 0.9) 100%);
+  --gradient-sidebar: linear-gradient(180deg, rgba(12, 12, 22, 0.95) 0%, rgba(8, 8, 14, 0.98) 100%);
+  --gradient-gold: linear-gradient(135deg, #3a7fff 0%, #2860cc 100%);
+  --gradient-gold-subtle: linear-gradient(135deg, rgba(var(--gold-rgb), 0.15) 0%, rgba(var(--gold-rgb), 0.05) 100%);
+}
+
+/* --- Tau Sept ---
+   Warm dark stone backgrounds + ember orange accent.
+   Evokes the T'au's desert sept worlds, fire caste markings, the Greater Good.
+   ------------------------------------------------------------ */
+[data-theme="tau-sept"] {
+  /* Backgrounds */
+  --color-bg-primary: #100c08;
+  --color-bg-secondary: #1a1410;
+  --color-bg-tertiary: #241e18;
+  --color-bg-card: #1e1814;
+  --color-bg-hover: #2c2418;
+  --color-border: #3a3028;
+  --color-border-light: #4a4038;
+
+  /* Accent */
+  --color-gold: #d4762a;
+  --color-gold-dim: #a85818;
+  --color-gold-bright: #f0983c;
+  --gold-rgb: 212, 118, 42;
+
+  /* Focus */
+  --focus-ring: 0 0 0 2px rgba(var(--gold-rgb), 0.4);
+
+  /* Glass */
+  --glass-bg: rgba(26, 20, 16, 0.6);
+  --glass-bg-heavy: rgba(26, 20, 16, 0.8);
+  --glass-bg-light: rgba(36, 30, 24, 0.4);
+  --glass-border-active: rgba(var(--gold-rgb), 0.3);
+
+  /* Shadows */
+  --shadow-glow-gold: 0 0 20px rgba(var(--gold-rgb), 0.15), 0 0 40px rgba(var(--gold-rgb), 0.05);
+
+  /* Gradients */
+  --gradient-card: linear-gradient(135deg, rgba(30, 24, 20, 0.8) 0%, rgba(22, 16, 12, 0.9) 100%);
+  --gradient-card-hover: linear-gradient(135deg, rgba(36, 30, 24, 0.85) 0%, rgba(26, 20, 14, 0.95) 100%);
+  --gradient-header: linear-gradient(180deg, rgba(26, 20, 16, 0.95) 0%, rgba(16, 12, 8, 0.9) 100%);
+  --gradient-sidebar: linear-gradient(180deg, rgba(20, 16, 12, 0.95) 0%, rgba(14, 10, 6, 0.98) 100%);
+  --gradient-gold: linear-gradient(135deg, #d4762a 0%, #a85818 100%);
+  --gradient-gold-subtle: linear-gradient(135deg, rgba(var(--gold-rgb), 0.15) 0%, rgba(var(--gold-rgb), 0.05) 100%);
+}
+
+/* --- Sons of Horus ---
+   Dark jade-teal backgrounds + sea-green accent.
+   Evokes the XVI Legion, the Warmaster's livery, Horus Heresy campaign grey-green.
+   ------------------------------------------------------------ */
+[data-theme="sons-of-horus"] {
+  /* Backgrounds */
+  --color-bg-primary: #080e0e;
+  --color-bg-secondary: #0e1a1a;
+  --color-bg-tertiary: #162828;
+  --color-bg-card: #122020;
+  --color-bg-hover: #1a2e2e;
+  --color-border: #264040;
+  --color-border-light: #365252;
+
+  /* Accent */
+  --color-gold: #4c9b7a;
+  --color-gold-dim: #36785c;
+  --color-gold-bright: #68bc96;
+  --gold-rgb: 76, 155, 122;
+
+  /* Focus */
+  --focus-ring: 0 0 0 2px rgba(var(--gold-rgb), 0.4);
+
+  /* Glass */
+  --glass-bg: rgba(14, 26, 26, 0.6);
+  --glass-bg-heavy: rgba(14, 26, 26, 0.8);
+  --glass-bg-light: rgba(22, 40, 40, 0.4);
+  --glass-border-active: rgba(var(--gold-rgb), 0.3);
+
+  /* Shadows */
+  --shadow-glow-gold: 0 0 20px rgba(var(--gold-rgb), 0.15), 0 0 40px rgba(var(--gold-rgb), 0.05);
+
+  /* Gradients */
+  --gradient-card: linear-gradient(135deg, rgba(18, 32, 32, 0.8) 0%, rgba(12, 22, 22, 0.9) 100%);
+  --gradient-card-hover: linear-gradient(135deg, rgba(22, 40, 40, 0.85) 0%, rgba(14, 28, 28, 0.95) 100%);
+  --gradient-header: linear-gradient(180deg, rgba(14, 26, 26, 0.95) 0%, rgba(8, 14, 14, 0.9) 100%);
+  --gradient-sidebar: linear-gradient(180deg, rgba(10, 20, 20, 0.95) 0%, rgba(6, 12, 12, 0.98) 100%);
+  --gradient-gold: linear-gradient(135deg, #4c9b7a 0%, #36785c 100%);
+  --gradient-gold-subtle: linear-gradient(135deg, rgba(var(--gold-rgb), 0.15) 0%, rgba(var(--gold-rgb), 0.05) 100%);
+}
+
 /* --- Iron Citadel ---
    Cool gunmetal backgrounds + steel blue accent.
    Evokes industrial fortress, mechanized warfare.

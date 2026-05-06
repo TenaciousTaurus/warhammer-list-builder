@@ -6,6 +6,11 @@ export const THEMES = [
   { id: 'crimson-forge', label: 'Crimson Forge', accent: '#c94c4c' },
   { id: 'warpstorm', label: 'Warpstorm', accent: '#4cb8b8' },
   { id: 'iron-citadel', label: 'Iron Citadel', accent: '#6090b8' },
+  { id: 'plague-garden', label: 'Plague Garden', accent: '#78be3c' },
+  { id: 'necron-tomb', label: 'Necron Tomb', accent: '#3cd672' },
+  { id: 'night-lords', label: 'Night Lords', accent: '#3a7fff' },
+  { id: 'tau-sept', label: "T'au Sept", accent: '#d4762a' },
+  { id: 'sons-of-horus', label: 'Sons of Horus', accent: '#4c9b7a' },
 ] as const;
 
 export type PresetThemeId = typeof THEMES[number]['id'];
