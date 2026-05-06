@@ -1666,11 +1666,11 @@ export type Database = {
         Returns: void;
       };
       shopping_list_for_army: {
-        Args: { p_list_id: string; p_user_id: string };
+        Args: { p_list_id: string };
         Returns: ShoppingListItem[];
       };
       check_and_award_achievements: {
-        Args: { p_user_id: string };
+        Args: Record<string, never>;
         Returns: { achievement_slug: string; achievement_name: string }[];
       };
       get_paint_equivalents: {
@@ -1698,7 +1698,7 @@ export type Database = {
         Returns: string;
       };
       get_friend_activity: {
-        Args: { p_user_id: string; p_limit?: number };
+        Args: { p_limit?: number };
         Returns: FriendActivityItem[];
       };
       generate_battle_report_code: {

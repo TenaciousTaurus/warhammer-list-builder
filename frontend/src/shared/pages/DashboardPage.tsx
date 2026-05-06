@@ -48,7 +48,7 @@ export function DashboardPage() {
       if (completedRes.data) setCompletedGames(completedRes.data as GameSession[]);
       setLoading(false);
       // Fire-and-forget: award any newly unlocked achievements
-      supabase.rpc('check_and_award_achievements', { p_user_id: user.id });
+      supabase.rpc('check_and_award_achievements');
     })();
   }, [user]);
 

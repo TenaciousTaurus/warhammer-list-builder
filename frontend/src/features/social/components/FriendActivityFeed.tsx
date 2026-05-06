@@ -43,7 +43,6 @@ export function FriendActivityFeed({ userId }: FriendActivityFeedProps) {
       }
 
       const { data, error } = await supabase.rpc('get_friend_activity', {
-        p_user_id: userId,
         p_limit: 15,
       });
 

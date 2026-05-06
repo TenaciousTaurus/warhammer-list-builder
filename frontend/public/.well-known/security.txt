@@ -1,0 +1,4 @@
+Contact: mailto:jeff.bukowski92@gmail.com
+Expires: 2027-05-06T00:00:00Z
+Preferred-Languages: en
+Canonical: https://warforge.website/.well-known/security.txt
