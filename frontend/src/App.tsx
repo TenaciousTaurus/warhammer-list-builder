@@ -68,6 +68,7 @@ const MetaPage = lazy(() => lazyRetry(() => import('./features/social/pages/Meta
 const BattleReportPage = lazy(() => lazyRetry(() => import('./features/play-mode/pages/BattleReportPage').then(m => ({ default: m.BattleReportPage }))));
 const RivalryPage = lazy(() => lazyRetry(() => import('./features/social/pages/RivalryPage').then(m => ({ default: m.RivalryPage }))));
 const ApiReferencePage = lazy(() => lazyRetry(() => import('./features/social/pages/ApiReferencePage').then(m => ({ default: m.ApiReferencePage }))));
+const RoadmapPage = lazy(() => lazyRetry(() => import('./shared/pages/RoadmapPage').then(m => ({ default: m.RoadmapPage }))));
 
 // Clear the reload flag on successful page load
 sessionStorage.removeItem('chunk_reload');
@@ -201,6 +202,14 @@ function AppHeader() {
           }
         >
           Meta
+        </NavLink>
+        <NavLink
+          to="/roadmap"
+          className={({ isActive }) =>
+            `app-header__link${isActive ? ' app-header__link--active' : ''}`
+          }
+        >
+          Roadmap
         </NavLink>
         <NavLink
           to="/changelog"
@@ -344,6 +353,7 @@ function App() {
             <Route path="/report/:code" element={<BattleReportPage />} />
             <Route path="/rivalry/:user1Id/:user2Id" element={<RivalryPage />} />
             <Route path="/api" element={<ApiReferencePage />} />
+            <Route path="/roadmap" element={<RoadmapPage />} />
           </Routes>
           </Suspense>
         </main>
