@@ -2,17 +2,16 @@
  * Edge Function: create-feedback
  *
  * Accepts feedback form submissions from authenticated users and creates
- * a task in ClickUp. Keeps the ClickUp API token server-side.
+ * a task in the appropriate ClickUp list based on category.
+ * Keeps the ClickUp API token server-side.
  *
  * Secrets required:
  *   CLICKUP_API_TOKEN — personal API token from ClickUp
- *   CLICKUP_LIST_ID   — target list ID for feedback tasks
  */
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const CLICKUP_API_TOKEN = Deno.env.get("CLICKUP_API_TOKEN")!;
-const CLICKUP_LIST_ID = Deno.env.get("CLICKUP_LIST_ID")!;
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
@@ -30,6 +29,13 @@ const CATEGORY_TAG_MAP: Record<Category, string> = {
   "Feature Request": "feature-request",
   "General Feedback": "general-feedback",
   "UI/UX Issue": "ui-ux-issue",
+};
+
+const CATEGORY_LIST_MAP: Record<Category, string> = {
+  "Bug Report": "901415120307",
+  "Feature Request": "901415120310",
+  "General Feedback": "901415120313",
+  "UI/UX Issue": "901415120307",
 };
 
 const CORS_HEADERS: Record<string, string> = {
@@ -123,10 +129,11 @@ Deno.serve(async (req) => {
 
   // --- Create ClickUp task ---
   const tag = CATEGORY_TAG_MAP[category as Category];
+  const listId = CATEGORY_LIST_MAP[category as Category];
 
   try {
     const clickupRes = await fetch(
-      `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`,
+      `https://api.clickup.com/api/v2/list/${listId}/task`,
       {
         method: "POST",
         headers: {
