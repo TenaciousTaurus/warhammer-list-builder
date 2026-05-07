@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useThemeStore, THEMES } from '../stores/themeStore';
 import type { ThemeId } from '../stores/themeStore';
@@ -18,6 +18,23 @@ export function ThemePicker() {
     themeId === 'custom'
       ? 'Custom'
       : (THEMES.find((t) => t.id === themeId)?.label ?? 'Void Dark');
+
+  // Group themes: '' group first (no header), then named groups in order
+  const groupedThemes = useMemo(() => {
+    const groups: { label: string; themes: typeof THEMES[number][] }[] = [];
+    const seen = new Set<string>();
+    for (const theme of THEMES) {
+      const g = theme.group;
+      if (!seen.has(g)) {
+        seen.add(g);
+        groups.push({ label: g, themes: [] });
+      }
+      groups[groups.length - 1].themes.push(theme);
+    }
+    // Re-sort so '' group is always first (it already is by insertion order, but be explicit)
+    groups.sort((a, b) => (a.label === '' ? -1 : b.label === '' ? 1 : 0));
+    return groups;
+  }, []);
 
   // Close on outside click
   useEffect(() => {
@@ -79,26 +96,32 @@ export function ThemePicker() {
 
       {open && (
         <div className="theme-picker__dropdown">
-          {THEMES.map((theme) => (
-            <button
-              key={theme.id}
-              className={`theme-picker__option${theme.id === themeId ? ' theme-picker__option--active' : ''}`}
-              onClick={() => {
-                setTheme(theme.id as ThemeId);
-                setOpen(false);
-              }}
-            >
-              <span
-                className="theme-picker__option-swatch"
-                style={{ backgroundColor: theme.accent }}
-              />
-              <span className="theme-picker__option-label">{theme.label}</span>
-              {theme.id === themeId && (
-                <svg className="theme-picker__check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-              )}
-            </button>
+          {groupedThemes.map(({ label: group, themes }, gi) => (
+            <div key={group || '__presets'}>
+              {gi > 0 && <div className="theme-picker__divider" />}
+              {group && <div className="theme-picker__group">{group}</div>}
+              {themes.map((theme) => (
+                <button
+                  key={theme.id}
+                  className={`theme-picker__option${theme.id === themeId ? ' theme-picker__option--active' : ''}`}
+                  onClick={() => {
+                    setTheme(theme.id as ThemeId);
+                    setOpen(false);
+                  }}
+                >
+                  <span
+                    className="theme-picker__option-swatch"
+                    style={{ backgroundColor: theme.accent }}
+                  />
+                  <span className="theme-picker__option-label">{theme.label}</span>
+                  {theme.id === themeId && (
+                    <svg className="theme-picker__check" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  )}
+                </button>
+              ))}
+            </div>
           ))}
 
           <div className="theme-picker__divider" />

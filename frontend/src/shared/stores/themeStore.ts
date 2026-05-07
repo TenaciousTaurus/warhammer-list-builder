@@ -2,15 +2,46 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export const THEMES = [
-  { id: 'void-dark', label: 'Void Dark', accent: '#c9a84c' },
-  { id: 'crimson-forge', label: 'Crimson Forge', accent: '#c94c4c' },
-  { id: 'warpstorm', label: 'Warpstorm', accent: '#4cb8b8' },
-  { id: 'iron-citadel', label: 'Iron Citadel', accent: '#6090b8' },
-  { id: 'plague-garden', label: 'Plague Garden', accent: '#78be3c' },
-  { id: 'necron-tomb', label: 'Necron Tomb', accent: '#3cd672' },
-  { id: 'night-lords', label: 'Night Lords', accent: '#3a7fff' },
-  { id: 'tau-sept', label: "T'au Sept", accent: '#d4762a' },
-  { id: 'sons-of-horus', label: 'Sons of Horus', accent: '#4c9b7a' },
+  // Presets — no faction association
+  { id: 'void-dark',    label: 'Void Dark',    accent: '#c9a84c', group: '' },
+  { id: 'crimson-forge', label: 'Crimson Forge', accent: '#c94c4c', group: '' },
+  { id: 'warpstorm',   label: 'Warpstorm',    accent: '#4cb8b8', group: '' },
+  { id: 'iron-citadel', label: 'Iron Citadel', accent: '#6090b8', group: '' },
+  // Imperium
+  { id: 'azure-crusade',    label: 'Azure Crusade',    accent: '#1a5cb8', group: 'Imperium' },
+  { id: 'fenrisian-frost',  label: 'Fenrisian Frost',  accent: '#c88030', group: 'Imperium' },
+  { id: 'ravenwing-shroud', label: 'Ravenwing Shroud', accent: '#c8b48a', group: 'Imperium' },
+  { id: 'sanguine-wings',   label: 'Sanguine Wings',   accent: '#c89040', group: 'Imperium' },
+  { id: 'argent-ward',      label: 'Argent Ward',      accent: '#8ab0d0', group: 'Imperium' },
+  { id: 'vigil-eternal',    label: 'Vigil Eternal',    accent: '#b0b8c4', group: 'Imperium' },
+  { id: 'cog-and-coil',     label: 'Cog and Coil',     accent: '#a0a8b4', group: 'Imperium' },
+  { id: 'sacred-flame',     label: 'Sacred Flame',     accent: '#e06070', group: 'Imperium' },
+  { id: 'cadian-wall',      label: 'Cadian Wall',      accent: '#8aaa50', group: 'Imperium' },
+  { id: 'auric-palace',     label: 'Auric Palace',     accent: '#d4980a', group: 'Imperium' },
+  { id: 'iron-throne',      label: 'Iron Throne',      accent: '#7030b8', group: 'Imperium' },
+  // Chaos
+  { id: 'blood-tithe',      label: 'Blood Tithe',      accent: '#c03820', group: 'Chaos' },
+  { id: 'perfections-edge', label: "Perfection's Edge", accent: '#d050b0', group: 'Chaos' },
+  { id: 'rubric-dust',      label: 'Rubric Dust',      accent: '#b8902a', group: 'Chaos' },
+  { id: 'plague-garden',    label: 'Plague Garden',    accent: '#78be3c', group: 'Chaos' },
+  { id: 'night-lords',      label: 'Night Lords',      accent: '#3a7fff', group: 'Chaos' },
+  { id: 'sons-of-horus',    label: 'Sons of Horus',    accent: '#4c9b7a', group: 'Chaos' },
+  { id: 'daemon-host',      label: 'Daemon Host',      accent: '#9a20c8', group: 'Chaos' },
+  { id: 'corrupted-throne', label: 'Corrupted Throne', accent: '#a83060', group: 'Chaos' },
+  // Xenos
+  { id: 'necron-tomb',       label: 'Necron Tomb',       accent: '#3cd672', group: 'Xenos' },
+  { id: 'tau-sept',          label: "T'au Sept",          accent: '#d4762a', group: 'Xenos' },
+  { id: 'waaagh-tide',       label: "Waaagh! Tide",       accent: '#5a9e14', group: 'Xenos' },
+  { id: 'leviathan-tide',    label: 'Leviathan Tide',    accent: '#e0d8c8', group: 'Xenos' },
+  { id: 'ghost-halls',       label: 'Ghost Halls',       accent: '#c8a220', group: 'Xenos' },
+  { id: 'thorned-rose',      label: 'Thorned Rose',      accent: '#50b840', group: 'Xenos' },
+  { id: 'farseers-veil',     label: "Farseer's Veil",    accent: '#d4c8a0', group: 'Xenos' },
+  { id: 'alaitoc-dusk',      label: 'Alaitoc Dusk',      accent: '#d0c020', group: 'Xenos' },
+  { id: 'spirit-spiral',     label: 'Spirit Spiral',     accent: '#e8e0d8', group: 'Xenos' },
+  { id: 'commorrite-blade',  label: 'Commorrite Blade',  accent: '#9040d8', group: 'Xenos' },
+  { id: 'masque-eternal',    label: 'Masque Eternal',    accent: '#e030a0', group: 'Xenos' },
+  { id: 'ancestor-core',     label: 'Ancestor Core',     accent: '#b87828', group: 'Xenos' },
+  { id: 'genestealer-veil',  label: 'Genestealer Veil',  accent: '#7050c8', group: 'Xenos' },
 ] as const;
 
 export type PresetThemeId = typeof THEMES[number]['id'];

@@ -1866,7 +1866,9 @@
   position: absolute;
   top: calc(100% + 6px);
   right: 0;
-  min-width: 180px;
+  min-width: 200px;
+  max-height: 70vh;
+  overflow-y: auto;
   background: var(--glass-bg-heavy);
   backdrop-filter: blur(var(--glass-blur-heavy));
   -webkit-backdrop-filter: blur(var(--glass-blur-heavy));
@@ -1876,6 +1878,25 @@
   padding: var(--space-xs);
   z-index: var(--z-dropdown);
   animation: fadeIn var(--transition-fast);
+  scrollbar-width: thin;
+  scrollbar-color: var(--glass-border) transparent;
+}
+
+.theme-picker__group {
+  padding: var(--space-xs) var(--space-md);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.theme-picker__divider {
+  height: 1px;
+  background: var(--glass-border);
+  margin: var(--space-xs) var(--space-sm);
 }
 
 .theme-picker__option {
