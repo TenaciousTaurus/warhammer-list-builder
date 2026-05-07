@@ -174,11 +174,15 @@
   color: var(--color-gold);
   letter-spacing: 0.1em;
   text-shadow: 0 0 30px rgba(var(--gold-rgb), 0.2);
+  flex-shrink: 0;
 }
 
 .app-header__nav {
   display: flex;
+  align-items: center;
   gap: var(--space-xs);
+  min-width: 0;
+  overflow: hidden;
 }
 
 .app-header__link {
@@ -1308,6 +1312,15 @@
   max-width: 280px;
 }
 
+.app-header__email {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* Data freshness indicator — full-width row below buttons */
 .app-header__data-freshness {
   display: block;
@@ -1581,6 +1594,17 @@
   }
 }
 
+/* Medium desktops — compact nav before overflow kicks in */
+@media (max-width: 1100px) {
+  .app-header__link {
+    padding: var(--space-xs) var(--space-sm);
+  }
+
+  .app-header__email {
+    display: none;
+  }
+}
+
 @media (max-width: 768px) {
   .app-header {
     padding: var(--space-sm) var(--space-md);
@@ -1694,16 +1718,15 @@
     min-height: 40px;
   }
 
-  /* Auth header on mobile */
+  /* Auth header on mobile — keep inline, drop non-essential elements */
   .app-header__user {
-    flex-direction: column;
-    gap: var(--space-xs);
-    align-items: flex-end;
+    flex-wrap: nowrap;
+    max-width: none;
   }
 
-  .app-header__email {
-    max-width: 120px;
-    font-size: 0.65rem;
+  .app-header__email,
+  .app-header__feedback {
+    display: none;
   }
 
   /* Auth page responsive */
@@ -1843,7 +1866,9 @@
   position: absolute;
   top: calc(100% + 6px);
   right: 0;
-  min-width: 180px;
+  min-width: 200px;
+  max-height: 70vh;
+  overflow-y: auto;
   background: var(--glass-bg-heavy);
   backdrop-filter: blur(var(--glass-blur-heavy));
   -webkit-backdrop-filter: blur(var(--glass-blur-heavy));
@@ -1853,6 +1878,25 @@
   padding: var(--space-xs);
   z-index: var(--z-dropdown);
   animation: fadeIn var(--transition-fast);
+  scrollbar-width: thin;
+  scrollbar-color: var(--glass-border) transparent;
+}
+
+.theme-picker__group {
+  padding: var(--space-xs) var(--space-md);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.theme-picker__divider {
+  height: 1px;
+  background: var(--glass-border);
+  margin: var(--space-xs) var(--space-sm);
 }
 
 .theme-picker__option {
