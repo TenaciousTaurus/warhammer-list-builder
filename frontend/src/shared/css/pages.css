@@ -365,6 +365,14 @@
   padding: var(--space-xl) var(--space-xl) var(--space-lg);
   text-align: center;
   animation: fadeInUp 400ms ease;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+@media (max-width: 480px) {
+  .auth-card {
+    padding: var(--space-lg) var(--space-md);
+  }
 }
 
 .auth-card__icon {
@@ -806,11 +814,12 @@
 
 .landing__title {
   font-family: var(--font-display);
-  font-size: clamp(2.5rem, 8vw, 4rem);
+  font-size: clamp(2rem, 9vw, 4rem);
   color: var(--color-gold);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin-bottom: var(--space-sm);
+  word-break: break-word;
   text-shadow: 0 0 40px rgba(var(--gold-rgb), 0.3);
 }
 
