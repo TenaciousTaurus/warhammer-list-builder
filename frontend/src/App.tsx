@@ -16,6 +16,7 @@ import { FeedbackModal } from './shared/components/FeedbackModal';
 import { ThemePicker } from './shared/components/ThemePicker';
 import { AppFooter } from './shared/components/AppFooter';
 import { OfflineBanner } from './shared/components/OfflineBanner';
+import { MobileTabBar } from './shared/components/MobileTabBar';
 import { supabase } from './shared/lib/supabase';
 
 // Auto-reload on stale chunk errors after deployment.
@@ -358,6 +359,7 @@ function App() {
           </Suspense>
         </main>
         <AppFooter />
+        <MobileTabBar />
       </div>
     </BrowserRouter>
     </Sentry.ErrorBoundary>

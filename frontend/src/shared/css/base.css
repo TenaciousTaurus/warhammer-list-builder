@@ -1,4 +1,21 @@
 /* ========================================
+   GLOBAL OVERFLOW GUARD
+   Prevents stray-wide elements from causing document horizontal scroll,
+   which on mobile manifests as every page needing pinch-zoom and every
+   line of text appearing to clip at the right edge. Pages that need
+   horizontal scrolling (weapon tables, etc.) opt in via their own
+   `overflow-x: auto` containers.
+   ======================================== */
+
+html, body {
+  overflow-x: hidden;
+}
+
+body {
+  max-width: 100vw;
+}
+
+/* ========================================
    KEYFRAME ANIMATIONS
    ======================================== */
 
@@ -1199,6 +1216,14 @@
   max-width: 680px;
   margin: 0 auto;
   opacity: 0.7;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 768px) {
+  .app-footer {
+    padding-left: var(--space-md);
+    padding-right: var(--space-md);
+  }
 }
 
 /* Hide footer when list editor occupies the full viewport */
@@ -1939,4 +1964,272 @@
 .theme-picker__check {
   flex-shrink: 0;
   color: var(--color-gold);
+}
+
+/* ========================================
+   MOBILE TAB BAR
+   Hidden on desktop. At ≤768px, replaces the cramped header nav with a
+   fixed bottom-tab pattern (PWA-native). Header collapses to logo only.
+   ======================================== */
+
+.mobile-tab-bar {
+  display: none;
+}
+
+.mobile-more-sheet__backdrop {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* Collapse desktop nav — only the WarForge logo remains in the header. */
+  .app-header__nav {
+    display: none;
+  }
+
+  .app-header {
+    padding: var(--space-sm) var(--space-md);
+    justify-content: flex-start;
+  }
+
+  /* Reserve space at the bottom for the fixed tab bar (+iOS safe area). */
+  .app-main {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .app-footer {
+    padding-bottom: calc(var(--space-md) + 72px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Show the tab bar. */
+  .mobile-tab-bar {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: var(--z-sticky);
+    align-items: stretch;
+    justify-content: space-around;
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom, 0px));
+    background: var(--gradient-header);
+    backdrop-filter: blur(var(--glass-blur-heavy));
+    -webkit-backdrop-filter: blur(var(--glass-blur-heavy));
+    border-top: 1px solid var(--glass-border);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  .mobile-tab-bar__item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 6px 2px;
+    min-height: 56px;
+    min-width: 0;
+    color: var(--color-text-secondary);
+    background: transparent;
+    border: 0;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    text-decoration: none;
+    transition: color var(--transition-normal), background-color var(--transition-normal);
+  }
+
+  .mobile-tab-bar__item:hover,
+  .mobile-tab-bar__item:active {
+    color: var(--color-text-primary);
+    background-color: rgba(255, 255, 255, 0.04);
+  }
+
+  .mobile-tab-bar__item--active {
+    color: var(--color-gold);
+  }
+
+  .mobile-tab-bar__icon-wrap {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .mobile-tab-bar__dot {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: var(--color-gold);
+    box-shadow: 0 0 6px rgba(var(--gold-rgb), 0.6);
+  }
+
+  .mobile-tab-bar__label {
+    font-size: 10px;
+    line-height: 1.1;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Hide tab bar where layout is already full-viewport. */
+  .app-layout:has(.list-editor) .mobile-tab-bar,
+  .app-layout:has(.painting-mode) .mobile-tab-bar,
+  .app-layout:has(.painting-mode) .app-main {
+    display: none;
+  }
+
+  .app-layout:has(.list-editor) .app-main,
+  .app-layout:has(.painting-mode) .app-main {
+    padding-bottom: 0;
+  }
+
+  /* ===== More sheet (slide-up overlay) ===== */
+  .mobile-more-sheet__backdrop {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal, 1000);
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+    align-items: flex-end;
+    justify-content: stretch;
+    animation: fadeIn 200ms ease;
+  }
+
+  .mobile-more-sheet {
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    background: var(--gradient-card);
+    border-top: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.6);
+    padding: var(--space-md) 0 calc(var(--space-md) + env(safe-area-inset-bottom, 0px));
+    animation: slideUp 250ms cubic-bezier(0.2, 0.9, 0.3, 1);
+  }
+
+  .mobile-more-sheet__handle {
+    width: 40px;
+    height: 4px;
+    margin: 0 auto var(--space-md);
+    background: var(--color-text-muted);
+    border-radius: var(--radius-full);
+    opacity: 0.4;
+  }
+
+  .mobile-more-sheet__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .mobile-more-sheet__user {
+    padding: 0 var(--space-lg) var(--space-sm);
+    border-bottom: 1px solid var(--glass-border);
+    margin-bottom: var(--space-xs);
+  }
+
+  .mobile-more-sheet__user-email {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    word-break: break-all;
+  }
+
+  .mobile-more-sheet__section {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0 var(--space-md);
+  }
+
+  .mobile-more-sheet__section + .mobile-more-sheet__section {
+    padding-top: var(--space-sm);
+    border-top: 1px solid var(--glass-border);
+  }
+
+  .mobile-more-sheet__section--theme {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: var(--space-md);
+    padding-bottom: var(--space-sm);
+  }
+
+  .mobile-more-sheet__row-label {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    font-weight: 500;
+  }
+
+  .mobile-more-sheet__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 48px;
+    padding: var(--space-sm) var(--space-md);
+    font-size: var(--text-base);
+    color: var(--color-text-primary);
+    background: transparent;
+    border: 0;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color var(--transition-normal);
+  }
+
+  .mobile-more-sheet__row:hover,
+  .mobile-more-sheet__row:active {
+    background-color: rgba(255, 255, 255, 0.04);
+  }
+
+  .mobile-more-sheet__row--active {
+    color: var(--color-gold);
+    background-color: rgba(var(--gold-rgb), 0.06);
+  }
+
+  .mobile-more-sheet__row--button {
+    font-family: inherit;
+  }
+
+  .mobile-more-sheet__row--danger {
+    color: var(--color-red-bright);
+  }
+
+  .mobile-more-sheet__badge {
+    font-size: 10px;
+    font-weight: 700;
+    color: #0a0a0f;
+    background: var(--color-gold);
+    padding: 2px 6px;
+    border-radius: var(--radius-full);
+    letter-spacing: 0.05em;
+  }
+
+  .mobile-more-sheet__close {
+    display: block;
+    width: calc(100% - 2 * var(--space-md));
+    margin: var(--space-md);
+    padding: var(--space-sm);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
 }
