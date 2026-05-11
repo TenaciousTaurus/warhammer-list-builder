@@ -18,6 +18,7 @@ import { AppFooter } from './shared/components/AppFooter';
 import { OfflineBanner } from './shared/components/OfflineBanner';
 import { MobileTabBar } from './shared/components/MobileTabBar';
 import { supabase } from './shared/lib/supabase';
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 // Auto-reload on stale chunk errors after deployment.
 // When Vite rebuilds, chunk hashes change — cached HTML may reference old filenames.
@@ -362,6 +363,7 @@ function App() {
         <MobileTabBar />
       </div>
     </BrowserRouter>
+    <SpeedInsights />
     </Sentry.ErrorBoundary>
   );
 }
